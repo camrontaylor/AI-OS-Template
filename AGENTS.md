@@ -462,6 +462,7 @@ Every skill and its output folder uses a category prefix.
 | `meta-memory-write` | "remember this", "remember that", "note that", "save this to memory", "update memory", "log this", "forget about", "remove from memory" |
 | `meta-synthesize-locals` | "synthesize skills", "sync local overrides", "clean up local files" |
 | `meta-find-skills` | "find a skill", "is there a skill for", "do we have a skill for", "find me a skill for X", "extend my capabilities" |
+| `meta-worktree` | "check worktrees", "check the folder", "what is going on", "what happened while I was away", "where is my work", "is everything saved", "tidy up the folder", "audit my workspace", "review the folder", "clean up my branches" |
 
 > `meta-find-skills` and `meta-goal-breakdown` are native routing behaviors built into this file and the Task Routing rules, not installed skills. They have no folder under `.claude/skills/` and no `brand_context/` needs, so they appear in this Skill Registry (the triggers are real) but not in the Context Matrix, and Skill & MCP Reconciliation should not flag them as missing.
 
@@ -535,6 +536,7 @@ Load only the `brand_context/` files listed for each skill.
 | `meta-wrap-up` | - | - | - | - | - | `## meta-wrap-up` |
 | `meta-memory-write` | - | - | - | - | - | `## meta-memory-write` |
 | `meta-synthesize-locals` | - | - | - | - | - | `## meta-synthesize-locals` |
+| `meta-worktree` | - | - | - | - | - | `## meta-worktree` |
 | `str-ai-seo` | tone only | summary | full | - | - | `## str-ai-seo` |
 | `str-trending-research` | - | - | - | - | - | `## str-trending-research` |
 | `tool-stitch` | - | - | - | - | - | `## tool-stitch` |
