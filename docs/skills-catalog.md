@@ -4,13 +4,14 @@
 
 Two tiers. LIVE skills are active and you invoke them by typing a forward slash plus the exact name (the slash name, the folder name, and the frontmatter name all match). LIBRARY skills are staging candidates in `skills-library/`; they are NOT invocable until promoted into `.claude/skills/`.
 
-## Live skills (25) - invoke with `/name`
+## Live skills (29) - invoke with `/name`
 
 | Invoke | Folder | What it does |
 |--------|--------|--------------|
 | `/meta-memory-write` | `.claude/skills/meta-memory-write/` | Saves durable facts to context/MEMORY.md, the curated working scratchpad read at session start. |
 | `/meta-skill-creator` | `.claude/skills/meta-skill-creator/` | Create new skills, modify and improve existing skills, and measure skill performance. |
 | `/meta-synthesize-locals` | `.claude/skills/meta-synthesize-locals/` | Synthesizes verbose SKILL.local.md files after migration from the old single-file pattern. |
+| `/meta-worktree` | `.claude/skills/meta-worktree/` | Audit the AI-OS folder and worktrees in plain English, then offer to tidy up. |
 | `/meta-wrap-up` | `.claude/skills/meta-wrap-up/` | End-of-session checklist that reviews deliverables, collects feedback, fixes skills, updates learnings, and commits work. |
 | `/mkt-brand-voice` | `.claude/skills/mkt-brand-voice/` | Extract or build a brand's voice so every skill writes in their style. |
 | `/mkt-content-repurposing` | `.claude/skills/mkt-content-repurposing/` | Repurpose one piece of content into platform-native posts across LinkedIn, Twitter/X, Instagram, TikTok, YouTube, Threads, Bluesky, and Reddit. |
@@ -28,6 +29,9 @@ Two tiers. LIVE skills are active and you invoke them by typing a forward slash 
 | `/tool-humanizer` | `.claude/skills/tool-humanizer/` | Remove AI-generated writing patterns and restore natural human voice. |
 | `/tool-stitch` | `.claude/skills/tool-stitch/` | Fetch UI designs from Google Stitch projects via MCP. |
 | `/tool-youtube` | `.claude/skills/tool-youtube/` | Fetch latest videos from YouTube channels and extract full transcripts. |
+| `/viz-ad-creative-codex` | `.claude/skills/viz-ad-creative-codex/` | Generate consistent, on-brand paid ad creative batches natively in Codex using Codex's built-in image generation, with no Gemini, fal, or other model API key. |
+| `/viz-ad-creative-fal` | `.claude/skills/viz-ad-creative-fal/` | Generate consistent, on-brand paid ad creative batches in Claude using fal.ai as the image and video engine (FLUX, Recraft, Ideogram, nano-banana, Kling, Veo, Seedance). |
+| `/viz-ad-creative-figma` | `.claude/skills/viz-ad-creative-figma/` | Generate consistent, on-brand paid ad creative batches in Claude with a deterministic Figma, Figma MCP, Figma Buzz/Weave-style, or local HTML template engine. |
 | `/viz-excalidraw-diagram` | `.claude/skills/viz-excalidraw-diagram/` | Generate Excalidraw diagram JSON files that make visual arguments - not just labelled boxes. |
 | `/viz-interface-design` | `.claude/skills/viz-interface-design/` | Design distinctive, craft-driven interfaces for dashboards, admin panels, SaaS tools, and interactive products. |
 | `/viz-nano-banana` | `.claude/skills/viz-nano-banana/` | Generate images, infographics, and visual content via Gemini 3 Pro Image. |
@@ -37,6 +41,14 @@ Two tiers. LIVE skills are active and you invoke them by typing a forward slash 
 ## Skills library (staging, review-only, not invocable)
 
 These live under `skills-library/backlog/<pack>/<name>/`. To make one live: move it through `triage/` then `review/`, rename to the `{category}-{name}` convention, and register it in `.claude/skills/` and `AGENTS.md`. See `skills-library/README.md`.
+
+### backlog/ad-creative-suite (3)
+
+| Skill folder | What it does |
+|--------------|--------------|
+| `ad-creative-suite/viz-ad-creative-codex/` | Generate consistent, on-brand paid ad creative batches natively in Codex using Codex's built-in image generation, with no Gemini, fal, or other model API key. |
+| `ad-creative-suite/viz-ad-creative-fal/` | Generate consistent, on-brand paid ad creative batches in Claude using fal.ai as the image and video engine (FLUX, Recraft, Ideogram, nano-banana, Kling, Veo, Seedance). |
+| `ad-creative-suite/viz-ad-creative-figma/` | Generate consistent, on-brand paid ad creative batches in Claude with a deterministic Figma, Figma MCP, Figma Buzz/Weave-style, or local HTML template engine. |
 
 ### backlog/cybersecurity-skills (29)
 
@@ -123,4 +135,4 @@ These live under `skills-library/backlog/<pack>/<name>/`. To make one live: move
 
 ---
 
-Totals: 25 live skills, 73 library skills.
+Totals: 29 live skills, 76 library skills.

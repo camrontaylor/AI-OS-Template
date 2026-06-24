@@ -1,0 +1,35 @@
+{
+  "skill_name": "ad-creative-suite",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Use viz-ad-creative-codex to make a 12-creative Meta still-image test batch for a DTC skincare brand. The offer is a starter bundle, the audience is women 28-45 with sensitive skin, and the landing page is provided. Build or update the brand lock, create an angle matrix, pause for approval, then use Codex-native image generation for 4:5, 1:1, and 9:16 outputs with prompts/, slate.csv, and qa-report.md.",
+      "expected_output": "A complete Codex-native workflow with onboarding profile usage, brand-profile.json, approved creative-matrix.csv before generation, platform-limited copy, saved prompt pack, native image generation steps, slate rows, launch-readiness.md, and QA checks.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Use viz-ad-creative-fal for a B2B SaaS client that needs photoreal product shots, one typography-heavy offer card, and one short vertical video concept. Estimate fal cost before generation and use reference images plus seed/style locking.",
+      "expected_output": "A fal workflow that routes models by job, estimates cost before running, uses reference images and seed/style locks, exports platform sizes, and logs disclosure/QA notes.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Use viz-ad-creative-figma to produce deterministic offer-card ads for a regulated finance client. No AI-generated imagery. Use the HTML fallback if Figma is unavailable. Need 6 concepts in 1:1 and 4:5.",
+      "expected_output": "A deterministic Figma/HTML template workflow with exact pixel sizes, no AI label requirement, text fit checks, slate tracking, launch-readiness.md, and qa-report.md.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "First run for a new freelance ads client: onboard a local gym client before making creatives. Capture their offer, Meta/TikTok defaults, examples to copy and avoid, $3,000 monthly budget, $50/day test cap, conversion event, UTMs, pause thresholds, and missing tool connections.",
+      "expected_output": "A saved onboarding profile under projects/{skill}/onboarding/{client}/onboarding-profile.json with media-buying defaults, examples, budget/pause rules, measurement conventions, tool connection status, open gaps, and next setup action.",
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "I have 14 days of Meta results for the last batch: one creative has high hook rate and CTR but awful CPA, another has low hook rate, and the old winner has frequency above 4 with rising CPM. Use the ad creative skill to tell me what to make next.",
+      "expected_output": "A performance-read.md style diagnosis that separates hook problems, post-click/offer problems, and fatigue, then recommends a next creative matrix with one controlled variable and one preserved control.",
+      "files": []
+    }
+  ]
+}

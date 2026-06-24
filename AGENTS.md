@@ -495,6 +495,9 @@ Every skill and its output folder uses a category prefix.
 | `viz-stitch-design` | "design a UI", "create a screen", "stitch design", "UI mockup", "app design", "landing page design", "mobile screen", "web layout", "wireframe to UI", "design this page" |
 | `viz-interface-design` | "dashboard", "admin panel", "SaaS UI", "data interface", "metrics display", "control panel", "monitoring UI", "analytics view", "settings page", "interactive tool interface" |
 | `viz-nano-banana` | "generate an image", "create an infographic", "nano banana", "notebook sketch", "comic strip", "hand-drawn diagram", "sketchnote", "storyboard", "illustrated diagram", "make an image of" |
+| `viz-ad-creative-codex` | "Codex ad creative", "no API key ad creative", "ad creative batch", "paid social creatives", "Meta ads", "TikTok ads", "Google ad creatives", "native image generation", "creative testing matrix" |
+| `viz-ad-creative-fal` | "Claude fal ad creatives", "fal ad creatives", "multi-model ad creative", "photoreal product ads", "short video ad concept", "mixed model ad batch", "creative testing matrix with fal" |
+| `viz-ad-creative-figma` | "Claude Figma ad creative", "deterministic ad creative", "Figma ad templates", "Figma Weave", "offer cards", "regulated ad creative", "pixel-exact ads", "no AI label ads", "brand locked ad batch" |
 | `viz-ugc-heygen` | "create a video", "UGC video", "heygen video", "talking head video", "avatar video", "make a video about", "generate video" |
 | `viz-excalidraw-diagram` | "excalidraw diagram", "draw a diagram", "visualize this workflow", "architecture diagram", "system diagram", "diagram this" |
 
@@ -546,6 +549,9 @@ Load only the `brand_context/` files listed for each skill.
 | `viz-stitch-design` | tone only | summary | language section | - | - | `## viz-stitch-design` |
 | `viz-interface-design` | tone only | summary | language section | - | - | `## viz-interface-design` |
 | `viz-nano-banana` | - | - | - | - | - | `## viz-nano-banana` |
+| `viz-ad-creative-codex` | full | angle only | full | - | full | `## viz-ad-creative-codex` |
+| `viz-ad-creative-fal` | full | angle only | full | - | full | `## viz-ad-creative-fal` |
+| `viz-ad-creative-figma` | full | angle only | full | - | full | `## viz-ad-creative-figma` |
 | `viz-excalidraw-diagram` | - | - | - | - | - | `## viz-excalidraw-diagram` |
 | `viz-ugc-heygen` | tone only | - | - | - | - | `## viz-ugc-heygen` |
 | `ops-cron` | - | - | - | - | - | `## ops-cron` |
@@ -711,7 +717,9 @@ Some skills use external services for enhanced functionality. API keys are store
 | OpenAI | `OPENAI_API_KEY` | `str-trending-research` | Reddit search via Responses API with `web_search` | Falls back to WebSearch without engagement metrics |
 | xAI | `XAI_API_KEY` | `str-trending-research` | X/Twitter search via xAI API with `x_search` | Falls back to WebSearch without engagement metrics |
 | YouTube Data API v3 | `YOUTUBE_API_KEY` | `tool-youtube` | Channel video listing, handle resolution, search | Direct URL transcript mode still works |
-| Google Gemini | `GEMINI_API_KEY` | `viz-nano-banana` | Image generation via Gemini 3 Pro Image (infographics, sketchnotes, illustrated diagrams) | No fallback |
+| Google Gemini | `GEMINI_API_KEY` | `viz-nano-banana` | Image generation via Gemini 3 Pro Image (infographics, sketchnotes, illustrated diagrams) | Use `viz-ad-creative-codex` for Codex-native ad creative batches or `viz-ad-creative-figma` for deterministic template ads |
+| fal.ai | `FAL_KEY` | `viz-ad-creative-fal` | Multi-model image and short-video ad creative generation, including photoreal product shots, typography models, and reference-image workflows | Use `viz-ad-creative-codex` for no-key Codex stills or `viz-ad-creative-figma` for deterministic templates |
+| Figma API | `FIGMA_TOKEN`, `FIGMA_FILE_KEY` | `viz-ad-creative-figma` | Pixel-exact export from brand-locked Figma templates | Falls back to local HTML-to-image render after `npm install` in the skill folder |
 | HeyGen | `HEYGEN_API_KEY` | `viz-ugc-heygen` | AI avatar and UGC video generation | No fallback |
 | Google Stitch | gcloud auth | `tool-stitch`, `viz-stitch-design` | UI design generation and export | No fallback |
 | Zilliz Cloud | `ZILLIZ_URI`, `ZILLIZ_TOKEN` | `scripts/setup-memory.*` on native Windows | Remote Milvus backend for MemSearch semantic recall; free clusters should use AWS `eu-central-1` (Frankfurt) or GCP `us-west-1` (Oregon). Windows disables real-time `memsearch watch` with `MEMSEARCH_NO_WATCH=1`; refresh indexing through initial/manual index or the managed cron runtime. | macOS/Linux use local Milvus Lite; Windows can use WSL/Linux or skip semantic recall. Use `scripts/stop-memsearch-watchers.ps1` to clear old watcher processes. |

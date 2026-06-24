@@ -1,0 +1,32 @@
+[
+  {
+    "name": "concept-1-hook-time",
+    "headline": "Cut your invoice chase in half.",
+    "subhead": "Auto-nudges paying clients so you do not have to.",
+    "cta": "See how",
+    "image": "https://example.com/brand/product-hero.png",
+    "logo": "https://example.com/brand/logo-light.png",
+    "brand_primary": "#0F172A",
+    "brand_secondary": "#1E293B",
+    "brand_accent": "#22D3EE",
+    "brand_text": "#0F172A",
+    "brand_bg": "#FFFFFF",
+    "heading_font": "Inter, sans-serif",
+    "body_font": "Inter, sans-serif"
+  },
+  {
+    "name": "concept-2-hook-risk",
+    "headline": "Stop chasing. Start collecting.",
+    "subhead": "Average user clears 11 days off DSO in month one.",
+    "cta": "Try it free",
+    "image": "https://example.com/brand/dashboard.png",
+    "logo": "https://example.com/brand/logo-light.png",
+    "brand_primary": "#0F172A",
+    "brand_secondary": "#1E293B",
+    "brand_accent": "#22D3EE",
+    "brand_text": "#0F172A",
+    "brand_bg": "#FFFFFF",
+    "heading_font": "Inter, sans-serif",
+    "body_font": "Inter, sans-serif"
+  }
+]

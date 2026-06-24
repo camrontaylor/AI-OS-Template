@@ -1,0 +1,161 @@
+<!doctype html>
+<!--
+  ad-template.html - the deterministic ad template the figma engine falls back
+  to when there is no Figma seat. The render-ad.mjs script fills the slots
+  below with one row from rows.json, then screenshots the root frame at the
+  exact platform pixel size (passed in as __w and __h).
+
+  Brand lock lives in the :root CSS variables. The agent must NEVER restyle
+  those at run time. It only swaps slot text and the image / logo URLs. That
+  is the whole point of this engine: deterministic, on-brand, repeatable.
+
+  Slots (Handlebars-style, filled by node-html-to-image):
+    {{name}}              - short identifier for the row, used in filename only
+    {{headline}}          - main hook, the largest text
+    {{subhead}}           - one line under the headline (optional)
+    {{cta}}               - call to action text on the button (optional)
+    {{image}}             - product / scene image URL (optional, hidden if absent)
+    {{logo}}              - logo image URL (optional, hidden if absent)
+
+  Brand-lock slots (override per client from brand-profile.json visual.colors
+  and visual.typography; do NOT hand-edit per ad):
+    {{brand_primary}}     - primary hex
+    {{brand_secondary}}   - secondary hex
+    {{brand_accent}}      - accent hex
+    {{brand_text}}        - text hex
+    {{brand_bg}}          - background hex
+    {{heading_font}}      - heading font family (e.g. 'Inter, sans-serif')
+    {{body_font}}         - body font family
+
+  Size slots (set by render-ad.mjs from --sizes):
+    {{__w}}, {{__h}}      - target frame width and height in pixels
+-->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      :root {
+        --w: {{__w}}px;
+        --h: {{__h}}px;
+        --brand-primary: {{brand_primary}};
+        --brand-secondary: {{brand_secondary}};
+        --brand-accent: {{brand_accent}};
+        --brand-text: {{brand_text}};
+        --brand-bg: {{brand_bg}};
+        --heading-font: {{heading_font}};
+        --body-font: {{body_font}};
+        /* Safe zones: keep critical text out of the top 14% and bottom 20%
+           of 9:16 frames. The vertical pads scale with frame height. */
+        --safe-top: calc(var(--h) * 0.08);
+        --safe-bottom: calc(var(--h) * 0.10);
+        --safe-side: calc(var(--w) * 0.06);
+      }
+
+      html, body { margin: 0; padding: 0; }
+
+      .frame {
+        width: var(--w);
+        height: var(--h);
+        background: var(--brand-bg, #ffffff);
+        color: var(--brand-text, #111111);
+        font-family: var(--body-font, system-ui, sans-serif);
+        position: relative;
+        overflow: hidden;
+        box-sizing: border-box;
+      }
+
+      /* Background image (locked behind a brand-tinted overlay so on-brand
+         contrast survives any product shot). Hide cleanly if not provided. */
+      .bg {
+        position: absolute; inset: 0;
+        background-size: cover; background-position: center;
+        background-color: var(--brand-bg);
+      }
+      .bg::after {
+        content: ''; position: absolute; inset: 0;
+        background: linear-gradient(
+          180deg,
+          rgba(0,0,0,0.00) 0%,
+          rgba(0,0,0,0.35) 70%,
+          rgba(0,0,0,0.55) 100%
+        );
+      }
+
+      .content {
+        position: absolute;
+        top: var(--safe-top);
+        left: var(--safe-side);
+        right: var(--safe-side);
+        bottom: var(--safe-bottom);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        gap: calc(var(--h) * 0.015);
+        color: #ffffff; /* overlaid on the gradient, so always readable */
+      }
+
+      .logo {
+        position: absolute;
+        top: var(--safe-top);
+        left: var(--safe-side);
+        max-width: calc(var(--w) * 0.18);
+        max-height: calc(var(--h) * 0.06);
+        object-fit: contain;
+      }
+
+      .headline {
+        font-family: var(--heading-font, var(--body-font));
+        /* Type scale: ~9.5% of the frame height, capped at 96px and 36px. */
+        font-size: clamp(36px, calc(var(--h) * 0.095), 96px);
+        font-weight: 800;
+        line-height: 1.05;
+        letter-spacing: -0.01em;
+        margin: 0;
+        text-shadow: 0 2px 16px rgba(0,0,0,0.35);
+      }
+
+      .subhead {
+        font-size: clamp(18px, calc(var(--h) * 0.032), 36px);
+        font-weight: 500;
+        line-height: 1.25;
+        margin: 0;
+        opacity: 0.92;
+      }
+
+      .cta {
+        align-self: flex-start;
+        margin-top: calc(var(--h) * 0.02);
+        padding: calc(var(--h) * 0.018) calc(var(--w) * 0.04);
+        background: var(--brand-primary, #111111);
+        color: var(--brand-bg, #ffffff);
+        font-family: var(--heading-font, var(--body-font));
+        font-weight: 700;
+        font-size: clamp(16px, calc(var(--h) * 0.028), 32px);
+        letter-spacing: 0.02em;
+        border-radius: 9999px;
+      }
+
+      /* The narrow display sizes (1.91:1) need a tighter type scale because
+         vertical space is much less than the square or portrait variants. */
+      @media (min-aspect-ratio: 16/9) {
+        .headline { font-size: clamp(28px, calc(var(--w) * 0.045), 72px); }
+        .content { gap: calc(var(--h) * 0.03); }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="frame">
+      {{#if image}}
+        <div class="bg" style="background-image: url('{{image}}');"></div>
+      {{/if}}
+      {{#if logo}}
+        <img class="logo" src="{{logo}}" alt="logo" />
+      {{/if}}
+      <div class="content">
+        {{#if headline}}<h1 class="headline">{{headline}}</h1>{{/if}}
+        {{#if subhead}}<p class="subhead">{{subhead}}</p>{{/if}}
+        {{#if cta}}<div class="cta">{{cta}}</div>{{/if}}
+      </div>
+    </div>
+  </body>
+</html>
