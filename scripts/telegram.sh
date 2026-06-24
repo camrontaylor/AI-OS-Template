@@ -157,11 +157,12 @@ fi
 
 # Bot token
 printf "  bot token ..... "
+telegram_bot_token="${TELEGRAM_BOT_TOKEN:-}"
 if [[ -f "$REPO_ROOT/.env" ]]; then
-    TELEGRAM_BOT_TOKEN="$(grep -E '^TELEGRAM_BOT_TOKEN=' "$REPO_ROOT/.env" 2>/dev/null | cut -d= -f2- | tr -d '[:space:]"'"'" || true)"
+    loaded_telegram_bot_token="$(grep -E '^TELEGRAM_BOT_TOKEN=' "$REPO_ROOT/.env" 2>/dev/null | cut -d= -f2- | tr -d '[:space:]"'"'" || true)"
+    [[ -n "$loaded_telegram_bot_token" ]] && telegram_bot_token="$loaded_telegram_bot_token"
 fi
-TELEGRAM_BOT_TOKEN="${TELEGRAM_BOT_TOKEN:-${TELEGRAM_BOT_TOKEN:-}}"
-if [[ -n "${TELEGRAM_BOT_TOKEN:-}" ]]; then
+if [[ -n "${telegram_bot_token:-}" ]]; then
     printf "${GREEN}configured${NC}\n"
 else
     printf "${RED}missing${NC}\n"
@@ -171,12 +172,13 @@ fi
 
 # Allowed users (access control)
 printf "  access control  "
+telegram_allowed_users="${TELEGRAM_ALLOWED_USERS:-}"
 if [[ -f "$REPO_ROOT/.env" ]]; then
-    TELEGRAM_ALLOWED_USERS="$(grep -E '^TELEGRAM_ALLOWED_USERS=' "$REPO_ROOT/.env" 2>/dev/null | cut -d= -f2- | tr -d '[:space:]"'"'" || true)"
+    loaded_telegram_allowed_users="$(grep -E '^TELEGRAM_ALLOWED_USERS=' "$REPO_ROOT/.env" 2>/dev/null | cut -d= -f2- | tr -d '[:space:]"'"'" || true)"
+    [[ -n "$loaded_telegram_allowed_users" ]] && telegram_allowed_users="$loaded_telegram_allowed_users"
 fi
-TELEGRAM_ALLOWED_USERS="${TELEGRAM_ALLOWED_USERS:-${TELEGRAM_ALLOWED_USERS:-}}"
-if [[ -n "${TELEGRAM_ALLOWED_USERS:-}" ]]; then
-    USER_COUNT=$(echo "$TELEGRAM_ALLOWED_USERS" | tr ',' '\n' | wc -l | tr -d ' ')
+if [[ -n "${telegram_allowed_users:-}" ]]; then
+    USER_COUNT=$(echo "$telegram_allowed_users" | tr ',' '\n' | wc -l | tr -d ' ')
     printf "${GREEN}${USER_COUNT} user(s) allowlisted${NC}\n"
 else
     printf "${YELLOW}open (no allowlist)${NC}\n"
@@ -203,18 +205,18 @@ CHANNEL_ARGS=(
 )
 
 # Pass config via environment
-export TELEGRAM_BOT_TOKEN
-if [[ -n "${TELEGRAM_ALLOWED_USERS:-}" ]]; then
-    export TELEGRAM_ALLOWED_USERS
+export TELEGRAM_BOT_TOKEN="$telegram_bot_token"
+if [[ -n "${telegram_allowed_users:-}" ]]; then
+    export TELEGRAM_ALLOWED_USERS="$telegram_allowed_users"
 fi
 
 # =============================================================================
 # Launch
 # =============================================================================
 info "Starting Claude Code with Telegram channel..."
-printf "${DIM}  Bot token: ${TELEGRAM_BOT_TOKEN:0:8}...${NC}\n"
-if [[ -n "${TELEGRAM_ALLOWED_USERS:-}" ]]; then
-    printf "${DIM}  Allowed users: ${TELEGRAM_ALLOWED_USERS}${NC}\n"
+printf "${DIM}  Bot token: configured${NC}\n"
+if [[ -n "${telegram_allowed_users:-}" ]]; then
+    printf "${DIM}  Allowed users: configured${NC}\n"
 fi
 echo ""
 info "Send a message to your bot on Telegram to start chatting."
