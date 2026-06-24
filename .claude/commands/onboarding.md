@@ -214,21 +214,23 @@ Everything's pre-selected. Tell me which to remove - or say "keep all" to move o
 
 **Visual & Video**
  5. viz-excalidraw-diagram - architecture and workflow diagrams
- 6. viz-nano-banana - AI image generation (needs GEMINI_API_KEY)
+ 6. viz-ad-creative-codex - no-key ad creative batches in Codex
+ 7. viz-ad-creative-fal - fal-powered ad creative and short video (needs FAL_KEY)
+ 8. viz-ad-creative-figma - Figma/template ad creative (FIGMA_TOKEN optional)
 
 **Utility**
- 7. tool-humanizer - de-AI all written output
- 8. tool-youtube - YouTube transcript extraction (needs YOUTUBE_API_KEY)
+ 9. tool-humanizer - de-AI all written output
+10. tool-youtube - YouTube transcript extraction (needs YOUTUBE_API_KEY)
 
 **Operations**
- 9. ops-cron - schedule recurring tasks
+11. ops-cron - schedule recurring tasks
 
 Which would you like to remove? (e.g. "remove 5, 6, 7" or "keep all")
 ```
 
 Wait for the user's response. Then run the script in CLI mode with their selections:
 ```bash
-python3 scripts/select-skills.py --remove "viz-excalidraw-diagram,viz-nano-banana"
+python3 scripts/select-skills.py --remove "viz-excalidraw-diagram,viz-ad-creative-fal"
 ```
 
 If the user says "keep all" or similar, run:
