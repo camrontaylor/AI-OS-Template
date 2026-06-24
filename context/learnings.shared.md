@@ -36,3 +36,9 @@
 # Individual Skills
 
 (Promote per-skill lessons here only after they are stripped of any client or personal detail.)
+
+## viz-ad-creative-codex
+
+## viz-ad-creative-fal
+
+## viz-ad-creative-figma

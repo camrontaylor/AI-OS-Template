@@ -1,0 +1,13 @@
+{
+  "name": "viz-ad-creative-figma-runtime",
+  "private": true,
+  "type": "module",
+  "description": "Local HTML-to-image runtime for the viz-ad-creative-figma skill.",
+  "scripts": {
+    "render:example": "node scripts/render-ad.mjs --rows assets/rows.example.json --out ./example-output",
+    "check": "node --check scripts/render-ad.mjs && node --check scripts/figma-export.mjs"
+  },
+  "dependencies": {
+    "node-html-to-image": "^5.0.0"
+  }
+}

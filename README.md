@@ -97,6 +97,9 @@ AI-OS is built on three layers:
 | `tool-stitch` | Fetch UI designs from Google Stitch projects | gcloud auth |
 | `viz-stitch-design` | Design and iterate on UI screens with Google Stitch | gcloud auth |
 | `viz-nano-banana` | Generate infographics, sketchnotes, and illustrated diagrams | `GEMINI_API_KEY` |
+| `viz-ad-creative-codex` | Build launch-ready ad creative batches natively in Codex with image generation, onboarding, creative matrix, QA, and performance readouts | -- |
+| `viz-ad-creative-fal` | Build Claude-powered multi-model paid ad creative batches using fal.ai for photoreal, typography, and short-video concepts | `FAL_KEY` |
+| `viz-ad-creative-figma` | Build Claude-powered deterministic, pixel-exact ad templates and offer cards with Figma export, Figma template flows, or local HTML fallback | `FIGMA_TOKEN` optional |
 | `viz-ugc-heygen` | Create talking-head and avatar UGC videos | `HEYGEN_API_KEY` |
 
 ---
@@ -411,6 +414,9 @@ For a quick reference, see [docs/cheat-sheet.md](docs/cheat-sheet.md).
 │   └── memory/            <- Daily session logs (auto-links to active projects)
 ├── brand_context/         <- Your brand data (voice, positioning, ICP)
 ├── .claude/skills/        <- Installed skill packs
+│   ├── viz-ad-creative-codex/ <- Codex-native no-key ad creative factory
+│   ├── viz-ad-creative-fal/   <- Claude + fal.ai multi-model ad creative factory
+│   └── viz-ad-creative-figma/ <- Claude + deterministic Figma/HTML ad creative factory
 ├── command-centre/        <- Local UI and runtime app (versioned with the repo)
 ├── cron/jobs/             <- Scheduled job definitions
 ├── projects/              <- All generated output

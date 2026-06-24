@@ -195,6 +195,67 @@
       "dependencies": [],
       "mcp_servers": []
     },
+    "viz-ad-creative-codex": {
+      "category": "visual",
+      "version": "1.0.0",
+      "description": "Codex-native paid ad creative batches with onboarding and image generation",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Initial release"
+        }
+      ],
+      "requires_services": [],
+      "dependencies": [],
+      "mcp_servers": []
+    },
+    "viz-ad-creative-fal": {
+      "category": "visual",
+      "version": "1.0.0",
+      "description": "Claude ad creative batches using fal.ai image and video models",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Initial release"
+        }
+      ],
+      "requires_services": [
+        "FAL_KEY"
+      ],
+      "dependencies": [],
+      "mcp_servers": []
+    },
+    "viz-ad-creative-figma": {
+      "category": "visual",
+      "version": "1.0.0",
+      "description": "Claude ad creative batches using Figma or local deterministic templates",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Initial release"
+        }
+      ],
+      "requires_services": [
+        "FIGMA_TOKEN",
+        "FIGMA_FILE_KEY"
+      ],
+      "dependencies": [],
+      "mcp_servers": [
+        "figma"
+      ]
+    },
     "viz-ugc-heygen": {
       "category": "visual",
       "version": "1.0.0",

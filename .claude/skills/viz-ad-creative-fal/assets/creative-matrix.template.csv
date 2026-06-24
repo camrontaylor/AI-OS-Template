@@ -1,0 +1,2 @@
+creative_id,phase,buyer_problem,hook_family,hook_structure,offer_frame,proof_point,objection,cta,format,aspect_ratio,platform,controlled_variable,held_constant,hypothesis,success_metric,status
+concept-001,phase_1,,,,,,,,static,4:5,Meta,hook,"offer, audience, CTA","If this hook names the buyer problem clearly, CTR and CPA should improve",CPA,draft

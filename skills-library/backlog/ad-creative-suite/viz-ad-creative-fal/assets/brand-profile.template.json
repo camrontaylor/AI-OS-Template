@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0",
+  "brand_name": "",
+  "website_url": "",
+  "tagline": "",
+  "positioning": "",
+  "extracted_at": "YYYY-MM-DD",
+  "voice": {
+    "formal_casual": 5,
+    "rational_emotional": 5,
+    "playful_serious": 5,
+    "bold_subtle": 5,
+    "traditional_innovative": 5,
+    "friendly_authoritative": 5,
+    "perspective": "second person (you / your)",
+    "descriptors": ["", "", ""],
+    "avoid": ["corporate jargon", "passive voice"],
+    "tone_examples": [
+      {
+        "attribute": "conversational",
+        "approved": "Here is how this works.",
+        "rejected": "The operational methodology functions thusly."
+      }
+    ]
+  },
+  "messaging": {
+    "value_props": ["", "", ""],
+    "key_phrases": ["", ""],
+    "boilerplate": "",
+    "banned_claims": ["", ""]
+  },
+  "audience": {
+    "personas": [
+      {
+        "name": "",
+        "age_range": "",
+        "profession": "",
+        "pains": ["", ""],
+        "desires": ["", ""],
+        "language_they_use": ["", ""]
+      }
+    ]
+  },
+  "visual": {
+    "colors": {
+      "primary": "#000000",
+      "secondary": ["#000000"],
+      "accent": "#000000",
+      "background": "#FFFFFF",
+      "text": "#111111",
+      "forbidden": ["#000000"]
+    },
+    "typography": {
+      "heading_font": "",
+      "body_font": "",
+      "weights": ["", ""],
+      "pairing_descriptor": ""
+    },
+    "logo": {
+      "primary_file": "assets/brand/logo.svg",
+      "clearspace": "",
+      "min_size_px": 0,
+      "usage_rules": ["never recolor", "never stretch"],
+      "safe_backgrounds": ["light", "dark"]
+    },
+    "imagery_style": {
+      "look": ["", ""],
+      "lighting": "",
+      "composition": "",
+      "subjects": [""],
+      "do": ["", ""],
+      "dont": ["", ""]
+    }
+  },
+  "contexts": {
+    "paid_social_static": { "tone": ["", ""], "aspect_ratios": ["1:1", "4:5"] },
+    "paid_social_video": { "tone": ["", ""], "aspect_ratios": ["9:16", "4:5"] },
+    "google_rsa": { "tone": ["", ""], "headline_max": 30, "description_max": 90 }
+  },
+  "reference_set": {
+    "logo_lockups": ["assets/brand/logo-lockup-1.png"],
+    "approved_product_shots": ["assets/brand/product-1.png"],
+    "style_anchors": ["assets/brand/style-anchor-1.png"],
+    "color_swatch_sheet": "assets/brand/swatches.png"
+  },
+  "version": "1.0.0",
+  "updated": "YYYY-MM-DD"
+}

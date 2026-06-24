@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "skill_name": "",
+  "client_name": "",
+  "client_slug": "",
+  "created_at": "",
+  "updated_at": "",
+  "status": "partial",
+  "first_success": {
+    "activation_goal": "Produce one approved, ready-to-upload creative test batch.",
+    "time_to_value_target_minutes": 30,
+    "first_batch_shape": {
+      "concepts": 3,
+      "variants_per_concept": 2,
+      "aspect_ratios": [
+        "4:5",
+        "1:1",
+        "9:16"
+      ]
+    },
+    "approval_definition": "The operator can approve the angle matrix and export files without asking for missing basics."
+  },
+  "business": {
+    "offer": "",
+    "website_url": "",
+    "landing_pages": [],
+    "primary_goal": "",
+    "primary_metric": "",
+    "target_cpa_or_roas": "",
+    "funnel_stage": ""
+  },
+  "audience": {
+    "icp": "",
+    "awareness_stage": "",
+    "markets": [],
+    "languages": [],
+    "exclusions": []
+  },
+  "platforms": {
+    "default_platforms": [],
+    "formats": [],
+    "aspect_ratios": [],
+    "launch_status_default": "paused_for_review",
+    "budget_sensitivity": ""
+  },
+  "creative_preferences": {
+    "tone": "",
+    "visual_style": "",
+    "photo_style": "",
+    "typography_notes": "",
+    "color_notes": "",
+    "layout_preferences": "",
+    "do_not_use": []
+  },
+  "brand_assets": {
+    "logo_path": "",
+    "product_photos_path": "",
+    "style_anchors": [],
+    "figma_file_key": "",
+    "brand_extraction_url": ""
+  },
+  "compliance": {
+    "regulated_category": "",
+    "mandatory_disclaimers": [],
+    "banned_claims": [],
+    "approval_notes": ""
+  },
+  "measurement": {
+    "conversion_event": "",
+    "tracking_status": "unknown",
+    "campaign_naming_convention": "",
+    "utm_convention": "",
+    "reporting_cadence": "",
+    "minimum_impressions_before_decision": 1000
+  },
+  "media_buying": {
+    "ad_accounts": [],
+    "connected_platforms": [],
+    "monthly_budget": "",
+    "test_budget": "",
+    "daily_spend_cap": "",
+    "audience_sources": [],
+    "retargeting_windows": [],
+    "exclusions": [],
+    "frequency_cap_notes": "",
+    "pause_thresholds": [],
+    "launch_permissions": "operator can prepare, client approves launch"
+  },
+  "performance_history": {
+    "recent_results_source": "",
+    "winning_patterns": [],
+    "losing_patterns": [],
+    "angles_to_extend": [],
+    "angles_to_avoid": []
+  },
+  "operator_preferences": {
+    "approval_workflow": "",
+    "testing_style": "",
+    "default_batch_size": "",
+    "output_format": "",
+    "handoff_destination": ""
+  },
+  "examples": [],
+  "tool_connections": {
+    "codex_native_imagegen": "unknown",
+    "FAL_KEY": "unknown",
+    "FIGMA_TOKEN": "unknown",
+    "FIGMA_FILE_KEY": "unknown",
+    "node": "unknown",
+    "local_html_render": "unknown"
+  },
+  "recommended_connections": [],
+  "open_gaps": [],
+  "next_setup_action": ""
+}

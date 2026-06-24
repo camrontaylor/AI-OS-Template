@@ -101,6 +101,16 @@ _44 total · 4 net-new, 40 already-live._
 | social | mkt | Create, schedule, and optimize social content across platforms plus social listening and engagement triage. | yes - skip | LinkedIn post, Twitter thread, content calendar, social listening | coreyhaines31/marketingskills |
 | video | mkt | Produce marketing video via AI models, avatars, and programmatic frameworks (Remotion, HeyGen, Veo, Sora, Runway). | yes - skip | video production, AI video, Remotion, HeyGen | coreyhaines31/marketingskills |
 
+### Ad Creative Suite (viz)
+
+_3 total · 3 live in `.claude/skills/`._
+
+| Skill | Cat | What it does | Active dup? | Triggers | Source |
+|-------|-----|--------------|-------------|----------|--------|
+| ad-creative-suite/viz-ad-creative-codex | viz | Full ad-creative pipeline (onboarding, brand lock, creative matrix, prompt pack, native image generation, multi-size slate, QA) using Codex-native image generation with no model API key. | yes - live | Codex ad creative, no API key ad creative, paid ad creatives, batch ad variations, ad creative matrix | local (ad-creative-suite, 2026-06-24) |
+| ad-creative-suite/viz-ad-creative-fal | viz | Full ad-creative pipeline (brand lock, copy, generate, multi-size, slate, QA) using fal.ai as the engine for photoreal, typography, and short-video concepts. | yes - live | fal ad creatives, multi-model ad creative, paid ad creatives, batch ad variations, ad creative matrix | local (ad-creative-suite, 2026-06-24) |
+| ad-creative-suite/viz-ad-creative-figma | viz | Full ad-creative pipeline with deterministic Figma, Figma MCP, Figma Buzz/Weave-style templates, or local HTML rendering for brand-strict and regulated creative. | yes - live | figma ad creatives, template ad creatives, brand-exact ad creatives, batch ad variations | local (ad-creative-suite, 2026-06-24) |
+
 ### Thinking & Decisions
 
 _1 total · 0 net-new, 1 promoted to live (str-thinking-partner)._
