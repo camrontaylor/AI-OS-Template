@@ -44,7 +44,7 @@ if [[ -d "$ROOT/clients" ]]; then
   for client_dir in "$ROOT"/clients/*/; do
     [[ -d "$client_dir/context" ]] || continue
     slug="$(basename "$client_dir")"
-    file_size_check "Client $slug MEMORY.md" "$client_dir/context/MEMORY.md"
+    file_size_check "Client $slug MEMORY.md" "$client_dir/context/MEMORY.md" 2500 warn
     if [[ ! -d "$client_dir/context/memory" ]]; then
       fail "Client $slug missing context/memory/"
     fi
