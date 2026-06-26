@@ -1,4 +1,5 @@
 {
+  "autoMemoryEnabled": false,
   "permissions": {
     "allow": [
       "Bash(cat:*)",
@@ -53,6 +54,10 @@
           {
             "type": "command",
             "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-sync-prompt.js\""
+          },
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/client-routing-guard.js\""
           },
           {
             "type": "command",
@@ -158,7 +163,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/skill-auto-commit.js"
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/skill-auto-commit.js\""
           }
         ]
       },
@@ -187,7 +192,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/branch-guard.js",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/branch-guard.js\"",
             "timeout": 5
           }
         ]
@@ -197,7 +202,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/overwrite-guard.js",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/overwrite-guard.js\"",
             "timeout": 5
           }
         ]

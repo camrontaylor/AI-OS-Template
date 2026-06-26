@@ -294,8 +294,8 @@ if ($Check) {
 
 function Show-SkipExplanation {
     Warn "Skipped searchable memory setup."
-    Write-Host "  Until it is enabled, older semantic recall, transcript drill-down,"
-    Write-Host "  expanded memory search, and stronger citations will not be available."
+    Write-Host "  Until it is enabled, older memory search,"
+    Write-Host "  expanded recall, and stronger citations will not be available."
 }
 
 function Select-Target {
@@ -303,9 +303,9 @@ function Select-Target {
 
     Write-Host ""
     Write-Host "Searchable Memory" -ForegroundColor Cyan
-    Write-Host "  MemSearch lets Claude Code or Codex search older sessions, transcripts,"
-    Write-Host "  brand context, and learnings. AI-OS keeps markdown as the source"
-    Write-Host "  of truth; MemSearch is only a rebuildable search index."
+    Write-Host "  MemSearch lets Claude Code or Codex search older sessions,"
+    Write-Host "  pinned memory, and learnings. AI-OS keeps markdown as the"
+    Write-Host "  source of truth; MemSearch is only a rebuildable search index."
     Write-Host ""
     Write-Host "  Choose where to enable it:"
     Write-Host "    1. Claude Code only (recommended)"
@@ -478,11 +478,9 @@ function Invoke-InitialIndex {
     $paths = New-Object System.Collections.Generic.List[string]
 
     $candidates = @(
+        @{ Path = "context\MEMORY.md"; Arg = "context/MEMORY.md" },
         @{ Path = "context\memory"; Arg = "context/memory/" },
-        @{ Path = "context\transcripts"; Arg = "context/transcripts/" },
-        @{ Path = "context\learnings.md"; Arg = "context/learnings.md" },
-        @{ Path = "brand_context"; Arg = "brand_context/" },
-        @{ Path = ".memsearch\memory"; Arg = ".memsearch/memory/" }
+        @{ Path = "context\learnings.md"; Arg = "context/learnings.md" }
     )
 
     foreach ($candidate in $candidates) {
@@ -491,9 +489,43 @@ function Invoke-InitialIndex {
         }
     }
 
+    $clientsRoot = Join-Path $RepoRoot "clients"
+    if (Test-Path -LiteralPath $clientsRoot -PathType Container) {
+        foreach ($clientDir in Get-ChildItem -LiteralPath $clientsRoot -Directory) {
+            $contextDir = Join-Path $clientDir.FullName "context"
+            if (-not (Test-Path -LiteralPath $contextDir -PathType Container)) {
+                continue
+            }
+
+            $relativePrefix = "clients/{0}/context" -f $clientDir.Name
+            $clientMemory = Join-Path $contextDir "MEMORY.md"
+            $clientDaily = Join-Path $contextDir "memory"
+            $clientLearnings = Join-Path $contextDir "learnings.md"
+
+            if (Test-Path -LiteralPath $clientMemory) {
+                $paths.Add("$relativePrefix/MEMORY.md") | Out-Null
+            }
+            if (Test-Path -LiteralPath $clientDaily -PathType Container) {
+                $paths.Add("$relativePrefix/memory/") | Out-Null
+            }
+            if (Test-Path -LiteralPath $clientLearnings) {
+                $paths.Add("$relativePrefix/learnings.md") | Out-Null
+            }
+        }
+    }
+
     if ($paths.Count -eq 0) {
         Warn "No memory files found to index yet."
         return $true
+    }
+
+    $reindexScript = Join-Path $RepoRoot "scripts/memsearch-reindex.sh"
+    $bashCommand = Get-Command bash -ErrorAction SilentlyContinue
+    $finishCommand = if ((Test-Path $reindexScript -PathType Leaf) -and $bashCommand) {
+        "bash scripts/memsearch-reindex.sh"
+    }
+    else {
+        "memsearch index $($paths -join ' ')"
     }
 
     Info "Running initial MemSearch index..."
@@ -523,7 +555,12 @@ function Invoke-InitialIndex {
     Push-Location $RepoRoot
     try {
         $pathArgs = $paths.ToArray()
-        & memsearch index @pathArgs
+        if ((Test-Path $reindexScript -PathType Leaf) -and $bashCommand) {
+            & bash scripts/memsearch-reindex.sh
+        }
+        else {
+            & memsearch index @pathArgs
+        }
         if ($LASTEXITCODE -eq 0) {
             return $true
         }
@@ -531,7 +568,7 @@ function Invoke-InitialIndex {
         Warn "Initial index did not finish (it was interrupted or the model download failed)."
         Write-Host "  Your setup is otherwise complete. The index is rebuildable and your"
         Write-Host "  markdown memory remains the source of truth. Finish it anytime with:"
-        Write-Host "    memsearch index $($pathArgs -join ' ')"
+        Write-Host "    $finishCommand"
         # Treat an unfinished index as a recoverable warning, not a hard setup failure.
         return $true
     }

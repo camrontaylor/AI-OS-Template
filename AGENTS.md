@@ -128,7 +128,7 @@ AI-OS must behave the same way when opened in Claude Code, Codex, Cursor, or any
    - `.codex/config.toml` and `.codex/hooks.json` adapt Codex to AI-OS.
    - `.cursor/rules/ai-os.mdc` points Cursor back to `AGENTS.md`.
 2. **Tool defaults cannot outrank AI-OS.** If a global tool rule, memory layer, skill, hook, or assistant profile conflicts with this file, neutralize the tool-level default or scope it away from this repository. Do not change AI-OS to fit the tool default.
-3. **Memory authority stays inside AI-OS.** Use `context/MEMORY.md`, `context/memory/`, `context/learnings.md`, `brand_context/`, and MemSearch. Do not use an external default memory layer as authoritative unless this repository explicitly configures it.
+3. **Memory authority stays inside AI-OS.** Use `context/MEMORY.md`, `context/memory/`, `context/learnings.md`, client-scoped `brand_context/`, and MemSearch. Do not use an external default memory layer as authoritative unless this repository explicitly configures it.
 4. **Skills resolve locally first.** When a task matches an AI-OS skill in `.claude/skills/`, invoke that skill before any global Codex, Cursor, Claude, or user-level skill. Global skills are fallback only when no AI-OS skill exists.
 5. **Hooks and guards should be shared, not forked.** Prefer thin tool adapters that call the same AI-OS hook logic. If a tool needs its own bridge, the bridge should point back to the shared `.claude/` or `AGENTS.md` rules.
 6. **Security and sandbox rules still apply.** Tool safety systems can require approvals or block unsafe actions, but they do not become product or workflow guidance for AI-OS.
@@ -298,6 +298,18 @@ When the user asks to add a client:
 4. Tell them exactly how to switch using the full absolute path:
    - `cd {absolute path}/clients/{slug} && claude`
 5. Link to `docs/multi-client-guide.md`.
+
+### Client Routing Guard
+
+When the session is running from the root AI-OS checkout and a prompt clearly targets exactly one folder under `clients/`, the guard in `.claude/hooks/client-routing-guard.js` pauses before writes, memory edits, project edits, commits, or external side effects and asks the user to confirm the client scope. The guard discovers `clients/*` dynamically; do not hardcode client names into hooks, memory scripts, or docs.
+
+Allowed paths without confirmation:
+- Explicit paths such as `clients/{slug}/...`
+- Shared/root system work
+- All-client, template, migration, or propagation work
+- Read-only review and comparison
+
+When confirmed client work starts from the root checkout, write session memory, durable notes, brand context, projects, and cron artifacts to that client's folder. Root memory is for AI-OS system behavior and shared decisions, not client-specific activity.
 
 ### Branching Policy
 
@@ -489,7 +501,8 @@ When the user asks about past context, decisions, or facts:
    - **Tier 1.5 markdown fallback**: `bash scripts/memory-search.sh "query" 10` searches the authoritative markdown files directly. It needs no Milvus lock, no loopback port, no external service, and no Codex escalation. Results include `search_mode: "markdown_fallback"` so the agent can say semantic search was not used.
    - **Raw MemSearch guard**: Codex PreToolUse blocks raw `memsearch search`, `memsearch expand`, `memsearch index`, and `memsearch stats` commands. This is intentional. Use `scripts/memsearch-search.sh` for recall and `scripts/memsearch-reindex.sh` for indexing so canonical collection resolution, markdown fallback, and lock handling always apply.
    - **Codex / Milvus Lite rule**: MemSearch uses local Milvus Lite at `~/.memsearch/milvus.db` and binds a loopback port. In Codex, semantic MemSearch needs escalated permissions. If the wrapper returns `search_mode: "markdown_fallback"`, answer from those results and mention that semantic search was blocked or unavailable; do not say memory is empty. If it errors with `DataDirLockedError` or "another process holds the lock", an index job is active; do not start another index. Use the markdown fallback and retry semantic search after indexing finishes if needed.
-   Searches `context/memory/`, `.memsearch/memory/`, `context/transcripts/`, `context/learnings.md`, and `brand_context/`.
+   - **Multi-client scope**: wrappers default to the current checkout. From the root checkout, use `--scope root`, `--scope client --client {slug}`, `--scope clients`, or `--scope all` when the recall target matters. From `clients/{slug}`, the default is that client only.
+   - **Source boundary**: routine semantic indexing includes root/client `context/MEMORY.md`, `context/memory/`, and `context/learnings.md`. Routine markdown fallback searches the same memory surfaces, plus `clients/*/brand_context/` only when client scope is included. Root `brand_context/`, root transcripts, Notion/reference archives, and `.memsearch/memory/` are explicit deep-search or diagnostic sources, not standard recall.
 3. **Cite sources** - structure every recall response based on what was found:
 
    **Found:** answer + cite source inline ("Based on the session log from 2026-05-11 and a decision in MEMORY.md...") + temporal context ("This was last discussed 3 days ago"). If the source is >14 days old: "Note: this information is from [date] - it may be outdated."
@@ -663,7 +676,7 @@ Every skill and its output folder uses a category prefix.
 |-------|-------------|
 | `ops-cron` | "schedule a job", "cron job", "run this every morning", "automate daily", "recurring task", "scheduled job", "check scheduled jobs", "list jobs", "run job manually", "start crons", "stop crons", "cron status", "cron logs" |
 | `ops-agent-email` | "check the agent inbox", "read the agent's email", "get the magic link", "grab the login link", "agent email", "agentmail", "send an email as the agent", "read the invite" |
-| `ops-client-dashboard` | "check the client dashboard", "client task board", "what's on the board", "task dashboard", "read the kanban", "coast board", "screenshot the board" |
+| `ops-client-dashboard` | "check the client dashboard", "client task board", "what's on the board", "task dashboard", "read the kanban", "client board", "screenshot the board" |
 | `ops-versioning` | "make a new version", "save a version", "version this doc", "show versions", "go back to a previous version", "restore the previous version", "older version", "the one from yesterday", "undo to the last version", "version history" |
 
 *Optional skills are auto-registered by reconciliation when their folders appear on disk. Install optional skills with `bash scripts/add-skill.sh <name>`. See `.claude/skills/_catalog/catalog.json` for the full list.*

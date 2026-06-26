@@ -232,7 +232,7 @@ setup_searchable_memory() {
     echo ""
     printf "${CYAN}${BOLD}Searchable Memory${NC}\n"
     echo "  This is optional, but recommended. It lets AI-OS search older"
-    echo "  sessions, transcripts, learnings, and brand context."
+    echo "  memory, daily logs, learnings, and client-scoped brand context."
     echo "  Claude Code is the recommended default because AI-OS is Claude-first."
     echo ""
 
@@ -274,7 +274,7 @@ setup_searchable_memory() {
         3) target="both" ;;
         4)
             warn "Skipped searchable memory setup."
-            echo "  Semantic recall, older memory search, transcript drill-down,"
+            echo "  Semantic recall, older memory search,"
             echo "  expanded search, and stronger citations will be unavailable until enabled."
             MEMORY_DECISION="skipped"
             return 0

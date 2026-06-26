@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-reranker.py - Post-fusion reranker for memsearch results.
+reranker.py — Post-fusion reranker for memsearch results.
 Stages 1-3 (Stage 4 cross-encoder disabled by default).
 
 Usage:
@@ -25,10 +25,8 @@ DEFAULTS = {
     "authority_weights": {
         "context/MEMORY.md": 2.0,
         "context/learnings.md": 1.5,
-        "brand_context/": 1.3,
         "context/memory/": 1.0,
-        "context/transcripts/": 0.8,
-        ".memsearch/memory/": 0.9,
+        "brand_context/": 0.8,
     },
     "cross_encoder_enabled": False,
 }
@@ -128,17 +126,17 @@ def rerank(results: list, query: str, cfg: dict) -> list:
             or ""
         )
 
-        # Stage 1 - Authority Boost
+        # Stage 1 — Authority Boost
         auth = authority_multiplier(source, weights)
         s1 = raw_score * auth
 
-        # Stage 2 - Recency Decay
+        # Stage 2 — Recency Decay
         rf = recency_factor(source, half_life)
         s2 = s1 * (rec_floor + (1.0 - rec_floor) * rf)
 
         scored.append({**item, "_s1": s1, "_s2": s2})
 
-    # Stage 3 - Floor-Ratio Gating
+    # Stage 3 — Floor-Ratio Gating
     # Drop low-relevance noise: anything scoring below floor_ratio of the top
     # result is gated out. The top result always survives (floor_ratio < 1).
     top_s2 = max(x["_s2"] for x in scored) if scored else 1.0

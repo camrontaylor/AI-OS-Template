@@ -118,6 +118,10 @@
           },
           {
             "type": "command",
+            "command": "bash scripts/codex-hook.sh .claude/hooks/client-routing-guard.js"
+          },
+          {
+            "type": "command",
             "command": "bash scripts/codex-hook.sh .claude/hooks/session-memory-block.js"
           },
           {

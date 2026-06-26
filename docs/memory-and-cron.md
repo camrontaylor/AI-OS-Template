@@ -22,7 +22,7 @@ flowchart TD
 
 3. **The learnings file** (`context/learnings.md`). Per-skill lessons accumulated over time. Loaded only when a skill runs, not at startup.
 
-4. **The full searchable index** (memsearch). The other three layers plus your operator profile, brand context, Notion sync, and chat transcripts get turned into a search index. When you ask about something from days or weeks ago, the assistant searches this and pulls back the matching notes.
+4. **The searchable memory index** (memsearch). The durable memory layers get turned into a bounded semantic search index. Client brand context can be searched when recall is scoped to clients; broader reference surfaces such as root brand context, Notion sync, and chat transcripts are explicit deep-search/reference material, not routine memory recall.
 
 ## Memsearch and Milvus, in plain words
 
@@ -34,13 +34,13 @@ AI-OS uses **Milvus Lite**, the version that runs inside the memsearch process. 
 
 Milvus Lite is single-process. While an index job is writing to it, live semantic search may return a lock error. That is temporary unavailability, not missing memory. Agents should fall back to the markdown search layer and retry semantic search after the job finishes if semantic matching is still needed.
 
-Manual recall should use `bash scripts/memsearch-search.sh "your query" 10`, which resolves the canonical AI-OS collection, runs semantic search, runs deterministic markdown recall, and fuses both result sets. This matters because semantic search can return broad nearby context while exact markdown hits catch specific terms like attachment fields, duplicate handling, or workflow names. If Milvus cannot start, the wrapper returns markdown results only. The markdown layer reads `context/MEMORY.md`, `context/memory/`, `.memsearch/memory/`, `context/learnings.md`, `brand_context/`, and `context/transcripts/` directly, so it needs no lock file, local port, external service, or Codex escalation.
+Manual recall should use `bash scripts/memsearch-search.sh "your query" 10`, which resolves the canonical AI-OS collection, runs semantic search, runs deterministic markdown recall, and fuses both result sets. This matters because semantic search can return broad nearby context while exact markdown hits catch specific terms like attachment fields, duplicate handling, or workflow names. From the root workspace, the wrapper defaults to root AI-OS memory only. From inside a client folder, it scopes recall to that client. Force a boundary with `--scope root|client|clients|all` and `--client slug` when needed. If Milvus cannot start, the wrapper returns markdown results only. The markdown layer reads root/client `context/MEMORY.md`, `context/memory/`, `context/learnings.md`, and client `brand_context/` only when client scope is included, so it needs no lock file, local port, external service, or Codex escalation. Root transcripts and broad reference archives require explicit deep search. The plugin's `.memsearch/memory/` shadow captures are diagnostic material only; they are not authoritative AI-OS recall sources.
 
 In Codex, semantic MemSearch commands need escalated permissions because the local database lives under `~/.memsearch` and Milvus Lite binds a local loopback port even for read-only search. The markdown fallback does not need escalation.
 
 Codex also blocks raw `memsearch search`, `memsearch expand`, `memsearch index`, and `memsearch stats` commands through the AI-OS authority guard. That block is intentional: direct MemSearch calls can bypass the canonical collection and fallback layer. Use `scripts/memsearch-search.sh` for recall and `scripts/memsearch-reindex.sh` for indexing.
 
-The embedding model is **ONNX**, running locally on your CPU. No external API call, no cost per query. The tradeoff is speed: about half a second to embed one chunk. That is fast enough for live search, but slow for a full reindex. The nightly and weekly jobs list the complete source set without `--force`, so unchanged files are skipped and destructive-sync never drops sources. Manual force rebuilds are still possible with `bash scripts/memsearch-reindex.sh --force`, but they are intentionally not scheduled.
+The embedding model is **ONNX**, running locally on your CPU. No external API call, no cost per query. The tradeoff is speed: about half a second to embed one chunk. That is fast enough for live search, but slow for a full reindex. The nightly and weekly jobs list the complete semantic source set - root memory plus every discovered `clients/*` memory workspace - without `--force`, so unchanged files are skipped and destructive-sync never drops sources. Client brand context stays in scoped markdown recall, and transcripts stay behind explicit deep search because transcript archives can be too large and often contain client-specific material that should not appear in root recall. Manual force rebuilds are still possible with `bash scripts/memsearch-reindex.sh --force`, but they are intentionally not scheduled.
 
 ## Cron jobs, in plain words
 
@@ -62,7 +62,7 @@ The cron daemon is a node process that watches the schedule and does the spawnin
 | `weekly-memory-curator` | Sun 23:32 | On | Tidies the pinned note: drops stale entries, merges duplicates, keeps it under 2,500 characters. |
 | `weekly-memsearch-rebuild` | Sun 23:33 | On | Runs the same complete source set as a second maintenance sync, without forced re-embedding. |
 
-The shared reindex script uses `scripts/memsearch-fast-index.py` when available. That keeps raw source paths, including `context/notion/`, while loading existing chunk hashes once for the whole collection instead of once per file.
+The shared reindex script uses `scripts/memsearch-fast-index.py` when available. That keeps raw source paths for the memory files while loading existing chunk hashes once for the whole collection instead of once per file. Larger reference surfaces such as root `context/notion/` and transcripts stay available only through explicit deep search instead of routine semantic indexing.
 
 Off by default: `weekly-activity-digest` (Fri 17:00), plus `monthly-learnings-health`, `skill-update-check`, `skills-library-digest`, `skills-library-review-watcher`, and `youtube-newsletter`. Turn one on by setting `active: 'true'` in its YAML header.
 

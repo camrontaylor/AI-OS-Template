@@ -8,10 +8,14 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+SCRIPT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+ROOT="$(git -C "$SCRIPT_ROOT" rev-parse --show-toplevel 2>/dev/null || true)"
+if [ -z "$ROOT" ]; then
+  ROOT="$SCRIPT_ROOT"
+fi
 
 usage() {
-  echo "Usage: bash scripts/memsearch-search.sh \"query\" [top-k]" >&2
+  echo "Usage: bash scripts/memsearch-search.sh \"query\" [top-k] [--scope root|client|clients|all] [--client slug]" >&2
 }
 
 if [ $# -lt 1 ] || [ -z "${1:-}" ]; then
@@ -20,16 +24,81 @@ if [ $# -lt 1 ] || [ -z "${1:-}" ]; then
 fi
 
 QUERY="$1"
-TOP_K="${2:-10}"
+shift
+
+TOP_K="10"
+if [ $# -gt 0 ] && [[ "${1:-}" =~ ^[0-9]+$ ]]; then
+  TOP_K="$1"
+  shift
+fi
 
 if ! [[ "$TOP_K" =~ ^[0-9]+$ ]] || [ "$TOP_K" -lt 1 ]; then
   echo "top-k must be a positive integer." >&2
   exit 64
 fi
 
+client_from_path() {
+  local path="$1"
+  case "$path" in
+    "$ROOT"/clients/*)
+      local rest="${path#"$ROOT"/clients/}"
+      printf '%s\n' "${rest%%/*}"
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+DEFAULT_CLIENT="$(client_from_path "$PWD" 2>/dev/null || client_from_path "$SCRIPT_ROOT" 2>/dev/null || true)"
+if [ -n "${AI_OS_MEMORY_SCOPE:-}" ]; then
+  SCOPE="$AI_OS_MEMORY_SCOPE"
+elif [ -n "$DEFAULT_CLIENT" ]; then
+  SCOPE="client"
+else
+  SCOPE="root"
+fi
+CLIENT="${AI_OS_MEMORY_CLIENT:-$DEFAULT_CLIENT}"
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --scope)
+      SCOPE="${2:-}"
+      shift 2
+      ;;
+    --scope=*)
+      SCOPE="${1#*=}"
+      shift
+      ;;
+    --client)
+      CLIENT="${2:-}"
+      shift 2
+      ;;
+    --client=*)
+      CLIENT="${1#*=}"
+      shift
+      ;;
+    root|client|clients|all)
+      SCOPE="$1"
+      shift
+      ;;
+    *)
+      echo "Unknown memory search option: $1" >&2
+      exit 64
+      ;;
+  esac
+done
+
+if [ "$SCOPE" = "client" ] && [ -z "$CLIENT" ]; then
+  echo "--scope client requires --client when not running from a client folder." >&2
+  exit 64
+fi
+
 run_markdown_fallback() {
   if [ -x "$ROOT/scripts/memory-search.sh" ] || [ -f "$ROOT/scripts/memory-search.sh" ]; then
-    bash "$ROOT/scripts/memory-search.sh" "$QUERY" "$TOP_K"
+    args=("$QUERY" "$TOP_K" --scope "$SCOPE")
+    [ -n "$CLIENT" ] && args+=(--client "$CLIENT")
+    bash "$ROOT/scripts/memory-search.sh" "${args[@]}"
     return
   fi
   echo "[]"
@@ -49,9 +118,10 @@ COLLECTION="$(bash "$ROOT/scripts/lib/memsearch-collection.sh" "$ROOT")"
 RAW_OUT="$(mktemp "${TMPDIR:-/tmp}/aios-memsearch.XXXXXX")"
 ERR_OUT="$(mktemp "${TMPDIR:-/tmp}/aios-memsearch.err.XXXXXX")"
 SEMANTIC_OUT="$(mktemp "${TMPDIR:-/tmp}/aios-memsearch.semantic.XXXXXX")"
+FILTERED_SEMANTIC_OUT="$(mktemp "${TMPDIR:-/tmp}/aios-memsearch.semantic-filtered.XXXXXX")"
 MARKDOWN_OUT="$(mktemp "${TMPDIR:-/tmp}/aios-memsearch.markdown.XXXXXX")"
 cleanup() {
-  rm -f "$RAW_OUT" "$ERR_OUT" "$SEMANTIC_OUT" "$MARKDOWN_OUT"
+  rm -f "$RAW_OUT" "$ERR_OUT" "$SEMANTIC_OUT" "$FILTERED_SEMANTIC_OUT" "$MARKDOWN_OUT"
 }
 trap cleanup EXIT
 
@@ -90,14 +160,22 @@ else
   cp "$RAW_OUT" "$SEMANTIC_OUT"
 fi
 
+if [ "$SCOPE" != "all" ] && [ -f "$ROOT/scripts/lib/filter-memory-results.py" ]; then
+  python3 "$ROOT/scripts/lib/filter-memory-results.py" "$ROOT" "$SCOPE" "$CLIENT" "$SEMANTIC_OUT" >"$FILTERED_SEMANTIC_OUT"
+else
+  cp "$SEMANTIC_OUT" "$FILTERED_SEMANTIC_OUT"
+fi
+
 if [ -f "$ROOT/scripts/memory-search.sh" ]; then
-  bash "$ROOT/scripts/memory-search.sh" "$QUERY" "$TOP_K" >"$MARKDOWN_OUT" 2>/dev/null || printf '[]\n' >"$MARKDOWN_OUT"
+  args=("$QUERY" "$TOP_K" --scope "$SCOPE")
+  [ -n "$CLIENT" ] && args+=(--client "$CLIENT")
+  bash "$ROOT/scripts/memory-search.sh" "${args[@]}" >"$MARKDOWN_OUT" 2>/dev/null || printf '[]\n' >"$MARKDOWN_OUT"
 else
   printf '[]\n' >"$MARKDOWN_OUT"
 fi
 
 if [ -f "$ROOT/scripts/lib/merge-memory-results.py" ]; then
-  python3 "$ROOT/scripts/lib/merge-memory-results.py" "$SEMANTIC_OUT" "$MARKDOWN_OUT" "$TOP_K"
+  python3 "$ROOT/scripts/lib/merge-memory-results.py" "$FILTERED_SEMANTIC_OUT" "$MARKDOWN_OUT" "$TOP_K"
 else
-  cat "$SEMANTIC_OUT"
+  cat "$FILTERED_SEMANTIC_OUT"
 fi

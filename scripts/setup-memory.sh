@@ -369,8 +369,8 @@ fi
 
 explain_skip() {
     warn "Skipped searchable memory setup."
-    echo "  Until it is enabled, older semantic recall, transcript drill-down,"
-    echo "  expanded memory search, and stronger citations will not be available."
+    echo "  Until it is enabled, older memory search,"
+    echo "  expanded recall, and stronger citations will not be available."
 }
 
 choose_target() {
@@ -385,8 +385,8 @@ choose_target() {
 
     echo ""
     printf "${CYAN}${BOLD}Searchable Memory${NC}\n"
-    echo "  MemSearch lets Claude Code or Codex search older sessions, transcripts,"
-    echo "  brand context, and learnings. AI-OS keeps markdown as the source"
+    echo "  MemSearch lets Claude Code or Codex search older sessions,"
+    echo "  pinned memory, and learnings. AI-OS keeps markdown as the source"
     echo "  of truth; MemSearch is only a rebuildable search index."
     echo ""
     echo "  Choose where to enable it:"
@@ -575,18 +575,35 @@ ensure_backend_config() {
 run_initial_index() {
     local index_paths=()
 
+    [[ -f "$REPO_ROOT/context/MEMORY.md" ]] && index_paths+=("context/MEMORY.md")
     [[ -d "$REPO_ROOT/context/memory" ]] && index_paths+=("context/memory/")
-    [[ -d "$REPO_ROOT/context/operator" ]] && index_paths+=("context/operator/")
-    [[ -d "$REPO_ROOT/context/_private" ]] && index_paths+=("context/_private/")
-    [[ -d "$REPO_ROOT/context/notion" ]] && index_paths+=("context/notion/")
-    [[ -d "$REPO_ROOT/context/transcripts" ]] && index_paths+=("context/transcripts/")
     [[ -f "$REPO_ROOT/context/learnings.md" ]] && index_paths+=("context/learnings.md")
-    [[ -d "$REPO_ROOT/brand_context" ]] && index_paths+=("brand_context/")
-    [[ -d "$REPO_ROOT/.memsearch/memory" ]] && index_paths+=(".memsearch/memory/")
+    shopt -s nullglob
+    for client_dir in "$REPO_ROOT"/clients/*/; do
+        [[ -d "$client_dir/context" ]] || continue
+        [[ -f "${client_dir}context/MEMORY.md" ]] && index_paths+=("${client_dir#"$REPO_ROOT/"}context/MEMORY.md")
+        [[ -d "${client_dir}context/memory" ]] && index_paths+=("${client_dir#"$REPO_ROOT/"}context/memory/")
+        [[ -f "${client_dir}context/learnings.md" ]] && index_paths+=("${client_dir#"$REPO_ROOT/"}context/learnings.md")
+    done
+    shopt -u nullglob
 
     if [[ ${#index_paths[@]} -eq 0 ]]; then
         warn "No memory files found to index yet."
         return 0
+    fi
+
+    local collection=""
+    if [[ -f "$REPO_ROOT/scripts/lib/memsearch-collection.sh" ]]; then
+        collection="$(bash "$REPO_ROOT/scripts/lib/memsearch-collection.sh" "$REPO_ROOT" 2>/dev/null || true)"
+    fi
+
+    local finish_command=""
+    if [[ -f "$REPO_ROOT/scripts/memsearch-reindex.sh" ]]; then
+        finish_command="bash scripts/memsearch-reindex.sh"
+    elif [[ -n "$collection" ]]; then
+        finish_command="memsearch index ${index_paths[*]} --collection $collection"
+    else
+        finish_command="memsearch index ${index_paths[*]}"
     fi
 
     info "Running initial MemSearch index..."
@@ -613,7 +630,13 @@ run_initial_index() {
         export HF_HUB_DISABLE_TELEMETRY="${HF_HUB_DISABLE_TELEMETRY:-1}"
         hf_token="$(read_env_value HF_TOKEN)"
         [[ -n "$hf_token" ]] && export HF_TOKEN="$hf_token"
-        memsearch index "${index_paths[@]}"
+        if [[ -f scripts/memsearch-reindex.sh ]]; then
+            bash scripts/memsearch-reindex.sh
+        else
+            collection_args=()
+            [[ -n "$collection" ]] && collection_args=(--collection "$collection")
+            memsearch index "${index_paths[@]}" "${collection_args[@]}"
+        fi
     ) || rc=$?
 
     if [[ $rc -eq 0 ]]; then
@@ -624,7 +647,7 @@ run_initial_index() {
     warn "Initial index did not finish (it was interrupted or the model download failed)."
     echo "  Your setup is otherwise complete. The index is rebuildable and your"
     echo "  markdown memory remains the source of truth. Finish it anytime with:"
-    echo "    memsearch index ${index_paths[*]}"
+    echo "    $finish_command"
     # Treat an unfinished index as a recoverable warning, not a hard setup failure.
     return 0
 }

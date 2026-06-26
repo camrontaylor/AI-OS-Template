@@ -18,6 +18,12 @@ make_fake_repo() {
     rm -rf "$TEST_ROOT"
     mkdir -p "$TEST_ROOT/repo/scripts" "$TEST_ROOT/repo/context/memory" "$TEST_ROOT/repo/brand_context" "$TEST_ROOT/repo/cron/jobs"
     cp "$REAL_REPO/scripts/setup-memory.sh" "$TEST_ROOT/repo/scripts/setup-memory.sh"
+    cat > "$TEST_ROOT/repo/scripts/memsearch-reindex.sh" <<'EOF'
+#!/usr/bin/env bash
+printf 'memsearch-reindex %s\n' "$*" >> "${MEMSEARCH_LOG:?}"
+exit 0
+EOF
+    chmod +x "$TEST_ROOT/repo/scripts/memsearch-reindex.sh"
     printf "ZILLIZ_URI=https://example.zillizcloud.com\nZILLIZ_TOKEN=test-token\n" > "$TEST_ROOT/repo/.env"
     printf "# Learnings\n" > "$TEST_ROOT/repo/context/learnings.md"
     cat > "$TEST_ROOT/repo/cron/jobs/nightly-memsearch-index.md" <<'EOF'
@@ -161,7 +167,7 @@ test_initial_index_is_scoped() {
     )
 
     assert_contains "$TEST_ROOT/memsearch-index.log" "config set embedding.provider onnx"
-    assert_contains "$TEST_ROOT/memsearch-index.log" "index context/memory/ context/learnings.md brand_context/"
+    assert_contains "$TEST_ROOT/memsearch-index.log" "memsearch-reindex"
     assert_not_contains "$TEST_ROOT/memsearch-index.log" "memsearch index ."
     assert_contains "$TEST_ROOT/claude-index.log" "claude plugin marketplace add zilliztech/memsearch"
     assert_contains "$TEST_ROOT/claude-index.log" "claude plugin install memsearch@memsearch-plugins --scope user"
@@ -209,7 +215,7 @@ test_windows_setup_disables_watch() {
 
     assert_contains "$TEST_ROOT/powershell-windows-setup.log" "set MEMSEARCH_NO_WATCH=1"
     assert_contains "$TEST_ROOT/memsearch-windows-setup.log" "no_watch=1 config set milvus.uri"
-    assert_contains "$TEST_ROOT/memsearch-windows-setup.log" "no_watch=1 index context/memory/ context/learnings.md brand_context/"
+    assert_contains "$TEST_ROOT/memsearch-windows-setup.log" "memsearch-reindex"
     assert_not_contains "$TEST_ROOT/repo/.env" "MEMSEARCH_NO_WATCH"
     ok "Windows setup disables watch without writing MEMSEARCH_NO_WATCH to .env"
 }

@@ -50,6 +50,16 @@ When Tier 0 is not enough, run the project wrapper from the repo root:
 bash scripts/memsearch-search.sh "<query>" 10
 ```
 
+From the root workspace, the wrapper searches root AI-OS memory only by default.
+From inside a client folder, it scopes recall to that client. Force a boundary
+when needed:
+
+```bash
+bash scripts/memsearch-search.sh "<query>" 10 --scope root
+bash scripts/memsearch-search.sh "<query>" 10 --scope client --client acme
+bash scripts/memsearch-search.sh "<query>" 10 --scope all
+```
+
 Do not run raw `memsearch search`, `memsearch expand`, `memsearch index`, or
 `memsearch stats` in Codex. The AI-OS authority guard blocks those commands so
 the recall path cannot bypass canonical collection resolution, markdown
@@ -61,6 +71,11 @@ MemSearch can start, the wrapper also runs markdown recall and fuses both result
 sets so exact specific matches can outrank broad semantic matches. If MemSearch
 cannot start because Milvus is blocked, locked, or missing, the wrapper returns
 sandbox-safe markdown fallback results only.
+
+Semantic indexing is for root/client memory and learning files. Client brand
+context is available only through client-scoped markdown fallback. Root brand
+context and transcript archives are explicit deep-search/reference surfaces, not
+routine memory recall.
 
 For semantic recall in Codex, run the command with escalated permissions from
 the first attempt:
@@ -76,12 +91,15 @@ return deterministic markdown results with `search_mode: "markdown_fallback"`.
 The fallback can also be run directly:
 
 ```bash
-bash scripts/memory-search.sh "<query>" 10
+bash scripts/memory-search.sh "<query>" 10 --scope all
 ```
 
-This searches `context/MEMORY.md`, `context/memory/`, `.memsearch/memory/`,
-`context/learnings.md`, `brand_context/`, and `context/transcripts/` without
-Milvus, a lock file, a local port, or escalation.
+This searches root `context/MEMORY.md`, `context/memory/`,
+`context/learnings.md`, plus the same memory surfaces under every `clients/*`
+folder when scope includes clients. Client `brand_context/` is included only
+when client scope is included. Root `brand_context/`, transcript archives, and
+plugin `.memsearch/memory/` shadow captures are diagnostic or reference material
+only; they are not routine authoritative AI-OS recall sources.
 
 Treat markdown fallback as a valid recall layer, not a last-ditch manual scrape.
 It is less semantic than MemSearch, but it is faithful to AI-OS because it reads
@@ -104,7 +122,7 @@ are unavailable or insufficient.
 In degraded mode:
 
 1. Say **degraded mode** plainly.
-2. Read `context/MEMORY.md`, `context/memory/*.md`, `.memsearch/memory/*.md`, and `context/learnings.md`.
+2. Read `context/MEMORY.md`, `context/memory/*.md`, and `context/learnings.md`.
 3. Run:
    ```bash
    bash scripts/lib/memory-meta.sh "<topic>"
@@ -132,6 +150,10 @@ Keep it short unless the user asks for a full history.
 - 2026-06-25: Use `scripts/memory-search.sh` as the Tier 1.5 fallback before manual degraded-mode reading. It is the sandbox-safe AI-OS recall layer.
 - 2026-06-25: Raw MemSearch commands are blocked in Codex. Use `scripts/memsearch-search.sh` for recall and `scripts/memsearch-reindex.sh` for indexing.
 - 2026-06-25: `scripts/memsearch-search.sh` must use hybrid recall: semantic MemSearch plus exact markdown recall fused together, because semantic-only results can be too broad.
+- 2026-06-25: Multi-client recall must be generic across every `clients/*` workspace. Root recall defaults to root AI-OS memory only; client-folder recall defaults to that client; force `--scope root|client|clients|all` when the boundary matters.
+- 2026-06-25: Do not index client `brand_context/` trees semantically; some contain design systems and app assets. Client brand context is available in client-scoped markdown fallback only.
+- 2026-06-25: Do not include transcript archives in routine semantic indexing or standard markdown fallback. Keep transcripts behind explicit deep-search so regular memory recall stays bounded and root searches do not surface client meeting material.
+- 2026-06-25: Do not treat `.memsearch/memory/` plugin shadow captures as authoritative AI-OS memory. They can be inspected for diagnostics, but routine recall and indexing should use root/client `context/MEMORY.md`, `context/memory/`, and `context/learnings.md`.
 
 ## Self-Update
 

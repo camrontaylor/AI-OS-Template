@@ -165,7 +165,7 @@ bash scripts/update.sh
 
 ## Semantic Memory (optional)
 
-AI-OS includes a semantic recall layer (Tier 1) that lets Claude Code or Codex search across past sessions, transcripts, learnings, and brand context -- not just today's log.
+AI-OS includes a semantic recall layer (Tier 1) that lets Claude Code or Codex search pinned memory, daily logs, learnings, and client brand context when the search is scoped to clients. Transcripts and reference archives stay out of routine recall unless you explicitly deep-search them.
 
 The guided installer and updater offer this as the recommended memory upgrade, but never install it silently. Claude Code is the default because AI-OS is Claude-first. You can choose Claude Code, Codex, both, or skip for now.
 
@@ -187,7 +187,17 @@ PowerShell on Windows:
 powershell -File scripts\setup-memory.ps1
 ```
 
-The script installs the `memsearch` CLI with `uv tool install "memsearch[onnx]"`, configures the vector backend, configures the selected agent runtime, and runs the initial index. It indexes only AI-OS memory files: `context/memory/`, `context/transcripts/`, `context/learnings.md`, `brand_context/`, and `.memsearch/memory/` when present.
+The script installs the `memsearch` CLI with `uv tool install "memsearch[onnx]"`, configures the vector backend, configures the selected agent runtime, and runs the initial index. Routine semantic indexing includes only root/client `context/MEMORY.md`, `context/memory/`, and `context/learnings.md`. Markdown fallback searches the same memory surfaces, plus `clients/*/brand_context/` when client scope is included. Root `brand_context/`, root transcripts, Notion/reference archives, and `.memsearch/memory/` are explicit deep-search or diagnostic sources, not standard recall.
+
+Recall wrappers are scope-aware:
+
+```bash
+bash scripts/memory-search.sh "query" 10 --scope root
+bash scripts/memory-search.sh "query" 10 --scope client --client client-slug
+bash scripts/memsearch-search.sh "query" 10 --scope all
+```
+
+From inside `clients/{slug}`, the default scope is that client. From the root checkout, the default scope is AI-OS root only unless you pass a client/all-client scope.
 
 On macOS/Linux it uses local Milvus Lite. On native Windows it uses a free [Zilliz Cloud](https://cloud.zilliz.com) cluster. For the free Zilliz option, choose AWS `eu-central-1` (Frankfurt) or GCP `us-west-1` (Oregon); other regions may require a paid plan. If `ZILLIZ_URI` and `ZILLIZ_TOKEN` are missing, the PowerShell setup opens Zilliz Cloud in your browser and asks you to paste the values. Git Bash prints the same guidance and can open the browser when PowerShell is available.
 
@@ -225,7 +235,7 @@ The old commands still work as compatibility wrappers:
 bash scripts/setup-memsearch.sh
 ```
 
-Semantic recall is **optional**. Without it, Tier 0 recall (`MEMORY.md` + today's log) still works. Older semantic recall, transcript drill-down, expanded memory search, and stronger citations stay unavailable until you enable searchable memory.
+Semantic recall is **optional**. Without it, Tier 0 recall (`MEMORY.md` + today's log) still works. Older memory search, expanded recall, and stronger citations stay unavailable until you enable searchable memory.
 
 ---
 
@@ -409,6 +419,8 @@ claude
 ```
 
 Each client has its own brand context, memory, and output. Shared methodology now lives in `AGENTS.md` at the root, with `CLAUDE.md` importing it for Claude Code. Skills and scripts sync automatically when you run `update.sh`.
+
+When a root-session prompt clearly targets one `clients/{slug}` workspace, AI-OS asks for confirmation before writes, memory edits, project edits, commits, or external side effects. Work inside `clients/{slug}` writes memory to that client by default.
 
 For the full setup guide, see [docs/multi-client-guide.md](docs/multi-client-guide.md).
 For how projects work (single tasks, planned projects, GSD), see [docs/projects-guide.md](docs/projects-guide.md).

@@ -8,7 +8,7 @@
 #   after every session, and `memsearch index` does a DESTRUCTIVE sync - it
 #   deletes every source that is not in the paths it was just given. When the
 #   plugin and AI-OS shared one collection, the plugin wiped AI-OS's full index
-#   (memory, transcripts, learnings, brand, notion) down to just the shadow on
+#   (root/client memory and learnings) down to just the shadow on
 #   every single session. Giving AI-OS its own "_aios" collection means the
 #   plugin can only ever clobber its own shadow box, never the canonical index
 #   that AI-OS cron indexing and runtime recall read.

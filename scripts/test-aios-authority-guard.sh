@@ -34,7 +34,7 @@ assert_empty() {
 
 info "Running AI-OS authority guard tests..."
 
-raw_out="$(run_hook 'memsearch search "Coast HubSpot" --top-k 5 --json-output')"
+raw_out="$(run_hook 'memsearch search "Acme Ops" --top-k 5 --json-output')"
 assert_contains "$raw_out" "permissionDecision"
 assert_contains "$raw_out" "AI-OS memory guard"
 assert_contains "$raw_out" "scripts/memsearch-search.sh"
@@ -44,11 +44,11 @@ uvx_out="$(run_hook 'uvx memsearch stats --collection ms_ai_os_c11344b8_aios')"
 assert_contains "$uvx_out" "AI-OS memory guard"
 ok "uvx raw memsearch command is denied"
 
-env_out="$(run_hook 'GLOG_minloglevel=3 GRPC_VERBOSITY=NONE memsearch search "Coast HubSpot" --top-k 5')"
+env_out="$(run_hook 'GLOG_minloglevel=3 GRPC_VERBOSITY=NONE memsearch search "Acme Ops" --top-k 5')"
 assert_contains "$env_out" "AI-OS memory guard"
 ok "env-prefixed raw memsearch command is denied"
 
-wrapper_out="$(run_hook 'bash scripts/memsearch-search.sh "Coast HubSpot" 10')"
+wrapper_out="$(run_hook 'bash scripts/memsearch-search.sh "Acme Ops" 10')"
 assert_empty "$wrapper_out"
 ok "AI-OS recall wrapper is allowed"
 

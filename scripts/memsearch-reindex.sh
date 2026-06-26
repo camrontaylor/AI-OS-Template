@@ -36,6 +36,7 @@ if ! command -v memsearch >/dev/null 2>&1; then
 fi
 
 LOCK_DIR="$ROOT/.command-centre/memsearch-index.lock"
+mkdir -p "$(dirname "$LOCK_DIR")"
 cleanup_lock() {
   rm -f "$LOCK_DIR/pid"
   rmdir "$LOCK_DIR" 2>/dev/null || true
@@ -89,28 +90,51 @@ if [ -x scripts/trim-memsearch-stubs.sh ]; then
   bash scripts/trim-memsearch-stubs.sh >/dev/null 2>&1 || true
 fi
 
+# Remove the obsolete generated bundle if it exists. The fast indexer keeps raw
+# Notion source paths, so indexing this bundle would duplicate Notion content.
+rm -f context/notion/_memsearch.md 2>/dev/null || true
+
 # The COMPLETE AI-OS memory source set. Every index run lists ALL of these so
 # none get deleted by the destructive sync. Only existing paths are included.
-CANDIDATES=(
-  context/memory/
-  context/learnings.md
-  context/operator/
-  context/_private/
-  brand_context/
-  context/notion/
-  context/transcripts/
-  .memsearch/memory/
-)
+# Brand context is intentionally left to markdown fallback. Client brand folders
+# can contain design systems, app assets, and other large reference trees that
+# make semantic indexing too slow for routine memory maintenance.
 SOURCES=()
-for p in "${CANDIDATES[@]}"; do
-  [ -e "$p" ] && SOURCES+=("$p")
+add_source() {
+  local p="$1"
+  if [ -e "$p" ]; then
+    SOURCES+=("$p")
+  fi
+}
+
+add_source context/MEMORY.md
+add_source context/memory/
+add_source context/learnings.md
+
+shopt -s nullglob
+for client_dir in clients/*/; do
+  [ -d "$client_dir/context" ] || continue
+  add_source "${client_dir}context/MEMORY.md"
+  add_source "${client_dir}context/memory/"
+  add_source "${client_dir}context/learnings.md"
 done
+shopt -u nullglob
 if [ ${#SOURCES[@]} -eq 0 ]; then
   echo "No memory sources found - nothing to index."
   exit 0
 fi
 
 echo "Indexing ${#SOURCES[@]} sources into ${COLL}${FORCE:+ (force)}: ${SOURCES[*]}"
-GLOG_minloglevel=3 GRPC_VERBOSITY=NONE memsearch index "${SOURCES[@]}" --collection "$COLL" $FORCE
+MEMSEARCH_PY=""
+MEMSEARCH_BIN="$(command -v memsearch || true)"
+if [ -n "$MEMSEARCH_BIN" ] && [ -f "$MEMSEARCH_BIN" ]; then
+  MEMSEARCH_PY="$(sed -n '1s/^#!//p' "$MEMSEARCH_BIN" 2>/dev/null || true)"
+fi
+
+if [ -x "$MEMSEARCH_PY" ] && [ -f scripts/memsearch-fast-index.py ]; then
+  GLOG_minloglevel=3 GRPC_VERBOSITY=NONE "$MEMSEARCH_PY" scripts/memsearch-fast-index.py "${SOURCES[@]}" --collection "$COLL" $FORCE
+else
+  GLOG_minloglevel=3 GRPC_VERBOSITY=NONE memsearch index "${SOURCES[@]}" --collection "$COLL" $FORCE
+fi
 echo -n "Result: "
 GLOG_minloglevel=3 memsearch stats --collection "$COLL" 2>/dev/null | grep -iE "chunk|total" | head -1

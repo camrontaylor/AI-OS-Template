@@ -13,6 +13,8 @@ const os = require("os");
 
 const GREETING_RE =
   /^(hi|hey|hello|yo|sup|gm|hiya|howdy|morning|good (morning|afternoon|evening)|hey there|hello there|what'?s up|whats up|ok|okay|thanks|thank you|ty)[\s!.?,]*$/i;
+const ALL_CLIENTS_RE =
+  /\b(all|every|each)\s+clients?\b|\bclients?\s+folders?\b|clients\/\*|\bevery\s+clients?\s+folders?\b/i;
 
 function isGreetingOnly(prompt) {
   const cleaned = prompt.trim();
@@ -53,6 +55,73 @@ function findContextRoot(startDir) {
   }
 
   return null;
+}
+
+function isClientRoot(root) {
+  return path.basename(path.dirname(root)) === "clients";
+}
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function aliasMatches(prompt, alias) {
+  const cleaned = alias.trim().toLowerCase();
+  if (!cleaned || cleaned.length < 3) return false;
+  const pattern = escapeRegExp(cleaned).replace(/[-\s]+/g, "[-\\s]+");
+  return new RegExp(`(^|[^a-z0-9])${pattern}([^a-z0-9]|$)`, "i").test(prompt);
+}
+
+function clientAliases(slug, displayName) {
+  const aliases = new Set([slug, slug.replace(/-/g, " "), displayName]);
+  const words = displayName
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter(Boolean);
+  if (words.length > 1) {
+    aliases.add(words.map((word) => word[0]).join(""));
+    if (words[words.length - 1] === "af") {
+      aliases.add(`${words.slice(0, -1).map((word) => word[0]).join("")}f`);
+    }
+  }
+  return [...aliases].filter(Boolean);
+}
+
+function clientDisplayName(clientDir) {
+  const agentsPath = path.join(clientDir, "AGENTS.md");
+  try {
+    const firstLine = fs.readFileSync(agentsPath, "utf8").split(/\r?\n/, 1)[0] || "";
+    return firstLine.replace(/^# Client:\s*/, "").trim() || path.basename(clientDir);
+  } catch {
+    return path.basename(clientDir);
+  }
+}
+
+function discoverClients(root) {
+  const clientsDir = path.join(root, "clients");
+  try {
+    return fs
+      .readdirSync(clientsDir, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => {
+        const dir = path.join(clientsDir, entry.name);
+        return {
+          dir,
+          aliases: clientAliases(entry.name, clientDisplayName(dir)),
+        };
+      })
+      .filter((client) => fs.existsSync(path.join(client.dir, "context")));
+  } catch {
+    return [];
+  }
+}
+
+function clientRootForPrompt(root, prompt) {
+  if (isClientRoot(root) || ALL_CLIENTS_RE.test(prompt)) return null;
+  const matches = discoverClients(root).filter((client) =>
+    client.aliases.some((alias) => aliasMatches(prompt, alias))
+  );
+  return matches.length === 1 ? matches[0].dir : null;
 }
 
 function visiblePromptLine(prompt) {
@@ -98,7 +167,8 @@ process.stdin.on("end", () => {
     const marker = path.join(os.tmpdir(), `aios-session-memory-${sessionId}.done`);
     if (fs.existsSync(marker)) return;
 
-    const root = findContextRoot(cwd);
+    const contextRoot = findContextRoot(cwd);
+    const root = contextRoot ? clientRootForPrompt(contextRoot, prompt) || contextRoot : null;
     if (!root) return;
 
     const today = dateStr(new Date());

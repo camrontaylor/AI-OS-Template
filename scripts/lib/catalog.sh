@@ -315,8 +315,8 @@ offer_memory_setup_after_update() {
     printf "${CYAN}${BOLD}  Recommended: Searchable Memory${NC}\n"
     printf "${CYAN}${BOLD}═══════════════════════════════════════════════${NC}\n"
     echo ""
-    echo "  MemSearch lets AI-OS search older sessions, transcripts,"
-    echo "  learnings, and brand context. Claude Code is the recommended default,"
+    echo "  MemSearch lets AI-OS search older memory, daily logs,"
+    echo "  learnings, and client-scoped brand context. Claude Code is the recommended default,"
     echo "  but Codex and Claude Code + Codex are also supported."
     echo ""
     printf "  Set it up now? ${BOLD}[Y/n]${NC} "
@@ -327,7 +327,7 @@ offer_memory_setup_after_update() {
 
     if [[ ! "$reply" =~ ^[Yy]$ ]]; then
         warn "Skipped searchable memory setup. The update flow will offer it again next time."
-        echo "  Semantic recall, older memory search, transcript drill-down,"
+        echo "  Semantic recall, older memory search,"
         echo "  expanded search, and stronger citations remain unavailable until enabled."
         record_memory_setup_decision "skipped-update"
         return 0

@@ -205,7 +205,7 @@ function Setup-SearchableMemory {
     Write-Host ""
     Write-Host "Searchable Memory" -ForegroundColor Cyan
     Write-Host "  This is optional, but recommended. It lets AI-OS search older"
-    Write-Host "  sessions, transcripts, learnings, and brand context."
+    Write-Host "  memory, daily logs, learnings, and client-scoped brand context."
     Write-Host "  Claude Code is the recommended default because AI-OS is Claude-first."
     Write-Host ""
 
@@ -246,7 +246,7 @@ function Setup-SearchableMemory {
         "3" { $target = "both" }
         "4" {
             Warn "Skipped searchable memory setup."
-            Write-Host "  Semantic recall, older memory search, transcript drill-down,"
+            Write-Host "  Semantic recall, older memory search,"
             Write-Host "  expanded search, and stronger citations will be unavailable until enabled."
             $script:MemoryDecision = "skipped"
             return

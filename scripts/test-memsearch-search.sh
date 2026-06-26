@@ -16,11 +16,17 @@ info() { printf "${CYAN}%s${NC}\n" "$1"; }
 
 make_fake_repo() {
   rm -rf "$TEST_ROOT"
-  mkdir -p "$TEST_ROOT/repo/scripts/lib" "$TEST_ROOT/repo/context/memory" "$TEST_ROOT/bin"
+  mkdir -p \
+    "$TEST_ROOT/repo/scripts/lib" \
+    "$TEST_ROOT/repo/context/memory" \
+    "$TEST_ROOT/repo/clients/acme/context" \
+    "$TEST_ROOT/repo/clients/beta/context" \
+    "$TEST_ROOT/bin"
   cp "$REAL_REPO/scripts/memsearch-search.sh" "$TEST_ROOT/repo/scripts/memsearch-search.sh"
   cp "$REAL_REPO/scripts/memory-search.sh" "$TEST_ROOT/repo/scripts/memory-search.sh"
   cp "$REAL_REPO/scripts/memory-search.py" "$TEST_ROOT/repo/scripts/memory-search.py"
   cp "$REAL_REPO/scripts/lib/merge-memory-results.py" "$TEST_ROOT/repo/scripts/lib/merge-memory-results.py"
+  cp "$REAL_REPO/scripts/lib/filter-memory-results.py" "$TEST_ROOT/repo/scripts/lib/filter-memory-results.py"
   cat > "$TEST_ROOT/repo/scripts/lib/memsearch-collection.sh" <<'EOF'
 #!/usr/bin/env bash
 echo "test_collection"
@@ -30,7 +36,19 @@ EOF
 # Working Memory
 
 ## Active Threads
-- Prior decisions say Coast recall should fall back to markdown when Milvus is sandboxed.
+- Prior decisions say Acme recall should fall back to markdown when Milvus is sandboxed.
+EOF
+  cat > "$TEST_ROOT/repo/clients/acme/context/MEMORY.md" <<'EOF'
+# Acme Memory
+
+## Active Threads
+- Acme scoped recall should return the acme-only marker.
+EOF
+  cat > "$TEST_ROOT/repo/clients/beta/context/MEMORY.md" <<'EOF'
+# Beta Memory
+
+## Active Threads
+- Beta scoped recall should not appear for acme-only marker searches.
 EOF
 }
 
@@ -53,10 +71,10 @@ EOF
     cd "$TEST_ROOT/repo"
     export PATH="$TEST_ROOT/bin:$PATH"
     export MEMSEARCH_LOG="$TEST_ROOT/memsearch.log"
-    bash scripts/memsearch-search.sh "Coast HubSpot" 7 > "$TEST_ROOT/out.json"
+    bash scripts/memsearch-search.sh "Acme Ops" 7 > "$TEST_ROOT/out.json"
   )
 
-  assert_contains "$TEST_ROOT/memsearch.log" "search Coast HubSpot --top-k 7 --json-output --collection test_collection"
+  assert_contains "$TEST_ROOT/memsearch.log" "search Acme Ops --top-k 7 --json-output --collection test_collection"
   python3 - "$TEST_ROOT/out.json" <<'PY'
 import json, sys
 data = json.load(open(sys.argv[1]))
@@ -72,7 +90,7 @@ test_sandbox_failure_returns_markdown_fallback() {
   make_fake_repo
   cat > "$TEST_ROOT/bin/memsearch" <<'EOF'
 #!/usr/bin/env bash
-echo "PermissionError: [Errno 1] Operation not permitted: '/Users/camronstricklin/.memsearch/milvus.db/LOCK'" >&2
+echo "PermissionError: [Errno 1] Operation not permitted: '/tmp/memsearch/milvus.db/LOCK'" >&2
 exit 1
 EOF
   chmod +x "$TEST_ROOT/bin/memsearch"
@@ -94,7 +112,59 @@ PY
   ok "sandbox failures return markdown fallback results"
 }
 
+test_root_default_filters_client_results() {
+  make_fake_repo
+  cat > "$TEST_ROOT/bin/memsearch" <<'EOF'
+#!/usr/bin/env bash
+printf '[{"source":"context/MEMORY.md","text":"root marker semantic"},{"source":"clients/acme/context/MEMORY.md","text":"acme-only marker semantic"}]\n'
+EOF
+  chmod +x "$TEST_ROOT/bin/memsearch"
+
+  (
+    cd "$TEST_ROOT/repo"
+    export PATH="$TEST_ROOT/bin:$PATH"
+    bash scripts/memsearch-search.sh "acme-only marker" 5 > "$TEST_ROOT/root-default.json"
+  )
+
+  python3 - "$TEST_ROOT/root-default.json" <<'PY'
+import json, sys
+data = json.load(open(sys.argv[1]))
+assert data, "expected root-scoped results"
+sources = [item.get("source", "") for item in data]
+assert any(source == "context/MEMORY.md" for source in sources), data
+assert not any(source.startswith("clients/") for source in sources), data
+PY
+  ok "root default filters client semantic and markdown results"
+}
+
+test_client_scope_filters_semantic_and_markdown() {
+  make_fake_repo
+  cat > "$TEST_ROOT/bin/memsearch" <<'EOF'
+#!/usr/bin/env bash
+printf '[{"source":"clients/acme/context/MEMORY.md","text":"acme-only marker semantic"},{"source":"clients/beta/context/MEMORY.md","text":"beta marker semantic"}]\n'
+EOF
+  chmod +x "$TEST_ROOT/bin/memsearch"
+
+  (
+    cd "$TEST_ROOT/repo"
+    export PATH="$TEST_ROOT/bin:$PATH"
+    bash scripts/memsearch-search.sh "acme-only marker" 5 --scope client --client acme > "$TEST_ROOT/scoped.json"
+  )
+
+  python3 - "$TEST_ROOT/scoped.json" <<'PY'
+import json, sys
+data = json.load(open(sys.argv[1]))
+assert data, "expected scoped results"
+sources = [item.get("source", "") for item in data]
+assert all("clients/acme/" in source for source in sources), data
+assert not any("clients/beta/" in source for source in sources), data
+PY
+  ok "client scope filters semantic and markdown results"
+}
+
 info "Running memsearch search wrapper tests..."
 test_success_uses_canonical_collection
 test_sandbox_failure_returns_markdown_fallback
+test_root_default_filters_client_results
+test_client_scope_filters_semantic_and_markdown
 ok "memsearch search wrapper tests passed"

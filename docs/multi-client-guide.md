@@ -4,8 +4,8 @@
 
 AI-OS has two layers:
 
-1. **Shared methodology** - `AGENTS.md`, `CLAUDE.md`, `SOUL.md`, skills, scripts. Version-controlled and shared. Lives at the root of your AI-OS folder.
-2. **Client data** - `brand_context/`, memory, learnings, projects, and cron jobs. Unique per client. Lives inside `clients/{client-name}/`.
+1. **Shared methodology** — `AGENTS.md`, `CLAUDE.md`, `SOUL.md`, skills, scripts. Version-controlled and shared. Lives at the root of your AI-OS folder.
+2. **Client data** — `brand_context/`, memory, learnings, projects, and cron jobs. Unique per client. Lives inside `clients/{client-name}/`.
 
 Claude remains the primary runtime. The compatibility change is structural:
 - `AGENTS.md` is now the canonical shared instruction file
@@ -51,6 +51,20 @@ No extra shim is needed for Codex.
 
 ---
 
+## Client Routing Guard
+
+If you are at the root and ask for work that clearly belongs to exactly one client, AI-OS should pause before doing the work. The assistant asks:
+
+```text
+This looks like {Client Name} work. Should I switch scope to clients/{slug}/ before proceeding?
+```
+
+If you confirm, memory, learnings, projects, outputs, and client-specific decisions go under that client folder. If you say it is root/shared AI-OS work, it stays at the root.
+
+This guard is generic. It discovers clients from `clients/*` and the first line of each client `AGENTS.md`, so it still works if you have 4 clients or 40. It does not fire for all-client work, AI-OS/template/system work, sync/update tasks, memory-system migration, or prompts that already include an explicit path like `clients/{slug}/...`.
+
+---
+
 ## What's Shared vs What's Separate
 
 | What | Where | How clients get it |
@@ -64,11 +78,10 @@ No extra shim is needed for Codex.
 | `AGENTS.md` (client-specific) | Each client | Created by `add-client.sh` |
 | `CLAUDE.md` (client wrapper) | Each client | Created by `add-client.sh` |
 | `brand_context/` | Each client | Built automatically on first session |
-| `context/MEMORY.md` | Root + each client | Root and clients each keep their own curated working scratchpad |
 | `context/learnings.md` | Root + each client | Root has system-wide learnings; clients start with a copy and diverge |
 | `context/memory/` | Root + each client | Root has system-wide memory; clients keep their own session history |
 | `projects/` | Each client | Per-client deliverables |
-| `.env` | Root + optional client overrides | Shared keys stay in the root `.env`; clients get overrides only when needed |
+| `.env` | Each client | Usually copied from root during client creation |
 | `cron/jobs/` | Each client | Per-client scheduled tasks |
 
 ### What stays in sync automatically
@@ -209,18 +222,13 @@ Existing clients created before the `AGENTS.md` change are handled conservativel
 
 ## Sharing API Keys
 
-Clients inherit shared API keys from the root `.env` at runtime. `add-client.sh`
-does **not** copy secrets into every client folder; when the root `.env` exists it
-creates a small client `.env` for client-specific overrides only.
-
-If one client needs its own key, add only that override:
+If all clients use the same API keys:
 
 ```bash
-printf 'FIRECRAWL_API_KEY=client-specific-key\n' >> clients/client-two/.env
+cp .env clients/client-two/.env
 ```
 
-Do not copy the full root `.env` unless you deliberately want duplicated secrets
-and are prepared to keep them in sync yourself.
+`add-client.sh` already does this automatically when the root `.env` exists.
 
 ---
 
@@ -241,6 +249,7 @@ The Command Centre UI also schedules root and client jobs while the server is ru
 
 - Work from the root folder when you are operating for yourself
 - Work from `clients/{slug}/` when you are operating for a specific client
+- If a root session sees one-client work, confirm the client scope before writing
 - Edit shared methodology in root `AGENTS.md`
 - Keep `CLAUDE.md` files as wrappers; do not put the canonical shared rules there
 - Edit shared skills at the root

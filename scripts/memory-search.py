@@ -22,10 +22,21 @@ from pathlib import Path
 SOURCE_RULES = [
     ("context/MEMORY.md", 2.0),
     ("context/learnings.md", 1.5),
-    ("brand_context/", 1.3),
     ("context/memory/", 1.0),
-    (".memsearch/memory/", 0.9),
-    ("context/transcripts/", 0.8),
+    ("brand_context/", 0.8),
+]
+
+MEMORY_SOURCE_FILES = [
+    "context/MEMORY.md",
+    "context/learnings.md",
+]
+
+MEMORY_SOURCE_DIRS = [
+    "context/memory",
+]
+
+CLIENT_REFERENCE_DIRS = [
+    "brand_context",
 ]
 
 SYSTEM_RECALL_TERMS = {
@@ -118,23 +129,71 @@ def build_term_groups(query: str) -> list[TermGroup]:
     return groups
 
 
-def candidate_files(root: Path) -> list[Path]:
+def is_client_root(path: Path) -> bool:
+    return path.parent.name == "clients" and (path / "context").is_dir()
+
+
+def workspace_root(start: Path) -> Path:
+    if is_client_root(start) and (start.parent.parent / "AGENTS.md").is_file():
+        return start.parent.parent
+    return start
+
+
+def client_dirs(root: Path) -> list[Path]:
+    clients_root = root / "clients"
+    if not clients_root.is_dir():
+        return []
+    return sorted(
+        path
+        for path in clients_root.iterdir()
+        if path.is_dir() and (path / "context").is_dir()
+    )
+
+
+def source_roots(root: Path, initial_root: Path, scope: str, client: str | None) -> list[Path]:
+    current_is_client = is_client_root(initial_root)
+
+    if scope == "current":
+        return [initial_root] if current_is_client else [root]
+
+    if scope == "root":
+        return [root]
+
+    if scope == "client":
+        if client:
+            target = root / "clients" / client
+        elif current_is_client:
+            target = initial_root
+        else:
+            raise ValueError("--scope client requires --client when --root is not a client folder")
+        return [target] if (target / "context").is_dir() else []
+
+    if scope == "clients":
+        return client_dirs(root)
+
+    if scope == "all":
+        return [root, *client_dirs(root)]
+
+    raise ValueError(f"unknown memory search scope: {scope}")
+
+
+def candidate_files(root: Path, source_root: Path) -> list[Path]:
     files: list[Path] = []
-    explicit = [
-        root / "context" / "MEMORY.md",
-        root / "context" / "learnings.md",
-    ]
+    explicit = [source_root / rel for rel in MEMORY_SOURCE_FILES]
     files.extend(path for path in explicit if path.is_file())
 
-    for rel_dir in [
-        "context/memory",
-        ".memsearch/memory",
-        "brand_context",
-        "context/transcripts",
-    ]:
-        directory = root / rel_dir
+    for rel_dir in MEMORY_SOURCE_DIRS:
+        directory = source_root / rel_dir
         if directory.is_dir():
             files.extend(sorted(directory.rglob("*.md")))
+
+    # Client brand context is useful when the caller deliberately scopes recall
+    # to clients, but root brand/transcript archives are not routine memory.
+    if source_root != root and is_client_root(source_root):
+        for rel_dir in CLIENT_REFERENCE_DIRS:
+            directory = source_root / rel_dir
+            if directory.is_dir():
+                files.extend(sorted(directory.rglob("*.md")))
 
     seen: set[Path] = set()
     unique: list[Path] = []
@@ -204,6 +263,10 @@ def split_sections(root: Path, path: Path) -> list[Section]:
 
 
 def authority(rel_source: str) -> float:
+    client_match = re.match(r"clients/[^/]+/(.+)", rel_source)
+    if client_match:
+        return authority(client_match.group(1))
+
     best_len = -1
     best_weight = 1.0
     for prefix, weight in SOURCE_RULES:
@@ -244,18 +307,21 @@ def source_fit(section: Section, groups: list[TermGroup]) -> float:
     """Prefer the memory source type that matches the query shape."""
     is_system_query = query_is_system_recall(groups)
     fit = 1.0
-    if section.rel_source == "context/learnings.md" and not is_system_query:
+    source_rel = section.rel_source
+    client_match = re.match(r"clients/[^/]+/(.+)", source_rel)
+    local_rel = client_match.group(1) if client_match else source_rel
+
+    if local_rel == "context/learnings.md" and not is_system_query:
         fit *= 0.35
+    if source_rel.startswith("clients/") and is_system_query:
+        fit *= 0.55
     if not is_system_query:
         haystack = section_haystack(section)
         if any(marker in haystack for marker in SYSTEM_NOTE_MARKERS):
             fit *= 0.35
     if (
         len(groups) >= 5
-        and (
-            section.rel_source.startswith("context/memory/")
-            or section.rel_source.startswith(".memsearch/memory/")
-        )
+        and local_rel.startswith("context/memory/")
     ):
         fit *= 1.15
     return fit
@@ -345,12 +411,15 @@ def score_section(section: Section, query: str, groups: list[TermGroup], idf: di
     return raw * authority(section.rel_source) * recency(section.rel_source) * length_factor * source_fit(section, groups)
 
 
-def search(root: Path, query: str, top_k: int) -> list[dict]:
+def search(root: Path, query: str, top_k: int, scope: str, client: str | None) -> list[dict]:
+    initial_root = root
+    root = workspace_root(root)
     groups = build_term_groups(query)
     terms = sorted({variant for group in groups for variant in group.variants}, key=len, reverse=True)
     sections: list[Section] = []
-    for path in candidate_files(root):
-        sections.extend(split_sections(root, path))
+    for source_root in source_roots(root, initial_root, scope, client):
+        for path in candidate_files(root, source_root):
+            sections.extend(split_sections(root, path))
 
     freqs = document_frequency(sections, groups)
     idf = idf_weights(len(sections), freqs)
@@ -387,6 +456,13 @@ def main() -> int:
     parser.add_argument("query")
     parser.add_argument("top_k", nargs="?", default=10, type=int)
     parser.add_argument("--root", default=Path(__file__).resolve().parents[1])
+    parser.add_argument(
+        "--scope",
+        choices=["current", "root", "client", "clients", "all"],
+        default="current",
+        help="Memory scope: current workspace, root only, one client, all clients, or root plus all clients.",
+    )
+    parser.add_argument("--client", help="Client slug to use with --scope client.")
     args = parser.parse_args()
 
     if args.top_k < 1:
@@ -394,7 +470,13 @@ def main() -> int:
         return 64
 
     root = Path(args.root).expanduser().resolve()
-    print(json.dumps(search(root, args.query, args.top_k), ensure_ascii=False, indent=2))
+    try:
+        results = search(root, args.query, args.top_k, args.scope, args.client)
+    except ValueError as exc:
+        print(str(exc), file=sys.stderr)
+        return 64
+
+    print(json.dumps(results, ensure_ascii=False, indent=2))
     return 0
 
 
