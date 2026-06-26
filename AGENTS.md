@@ -375,6 +375,50 @@ ever happens.
 - Log feedback to `context/learnings.md` under the skill's section
 - If gaps were spotted, mention once with opportunity framing
 
+### State Proof For External Actions
+
+When work changes state outside the current working tree, the agent must prove
+the exact target changed before claiming it is done. This covers git pushes,
+PR creation or merge, releases, template publishing, deploys, sent email,
+connector setup, cron or launch-agent changes, and external API writes.
+
+Before reporting completion for one of those actions:
+
+- **Target proof:** show the exact repo, remote URL, branch, account, workspace,
+  service, inbox, database, or deployment target that was acted on.
+- **Artifact proof:** show the exact commit hash, PR URL, tag, release, deploy
+  URL, job ID, sent-message ID, created file path, or equivalent durable result.
+- **Live proof:** verify from the remote or live target, not only from a local
+  cache, stale checkout, scratch clone, or command transcript.
+- **Stale-copy sweep:** if the task named another local checkout or template
+  folder, confirm whether that folder is the source of truth, disposable, stale,
+  or intentionally untouched.
+- **Boundary proof:** if the action crosses a repo, machine, service, account,
+  connector, inbox, or public surface, the approval must name that target and
+  action.
+
+If any proof is missing, use the status `prepared`, `tested locally`, or
+`blocked`, not `done`, `published`, `pushed`, `merged`, `sent`, or `live`.
+
+### External Action Approval Gates
+
+For outward actions, ask for approval with this shape and wait before acting:
+
+```text
+Approve external action?
+Target: <repo/service/account/branch/url>
+Action: <push/merge/publish/deploy/send/update/etc.>
+Artifact: <commit/tag/file/build/message/job/etc.>
+Risk: <what could change outside this workspace>
+Approval phrase: approve <action> to <target>
+```
+
+Generic consent such as "yes", "go ahead", "continue", or "do them all" can
+approve local edits, local tests, and already-listed Next Actions. It does not
+approve a push, merge, release, deploy, email send, connector write, cron
+enablement, or template publish unless the immediately preceding request named
+the exact target, action, artifact, and risk.
+
 ### Next Actions Footer
 
 Every interactive reply ends with a **Next Actions** block. This holds for substantive deliverables, research answers, status checks, one-line confirmations, and trivial Q&A. The only carve-outs are the narrow reply types listed under "Reply types that take no footer" below. The footer is the last thing in the reply, after the work, never before it, so it does not affect the "begin immediately, no preamble" rule in CLAUDE.md Greeting Behaviour. It is the SOUL.md truths "Have opinions" and "Anticipate needs" made routine.

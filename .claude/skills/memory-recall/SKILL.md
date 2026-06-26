@@ -155,6 +155,27 @@ Keep it short unless the user asks for a full history.
 - 2026-06-25: Do not include transcript archives in routine semantic indexing or standard markdown fallback. Keep transcripts behind explicit deep-search so regular memory recall stays bounded and root searches do not surface client meeting material.
 - 2026-06-25: Do not treat `.memsearch/memory/` plugin shadow captures as authoritative AI-OS memory. They can be inspected for diagnostics, but routine recall and indexing should use root/client `context/MEMORY.md`, `context/memory/`, and `context/learnings.md`.
 
+## Eval
+
+Run the memory recall eval before changing recall wrappers, collection logic, or
+client/root memory boundaries:
+
+```bash
+bash scripts/skill-evals.sh memory-recall
+```
+
+That runner executes:
+
+- `bash scripts/test-memory-search.sh`
+- `bash scripts/test-memsearch-search.sh`
+- `bash scripts/test-memsearch-reindex.sh`
+- `bash scripts/test-aios-authority-guard.sh`
+
+The eval fails if root recall returns client memory by default, client scope leaks
+another client, raw MemSearch bypass is allowed, semantic sandbox failure is
+treated as empty memory, or reindex includes transcripts, plugin shadow memory,
+or client brand context.
+
 ## Self-Update
 
 If the user flags a missed source, a wrong fallback, or a confusing memory answer,

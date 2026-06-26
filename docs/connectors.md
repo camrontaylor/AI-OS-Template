@@ -2,7 +2,7 @@
 
 One place to see everything AI-OS can reach: `.env` API services, CLI MCP servers, and Claude Desktop native connectors. This is the durable companion to the AGENTS.md Service Registry, which only covers the `.env` API keys.
 
-_Last reconciled: 2026-06-24._
+_Last reconciled: 2026-06-26._
 
 ## Layer 1 - `.env` API services (key-based)
 
@@ -68,3 +68,20 @@ Each adds a `plugin:*` skill block to the `/` picker. Enable/disable in `~/.clau
 ## Keeping this current
 
 Per the AGENTS.md **Skill & MCP Reconciliation** rules, when a new MCP server or connector is added, log it here. When an `.env` key is added, add it to the AGENTS.md Service Registry (Layer 1) and reflect it here. This file is the single answer to "what is AI-OS connected to right now."
+
+## Readiness Checks
+
+Run the static connector readiness check with:
+
+```bash
+bash .claude/skills/meta-systems-check/scripts/check.sh
+```
+
+It verifies that the connector map exists, required skill scripts are present,
+and key names are documented. It does not read `.env` or prove live credentials.
+
+For release/debug work that should also test the Command Centre runtime:
+
+```bash
+bash .claude/skills/meta-systems-check/scripts/check.sh --deep
+```

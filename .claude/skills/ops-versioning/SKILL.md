@@ -99,6 +99,19 @@ Auto and idempotent. Run `bash scripts/setup.sh`. It checks that bash is present
 (does not fail) if git is missing, since git only makes diffs nicer. Safe to run any time;
 nothing is installed.
 
+## Eval
+Run the ops-versioning eval before changing snapshot, list, restore, diff, deploy-routing,
+or saved-version index behavior:
+
+```bash
+bash scripts/skill-evals.sh ops-versioning
+```
+
+The eval creates a temporary document, snapshots it, changes it, snapshots again,
+restores the first version, and verifies the current copy was saved before restore.
+It fails if history is missing, restore loses the present copy, or the file does not
+return to the selected saved version.
+
 ## Rules
 - 2026-06-22: Never delete or change a saved version. History is append-only, matching the
   AI-OS no-hard-delete value.

@@ -146,6 +146,23 @@ If the dedup check caused a skip, reply: `Already saved - no change needed.`
 
 ---
 
+## Eval
+
+Run the memory-write eval before changing the MEMORY.md scaffold, cap rules,
+dedup behavior, section rules, or remove flow:
+
+```bash
+bash scripts/skill-evals.sh meta-memory-write
+```
+
+The eval checks that the skill still requires the three canonical sections,
+enforces the 2,500-character cap, performs a duplicate check before add,
+prefers replace over duplicate add, requires explicit confirmation before
+remove, stores env var names instead of secret values, and keeps mid-session
+writes on the next-session snapshot contract.
+
+---
+
 ## Self-Update
 
 If the user flags an issue with how memory is written - wrong section, missed dedup, bad consolidation - update the `## Rules` section in this SKILL.md immediately with the correction and today's date. Don't just log it to learnings; fix the skill so it doesn't repeat the mistake.
