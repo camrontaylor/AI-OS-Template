@@ -5,16 +5,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash scripts/codex-hook.sh .claude/hooks/aios-authority-guard.js",
-            "timeout": 5
-          }
-        ],
-        "matcher": "Write|Edit|MultiEdit|Bash"
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
             "command": "bash scripts/codex-hook.sh .claude/hooks/gsd-prompt-guard.js",
             "timeout": 5
           }

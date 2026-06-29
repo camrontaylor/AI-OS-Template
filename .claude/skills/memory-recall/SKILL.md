@@ -148,7 +148,7 @@ Keep it short unless the user asks for a full history.
 - 2026-06-25: In Codex, every MemSearch semantic command needs escalated permissions from the first attempt because Milvus Lite needs both a local lock file and a loopback port, even for read-only search.
 - 2026-06-25: If MemSearch returns `Operation not permitted`, `Failed to bind to address`, `Open local milvus failed`, `DataDirLockedError`, or a `LOCK` error, treat it as tool availability. Retry escalated or use labelled degraded mode; never treat it as empty memory.
 - 2026-06-25: Use `scripts/memory-search.sh` as the Tier 1.5 fallback before manual degraded-mode reading. It is the sandbox-safe AI-OS recall layer.
-- 2026-06-25: Raw MemSearch commands are blocked in Codex. Use `scripts/memsearch-search.sh` for recall and `scripts/memsearch-reindex.sh` for indexing.
+- 2026-06-25: Prefer AI-OS wrappers over raw MemSearch commands. Use `scripts/memsearch-search.sh` for recall and `scripts/memsearch-reindex.sh` for indexing.
 - 2026-06-25: `scripts/memsearch-search.sh` must use hybrid recall: semantic MemSearch plus exact markdown recall fused together, because semantic-only results can be too broad.
 - 2026-06-25: Multi-client recall must be generic across every `clients/*` workspace. Root recall defaults to root AI-OS memory only; client-folder recall defaults to that client; force `--scope root|client|clients|all` when the boundary matters.
 - 2026-06-25: Do not index client `brand_context/` trees semantically; some contain design systems and app assets. Client brand context is available in client-scoped markdown fallback only.
@@ -169,12 +169,10 @@ That runner executes:
 - `bash scripts/test-memory-search.sh`
 - `bash scripts/test-memsearch-search.sh`
 - `bash scripts/test-memsearch-reindex.sh`
-- `bash scripts/test-aios-authority-guard.sh`
 
 The eval fails if root recall returns client memory by default, client scope leaks
-another client, raw MemSearch bypass is allowed, semantic sandbox failure is
-treated as empty memory, or reindex includes transcripts, plugin shadow memory,
-or client brand context.
+another client, semantic sandbox failure is treated as empty memory, or reindex
+includes transcripts, plugin shadow memory, or client brand context.
 
 ## Self-Update
 

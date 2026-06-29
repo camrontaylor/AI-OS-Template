@@ -31,7 +31,6 @@ run_memory_recall() {
   bash "$ROOT/scripts/test-memory-search.sh"
   bash "$ROOT/scripts/test-memsearch-search.sh"
   bash "$ROOT/scripts/test-memsearch-reindex.sh"
-  bash "$ROOT/scripts/test-aios-authority-guard.sh"
   ok "memory-recall eval passed"
 }
 

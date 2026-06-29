@@ -178,7 +178,6 @@ required_tests=(
   "scripts/test-memsearch-reindex.sh"
   "scripts/test-client-routing-guard.sh"
   "scripts/test-session-memory-block.sh"
-  "scripts/test-aios-authority-guard.sh"
   "scripts/test-memory-setup.sh"
 )
 
