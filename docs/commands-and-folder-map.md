@@ -126,7 +126,7 @@ Skills are operating procedures for repeatable work.
 | Create or improve a skill | `/meta-skill-creator` |
 | Check whether a skill exists | `/meta-find-skills` |
 | Add a curated skill | `bash scripts/add-skill.sh skill-name` |
-| Remove a skill | `bash scripts/remove-skill.sh skill-name` |
+| Remove a skill (parks it in `_archived/`, never deletes) | `bash scripts/remove-skill.sh skill-name` |
 | Rebuild the skills catalog | `python3 scripts/gen-skills-catalog.py` |
 | Rank skills by usage and maturity | `python3 scripts/skill-tiers.py` |
 | Run a skill eval | `bash scripts/skill-evals.sh skill-name` |

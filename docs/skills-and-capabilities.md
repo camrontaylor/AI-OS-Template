@@ -64,6 +64,32 @@ AI-OS skills use category prefixes:
 The folder name, frontmatter name, learnings section, and output conventions
 should line up. That is what keeps the system understandable as it grows.
 
+### Vendored packs keep their author's name
+
+A skill pack brought in from an outside author does not get an AI-OS category
+prefix. It keeps the author's namespace instead:
+
+```text
+{author}-{pack}-{skill-name}
+```
+
+For example `coreyhaines-marketing-copywriting`, from
+[coreyhaines31/marketingskills](https://github.com/coreyhaines31/marketingskills).
+
+This is deliberate, for three reasons:
+
+- You can see at a glance in the `/` picker whose methodology you are about to run.
+- Someone else's approach stays visibly separate from AI-OS's own `mkt-*` and
+  `str-*` skills.
+- A vendored skill cannot quietly compete with a native one for the same request.
+  `mkt-copywriting` and `coreyhaines-marketing-copywriting` both write copy, and
+  the name tells you which is which.
+
+Every other rule still applies: folder name matches the frontmatter name, the
+learnings section is `## {folder-name}`, and each pack gets a row in
+`.claude/skills/ATTRIBUTION.md` and `skills-library/LICENSES.md`. Never rename a
+vendored skill into a category prefix, and never give a native skill a vendor name.
+
 ## Naming Conventions
 
 Use one name everywhere.
@@ -192,8 +218,14 @@ in [Skills Catalog](skills-catalog.md).
 | Inquiry | `/q-question` | Answer questions with the right depth: quick when stable, verified when current or client-facing, and research-backed when it matters. |
 | Research and strategy | `/str-ai-seo`, `/str-trending-research`, `/str-resources`, `/str-research-findings`, `/str-sitemap-workshop` | Research markets and trends, improve AI search visibility, capture resources and findings, and structure websites. |
 | Operations | `/ops-cron`, `/ops-versioning`, `/ops-agent-email`, `/ops-client-dashboard` | Schedule jobs, keep document versions, use the agent inbox, and inspect client task boards. |
-| Tools and connectors | `/tool-firecrawl-scraper`, `/tool-stitch`, `/tool-youtube` | Scrape sites, pull Stitch designs, and process YouTube content. |
-| Visual and design | `/viz-interface-design`, `/viz-stitch-design`, `/viz-excalidraw-diagram`, `/viz-ad-creative-fal`, `/viz-ad-creative-figma`, `/viz-ugc-heygen` | Design interfaces, diagrams, ad creative, and avatar video workflows. |
+| Tools and connectors | `/tool-firecrawl-scraper`, `/tool-youtube` | Scrape sites and process YouTube content. |
+| Visual and design | `/viz-excalidraw-diagram`, `/viz-ad-creative-codex`, `/viz-ad-creative-fal`, `/viz-ad-creative-figma` | Diagrams and ad creative batches. |
+| Engineering and comms | `/eng-implement`, `/comms-message`, `/q-unstuck` | Implement code changes, draft direct client messages, and break through a roadblock. |
+| Vendored marketing and maker packs | `/coreyhaines-marketing-*` (47), `/coreyhaines-skills-*` (18) | Corey Haines's marketing and maker methodology, kept under his own namespace so it stays distinct from the AI-OS `mkt-*` and `str-*` skills. See [ATTRIBUTION](../.claude/skills/ATTRIBUTION.md). |
+
+Parked skills are not listed here. `viz-interface-design`, `viz-stitch-design`,
+`tool-stitch`, `viz-ugc-heygen`, and `meta-synthesize-locals` sit in
+`.claude/skills/_archived/` and come back with `bash scripts/add-skill.sh <name>`.
 
 ## Optional Service Keys By Skill
 
@@ -359,6 +391,30 @@ Rank skills by actual use:
 ```bash
 python3 scripts/skill-tiers.py
 ```
+
+## Adding And Removing Skills
+
+```bash
+bash scripts/add-skill.sh <skill-name>
+bash scripts/remove-skill.sh <skill-name>
+```
+
+Removing a skill does not delete it. The folder moves to
+`.claude/skills/_archived/`, so it disappears from the `/` picker but nothing is
+lost. Adding it again moves it straight back:
+
+```text
+.claude/skills/<name>/  --remove-->  .claude/skills/_archived/<name>/
+.claude/skills/<name>/  <--add-----  .claude/skills/_archived/<name>/
+```
+
+This matters more than it looks. `add-skill.sh` restores from `_archived/` first
+and only falls back to git history. On a fresh clone, a team copy, or a shallow
+clone that history may not be there, so a skill that had been hard-deleted could
+not come back. Parking makes remove-then-re-add work everywhere.
+
+Core skills cannot be removed. If an older parked copy already exists, it is kept
+with a timestamp rather than overwritten.
 
 ## The Practical Rule
 

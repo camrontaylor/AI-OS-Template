@@ -37,9 +37,13 @@ You need:
 Clone the repo:
 
 ```bash
-git clone https://<YOUR-TOKEN>@github.com/camrontaylor/AI-OS.git
+git clone https://github.com/camrontaylor/AI-OS-Template.git AI-OS
 cd AI-OS
 ```
+
+No token or account is needed. That repo is the clean template: the system, the
+skills, and the docs, with nobody else's memory, clients, or keys in it. Your own
+memory and brand context are built on your machine as you use it, and stay there.
 
 Run the launcher:
 

@@ -115,9 +115,9 @@ Rather than trying to merge all the changes into your existing install (which wi
 
 2. **Clone the latest version:**
    ```bash
-   git clone https://YOUR-TOKEN@github.com/camrontaylor/AI-OS.git
+   git clone https://github.com/camrontaylor/AI-OS-Template.git AI-OS
    ```
-   Use the Camron-owned AI-OS repo or template as the source. Do not use any third-party classroom token.
+   The public template is the source. No token is needed. Do not use any third-party classroom token.
 
 ---
 
