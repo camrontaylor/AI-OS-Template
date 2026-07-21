@@ -80,7 +80,7 @@ export function PaneContainer({
   const [dropHover, setDropHover] = useState(false);
   const multiPane = visiblePanes.length > 1;
 
-  // Resolve display label - main pane uses mainPaneLabel prop (task title)
+  // Resolve display label — main pane uses mainPaneLabel prop (task title)
   const getPaneLabel = (pane: PaneItem) =>
     pane.id === MAIN_PANE_ID ? (mainPaneLabel || parentTask?.title || "Chat") : pane.label;
 
@@ -88,7 +88,7 @@ export function PaneContainer({
   const getPaneTask = (pane: PaneItem) =>
     pane.taskId ? allTasks.find((t) => t.id === pane.taskId) : undefined;
   function renderPaneContent(paneItem: PaneItem, isFocused: boolean) {
-    // Main chat pane - rendered by parent via callback
+    // Main chat pane — rendered by parent via callback
     if (paneItem.id === MAIN_PANE_ID && renderMainPane) {
       return <>{renderMainPane()}</>;
     }
@@ -247,7 +247,7 @@ export function PaneContainer({
 
   if (visiblePanes.length === 0) return null;
 
-  // Single pane - full width, no header. Column so the main pane's stacked
+  // Single pane — full width, no header. Column so the main pane's stacked
   // children (ModalChat header + messages, then ReplyInput composer) lay out
   // vertically (messages fill, composer pinned to the bottom) instead of
   // side-by-side. ModalChat returns a fragment, so this parent owns the axis.
@@ -266,7 +266,7 @@ export function PaneContainer({
     );
   }
 
-  // Multiple panes - stacked (grid) or side-by-side (horizontal)
+  // Multiple panes — stacked (grid) or side-by-side (horizontal)
   const useGrid = layout === "grid" && visiblePanes.length >= 2;
 
   return (
@@ -284,7 +284,7 @@ export function PaneContainer({
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
-      {/* Layout toggle - available when 2+ panes */}
+      {/* Layout toggle — available when 2+ panes */}
       {visiblePanes.length >= 2 && onSetLayout && (
         <div className="flex shrink-0 justify-end gap-1 px-2 py-1">
           <Button
@@ -316,7 +316,7 @@ export function PaneContainer({
         /* Grid: 2 panes = vertical stack, 3-4 panes = 2x2 grid */
         <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", minHeight: 0 }}>
           {visiblePanes.length <= 2 ? (
-            /* Vertical stack - each pane in its own row */
+            /* Vertical stack — each pane in its own row */
             visiblePanes.map((pane, idx) => (
               <React.Fragment key={pane.id}>
                 {idx > 0 && <div style={{ height: 1, backgroundColor: "var(--border)", flexShrink: 0 }} />}
@@ -339,7 +339,7 @@ export function PaneContainer({
               </React.Fragment>
             ))
           ) : (
-            /* 2x2 grid - top row + bottom row */
+            /* 2x2 grid — top row + bottom row */
             <>
               <div style={{ flex: 1, display: "flex", overflow: "hidden", minHeight: 0 }}>
                 {visiblePanes.slice(0, 2).map((pane, idx) => (
@@ -410,7 +410,7 @@ export function PaneContainer({
   );
 }
 
-/* ─── PaneWrapper - name header + content ───────────────────────── */
+/* ─── PaneWrapper — name header + content ───────────────────────── */
 
 function PaneWrapper({
   pane,

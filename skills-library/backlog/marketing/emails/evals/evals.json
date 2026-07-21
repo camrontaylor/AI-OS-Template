@@ -21,7 +21,7 @@
     {
       "id": 2,
       "prompt": "We need a lead nurture sequence for people who download our 'State of DevOps 2024' report. Goal is to get them to book a demo of our CI/CD platform.",
-      "expected_output": "Should create a lead nurture sequence (6-8 emails). Should follow value before ask - first emails should provide related value, not immediately push for demo. Should map the sequence from awareness (report download) through consideration (related content, case studies) to decision (demo request). Should include timing between emails. Each email should have clear subject line, hook, single CTA. Should gradually increase commitment asks across the sequence.",
+      "expected_output": "Should create a lead nurture sequence (6-8 emails). Should follow value before ask — first emails should provide related value, not immediately push for demo. Should map the sequence from awareness (report download) through consideration (related content, case studies) to decision (demo request). Should include timing between emails. Each email should have clear subject line, hook, single CTA. Should gradually increase commitment asks across the sequence.",
       "assertions": [
         "Creates 6-8 email lead nurture sequence",
         "Follows value before ask principle",

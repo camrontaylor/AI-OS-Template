@@ -14,16 +14,11 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 TOKEN="${1:-}"
 TOKEN_FILE="$HOME/.config/claude-code-oauth-token"
+AI_KEYS_FILE="${AI_KEYS_ENV_FILE:-$HOME/.config/ai-keys.env}"
 PLIST="$HOME/Library/LaunchAgents/com.aios.cron-daemon.plist"
 LABEL="com.aios.cron-daemon"
-
-# Make sure the runtime has the folders it writes to before the test job runs.
-# Without these, run-job.sh below cannot write its log/state files and the test
-# fails with a confusing path error instead of a clean result.
-mkdir -p "$REPO_ROOT/cron/logs" "$REPO_ROOT/cron/status"
 
 if [[ -n "$TOKEN" ]]; then
   mkdir -p "$(dirname "$TOKEN_FILE")"
@@ -38,9 +33,64 @@ else
   exit 1
 fi
 
+# Generate the launchd plist if it is missing. Nothing else in the repo creates it,
+# and it is what makes the nightly jobs durable: launchd reloads the daemon on login.
 if [[ ! -f "$PLIST" ]]; then
-  echo "Missing launchd plist: $PLIST"
-  exit 1
+  REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+  NODE_BIN="$(command -v node || true)"
+  if [[ -z "$NODE_BIN" ]]; then
+    echo "node not found on PATH. Install Node 18+ and re-run."
+    exit 1
+  fi
+  NODE_DIR="$(dirname "$NODE_BIN")"
+  CLAUDE_BIN="${REAL_CLAUDE_BIN:-$(command -v claude || echo /usr/local/bin/claude)}"
+  WRAPPER="$SCRIPT_DIR/claude-cron-wrapper.sh"
+  mkdir -p "$HOME/Library/LaunchAgents" "$REPO_ROOT/.command-centre"
+  cat > "$PLIST" <<PLIST_EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>$LABEL</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>$NODE_BIN</string>
+        <string>$REPO_ROOT/scripts/cron/cron-daemon.cjs</string>
+        <string>serve</string>
+    </array>
+    <key>WorkingDirectory</key>
+    <string>$REPO_ROOT</string>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>$REPO_ROOT/.command-centre/cron-daemon.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>$REPO_ROOT/.command-centre/cron-daemon.err.log</string>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>$NODE_DIR:$HOME/.local/bin:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <key>GLOG_minloglevel</key>
+        <string>3</string>
+        <key>GRPC_VERBOSITY</key>
+        <string>NONE</string>
+        <key>HOME</key>
+        <string>$HOME</string>
+        <key>AI_OS_CLAUDE_BIN</key>
+        <string>$WRAPPER</string>
+        <key>REAL_CLAUDE_BIN</key>
+        <string>$CLAUDE_BIN</string>
+        <key>AI_KEYS_ENV_FILE</key>
+        <string>$AI_KEYS_FILE</string>
+    </dict>
+</dict>
+</plist>
+PLIST_EOF
+  chmod 644 "$PLIST"
+  echo "Generated launchd plist: $PLIST"
 fi
 
 # Load or reload the daemon.
@@ -51,6 +101,13 @@ if launchctl print "gui/$(id -u)/$LABEL" >/dev/null 2>&1; then
 fi
 launchctl bootstrap "gui/$(id -u)" "$PLIST" && echo "Cron daemon loaded (durable, starts on login)."
 
+if [[ ! -f "$AI_KEYS_FILE" ]] || ! grep -qE '^(export[[:space:]]+)?NOTION_API_KEY=' "$AI_KEYS_FILE"; then
+  echo ""
+  echo "Notion resource jobs are not fully configured yet."
+  echo "Missing key name: NOTION_API_KEY in $AI_KEYS_FILE"
+  echo "Until that key is present, notion-resource-health will correctly report BLOCKED."
+fi
+
 sleep 2
 echo ""
 echo "--- scheduler status ---"
@@ -60,10 +117,10 @@ echo ""
 echo "--- test run: daily-memory-distill (proves auth works) ---"
 # Run the test through the same wrapper the daemon uses AND pass the token directly,
 # so this test reflects what the nightly job will actually do (the plain shell does
-# not have AGENTIC_OS_CLAUDE_BIN set; only the launchd plist does).
-AGENTIC_OS_CLAUDE_BIN="$SCRIPT_DIR/claude-cron-wrapper.sh" \
+# not have AI_OS_CLAUDE_BIN set; only the launchd plist does).
+AI_OS_CLAUDE_BIN="$SCRIPT_DIR/claude-cron-wrapper.sh" \
   CLAUDE_CODE_OAUTH_TOKEN="$(tr -d '[:space:]' < "$TOKEN_FILE")" \
   bash "$SCRIPT_DIR/run-job.sh" daily-memory-distill 2>&1 | tail -6
 echo ""
 echo "If the test shows result: success, your nightly memory jobs are LIVE and self-maintaining."
-echo "Jobs: daily-memory-distill 23:00, nightly-memsearch-index 23:30, weekly rebuild Sun 03:30."
+echo "Jobs: daily-memory-distill 23:00, nightly semantic index plus health 23:30."

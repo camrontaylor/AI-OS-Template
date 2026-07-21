@@ -1,4 +1,4 @@
-# Notion Sync - Optimisation Suggestions
+# Notion Sync — Optimisation Suggestions
 
 Running list of improvements for the Notion sync. Not committed work, just the
 backlog of ideas and their assessment. Newest thinking at the bottom of each
@@ -42,18 +42,20 @@ home. Minimise external write targets.
 
 ## Open suggestions
 
-### 1. Remove the double-indexer (concurrency safety) - HIGH PRIORITY
+### 1. Remove the double-indexer (concurrency safety) — HIGH PRIORITY
 Two schedulers call `memsearch index` against single-process Milvus Lite with no
 lock: the sync at Sun 22:30, the nightly memory index daily at 23:30. They
 survive today on a ~40-minute gap, which is luck not safety. This is the exact
 failure mode that corrupted the index once already.
-Fix: drop the `memsearch index` call from `run-notion-sync.sh`; add
-`context/notion/` to the nightly index's paths. One indexer, collision
-impossible by design. Cost: synced notes searchable within 24h instead of
+Fix: drop the `memsearch index` call from `run-notion-sync.sh`; have the nightly
+index own Notion semantic indexing. Current implementation keeps raw
+`context/notion/` source paths but uses AI-OS's fast index wrapper to avoid one
+existing-hash lookup per file, so one indexer owns Milvus Lite and scheduled
+maintenance stays tractable. Cost: synced notes searchable within 24h instead of
 instantly (fine for a knowledge base).
-Status: proposed.
+Status: implemented for single-indexer ownership and fast scheduled indexing.
 
-### 2. Incremental sync (only changed pages) - HIGH PRIORITY
+### 2. Incremental sync (only changed pages) — HIGH PRIORITY
 Today every run re-queries every database and re-pulls every page body: ~1,200
 API calls, ~7 minutes, even when nothing changed. Notion's query API supports a
 `last_edited_time` filter. Store the last-run timestamp, fetch only pages edited
@@ -61,26 +63,26 @@ since. A run drops from ~7 minutes to seconds when little changed. This is the
 change that makes frequent syncing essentially free.
 Status: proposed.
 
-### 3. Move to daily - MEDIUM
+### 3. Move to daily — MEDIUM
 After #2, daily costs almost nothing and keeps journal entries and saved
 resources at most a day stale in recall instead of a week. Could go twice-daily
 trivially once incremental is in.
 Status: proposed.
 
-### 4. Make the nightly index pure bash - LOW
+### 4. Make the nightly index pure bash — LOW
 The nightly memory index is an agentic cron (`model: haiku`) to run its steps,
 the only place any cloud-model credit touches the memory pipeline. The
 embeddings are already local (ONNX). Converting the orchestration to plain bash
 (like the Notion runner) takes model cost on the memory system to zero.
 Status: optional.
 
-### 5. Two-way / write-back sync - NEEDS A DECISION (added 2026-06-15)
+### 5. Two-way / write-back sync — NEEDS A DECISION (added 2026-06-15)
 Idea: let the OS write to Notion, not just read from it, possibly via an agentic
 cron. Moving forward only, not retroactive.
 
 Assessment: "two-way sync" bundles two very different systems.
 
-- **(A) Bidirectional mirror** - keep local files and Notion pages identical,
+- **(A) Bidirectional mirror** — keep local files and Notion pages identical,
   propagate edits both directions. Advise against this for the existing knowledge
   mirror, for two reasons:
   - The local bodies are intentionally LOSSY (images, embeds, bookmarks, and
@@ -91,7 +93,7 @@ Assessment: "two-way sync" bundles two very different systems.
     last-write-wins (silent data loss) or field-level merge (a genuine
     engineering project). Not worth it for a personal knowledge base.
 
-- **(B) Scoped write-back, single-writer-per-database** - the recommended shape.
+- **(B) Scoped write-back, single-writer-per-database** — the recommended shape.
   Human-curated DBs (Stack, Resources, Notes) stay READ-ONLY: you own them in
   Notion, the OS only reads. The OS writes only to OS-owned destinations it is
   the sole author of: e.g. a "Session Log", "Deliverables", or "Agent Inbox"

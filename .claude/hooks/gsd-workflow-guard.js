@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 // gsd-hook-version: 1.28.0
-// GSD Workflow Guard - PreToolUse hook
+// GSD Workflow Guard — PreToolUse hook
 // Detects when Claude attempts file edits outside a GSD workflow context
 // (no active /gsd- command or Task subagent) and injects an advisory warning.
 //
-// This is a SOFT guard - it advises, not blocks. The edit still proceeds.
+// This is a SOFT guard — it advises, not blocks. The edit still proceeds.
 // The warning nudges Claude to use /gsd-quick or /gsd-fast instead of
 // making direct edits that bypass state tracking.
 //
@@ -72,7 +72,7 @@ process.stdin.on('end', () => {
       process.exit(0);
     }
 
-    // Check if workflow guard is enabled - resolve via per-brief .planning/
+    // Check if workflow guard is enabled — resolve via per-brief .planning/
     const cwd = data.cwd || process.cwd();
     const configPath = findPlanningConfig(cwd);
     if (configPath && fs.existsSync(configPath)) {
@@ -85,7 +85,7 @@ process.stdin.on('end', () => {
         process.exit(0);
       }
     } else {
-      process.exit(0); // No GSD project - don't guard
+      process.exit(0); // No GSD project — don't guard
     }
 
     // If we get here: GSD project, guard enabled, file edit outside .planning/,
@@ -103,7 +103,7 @@ process.stdin.on('end', () => {
 
     process.stdout.write(JSON.stringify(output));
   } catch (e) {
-    // Silent fail - never block tool execution
+    // Silent fail — never block tool execution
     process.exit(0);
   }
 });

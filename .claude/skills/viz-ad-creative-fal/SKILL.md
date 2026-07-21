@@ -1,16 +1,7 @@
 ---
 name: viz-ad-creative-fal
 description: >
-  Generate consistent, on-brand paid ad creative batches in Claude using fal.ai
-  as the image and video engine (FLUX, Recraft, Ideogram, nano-banana, Kling,
-  Veo, Seedance). One skill runs first-use onboarding, brand lock, scratch or
-  performance-data strategy, platform-limited copy, image/video generation with
-  references and seed control, multi-size export, slate tracking, launch QA, and
-  performance iteration. Use whenever the user wants Claude plus fal.ai for paid
-  social ads, Meta/Google/TikTok ad sets, batch variations, creative matrices,
-  photoreal product shots, typography models, or short video. Needs FAL_KEY.
-  Use viz-ad-creative-codex for Codex-native no-key image generation and
-  viz-ad-creative-figma for Figma/template production.
+  Generate on-brand paid ad creative batches in Claude using fal.ai for image and video (FLUX, Recraft, Ideogram, nano-banana, Kling, Veo, Seedance). Covers brand lock, platform-limited copy, image/video generation with seed control, multi-size export, and launch QA. Needs FAL_KEY. Use viz-ad-creative-figma for deterministic Figma/template production.
 ---
 
 # Ad Creative Factory (fal.ai engine)
@@ -67,12 +58,12 @@ Run first-use onboarding once, then run `bash scripts/setup.sh` to check the key
 ## Skill Relationships
 
 - Upstream: `mkt-brand-voice`, `mkt-positioning`, `mkt-icp` build the brand lock this skill reads.
-- Sibling variants: `viz-ad-creative-codex` (Codex-native no-key image generation) and `viz-ad-creative-figma` (Claude plus Figma/template engine). Same pipeline, different generation step.
+- Sibling variant: `viz-ad-creative-figma` (Claude plus Figma/template engine). Same pipeline, different generation step.
 - Trigger conflicts: one-off image generation requests and `mkt-copywriting` (copy only) are not full ad sets. This skill wins when the user wants a full ad creative set with the fal engine.
 
 ## Before You Start
 
-Confirm three things, then move: which client, what is being sold or offered, and the platforms (Meta, Google, TikTok, LinkedIn, YouTube). If the onboarding profile exists, load it before asking anything so you do not re-ask known preferences. Pick this fal variant when the operator is in Claude and wants automated generation, photoreal product shots, mixed model routing, or short video. If they want no-key generation inside Codex, route to `viz-ad-creative-codex`; if they need pixel-exact, regulated, or AI-label-free output, route to `viz-ad-creative-figma`.
+Confirm three things, then move: which client, what is being sold or offered, and the platforms (Meta, Google, TikTok, LinkedIn, YouTube). If the onboarding profile exists, load it before asking anything so you do not re-ask known preferences. Pick this fal variant when the operator is in Claude and wants automated generation, photoreal product shots, mixed model routing, or short video. If they need pixel-exact, regulated, or AI-label-free output, route to `viz-ad-creative-figma`.
 
 ## Step 1: First-Run Onboarding
 
@@ -94,7 +85,7 @@ Read `context/learnings.md` for the `## viz-ad-creative-fal` section. Apply any 
 
 ## Step 4: Brand Lock
 
-Read `references/brand-lock.md`. The single source of truth is `brand_context/brand-profile.json`. If it exists, load it. If not, build it: pull from `brand_context/voice-profile.md`, `positioning.md`, and `icp.md` when present; otherwise use the client URL with WebFetch or Firecrawl if configured, or ask a short interview. Save the locked reference images (logo, 1 to 3 product shots, 1 to 2 style anchors, color swatch sheet) under `brand_context/assets/`. These exact images and exact hex values go into every generation call, which is what holds the look steady.
+Read `references/brand-lock.md`. The single source of truth is `brand_context/brand-profile.json`. If it exists, load it. If not, build it: pull from `brand_context/voice-profile.md`, `positioning.md`, and `icp.md` when present; otherwise extract from the client URL (use `tool-firecrawl-scraper` if available) or ask a short interview. Save the locked reference images (logo, 1 to 3 product shots, 1 to 2 style anchors, color swatch sheet) under `brand_context/assets/`. These exact images and exact hex values go into every generation call, which is what holds the look steady.
 
 ## Step 5: Strategy, Angles, and Matrix
 

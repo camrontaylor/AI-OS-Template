@@ -1,5 +1,5 @@
 {
-  "_comment": "Provenance for skills-library/backlog. SHAs are the upstream commits the vendored copies were taken from. Every pack vendored here is MIT-licensed and publish-safe (see LICENSES.md). Candidates are public repos worth turning into a skill later.",
+  "_comment": "Provenance for skills-library/backlog. Cloned 2026-06-16. SHAs are the upstream commits the vendored copies were taken from. License 'none' = all-rights-reserved; vendored for private personal use in this private repo only — do not republish.",
   "sources": [
     {
       "repo": "briiirussell/cybersecurity-skills",
@@ -13,11 +13,47 @@
     {
       "repo": "coreyhaines31/marketingskills",
       "url": "https://github.com/coreyhaines31/marketingskills",
-      "commit": "3bea48edea99dc3ff4fdbdf0ad5768c8965f1401",
+      "commit": "67264763cb107d61749f418d081c56e5bcbc0209",
       "license": "MIT",
       "vendored_to": "backlog/marketing",
-      "skills": 44,
-      "notes": "Broad marketing pack. Several overlap with the live marketing skills; the net-new ones include marketing-plan, prospecting, public-relations, sms."
+      "skills": 47,
+      "notes": "Re-synced 2026-07-21 from 6c60174 -> 6726476 (still 47 skills, no additions/removals - all changes are feature-adds inside existing skills). Prior: updated 2026-07-08 from 3bea48e -> 6c60174 (44 -> 47). ~40 are already live (flagged Active dup? in INDEX). Net-new skills at that point: marketing-plan, prospecting, public-relations, sms, marketing-council, marketing-loops, offers. 2026-07-21 delta = enhancements to LIVE-adjacent skills: ad-creative (iMessage/ChatGPT/AppleNotes/AirDrop reveal-video formats, motion-video ads, creative-review-page.html artifact, hook-system, Mode-4 creative-roadmap loop), ai-seo (citations-vs-recommendations AI-visibility ladder - feeds live str-ai-seo), social (carousel-frameworks: 5 slide narrative architectures), video (edit-anatomy: reverse-engineer a viral edit into a reusable spec), prospecting (demand-signals discovery branch), product-marketing (context-doc version history). No net-new skills this sync."
+    },
+    {
+      "repo": "coreyhaines31/makerskills",
+      "url": "https://github.com/coreyhaines31/makerskills",
+      "commit": "d4413703ffc0c750c2d2dbe645302af4e34e4895",
+      "license": "MIT",
+      "vendored_to": "backlog/maker",
+      "skills": 19,
+      "notes": "Re-synced 2026-07-21 from c6e5c3d -> d441370 (18 -> 19 skills). NET-NEW skill: unstuck (the roadblock antidote - classifies a wall's type, runs 10-technique lateral-thinking inventory to min 10 angles, has an AGENT FAST-PATH: run on yourself before reporting a dead end; strong grain-fit, sits upstream of decide; STAGED TO REVIEW 2026-07-21 for promotion). Other 2026-07-21 changes are fixes: decide +Q39 (opportunity cost), gender-neutral prose, de-personalized slide-deck, never store user state in the install tree. Prior (vendored 2026-07-08, inert): 18 'personal operator' skills business-brainstorm, company-brain, company-cfo, decide, deep-research, domain, jab-hook, loopify, paste, personal-cfo, pm, read-book, second-brain, skillify, slide-deck, social-fetch, toolify, watch-video. DID NOT run its installer (installs via a ~/.claude/plugins symlink). DUP/overlap with live AI-OS: decide (thinking-partner posture in AGENTS.md), deep-research (q-question + Claude built-in), second-brain/company-brain (AI-OS memory), skillify/toolify (meta-skill-creator), watch-video/social-fetch (tool-youtube, str-trending-research, firecrawl)."
+    },
+    {
+      "repo": "conversionfactory/agent-config",
+      "url": "https://github.com/conversionfactory/agent-config",
+      "commit": "329142e803a889958b11c9838e1dc99ea3be294a",
+      "license": "none (all-rights-reserved)",
+      "vendored_to": "backlog/cf-frameworks",
+      "skills": 42,
+      "notes": "Took shared/skills MINUS the marketing skills it re-bundles from coreyhaines (deduped). DID NOT run install.sh — it overwrites ~/.claude/CLAUDE.md, settings.json and symlinks their skills over yours. Crown jewel: the 14-stage client-delivery methodology (client-intake, brand-strategy, creative-direction, logo-design, brand-style-guide, sitemap-workshop, website-copy, wireframes, website-build-*, client-handoff, growth-engine, audit, audit-marketing)."
+    },
+    {
+      "repo": "conversionfactory/planner-skill",
+      "url": "https://github.com/conversionfactory/planner-skill",
+      "commit": "283df1d851b6927a0051bf98cc95ab1f55364b3e",
+      "license": "none (all-rights-reserved)",
+      "vendored_to": "backlog/planner",
+      "skills": 1,
+      "notes": "Notion + Google Calendar daily planner (v2.0.1). You have both MCPs. Recommended for triage — needs de-tailoring from the hardcoded 'Conversion Factory workspace' preflight."
+    },
+    {
+      "repo": "conversionfactory/QA-skill",
+      "url": "https://github.com/conversionfactory/QA-skill",
+      "commit": "ab09b2fe414131627fc44c338990d3ae15cf173b",
+      "license": "none (all-rights-reserved)",
+      "vendored_to": "backlog/copy-qa",
+      "skills": 1,
+      "notes": "Copy QA: Notion task -> Figma/Webflow comparison. You have Notion/Figma/Webflow MCPs. Built around a specific Notion schema (Task Type, '- Copy' related pages) — adapt to yours in triage."
     },
     {
       "repo": "mattnowdev/thinking-partner",
@@ -26,7 +62,52 @@
       "license": "MIT",
       "vendored_to": "backlog/thinking-partner",
       "skills": 1,
-      "notes": "Standalone 150+ mental-models thinking partner. Bundled as ONE skill: router SKILL.md + references/model-catalog.md + thinking-diagnostics.md, loaded on demand. The model for bundled promotion - one entry, not 150."
+      "notes": "Standalone 150+ mental-models thinking partner (the full catalog that GSD only sampled). Already bundled as ONE skill: router SKILL.md + references/model-catalog.md (841 lines) + thinking-diagnostics.md, loaded on demand. The model for bundled promotion - one /entry, not 150. Vendored 2026-06-22 via tarball, deliberately NOT 'skills add', to avoid auto-injecting into Claude."
+    },
+    {
+      "repo": "local/ad-creative-suite",
+      "url": "local",
+      "commit": "workspace-2026-06-23",
+      "license": "private local work product",
+      "vendored_to": "backlog/ad-creative-suite",
+      "skills": 3,
+      "notes": "Research-derived AI-OS pack for paid-ad creative production. Three portable variants: viz-ad-creative-fal, viz-ad-creative-nano, and viz-ad-creative-figma. Built from verified workflow research plus existing AI-OS marketing/visual skill patterns; not an upstream repo dump."
+    },
+    {
+      "repo": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills",
+      "commit": "391a2701dd948f94f56a39f7533f8eea9a859c87",
+      "license": "MIT",
+      "vendored_to": "backlog/mattpocock-skills",
+      "skills": 37,
+      "notes": "Vendored 2026-07-11, inert. Matt Pocock (AI Hero) 'Skills For Real Engineers' pack, aimed at real software engineering rather than vibe coding: grill-me/grill-with-docs interview-before-build, TDD, code-review (standards + spec review), diagnosing-bugs, domain-modeling, codebase-design, to-spec/to-tickets/triage/wayfinder issue-tracker workflow, wizard, research. Organized under skills/engineering, skills/productivity, skills/misc, skills/personal, skills/in-progress, skills/deprecated. AI-OS currently has no equivalent engineering-discipline pack (its skill set is marketing/ops/client-work heavy); likely dup/overlap only with grill-me/grilling vs the AGENTS.md Thinking Discipline posture, research vs q-question/deep-research, and code-review vs the built-in /code-review skill. Full per-skill assessment happens on triage."
+    },
+    {
+      "repo": "bradautomates/claude-video",
+      "url": "https://github.com/bradautomates/claude-video",
+      "commit": "unrecorded (vendored 2026-07-06; .git stripped to claude-video.git-backup/)",
+      "license": "MIT",
+      "vendored_to": "backlog/claude-video",
+      "skills": 1,
+      "notes": "Registered retroactively 2026-07-16 - vendored 2026-07-06 as the upstream for the live tool-youtube skill but never recorded here. One skill (watch). Active dup: tool-youtube is live and carries hand-patched fixes (config.py, yt-dlp path, android player_client); update tool-youtube VIA this vendored copy so patches carry over (memory 2026-07-06)."
+    },
+    {
+      "repo": "community/ten-rules-claude-md",
+      "url": "https://www.aibuilderclub.com (framing); TechTimes 2026-06-28 (secondhand claim)",
+      "commit": "n/a (document, not a repo)",
+      "license": "unverified - private reference only, do not republish",
+      "vendored_to": "backlog/community-claude-md-rules",
+      "skills": 0,
+      "notes": "Vendored 2026-07-16 as a provenance-flagged reference README only (the doc itself is summarized, not copied). Six community self-check rules layered on the four Karpathy-derived rules already absorbed into AGENTS.md Coding Discipline. Attribution to Karpathy is UNVERIFIED secondhand. Backlog only; normal intake applies."
+    },
+    {
+      "repo": "multica-ai/andrej-karpathy-skills",
+      "url": "https://github.com/multica-ai/andrej-karpathy-skills",
+      "commit": "n/a (linked, not copied - see backlog/karpathy-coding-discipline/README.md)",
+      "license": "not copied; check upstream before redistributing any original wording",
+      "vendored_to": "backlog/karpathy-coding-discipline",
+      "skills": 0,
+      "notes": "Registered retroactively 2026-07-16 - absorbed 2026-07-08 as the AGENTS.md Coding Discipline posture with a provenance-only README, but never recorded here. The four rules were re-expressed in AI-OS's own words; the source file was not copied in."
     }
   ],
   "candidates": [
@@ -41,7 +122,7 @@
       "vendored": false,
       "skills": 0,
       "clone": "gh repo clone farzaa/clicky",
-      "notes": "macOS app: an on-screen AI teaching buddy that watches your screen, talks back, and points a cursor at UI elements. NOT a Claude Code skill - tracked here as a reference to mine for a future screen-aware teaching / guided-walkthrough skill."
+      "notes": "macOS app by Farza Majeed: a Swift/Xcode app plus a Cloudflare Worker that proxies API keys. An on-screen AI teaching buddy that watches your screen, talks back (AssemblyAI speech-to-text + ElevenLabs voice), and points a cursor at UI elements; uses the Anthropic API. NOT a Claude Code skill - there is no SKILL.md to vendor, so it is tracked here as a reference/source to mine for a future skill idea (e.g. a screen-aware teaching / guided-walkthrough buddy as a viz or tool skill). To actually run it: clone OUTSIDE the AI-OS repo and follow its own CLAUDE.md (needs a Cloudflare Worker plus Anthropic/AssemblyAI/ElevenLabs keys, Xcode 15+, macOS 14.2+). Repo went source-frozen 2026-04-27 - the author keeps new work private; this open-source snapshot stays MIT."
     },
     {
       "repo": "TheCraigHewitt/seomachine",
@@ -54,7 +135,21 @@
       "vendored": false,
       "skills": 26,
       "clone": "gh repo clone TheCraigHewitt/seomachine",
-      "notes": "Claude Code workspace for long-form SEO blog content end to end: research, write, optimize, publish. Net-new value is the SEO commands + agents + data tooling (GA4, Search Console, DataForSEO); the bundled skills largely duplicate the marketing pack."
+      "notes": "Claude Code workspace by Craig Hewitt (Castos) for producing long-form, SEO-optimized blog content end to end: research -> write -> optimize -> publish. Net-new value vs what is already here: 24 SEO slash commands (/research, /write, /optimize, /performance-review, plus the landing-* and research-* sets) + 11 SEO agents (seo-optimizer, meta-creator, internal-linker, keyword-mapper, cluster-strategist, content-analyzer, cro-analyst, headline-generator, editor, performance, landing-page-optimizer) + a Python data_sources layer (GA4, Search Console, DataForSEO, plus nltk/textstat scoring). Caveat: the 26 bundled skills largely DUPLICATE the coreyhaines marketing pack already in backlog/live (copywriting, content-strategy, email-sequence, seo-audit, schema-markup, programmatic-seo, pricing-strategy, social, paid-ads, marketing-ideas, marketing-psychology, etc.), so if vendored, take the commands + agents + data tooling and dedup the skills. To run: clone OUTSIDE the AI-OS repo, pip install data_sources/requirements.txt, and set GA4/GSC/DataForSEO + Anthropic keys (see its .env.example)."
+    }
+  ],
+  "excluded": [
+    {
+      "repo": "conversionfactory/skills-demo",
+      "reason": "Next.js demo app, not skills — a sandbox target."
+    },
+    {
+      "repo": "conversionfactory/horizontal-saas-test",
+      "reason": "Next.js test app, not skills — a sandbox target."
+    },
+    {
+      "repo": "conversionfactory/vertical-saas-test",
+      "reason": "Next.js test app, not skills — a sandbox target."
     }
   ]
 }

@@ -26,11 +26,11 @@ don't shift under you), and **load-reduction** (no review backlog).
 ## Imported discipline (the useful bits from karpathy/autoresearch)
 - Ground "simulations" in **real past artifacts**, not invented examples (the honest version
   of "no synthetic data").
-- **Independent/adversarial judge** - avoid the model grading its own homework (Goodhart).
+- **Independent/adversarial judge** — avoid the model grading its own homework (Goodhart).
 - Keep champion until clearly beaten; log rejected variants so dead-ends aren't retried.
 - **Comparative + provisional** judgment, never a frozen success metric (don't ossify
   evolving craft).
-- **Skip** the fixed 5-min budget + autonomous-overnight loop - those need a cheap auto-metric
+- **Skip** the fixed 5-min budget + autonomous-overnight loop — those need a cheap auto-metric
   the user's domains (positioning, copy, delivery) lack.
 
 ## When to build

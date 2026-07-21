@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [dev, main]
+    branches: [main]
   pull_request:
-    branches: [dev, main]
+    branches: [main]
 
 jobs:
   detect-zones:
@@ -43,8 +43,8 @@ jobs:
           while IFS= read -r file; do
             [ -z "$file" ] && continue
 
-            # Zone 3: Code
-            if echo "$file" | grep -qE '^command-centre/|^\.claude/hooks/.*\.(js|ts)$'; then
+            # Zone 3: Code (the cron scheduler lives in scripts/cron/ since 2026-07-16)
+            if echo "$file" | grep -qE '^command-centre/|^scripts/cron/|^\.claude/hooks/.*\.(js|ts)$'; then
               CODE=true
               CONTENT_ONLY=false
               continue
@@ -82,11 +82,20 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: command-centre/package-lock.json
+          cache-dependency-path: |
+            command-centre/package-lock.json
+            scripts/cron/package-lock.json
+
+      - name: Install cron runtime dependencies
+        working-directory: scripts/cron
+        run: npm ci
 
       - name: Install dependencies
         working-directory: command-centre
         run: npm ci
+
+      - name: Cron runtime tests
+        run: node --test command-centre/src/lib/cron-runtime.test.cjs
 
       - name: Build command centre
         if: needs.detect-zones.outputs.code-changed == 'true'
@@ -95,8 +104,8 @@ jobs:
 
       - name: Syntax check shell scripts
         run: |
-          for f in scripts/*.sh; do
-            [ -f "$f" ] && bash -n "$f"
+          find scripts -name '*.sh' -not -path '*/node_modules/*' | while read -r f; do
+            bash -n "$f" || exit 1
           done
 
       - name: Syntax check hook scripts
@@ -122,7 +131,7 @@ jobs:
             YAML_NAME=$(sed -n '/^---$/,/^---$/{ /^name:/s/^name: *//p }' "$SKILL_FILE")
 
             if [ "$YAML_NAME" != "$FOLDER_NAME" ]; then
-              echo "ERROR: $SKILL_FILE - name '$YAML_NAME' does not match folder '$FOLDER_NAME'"
+              echo "ERROR: $SKILL_FILE — name '$YAML_NAME' does not match folder '$FOLDER_NAME'"
               EXIT_CODE=1
             fi
 
@@ -130,7 +139,7 @@ jobs:
             FRONTMATTER=$(awk '/^---$/{c++; print; if(c==2) exit; next} c==1' "$SKILL_FILE")
             FM_LENGTH=${#FRONTMATTER}
             if [ "$FM_LENGTH" -gt 1024 ]; then
-              echo "ERROR: $SKILL_FILE - frontmatter is ${FM_LENGTH} chars (max 1024)"
+              echo "ERROR: $SKILL_FILE — frontmatter is ${FM_LENGTH} chars (max 1024)"
               EXIT_CODE=1
             fi
           done
@@ -145,7 +154,7 @@ jobs:
       - name: Determine result
         run: |
           if [ "${{ needs.detect-zones.outputs.content-only }}" = "true" ]; then
-            echo "Content-only change - all checks skipped (auto-pass)"
+            echo "Content-only change — all checks skipped (auto-pass)"
             exit 0
           fi
           if [ "${{ needs.checks.result }}" = "success" ]; then

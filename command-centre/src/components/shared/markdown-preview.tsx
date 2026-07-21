@@ -62,7 +62,7 @@ function parseFrontmatter(raw: string): { meta: Record<string, string | string[]
       currentKey = kv[1].trim();
       currentArray = null;
       const val = kv[2].trim().replace(/^["']|["']$/g, "");
-      // Folded (>) or literal (|) scalar - collect subsequent indented lines
+      // Folded (>) or literal (|) scalar — collect subsequent indented lines
       if (val === ">" || val === "|") {
         foldedKey = currentKey;
         foldedLines = [];

@@ -110,7 +110,7 @@ export function KanbanBoard({
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-      {/* Column headers - desktop only */}
+      {/* Column headers — desktop only */}
       {!isNarrow && (
         <div
           style={{
@@ -291,7 +291,7 @@ function LaneRow({
 
   return (
     <div style={{ marginBottom: singleLane ? 0 : 4 }}>
-      {/* Swim lane header - only when multiple clients */}
+      {/* Swim lane header — only when multiple clients */}
       {!singleLane && (
         <button
           onClick={() => setLaneCollapsed((v) => !v)}
@@ -380,7 +380,7 @@ function LaneRow({
   );
 }
 
-/** Column cell - shows PAGE_SIZE tasks, with expand/collapse when more exist */
+/** Column cell — shows PAGE_SIZE tasks, with expand/collapse when more exist */
 function ColumnCell({
   col,
   laneClientSlug,

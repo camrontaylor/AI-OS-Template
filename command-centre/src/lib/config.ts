@@ -83,10 +83,10 @@ export function getClientAiOsDir(clientId: string | null): string {
 // Resolution order (first hit wins):
 //   1. Explicit override (caller passes a slug, e.g. from ?project=)
 //   2. AI_OS_ACTIVE_PROJECT env var (AI_OS_ACTIVE_PROJECT accepted as fallback)
-//   3. cwd walk - if cwd is inside projects/briefs/{slug}/..., use {slug}
+//   3. cwd walk — if cwd is inside projects/briefs/{slug}/..., use {slug}
 //   4. .planning-active pointer file at the base dir (single line = slug)
-//   5. Auto-detect - if exactly one projects/briefs/*/.planning/ exists
-//   6. null - no active project
+//   5. Auto-detect — if exactly one projects/briefs/*/.planning/ exists
+//   6. null — no active project
 
 export interface PlanningResolution {
   planningDir: string;
@@ -162,7 +162,7 @@ export function resolvePlanningDir(
     if (slugHasPlanning(baseDir, envSlug)) {
       return buildResolution(baseDir, envSlug);
     }
-    // env var pointed at a non-existent project - fall through
+    // env var pointed at a non-existent project — fall through
   }
 
   // 3. cwd walk
@@ -185,7 +185,7 @@ export function resolvePlanningDir(
     }
   }
 
-  // 5. Auto-detect - exactly one project with .planning/
+  // 5. Auto-detect — exactly one project with .planning/
   const available = listBriefsWithPlanning(baseDir);
   if (available.length === 1) {
     return buildResolution(baseDir, available[0]);

@@ -73,7 +73,7 @@ function pollCronTasks() {
       }
     }
   } catch (err) {
-    // Silently fail - this is a background service
+    // Silently fail — this is a background service
     console.error("[cron-task-sync] Poll error:", err);
   }
 }

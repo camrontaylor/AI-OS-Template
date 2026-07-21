@@ -361,13 +361,13 @@ test("extractApprovedBriefBlockFromLogs keeps nested triple-backtick sections in
       type: "text",
       timestamp: "2026-04-17T18:00:00.000Z",
       content:
-        "Summary first.\n\n```approved-brief\n# Test File Edit - Mock Plan\n\n## Current Content\n```\n# Test File\n\nHello\n```\n\n## Proposed New Content\n```markdown\n# Test File\n\nUpdated\n```\n\n## Steps\n1. Read\n2. Edit\n3. Verify\n```",
+        "Summary first.\n\n```approved-brief\n# Test File Edit — Mock Plan\n\n## Current Content\n```\n# Test File\n\nHello\n```\n\n## Proposed New Content\n```markdown\n# Test File\n\nUpdated\n```\n\n## Steps\n1. Read\n2. Edit\n3. Verify\n```",
     },
   ];
 
   assert.equal(
     planBrief.extractApprovedBriefBlockFromLogs(logEntries),
-    "# Test File Edit - Mock Plan\n\n## Current Content\n```\n# Test File\n\nHello\n```\n\n## Proposed New Content\n```markdown\n# Test File\n\nUpdated\n```\n\n## Steps\n1. Read\n2. Edit\n3. Verify",
+    "# Test File Edit — Mock Plan\n\n## Current Content\n```\n# Test File\n\nHello\n```\n\n## Proposed New Content\n```markdown\n# Test File\n\nUpdated\n```\n\n## Steps\n1. Read\n2. Edit\n3. Verify",
   );
 });
 

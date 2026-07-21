@@ -1,12 +1,12 @@
 ---
 name: threat-modeling
-description: "Run a structured threat-modeling session for a new feature, system, or architecture - STRIDE, attack trees, data flow diagrams, abuse cases. Use when the user mentions 'threat model,' 'threat modeling,' 'STRIDE,' 'attack tree,' 'abuse case,' 'data flow diagram,' 'DFD,' 'security architecture review,' 'security review,' 'design review,' 'pre-implementation security,' 'shift left,' 'what could go wrong,' or needs strategic security thinking before code is written."
+description: "Run a structured threat-modeling session for a new feature, system, or architecture — STRIDE, attack trees, data flow diagrams, abuse cases. Use when the user mentions 'threat model,' 'threat modeling,' 'STRIDE,' 'attack tree,' 'abuse case,' 'data flow diagram,' 'DFD,' 'security architecture review,' 'security review,' 'design review,' 'pre-implementation security,' 'shift left,' 'what could go wrong,' or needs strategic security thinking before code is written."
 allowed-tools: Read, Write, Grep, Glob, WebSearch
 ---
 
-# Threat Modeling - Pre-Implementation Security Design
+# Threat Modeling — Pre-Implementation Security Design
 
-Run a structured threat-modeling session against a proposed feature, system, or architecture. This is the *design-time* security skill - different from audit (which inspects code that exists). Use this when there's a design doc, a feature spec, an architecture diagram - but not yet code.
+Run a structured threat-modeling session against a proposed feature, system, or architecture. This is the *design-time* security skill — different from audit (which inspects code that exists). Use this when there's a design doc, a feature spec, an architecture diagram — but not yet code.
 
 When to use:
 - New feature touching auth, payments, multi-tenant data, or sensitive PII
@@ -19,7 +19,7 @@ Cross-references: `owasp-audit` (code-level checklist that lines up with the thr
 
 ## The four questions
 
-Adam Shostack's framing - every threat model answers these four:
+Adam Shostack's framing — every threat model answers these four:
 
 1. **What are we working on?** (Scope and model)
 2. **What can go wrong?** (Threats)
@@ -28,20 +28,20 @@ Adam Shostack's framing - every threat model answers these four:
 
 The rest of this skill walks through each in order.
 
-## Step 1 - What are we working on?
+## Step 1 — What are we working on?
 
 Produce a Data Flow Diagram (DFD) at one of three levels:
 
-- **Level 0** - Context diagram. One bubble for the system, lines to every external entity (users, third-party APIs, internal admin tools). Use this when the question is "what does this system even touch?"
-- **Level 1** - Major processes. Auth service, API gateway, primary data store, payment integration, etc. Use this for most feature-level threat models.
-- **Level 2** - Detailed component model. Specific endpoints, specific tables, specific queues. Use this for the trickiest parts only.
+- **Level 0** — Context diagram. One bubble for the system, lines to every external entity (users, third-party APIs, internal admin tools). Use this when the question is "what does this system even touch?"
+- **Level 1** — Major processes. Auth service, API gateway, primary data store, payment integration, etc. Use this for most feature-level threat models.
+- **Level 2** — Detailed component model. Specific endpoints, specific tables, specific queues. Use this for the trickiest parts only.
 
 A useful DFD has:
-- **External entities** (rectangles) - users, third-party services, admins
-- **Processes** (circles) - your services, functions, handlers
-- **Data stores** (parallel lines / cylinders) - databases, caches, blob storage, queues
-- **Data flows** (arrows, labeled with what crosses) - request bodies, tokens, files, events
-- **Trust boundaries** (dashed lines) - every crossing is a place data is validated, authenticated, or filtered
+- **External entities** (rectangles) — users, third-party services, admins
+- **Processes** (circles) — your services, functions, handlers
+- **Data stores** (parallel lines / cylinders) — databases, caches, blob storage, queues
+- **Data flows** (arrows, labeled with what crosses) — request bodies, tokens, files, events
+- **Trust boundaries** (dashed lines) — every crossing is a place data is validated, authenticated, or filtered
 
 Trust boundaries are the most useful element. If you can draw exactly one diagram that shows every trust boundary in your feature, you've already done 60% of the work.
 
@@ -59,9 +59,9 @@ flowchart LR
   class API,Service trust
 ```
 
-## Step 2 - What can go wrong? (STRIDE)
+## Step 2 — What can go wrong? (STRIDE)
 
-For each process, data store, and data flow, ask STRIDE - one threat category per letter. Not every category applies to every element, and that's fine.
+For each process, data store, and data flow, ask STRIDE — one threat category per letter. Not every category applies to every element, and that's fine.
 
 | Letter | Threat | Property violated | Examples |
 |---|---|---|---|
@@ -81,7 +81,7 @@ A useful threat-modeling habit: for each element of the DFD, write a short table
 
 | STRIDE | Threat | Likelihood | Impact |
 |---|---|---|---|
-| S | Forged JWT - symmetric secret in env, leaks if .env exposed | M | H |
+| S | Forged JWT — symmetric secret in env, leaks if .env exposed | M | H |
 | T | Request body modified between gateway and upstream service | L | M |
 | R | Gateway access logs deleted by attacker post-breach | L | H |
 | I | Verbose error responses expose internal hostnames | M | L |
@@ -89,7 +89,7 @@ A useful threat-modeling habit: for each element of the DFD, write a short table
 | E | "X-Admin: true" header pass-through from external requests | L | C |
 ```
 
-Likelihood and impact: L / M / H / C(ritical) - qualitative is fine; quantitative scoring is theater for most engagements.
+Likelihood and impact: L / M / H / C(ritical) — qualitative is fine; quantitative scoring is theater for most engagements.
 
 ### Abuse cases (sister to STRIDE)
 
@@ -104,16 +104,16 @@ Examples:
 - As a competitor, I want to scrape every product detail in bulk so that I can clone your catalog
 - As an insider with read access, I want to extract every customer's PII over a year so that I can sell it without triggering DLP alerts
 
-Abuse cases catch what STRIDE misses - STRIDE is great at "security properties violated"; abuse cases are great at "business intent violated."
+Abuse cases catch what STRIDE misses — STRIDE is great at "security properties violated"; abuse cases are great at "business intent violated."
 
-## Step 3 - What are we going to do about it?
+## Step 3 — What are we going to do about it?
 
 For each threat surfaced in Step 2, pick one of four responses:
 
-- **Mitigate** - design a control that reduces likelihood or impact
-- **Transfer** - push the risk to someone else (Stripe handles PCI compliance, Vercel handles DDoS)
-- **Accept** - document the residual risk and the rationale
-- **Avoid** - don't build the feature this way; redesign
+- **Mitigate** — design a control that reduces likelihood or impact
+- **Transfer** — push the risk to someone else (Stripe handles PCI compliance, Vercel handles DDoS)
+- **Accept** — document the residual risk and the rationale
+- **Avoid** — don't build the feature this way; redesign
 
 Mitigations should be specific:
 
@@ -125,20 +125,20 @@ Mitigations should be specific:
 
 ### Common mitigation patterns
 
-- **Spoofing → strong identity** - short-lived tokens, MFA, mutual TLS, signed requests, workload identity federation (see `iam-audit`)
-- **Tampering → integrity controls** - HMAC, signed cookies, transport encryption, write-ahead logs, immutable infrastructure
-- **Repudiation → audit logs** - immutable append-only logs, separate logging account, alerting on log-tampering attempts
-- **Information disclosure → minimum exposure** - least-privilege IAM, data classification, encryption at rest and in transit, DTOs not whole records (see `api-audit` API3)
-- **Denial of service → resource limits** - rate limits, quotas, query depth limits, billing alarms, circuit breakers
-- **Elevation of privilege → authorization checks** - centralized `can(user, action, resource)`, deny-by-default, sister-route audit (see `owasp-audit` A04 sister-route)
+- **Spoofing → strong identity** — short-lived tokens, MFA, mutual TLS, signed requests, workload identity federation (see `iam-audit`)
+- **Tampering → integrity controls** — HMAC, signed cookies, transport encryption, write-ahead logs, immutable infrastructure
+- **Repudiation → audit logs** — immutable append-only logs, separate logging account, alerting on log-tampering attempts
+- **Information disclosure → minimum exposure** — least-privilege IAM, data classification, encryption at rest and in transit, DTOs not whole records (see `api-audit` API3)
+- **Denial of service → resource limits** — rate limits, quotas, query depth limits, billing alarms, circuit breakers
+- **Elevation of privilege → authorization checks** — centralized `can(user, action, resource)`, deny-by-default, sister-route audit (see `owasp-audit` A04 sister-route)
 
-## Step 4 - Did we do a good job?
+## Step 4 — Did we do a good job?
 
 Validation comes from three sources:
 
-1. **Coverage check** - every element in the DFD has a STRIDE table; every threat has a mitigation; every mitigation has an owner and a deadline. Missing rows are the most common failure.
-2. **Adversarial second pass** - invite someone who wasn't in the original session (or another model, in this skill's context). Ask "what did we miss?" with explicit prompt to break correlated blind spots. See `owasp-audit` Second-Opinion Pass.
-3. **Trace to tests** - every High/Critical mitigation should have a test (unit, integration, or canary in production monitoring). If you can't write the test, you don't have the mitigation, you have an intention.
+1. **Coverage check** — every element in the DFD has a STRIDE table; every threat has a mitigation; every mitigation has an owner and a deadline. Missing rows are the most common failure.
+2. **Adversarial second pass** — invite someone who wasn't in the original session (or another model, in this skill's context). Ask "what did we miss?" with explicit prompt to break correlated blind spots. See `owasp-audit` Second-Opinion Pass.
+3. **Trace to tests** — every High/Critical mitigation should have a test (unit, integration, or canary in production monitoring). If you can't write the test, you don't have the mitigation, you have an intention.
 
 ## When to threat model (and when not to)
 
@@ -154,7 +154,7 @@ Validation comes from three sources:
 - UI-only changes
 - Refactors that don't change trust boundaries
 
-The test: if the change introduces a new trust boundary, moves an existing one, or changes what crosses one - threat model it. Otherwise, skip.
+The test: if the change introduces a new trust boundary, moves an existing one, or changes what crosses one — threat model it. Otherwise, skip.
 
 ## Output Format
 
@@ -168,13 +168,13 @@ A threat model is a living document, not a one-shot report. Keep it short and re
 ## Reviewers: [names]
 
 ## 1. Scope
-[2-3 sentences - what's in, what's out]
+[2-3 sentences — what's in, what's out]
 
 ## 2. Data Flow Diagram
 [Mermaid diagram or link to image]
 
 ## 3. Assumptions and constraints
-- [Anything taken as given - e.g. "users authenticate via Okta, MFA enforced"]
+- [Anything taken as given — e.g. "users authenticate via Okta, MFA enforced"]
 
 ## 4. Threats and mitigations
 [STRIDE-per-element tables, then abuse cases]
@@ -183,25 +183,25 @@ A threat model is a living document, not a one-shot report. Keep it short and re
 [Things we deferred or couldn't decide]
 
 ## 6. Decision log
-[Material design decisions and why - including risks accepted]
+[Material design decisions and why — including risks accepted]
 
 ## 7. Action items
 | Item | Owner | Deadline | Status |
 |------|-------|----------|--------|
 ```
 
-Keep this in the repo alongside the design doc, not in a separate security tracker. Drift between the threat model and the implementation is the dominant failure mode - proximity helps.
+Keep this in the repo alongside the design doc, not in a separate security tracker. Drift between the threat model and the implementation is the dominant failure mode — proximity helps.
 
 ## Boundaries
 
 - This skill produces planning artifacts, not exploitation
-- Threat models surface risks; they don't grant authority to test them - pair with `web-pentest` or `owasp-audit` for verification
+- Threat models surface risks; they don't grant authority to test them — pair with `web-pentest` or `owasp-audit` for verification
 - Don't threat-model someone else's product without authorization (e.g., generating an attack tree of a competitor)
-- Threat models that don't get reviewed and signed off are noise - push back if the user is producing a model nobody will read
+- Threat models that don't get reviewed and signed off are noise — push back if the user is producing a model nobody will read
 
 ## References
 
-- "Threat Modeling: Designing for Security" - Adam Shostack
+- "Threat Modeling: Designing for Security" — Adam Shostack
 - Microsoft STRIDE methodology
 - OWASP Threat Modeling Cheat Sheet
 - OWASP pytm / threatspec (tooling)

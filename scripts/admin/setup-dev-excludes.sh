@@ -2,10 +2,9 @@
 # =============================================================================
 # Setup local git excludes for development
 # =============================================================================
-# Run this after a fresh clone if you maintain the upstream template and want to
-# keep your own personal data out of it. These rules live in .git/info/exclude
-# (local-only, never pushed). End users who just use AI-OS do NOT need this:
-# they want their own data tracked in their private repo.
+# Run this after a fresh clone of the upstream repo to prevent personal data
+# from being accidentally committed. These rules live in .git/info/exclude
+# (local-only, never pushed).
 #
 # Usage: bash scripts/admin/setup-dev-excludes.sh
 # =============================================================================
@@ -18,16 +17,16 @@ EXCLUDE_FILE="$REPO_ROOT/.git/info/exclude"
 
 cat > "$EXCLUDE_FILE" << 'EXCLUDE'
 # =============================================================================
-# LOCAL EXCLUSIONS - dev machine only
+# LOCAL EXCLUSIONS — dev machine only
 # =============================================================================
 # These files are tracked for users (they WANT their data in git) but excluded
-# here so personal data never leaks to the upstream/template repo.
+# here so personal data never leaks to the upstream/main repo.
 #
-# This file lives in .git/info/exclude - it is NEVER pushed or shared.
+# This file lives in .git/info/exclude — it is NEVER pushed or shared.
 # Re-run: bash scripts/admin/setup-dev-excludes.sh
 # =============================================================================
 
-# Personal user data (users track these - we don't)
+# Personal user data (users track these — we don't)
 context/USER.md
 context/learnings.md
 context/memory/*
@@ -38,14 +37,20 @@ projects/*
 !projects/.gitkeep
 .planning/
 
-# Client workspaces (users track these - we don't)
+# Personal skill configs
+.claude/skills/viz-ugc-heygen/references/avatar-config.md
+
+# Personal cron jobs
+cron/jobs/claude-code-trending.md
+cron/jobs/test-watchdog.md
+
+# Client workspaces (users track these — we don't)
 clients/
 
-# Add your own machine-specific excludes below, for example a personal skill
-# config or a private cron job you do not want to ship upstream:
-# .claude/skills/<your-skill>/references/<your-config>.md
-# cron/jobs/<your-private-job>.md
+# WIP / scratch files
+scripts/test-parser.ts
+docs/kanban.md
 EXCLUDE
 
-echo "Local git excludes written to .git/info/exclude"
+echo "✓ Local git excludes written to .git/info/exclude"
 echo "  Your personal data files will not appear in git status or be staged."

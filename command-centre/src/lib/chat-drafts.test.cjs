@@ -45,7 +45,7 @@ test("draft storage saves and restores the same composer payload", () => {
     message: "Unsaved message",
     attachments: [{ id: "a-1", fileName: "notes.md" }],
     pastedBlocks: [{ id: "p-1", label: "[paste]", text: "full text" }],
-    updatedAt: new Date().toISOString(),
+    updatedAt: "2026-04-20T10:00:00.000Z",
   };
 
   drafts.saveChatDraft(draft, storage);
@@ -139,7 +139,6 @@ test("loadChatDraft removes mismatched entries instead of restoring them", () =>
 
 test("touchChatDraft refreshes the updatedAt timestamp", () => {
   const storage = createStorage();
-  const originalTimestamp = new Date(Date.now() - 60_000).toISOString();
   drafts.saveChatDraft({
     version: 1,
     surface: "conversation",
@@ -148,13 +147,13 @@ test("touchChatDraft refreshes the updatedAt timestamp", () => {
     message: "hello",
     attachments: [],
     pastedBlocks: [],
-    updatedAt: originalTimestamp,
+    updatedAt: "2026-04-20T10:00:00.000Z",
   }, storage);
 
   const touched = drafts.touchChatDraft("conversation", "conv-1", storage);
 
   assert.equal(touched?.scopeId, "conv-1");
-  assert.notEqual(touched?.updatedAt, originalTimestamp);
+  assert.notEqual(touched?.updatedAt, "2026-04-20T10:00:00.000Z");
   assert.equal(
     drafts.loadChatDraft("conversation", "conv-1", storage)?.updatedAt,
     touched?.updatedAt,

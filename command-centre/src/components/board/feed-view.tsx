@@ -163,7 +163,7 @@ function isTerminalTask(t: Task): boolean {
 
 const MONO = "var(--font-inter), Inter, sans-serif";
 
-// Terminal-lines palette - light cream, mono typography, dashed rules.
+// Terminal-lines palette — light cream, mono typography, dashed rules.
 // Looks like a terminal readout rendered into the cream page, not a dark
 // terminal window.
 const T = {
@@ -182,7 +182,7 @@ const T = {
   green: "var(--muted-foreground)",
 };
 
-/** Inline-editable title - double-click to rename */
+/** Inline-editable title — double-click to rename */
 function InlineTitle({ title, taskId, color }: { title: string; taskId: string; color: string }) {
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState(title);
@@ -304,7 +304,7 @@ function GoalCard({
     : parentSelfRunning;
   const isDone = isAchieved(task);
 
-  // Conversation status counts - the main chat (parent task) is always
+  // Conversation status counts — the main chat (parent task) is always
   // conversation #1. Additional child chat windows (non-GSD) are also counted.
   const mainNeedsReview = taskNeedsInput(task) && task.status !== "done";
   const mainIsActive = task.status === "running" && !taskNeedsInput(task);
@@ -422,7 +422,7 @@ function GoalCard({
               taskId={task.id}
               color={isDone ? T.textDim : T.text}
             />
-            {/* Pin toggle - visible on hover or when pinned */}
+            {/* Pin toggle — visible on hover or when pinned */}
             {(hover || isPinned) && !isDone && (
               <div style={{ display: "flex", alignItems: "center", gap: 4, flexShrink: 0 }}>
                 {isPinned && (
@@ -461,7 +461,7 @@ function GoalCard({
             )}
           </div>
 
-          {/* Description - one line, muted */}
+          {/* Description — one line, muted */}
           {truncatedBrief && (
             <div style={{
               marginTop: 4,
@@ -477,7 +477,7 @@ function GoalCard({
             </div>
           )}
 
-          {/* Metadata row - all inline */}
+          {/* Metadata row — all inline */}
           <div style={{ display: "flex", flexDirection: "column", gap: 4, marginTop: 8 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
               {task.level !== "task" && (
@@ -732,7 +732,7 @@ function SubtasksList({
         </button>
       )}
       {visible.map((st) => {
-        // Mutually-exclusive display state - priority order matters.
+        // Mutually-exclusive display state — priority order matters.
         // done > needsInput > running > queued > backlog
         type DisplayState = "done" | "needs" | "running" | "queued" | "backlog";
         const rawNeeds = taskNeedsInput(st);
@@ -1115,7 +1115,7 @@ function GsdPhasesOverview({
     for (const st of subtasks) {
       if (st.phaseNumber == null) continue;
       if (!map.has(st.phaseNumber)) {
-        const nameMatch = st.title.match(/Phase \d+:\s*\w+\s* - \s*(.+)/);
+        const nameMatch = st.title.match(/Phase \d+:\s*\w+\s*—\s*(.+)/);
         map.set(st.phaseNumber, {
           phaseNumber: st.phaseNumber,
           phaseName: nameMatch ? nameMatch[1].trim() : `Phase ${st.phaseNumber}`,
@@ -1336,7 +1336,7 @@ function GsdPhasesOverview({
               }}>&#9654;</span>
             </div>
 
-            {/* Step pills - always clickable, fills reply input with the /gsd command */}
+            {/* Step pills — always clickable, fills reply input with the /gsd command */}
             <div style={{ display: "flex", gap: 4, paddingLeft: 22 }}>
               {phase.steps.map((step) => {
                 const isDone = step.status === "done";
@@ -1427,7 +1427,7 @@ function GsdPhasesOverview({
                 paddingLeft: 22, marginTop: 4,
               }}>
                 {taskNeedsInput(currentStep)
-                  ? `Needs input - ${currentStep.gsdStep}`
+                  ? `Needs input — ${currentStep.gsdStep}`
                   : currentStep.activityLabel || `${currentStep.gsdStep} ${currentStep.status}`}
               </div>
             )}
@@ -2005,7 +2005,7 @@ function DetailPanel({
   // All tasks get the multi-pane UI (open subtask chats, terminals, etc.)
   const isParentTask = true;
 
-  // Main pane - always the first visible pane for parent tasks
+  // Main pane — always the first visible pane for parent tasks
   const mainPane: PaneItem = useMemo(() => ({
     id: MAIN_PANE_ID,
     type: "chat" as const,
@@ -2187,7 +2187,7 @@ function DetailPanel({
   // For project/gsd parents: merge the parent's scoping log with every
   // subtask's run log, sorted by timestamp. Because all subtasks resume
   // into the parent's claudeSessionId, these are literally the same
-  // conversation - the merged feed is what the user is actually talking to.
+  // conversation — the merged feed is what the user is actually talking to.
   // Each entry is tagged with sourceTaskId so we can scroll to a subtask's
   // section when clicking it.
   const anyChildRunning = subtasks.some((s) => s.status === "running");
@@ -2387,7 +2387,7 @@ function DetailPanel({
       style={
         isFullscreen
           ? {
-              // Full-screen overlay mode - cover the viewport so the user can
+              // Full-screen overlay mode — cover the viewport so the user can
               // focus entirely on the conversation + files for a tall task.
               position: "fixed",
               top: 16,
@@ -2404,7 +2404,7 @@ function DetailPanel({
               boxShadow: "0 20px 60px color-mix(in srgb, var(--foreground) 25%, transparent)",
             }
           : {
-              // Drawer mode - fixed overlay covering the full viewport height
+              // Drawer mode — fixed overlay covering the full viewport height
               // including the nav and goal bar. The page content reflows via
               // marginRight on the FeedView wrapper.
               position: "fixed",
@@ -2596,9 +2596,9 @@ function DetailPanel({
         </div>
       </div>
 
-      {/* Subtask status strip removed - subtasks accessible from bottom of chat */}
+      {/* Subtask status strip removed — subtasks accessible from bottom of chat */}
 
-      {/* Scoping wizard - shown inline when a project goal needs planning */}
+      {/* Scoping wizard — shown inline when a project goal needs planning */}
       {pendingScope && (
         <ScopingWizardInline
           scope={pendingScope.scope}
@@ -2613,7 +2613,7 @@ function DetailPanel({
         />
       )}
 
-      {/* Body: tabbed - Chat / Subtasks / Files. Each tab fills the full
+      {/* Body: tabbed — Chat / Subtasks / Files. Each tab fills the full
           drawer height. Chat lays out as flex column so the conversation
           scrolls and the reply input pins to the bottom. */}
       {!pendingScope && (<div style={{
@@ -2754,7 +2754,7 @@ function DetailPanel({
                     />
                   </div>
 
-                  {/* Pane sidebar - shows open panes, + to add new chat/terminal */}
+                  {/* Pane sidebar — shows open panes, + to add new chat/terminal */}
                   {isParentTask && (
                     <ChatList
                       openPanes={paneState.openPanes}
@@ -2823,7 +2823,7 @@ function DetailPanel({
             />
           )}
 
-          {/* Leaf reply input - always shown for leaf tasks so the user can
+          {/* Leaf reply input — always shown for leaf tasks so the user can
               reply/follow up whenever the detail panel is open. Covers every
               state (needsInput, running, review, done, queued, backlog,
               error), including edge cases like queued-with-needsInput. */}
@@ -3017,7 +3017,7 @@ function DetailPanel({
                 )}
               </div>
 
-              {/* Controls strip - bottom */}
+              {/* Controls strip — bottom */}
               <div style={{
                 display: "flex",
                 alignItems: "center",
@@ -3099,7 +3099,7 @@ function DetailPanel({
           )}
         </div>
 
-        {/* Docked plan panel - shown alongside chat */}
+        {/* Docked plan panel — shown alongside chat */}
         {planDocked && task.projectSlug && (
           <>
           {/* Drag handle between chat and plan */}
@@ -3198,7 +3198,7 @@ function DetailPanel({
 
         )}
 
-        {/* Plan tab - show brief.md for project tasks (full-screen) */}
+        {/* Plan tab — show brief.md for project tasks (full-screen) */}
         {mainTab === "plan" && task.projectSlug && (
           <div style={{ flex: 1, minHeight: 0, overflow: "hidden", display: "flex", flexDirection: "column" }}>
             {pendingApprovedBrief ? (
@@ -3241,7 +3241,7 @@ function DetailPanel({
           </div>
         )}
 
-        {/* Subtasks tab removed - subtasks accessible from bottom of chat */}
+        {/* Subtasks tab removed — subtasks accessible from bottom of chat */}
 
         {/* Files tab */}
         {mainTab === "files" && (
@@ -3252,7 +3252,7 @@ function DetailPanel({
           overflowY: "auto",
         }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {/* Brief / Plan file - pinned at top for project tasks */}
+              {/* Brief / Plan file — pinned at top for project tasks */}
               {task.projectSlug && (
                 <div style={{ marginBottom: 4 }}>
                   <div style={{ fontSize: 9, fontFamily: "var(--font-inter), Inter, sans-serif", color: "var(--muted-foreground)", letterSpacing: "0.06em", marginBottom: 4, textTransform: "uppercase" }}>
@@ -3381,7 +3381,7 @@ function DetailPanel({
                 </>
               )}
 
-              {/* Regular output files - with diff status badges + filter */}
+              {/* Regular output files — with diff status badges + filter */}
               {outputFiles.length === 0 && !(task.level === "gsd" && planningFiles) ? (
                 <div style={{ fontSize: 11, color: "var(--muted-foreground)", fontFamily: "var(--font-inter), Inter, sans-serif", padding: "8px 0" }}>
                   No files yet
@@ -3521,7 +3521,7 @@ function DetailPanel({
                           </button>
                         </div>
                       </div>
-                    {/* Inline preview - rendered directly under the clicked file */}
+                    {/* Inline preview — rendered directly under the clicked file */}
                     {previewFile && previewFile.relativePath === file.relativePath && (
                       <FilePreviewInline
                         relativePath={previewFile.relativePath}
@@ -3718,7 +3718,7 @@ function AchievedRow({
         <div style={{ flex: 1, height: 1, borderTop: "1px dashed var(--border)" }} />
       </div>
 
-      {/* Above the fold - date-grouped */}
+      {/* Above the fold — date-grouped */}
       {aboveFold.map((group) => (
         <div key={group.label} style={{ marginBottom: 8 }}>
           <div style={{
@@ -3739,7 +3739,7 @@ function AchievedRow({
         </div>
       ))}
 
-      {/* Below the fold - behind expand toggle */}
+      {/* Below the fold — behind expand toggle */}
       {belowFoldCount > 0 && (
         <>
           <button
@@ -4333,7 +4333,7 @@ export function FeedView({
         const slug = t.clientId || "_root";
         if (!activeClientSlugs.includes(slug)) return false;
       }
-      // Tag filtering - when a tag is selected, show only tasks with that tag
+      // Tag filtering — when a tag is selected, show only tasks with that tag
       // (plus their children, so subtasks aren't orphaned)
       if (activeTagFilter) {
         const matchesTag = t.tag === activeTagFilter;
@@ -4488,7 +4488,7 @@ export function FeedView({
     }
 
     // Show swim lane headers when multiple clients have active goals
-    // (done-only lanes don't count - they shouldn't trigger headers by themselves)
+    // (done-only lanes don't count — they shouldn't trigger headers by themselves)
     const lanesWithActiveWork = lanes.filter((lane) => lane.goals.length > 0 || lane.goalDrafts.length > 0);
     const singleLane = lanesWithActiveWork.length <= 1 && lanes.length <= 1;
 
@@ -4777,10 +4777,10 @@ export function FeedView({
         }}
       />
 
-      {/* Detail drawer - fixed-position overlay covering the full viewport
+      {/* Detail drawer — fixed-position overlay covering the full viewport
           height (including nav/goal bar). The feed content is pushed left
           via marginRight on the outermost wrapper. */}
-      {/* New Goal panel - shown when creating, hidden when a task is selected */}
+      {/* New Goal panel — shown when creating, hidden when a task is selected */}
       {showNewGoalPanel && !selectedTask && (
         <NewGoalPanel
           key={goalDraftPanelState.panelKey}

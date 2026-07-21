@@ -1,6 +1,7 @@
 ---
 name: meta-systems-check
-description: Run a full health check of the AI-OS install and report a plain-English scorecard of what works, what is missing, and what is broken. Triggers on "systems check", "health check", "is everything working", "is AI-OS healthy", "check my setup", "what is broken", "diagnose AI-OS", "run a diagnostic", "check the system", "is everything connected", "did anything break". Runs a read-only script that inspects Node and Command Centre deps, the cron daemon, semantic memory, exported API key readiness, connector readiness, brand context, client folders, the git backup remote, version vs changelog, the memory budget, and settings. Reports critical, warnings, info, and OK with a one-line fix each. Does NOT trigger for cron status alone (use ops-cron), memory recall (use memory-recall), or worktree and branch audits (use meta-worktree).
+description: "Full health check of the AI-OS install, reported as a plain-English scorecard of what works, what is missing, and what is broken. Not for cron status alone (ops-cron) or worktree audits (meta-worktree)."
+when_to_use: 'Invoke when the request sounds like: "systems check", "health check", "is everything working", "what is broken", "diagnose AI-OS", "check my setup"'
 ---
 
 # meta-systems-check
@@ -16,6 +17,16 @@ The user asks whether the system is healthy, working, set up correctly, connecte
 - Just the cron schedule or job status, use `ops-cron`.
 - Recalling a past fact or memory, use `memory-recall`.
 - Git branches, worktrees, dirty work, or "where is my work", use `meta-worktree`.
+
+## Context Needs
+
+| File | Load level | Why |
+|---|---|---|
+| `context/learnings.md` | `## meta-systems-check` | Known health-check false positives and fixes |
+| `docs/connectors.md` | targeted | Connector inventory authority |
+
+The check scripts inspect runtime state directly. Do not preload broad memory or
+brand context for a normal health check.
 
 ## How to run
 
@@ -55,7 +66,7 @@ Keep it plain. Translate any jargon. Never print secret values; the script repor
 - The nightly cron daemon (macOS launchd): loaded, off, or stalled.
 - Semantic memory (memsearch) installed.
 - API keys: how many documented keys are exported in the current process. It does not read `.env`.
-- Connector readiness: connector map, AgentMail files, Notion sync files, Notion blocker notes, and client-dashboard shared profile.
+- Connector readiness: connector map, AgentMail files, Notion sync files, Notion resource-health status, Notion blocker notes, and client-dashboard shared profile.
 - Brand context: whether onboarding has been run.
 - Client folders: each has its AGENTS.md, CLAUDE.md, and .claude/commands.
 - Git backup remote: your own, the template's, or none.
@@ -64,9 +75,26 @@ Keep it plain. Translate any jargon. Never print secret values; the script repor
 - Claude settings.json is valid JSON.
 - In `--deep` mode only: `npm run test:cron` and `npm run build` in `command-centre/`, each with a timeout.
 
+## Eval
+
+Run this eval before changing system health checks or result presentation:
+
+```bash
+bash .claude/skills/meta-systems-check/scripts/check.sh
+bash scripts/memory-system-audit.sh
+```
+
+The eval passes when the normal check stays read-only, reports critical,
+warning, info, and OK groups, never prints secret values, reports failed Notion
+resource health as needing attention, keeps Command Centre
+build/test work behind `--deep`, and gives one clear next fix. It fails if the
+skill mutates files, treats optional setup as critical, or claims semantic
+memory is proven when only fallback recall was available.
+
 ## Rules
 
 - Read-only. The skill never changes anything; it only reports. If the user wants a fix applied, do that as a separate, explicit step.
 - After presenting, offer to apply the top one or two fixes, but do not auto-fix.
 - The cron check is macOS-first; on other systems that one check is skipped, not failed.
+- A failed `notion-resource-health` status is a warning and the overall status is `NEEDS ATTENTION`; the check must not say `HEALTHY` while Resource Sync is blocked.
 - Keep deep Command Centre tests out of normal mode. They are explicit release/debug checks, not startup checks.

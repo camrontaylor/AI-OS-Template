@@ -1,4 +1,4 @@
-# Idea Cross-Reference - 139 Marketing Ideas Mapped to AARRR
+# Idea Cross-Reference — 139 Marketing Ideas Mapped to AARRR
 
 The `marketing-ideas` skill catalogs 139 proven marketing tactics. This doc is the source-of-truth mapping: every idea assigned to a primary AARRR stage, with notes for when it's typically active and what category constraints apply.
 
@@ -171,7 +171,7 @@ These ideas primarily serve top-of-funnel awareness, traffic, and lead generatio
 | 93 | Viral Loops | Product-Led | Q3+ |
 | 137 | Two-Sided Referrals | Audience-Specific | Q2+ |
 
-### Revenue (2 entries - most monetization is strategy not tactic)
+### Revenue (2 entries — most monetization is strategy not tactic)
 
 | # | Idea | Category | Typical stage available |
 |---|---|---|---|
@@ -198,43 +198,43 @@ These ideas primarily serve top-of-funnel awareness, traffic, and lead generatio
 
 For Section 12 of the plan:
 
-### Step 1 - Filter for category fit
+### Step 1 — Filter for category fit
 
 For each idea, ask:
 - Does this idea apply to the client's category? (e.g., #16 Importers only for SaaS; #19 Chrome Extensions only for browser-relevant; #136 DevRel only for dev tools)
 - Skip ideas that don't apply, with a note
 
-### Step 2 - Filter for brand voice
+### Step 2 — Filter for brand voice
 
 For each idea, ask:
 - Does this idea conflict with the client's brand voice?
 - Common conflicts:
-  - **Lifetime Deals (#86)** - conflicts with premium positioning
-  - **Twitter Giveaways (#83)** - often off-brand for serious / clinical / luxury voices
-  - **Humor Marketing (#122)** - off-brand for serious / clinical voices
-  - **Cameo Marketing (#118)** - off-brand for most voices
-  - **Reality TV Marketing (#112)** - off-brand for most voices
+  - **Lifetime Deals (#86)** — conflicts with premium positioning
+  - **Twitter Giveaways (#83)** — often off-brand for serious / clinical / luxury voices
+  - **Humor Marketing (#122)** — off-brand for serious / clinical voices
+  - **Cameo Marketing (#118)** — off-brand for most voices
+  - **Reality TV Marketing (#112)** — off-brand for most voices
 
 If conflict, place in Skip list with explicit rationale.
 
-### Step 3 - Set timing status
+### Step 3 — Set timing status
 
 For ideas that pass filters, set status:
-- **Now (Q1)** - already in 90-day plan OR can run alongside without new capacity
-- **Q2** - post-bedrock-fix, post-foundation; second-quarter layer-in
-- **Q3+** - post-seed-close, post-GA; expansion moves
-- **Q4+** - long-game / large-investment
+- **Now (Q1)** — already in 90-day plan OR can run alongside without new capacity
+- **Q2** — post-bedrock-fix, post-foundation; second-quarter layer-in
+- **Q3+** — post-seed-close, post-GA; expansion moves
+- **Q4+** — long-game / large-investment
 
 Use the "Typical stage available" column as the default. Shift earlier if client has unusual capability (e.g., a celebrity founder shifts Conference Speaking #70 from "Now" to "Now and high-leverage").
 
-### Step 4 - Write the client-specific note
+### Step 4 — Write the client-specific note
 
 Every "Now / Q2 / Q3+" idea gets a one-line client-specific note. Examples:
-- For idea #11 Competitor Comparison Pages: "Quietude vs. Calm / Headspace / Brain.fm / Endel / Wavepaths - high-intent SERPs"
-- For idea #133 Investor Marketing: "Alex's seed raise - leverage angel backchannel for PR + intros"
+- For idea #11 Competitor Comparison Pages: "Quietude vs. Calm / Headspace / Brain.fm / Endel / Wavepaths — high-intent SERPs"
+- For idea #133 Investor Marketing: "Alex's seed raise — leverage angel backchannel for PR + intros"
 - For idea #15 Engineering as Marketing: "HRV interpretation guide; nervous system self-assessment; sound bath finder directory"
 
-### Step 5 - Sum the bank
+### Step 5 — Sum the bank
 
 After all five AARRR tables + skip list:
 
@@ -248,12 +248,12 @@ After all five AARRR tables + skip list:
 - {cross-cutting count} cross-cutting
 - {skipped count} ideas skipped for brand / business-model fit
 
-**What this proves:** the plan is roughly X% of the available tactical surface area, not 100%. {appropriate or not for the stage} - as capacity unlocks across Q2 → Q3 → Series A, the cross-reference becomes the inventory to scale activity without losing strategic coherence.
+**What this proves:** the plan is roughly X% of the available tactical surface area, not 100%. {appropriate or not for the stage} — as capacity unlocks across Q2 → Q3 → Series A, the cross-reference becomes the inventory to scale activity without losing strategic coherence.
 ```
 
 ## How to maintain this doc
 
-If `marketing-ideas` adds new ideas (it's a living skill - the 139 may become 145 or 160 over time):
+If `marketing-ideas` adds new ideas (it's a living skill — the 139 may become 145 or 160 over time):
 1. Read `skills/marketing-ideas/references/ideas-by-category.md` in the `marketingskills` repo
 2. Assign each new idea to a primary AARRR stage using the rules above
 3. Add to this doc's tables

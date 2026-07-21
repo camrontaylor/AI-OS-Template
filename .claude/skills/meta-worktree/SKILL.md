@@ -1,18 +1,7 @@
 ---
 name: meta-worktree
-description: >
-  Audit the AI-OS folder and worktrees in plain English, then offer to tidy up.
-  Surfaces what is going on with branches, dirty work, side-branch commits,
-  worktrees, stashes, recovery branches, local-vs-GitHub state, and any work
-  another session left behind. Translates every git term into plain words and
-  presents a ranked list of suggested actions the user can approve with one
-  word. For destructive or ambiguous items (overwrite risk, branches with
-  commits, multiple sessions racing), it ASKS first. Triggers on, check
-  worktrees, check the folder, what is going on, what happened while I was
-  away, where is my work, is everything saved, tidy up the folder, audit my
-  workspace, review the folder, clean up my branches, what worktrees are open,
-  meta-worktree. Does NOT trigger for: ops-versioning ("go back to yesterday"
-  - use ops-versioning), brand voice, content writing, or non-git tasks.
+description: 'Audit the AI-OS folder and worktrees in plain English, then offer to tidy up: branches, dirty work, stashes, recovery branches, local-vs-GitHub state, and work another session left behind. Asks first on anything risky. Not for "go back to yesterday" (ops-versioning) or non-git tasks.'
+when_to_use: 'Invoke when the request sounds like: "check worktrees", "check the folder", "what happened while I was away", "where is my work", "is everything saved", "tidy up the folder"'
 metadata:
   type: meta
 ---
@@ -33,6 +22,16 @@ The skill auto-triggers on the phrases above. Use it whenever the user:
 
 Do NOT use this skill for "go back to yesterday's draft" — that is
 `ops-versioning` (document snapshots), not git history.
+
+## Context Needs
+
+| File | Load level | Why |
+|---|---|---|
+| `context/learnings.md` | `## meta-worktree` | Known workspace and recovery edge cases |
+| `.command-centre/branch-state.log` | recent entries, when present | Human-facing branch warnings |
+| `.command-centre/autosave-pending.log` | recent entries, when present | Deferred autosave evidence |
+
+All other state comes from the read-only audit script, not from memory.
 
 ## How it works
 
@@ -96,6 +95,24 @@ The skill NEVER executes these without explicit per-item approval:
 
 For these the response lists them under a separate **`## Needs your call`**
 block, each with a plain question the user can answer.
+
+## Eval
+
+Run this eval before changing workspace audit or action behavior:
+
+```bash
+bash scripts/test-base-return-to-main.sh
+bash .claude/skills/meta-worktree/scripts/audit.sh
+bash scripts/workspace-health-report.sh
+bash scripts/branch-triage-report.sh
+```
+
+The eval passes when the audit is read-only, translates git state into plain
+language, surfaces dirty work, ahead/behind state, worktrees, stashes, and side
+branches, returns clean autosave recovery branches to `main` without deleting
+the saved branch, and keeps push, pull, merge, archive, delete, and ambiguous
+overwrite actions behind explicit approval. It fails if it mutates git state
+during audit or hides normal side branches with unique commits.
 
 ## Rules
 

@@ -203,62 +203,101 @@ EOF
 
 # Create directory structure
 mkdir -p "${CLIENT_DIR}/brand_context"
+mkdir -p "${CLIENT_DIR}/context/inbox"
+mkdir -p "${CLIENT_DIR}/context/intake/review"
+mkdir -p "${CLIENT_DIR}/context/intake/parked"
 mkdir -p "${CLIENT_DIR}/context/memory"
+mkdir -p "${CLIENT_DIR}/context/reference"
 mkdir -p "${CLIENT_DIR}/projects"
 mkdir -p "${CLIENT_DIR}/cron/jobs"
 mkdir -p "${CLIENT_DIR}/cron/logs"
 mkdir -p "${CLIENT_DIR}/cron/status"
 mkdir -p "${CLIENT_DIR}/cron/templates"
 
-# Copy skills from root
+# Seed optional starter files from an AI-OS-owned template folder. The live
+# clients/ folder stays user-owned; templates/client/ is the upstream starter.
+if [[ -d "${PROJECT_DIR}/templates/client" ]]; then
+  cp -R "${PROJECT_DIR}/templates/client/." "${CLIENT_DIR}/"
+  echo "  Seeded client starter templates"
+fi
+
+# Link skills from root (symlink, never copy - copies drift; see AGENTS.md Skill
+# Publishing). Each shared skill is a symlink back to the one root copy. Client-
+# unique skills are added later as real folders and are never touched here.
 if [[ -d "${PROJECT_DIR}/.claude/skills" ]]; then
   mkdir -p "${CLIENT_DIR}/.claude/skills"
   for root_skill in "${PROJECT_DIR}/.claude/skills"/*/; do
-    [[ -d "$root_skill" ]] || continue
+    [[ -f "$root_skill/SKILL.md" ]] || continue
     skill_name=$(basename "$root_skill")
-    [[ "$skill_name" == "_catalog" || "$skill_name" == "_archived" ]] && continue
-    cp -R "$root_skill" "${CLIENT_DIR}/.claude/skills/${skill_name}"
+    ln -s "../../../../.claude/skills/${skill_name}" "${CLIENT_DIR}/.claude/skills/${skill_name}"
   done
-  if [[ -d "${PROJECT_DIR}/.claude/skills/_catalog" ]]; then
-    cp -R "${PROJECT_DIR}/.claude/skills/_catalog" "${CLIENT_DIR}/.claude/skills/_catalog"
-  fi
-  echo "  Copied skills"
+  for shared_meta in _catalog _archived; do
+    if [[ -d "${PROJECT_DIR}/.claude/skills/${shared_meta}" ]]; then
+      ln -s "../../../../.claude/skills/${shared_meta}" "${CLIENT_DIR}/.claude/skills/${shared_meta}"
+    fi
+  done
+  echo "  Linked skills"
 fi
 
-# Copy slash commands so /onboarding (and any other commands) work in the client workspace
+# Link slash commands from root (symlink) so /onboarding etc. work in the client
 if [[ -d "${PROJECT_DIR}/.claude/commands" ]]; then
   mkdir -p "${CLIENT_DIR}/.claude"
-  cp -R "${PROJECT_DIR}/.claude/commands" "${CLIENT_DIR}/.claude/commands"
-  echo "  Copied commands"
+  ln -s "../../../.claude/commands" "${CLIENT_DIR}/.claude/commands"
+  echo "  Linked commands"
 fi
 
-# Copy Claude Code settings if they exist
+# Link Claude Code settings from root. Tool-specific state belongs outside this
+# shared file; a copied settings file drifts as hooks and permissions evolve.
 if [[ -f "${PROJECT_DIR}/.claude/settings.json" ]]; then
-  cp "${PROJECT_DIR}/.claude/settings.json" "${CLIENT_DIR}/.claude/settings.json"
-  echo "  Copied Claude Code settings"
+  ln -s "../../../.claude/settings.json" "${CLIENT_DIR}/.claude/settings.json"
+  echo "  Linked Claude Code settings"
 fi
 
 # Copy hooks_info if it exists (required by hooks in settings.json)
 if [[ -d "${PROJECT_DIR}/.claude/hooks_info" ]]; then
-  cp -R "${PROJECT_DIR}/.claude/hooks_info" "${CLIENT_DIR}/.claude/hooks_info"
+  mkdir -p "${CLIENT_DIR}/.claude/hooks_info"
+  if command -v rsync >/dev/null 2>&1; then
+    rsync -a \
+      --exclude 'ccnotify.db' \
+      --exclude 'ccnotify.log*' \
+      --exclude 'footer-misses.log' \
+      "${PROJECT_DIR}/.claude/hooks_info/" "${CLIENT_DIR}/.claude/hooks_info/"
+  else
+    find "${PROJECT_DIR}/.claude/hooks_info" -maxdepth 1 -type f \
+      ! -name 'ccnotify.db' \
+      ! -name 'ccnotify.log*' \
+      ! -name 'footer-misses.log' \
+      -exec cp -p {} "${CLIENT_DIR}/.claude/hooks_info/" \;
+  fi
   echo "  Copied hooks_info"
 fi
 
-# Copy hooks if they exist (session-sync, gsd hooks, etc.)
+# Link hooks from root (symlink, shared for every client)
 if [[ -d "${PROJECT_DIR}/.claude/hooks" ]]; then
-  cp -R "${PROJECT_DIR}/.claude/hooks" "${CLIENT_DIR}/.claude/hooks"
-  echo "  Copied hooks"
+  ln -s "../../../.claude/hooks" "${CLIENT_DIR}/.claude/hooks"
+  echo "  Linked hooks"
 fi
 
-# Copy scripts from root
-cp -R "${PROJECT_DIR}/scripts" "${CLIENT_DIR}/scripts"
+# Link shared scripts from root (symlink, never copy). The client-specific cron
+# proxy scripts differ from root, so they are written as real files afterward and
+# must NOT be symlinked - hence the skip list below.
+mkdir -p "${CLIENT_DIR}/scripts"
+for root_entry in "${PROJECT_DIR}/scripts"/*; do
+  entry_name=$(basename "$root_entry")
+  case "$entry_name" in
+    start-crons.sh|stop-crons.sh|status-crons.sh|logs-crons.sh|run-job.sh|\
+    start-crons.ps1|stop-crons.ps1|status-crons.ps1|logs-crons.ps1|run-job.ps1) continue ;;
+  esac
+  ln -s "../../../scripts/${entry_name}" "${CLIENT_DIR}/scripts/${entry_name}"
+done
 create_client_cron_proxy_scripts "${CLIENT_DIR}/scripts"
-echo "  Copied scripts"
+echo "  Linked scripts (shared root scripts symlinked; client cron proxies real)"
 
-# Copy cron templates if they exist
+# Link shared cron templates from root.
 if [[ -d "${PROJECT_DIR}/cron/templates" ]]; then
-  cp -R "${PROJECT_DIR}/cron/templates/." "${CLIENT_DIR}/cron/templates/"
-  echo "  Copied cron templates"
+  rmdir "${CLIENT_DIR}/cron/templates"
+  ln -s "../../../cron/templates" "${CLIENT_DIR}/cron/templates"
+  echo "  Linked cron templates"
 fi
 
 # Create client hot memory scaffold if missing
@@ -295,7 +334,11 @@ fi
 
 # Create .gitkeep files to preserve empty directories
 touch "${CLIENT_DIR}/brand_context/.gitkeep"
+touch "${CLIENT_DIR}/context/inbox/.gitkeep"
+touch "${CLIENT_DIR}/context/intake/review/.gitkeep"
+touch "${CLIENT_DIR}/context/intake/parked/.gitkeep"
 touch "${CLIENT_DIR}/context/memory/.gitkeep"
+touch "${CLIENT_DIR}/context/reference/.gitkeep"
 touch "${CLIENT_DIR}/projects/.gitkeep"
 touch "${CLIENT_DIR}/cron/jobs/.gitkeep"
 

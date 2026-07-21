@@ -124,18 +124,12 @@ if [[ -f "$SETUP_SCRIPT" ]]; then
 fi
 
 if ! command -v node &>/dev/null; then
-    fail "The Command Centre dashboard needs Node.js, and Node.js is not installed."
-    echo "  The rest of AI-OS works without Node - this only blocks the dashboard."
-    echo "  To open the dashboard:"
-    echo "    1. Install Node.js (https://nodejs.org)"
-    echo "    2. Re-run this command: bash scripts/centre.sh"
+    fail "Node.js is required. Install it from https://nodejs.org/"
     exit 1
 fi
 
 if ! command -v npm &>/dev/null; then
-    fail "npm is required for the Command Centre, and it is missing."
-    echo "  npm ships with Node.js. Install Node.js (https://nodejs.org), then re-run:"
-    echo "    bash scripts/centre.sh"
+    fail "npm is required (it ships with Node.js)."
     exit 1
 fi
 
@@ -157,7 +151,7 @@ fi
 printf "${CYAN}${BOLD}"
 cat <<'BANNER'
     ╔══════════════════════════════════════════════╗
-    ║                  A I - O S                   ║
+    ║          A G E N T I C   O S                 ║
     ║              Command Centre                  ║
     ╚══════════════════════════════════════════════╝
 BANNER

@@ -9,6 +9,7 @@ import { useGsdSync } from "@/hooks/use-gsd-sync";
 import { FeedView } from "@/components/board/feed-view";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { BrandContextBanner } from "@/components/board/brand-context-banner";
+import { AiOsLogomark } from "@/components/layout/ai-os-logomark";
 import { CronJobsView } from "@/components/cron/cron-table";
 import { SkillsWorkspace } from "@/components/skills/skills-workspace";
 import { ContentViewer } from "@/components/context/content-viewer";
@@ -225,11 +226,14 @@ function CommandCentreBody() {
         {/* Left: branding + tabs */}
         <div className="gap-3 sm:gap-5" style={{ display: "flex", alignItems: "center", minWidth: 0 }}>
           <a
-            href="https://github.com/camrontaylor/ai-os-template"
+            href="https://github.com/camrontaylor/AI-OS"
             target="_blank"
             rel="noopener noreferrer"
             style={{ display: "inline-flex", alignItems: "center", gap: 12, textDecoration: "none" }}
           >
+            <span style={{ color: "var(--foreground)", display: "inline-flex" }}>
+              <AiOsLogomark size={24} />
+            </span>
             <h1
               className="hidden sm:block"
               style={{

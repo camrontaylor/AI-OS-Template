@@ -68,7 +68,7 @@ def classify(name):
         if ns.startswith("clients/"):
             return ("project", f"client skill ({ns})", False)
         return (f"plugin:{ns}", f"plugin '{ns}'", False)
-    # agents store (feeds Codex/Cursor too)
+    # agents store (feeds Cursor and other compatible agents too)
     if isdir(AGENTS_STORE, name):
         return ("agents-store", "agents store", False)
     # live in the Claude menu folder

@@ -190,14 +190,14 @@ function toPastTense(verb: string): string {
     // Try adding "ed" directly
     return stem + "ed";
   }
-  // Stem ends in vowel - likely had trailing "e": "Composing" → "Compos" → "Composed"
+  // Stem ends in vowel — likely had trailing "e": "Composing" → "Compos" → "Composed"
   return stem + "d";
 }
 
 /** Persist random verbs across re-renders by taskId */
 const completedVerbCache = new Map<string, string>();
 
-/** "Sautéed for Xm Ys · 2,847 tokens · $0.47" - shown after a task completes. */
+/** "Sautéed for Xm Ys · 2,847 tokens · $0.47" — shown after a task completes. */
 function CompletedVerb({
   durationSeconds,
   costUsd,
@@ -338,7 +338,7 @@ function toolRowDetail(entry: LogEntry): string | null {
   } catch { return null; }
 }
 
-/** Compact single-line row for a tool call - or aggregated "Read · 4 files" */
+/** Compact single-line row for a tool call — or aggregated "Read · 4 files" */
 function ToolCompactRow({ toolName, entries }: { toolName: string; entries: LogEntry[] }) {
   const { Icon, label } = toolRowVisual(toolName);
   const count = entries.length;
@@ -516,7 +516,7 @@ function ThinkingGroup({
   );
 }
 
-/** Collapsible "Updated Todos" card - shows todo items when expanded */
+/** Collapsible "Updated Todos" card — shows todo items when expanded */
 function TodoUpdateCard({ entry }: { entry: LogEntry }) {
   const [expanded, setExpanded] = useState(false);
 
@@ -688,7 +688,7 @@ function groupEntries(entries: LogEntry[]): RenderItem[] {
       flushToolBuffer();
       currentTextGroup.push(entry);
     } else if (entry.type === "tool_result") {
-      // tool_result entries are hidden - their content is noise
+      // tool_result entries are hidden — their content is noise
       continue;
     } else if (entry.type === "tool_use") {
       flushTextGroup();
@@ -929,7 +929,7 @@ interface ModalChatProps {
   activePreviewPath?: string | null;
   /**
    * Read-only mode: used when this chat is rendered as a parent "aggregated
-   * activity" surface. Hides inline child reply inputs - the user replies to
+   * activity" surface. Hides inline child reply inputs — the user replies to
    * subtasks by drilling into them directly.
    */
   readOnly?: boolean;
@@ -937,13 +937,13 @@ interface ModalChatProps {
   scrollToTaskId?: string | null;
   /** Called after the scroll completes (so parent can clear the state). */
   onScrollComplete?: () => void;
-  /** Permission mode of the task - shown on user reply bubbles. */
+  /** Permission mode of the task — shown on user reply bubbles. */
   permissionMode?: PermissionMode;
   /** Current activity label from Claude (e.g. "Reading file...", "Writing code...") */
   activityLabel?: string | null;
-  /** ISO timestamp when the task started running - used for elapsed timer */
+  /** ISO timestamp when the task started running — used for elapsed timer */
   startedAt?: string | null;
-  /** ISO timestamp of the most recent user reply - resets the thinking timer */
+  /** ISO timestamp of the most recent user reply — resets the thinking timer */
   lastReplyAt?: string | null;
   /** Cost in USD from Claude API */
   costUsd?: number | null;
@@ -1068,7 +1068,7 @@ export function ModalChat({
     }
     return Math.round(total / 1000);
   }, [durationMs, logEntries]);
-  // Ref mirror of auto-scroll state - read synchronously inside effects
+  // Ref mirror of auto-scroll state — read synchronously inside effects
   // and scroll handlers so we don't fight the user with stale closure state
   // while entries stream in rapidly.
   const isAutoScrollingRef = useRef(true);
@@ -1177,7 +1177,7 @@ export function ModalChat({
   );
 
   // Determine if Claude is actively working right now. Use the last log entry
-  // timestamp as a staleness check - if the last entry was > 60s ago and there's
+  // timestamp as a staleness check — if the last entry was > 60s ago and there's
   // no activityLabel, Claude has likely stopped and we shouldn't show the spinner.
   const isActivelyWorking = useMemo(() => {
     if (!isRunning || needsInput) return false;
@@ -1219,7 +1219,7 @@ export function ModalChat({
           currentTurn = [];
         }
         breakItems.push({ index: turns.length, item });
-        turns.push([]); // placeholder - will be replaced by the break item
+        turns.push([]); // placeholder — will be replaced by the break item
       } else {
         currentTurn.push(item);
       }
@@ -1243,12 +1243,12 @@ export function ModalChat({
       // Does this turn have any tool activity?
       const hasTools = turn.some((it) => TOOL_KINDS.has(it.kind));
       if (!hasTools) {
-        // Pure text turn (no tools) - show as-is, no collapsing needed
+        // Pure text turn (no tools) — show as-is, no collapsing needed
         result.push(...turn);
         continue;
       }
 
-      // Find the last text-group that comes AFTER the last tool - that's the answer.
+      // Find the last text-group that comes AFTER the last tool — that's the answer.
       // If the last text-group is before all tools, it's narration (no answer yet).
       const isLastTurn = t === turns.length - 1;
       let answerIdx = -1;
@@ -1315,7 +1315,7 @@ export function ModalChat({
         minHeight: 0,
       }}
     >
-      {/* "Waiting for your reply" banner removed - the reply input box is sufficient */}
+      {/* "Waiting for your reply" banner removed — the reply input box is sufficient */}
 
       <div
         ref={scrollRef}
@@ -1397,7 +1397,7 @@ export function ModalChat({
           </div>
         )}
 
-        {/* Log entries - business-focused grouping with child task events */}
+        {/* Log entries — business-focused grouping with child task events */}
         {renderItems.map((item, index) => {
           // Derive source task ID from the first entry in each group
           const sourceId =
@@ -1431,7 +1431,7 @@ export function ModalChat({
             );
           }
           if (item.kind === "tool-group") {
-            // Legacy fallback - should not be produced by new grouping
+            // Legacy fallback — should not be produced by new grouping
             return null;
           }
           if (item.kind === "tool-row") {
@@ -1645,7 +1645,7 @@ export function ModalChat({
           return null;
         })}
 
-        {/* First-turn spinner - show after the user's first message, before later review/actions */}
+        {/* First-turn spinner — show after the user's first message, before later review/actions */}
         {showInitialSpinner && <SpinnerVerb startedAt={startedAt} lastReplyAt={lastReplyAt} activityLabel={activityLabel} />}
 
         {showInlinePlanReview && (
@@ -1675,13 +1675,13 @@ export function ModalChat({
           onResolved={onRefresh}
         />
 
-        {/* Spinner verb - shown while Claude is actively working */}
+        {/* Spinner verb — shown while Claude is actively working */}
         {showWorkingSpinner && <SpinnerVerb startedAt={startedAt} lastReplyAt={lastReplyAt} activityLabel={activityLabel} />}
 
-        {/* Error banner - shown when task failed */}
+        {/* Error banner — shown when task failed */}
         {showErrorBanner && errorMessage && <ErrorBanner message={errorMessage} />}
 
-        {/* Completed verb - shown when task is done, with total work time */}
+        {/* Completed verb — shown when task is done, with total work time */}
         {!isRunning && (status === "done" || status === "review") && totalWorkSeconds != null && totalWorkSeconds > 0 && (
           <CompletedVerb
             durationSeconds={totalWorkSeconds}
@@ -1692,9 +1692,9 @@ export function ModalChat({
           />
         )}
 
-        {/* Question indicator - hide when the structured question is already
+        {/* Question indicator — hide when the structured question is already
             rendered inline in the timeline entry itself. */}
-        {/* Removed: "Waiting for your reply..." text - the reply input itself is sufficient */}
+        {/* Removed: "Waiting for your reply..." text — the reply input itself is sufficient */}
       </div>
 
       {/* Jump to latest button */}

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// PostToolUse hook - auto-commits SKILL.md changes immediately after Claude writes them.
+// PostToolUse hook — auto-commits SKILL.md changes immediately after Claude writes them.
 // Ensures skill customisations are durable without depending on the user running wrap-up.
 // Fire-and-forget: spawns a background process so it never blocks Claude.
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// SessionStart hook - creates or resumes a board task in the command centre
+// SessionStart hook — creates or resumes a board task in the command centre
 // Fire-and-forget: spawns background process so it doesn't block session startup
 
 const fs = require("fs");

@@ -16,7 +16,7 @@ Ready-to-use templates for competitor profile sections and the summary document.
 Abbreviated profile for when speed matters more than depth.
 
 ```markdown
-# [Competitor Name] - Quick Profile
+# [Competitor Name] — Quick Profile
 
 **URL**: [website]
 **Generated**: [date]
@@ -131,10 +131,10 @@ Per-competitor SWOT relative to your product.
 ## SWOT: [Competitor] vs. [Your Product]
 
 ### Strengths (theirs vs. ours)
-- [Where they genuinely outperform us - be honest]
+- [Where they genuinely outperform us — be honest]
 
 ### Weaknesses (theirs vs. ours)
-- [Where they fall short compared to us - with evidence]
+- [Where they fall short compared to us — with evidence]
 
 ### Opportunities (for us)
 - [Gaps in their offering we can exploit]

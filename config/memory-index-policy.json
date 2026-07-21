@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "purpose": "Define which AI-OS context paths are routine semantic memory, review-gated semantic candidates, deep-search-only material, or excluded from memory indexing.",
+  "tiers": {
+    "routine_semantic": {
+      "description": "Small, curated memory sources indexed by the regular MemSearch maintenance path.",
+      "paths": [
+        "context/MEMORY.md",
+        "context/memory/",
+        "context/learnings.md",
+        "clients/*/context/MEMORY.md",
+        "clients/*/context/memory/",
+        "clients/*/context/learnings.md"
+      ]
+    },
+    "selective_semantic_candidates": {
+      "description": "Durable references that can be proposed for semantic indexing after review, but are not routine hot memory.",
+      "paths": [
+        "context/reference/**/*.md",
+        "clients/*/context/reference/**/*.md"
+      ]
+    },
+    "deep_search_only": {
+      "description": "Useful source material that should stay out of routine semantic indexing unless a report proposes a curated summary or reference promotion.",
+      "paths": [
+        "context/inbox/",
+        "context/notion/",
+        "context/transcripts/",
+        "projects/",
+        "brand_context/",
+        "clients/*/context/inbox/",
+        "clients/*/context/intake/",
+        "clients/*/context/transcripts/",
+        "clients/*/projects/",
+        "clients/*/brand_context/"
+      ]
+    },
+    "excluded": {
+      "description": "Files and folders that should never be treated as memory sources.",
+      "paths": [
+        ".git/",
+        ".env",
+        ".env.*",
+        ".memsearch/",
+        ".command-centre/",
+        "node_modules/",
+        "dist/",
+        "build/",
+        ".next/",
+        "**/*.png",
+        "**/*.jpg",
+        "**/*.jpeg",
+        "**/*.gif",
+        "**/*.webp",
+        "**/*.pdf",
+        "**/*.mov",
+        "**/*.mp4",
+        "**/*.zip"
+      ]
+    }
+  },
+  "promotion_rules": {
+    "hot_memory": "Only distill stable, currently useful facts into MEMORY.md. Keep details in dated logs or reference files.",
+    "reference": "Promote durable client knowledge into context/reference/ after review. Preserve source path and date in the promoted file.",
+    "inbox": "Inbox files are intake material. They stay deep-search-only until a promotion report is reviewed.",
+    "skills": "External skill material goes to skills-library/backlog/ and follows backlog -> triage -> review -> live.",
+    "infrastructure": "Tooling or database changes require a tested prototype and explicit approval before becoming AI-OS infrastructure."
+  },
+  "intake": {
+    "large_file_bytes": 60000,
+    "text_extensions": [
+      ".md",
+      ".txt",
+      ".csv",
+      ".json",
+      ".yaml",
+      ".yml",
+      ".html"
+    ]
+  }
+}

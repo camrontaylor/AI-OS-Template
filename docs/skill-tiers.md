@@ -6,17 +6,17 @@ How AI-OS decides which skills earn a place, using your real usage data.
 
 Claude Code installs hundreds of skills on its own: auto-installed plugin
 packs, bundled "inline" packs, and an agents store (`~/.agents/skills`) that
-also feeds Codex and Cursor. That pile is a firehose, and it is not AI-OS.
+also feeds Cursor. That pile is a firehose, and it is not AI-OS.
 
 AI-OS is the curated layer: a deliberate set of skills in `.claude/skills/`,
-each registered in `AGENTS.md`, documented, and named to one convention
+each self-describing through `SKILL.md`, documented, and named to one convention
 (`category-name`).
 
 A skill does not become an AI-OS skill just by being available in Claude. It
 graduates only when both are true:
 
 1. You have actually USED it (proven value).
-2. It can be DOCUMENTED (registered, named to the convention, learnings section).
+2. It can be DOCUMENTED (clear triggers, named to the convention, learnings section).
 
 ## The tiers
 

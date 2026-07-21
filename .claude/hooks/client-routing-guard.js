@@ -1,10 +1,13 @@
 #!/usr/bin/env node
-// UserPromptSubmit hook - warns before root-scoped work that looks client-specific.
+// UserPromptSubmit hook - scope declaration for root-scoped work that looks client-specific.
 //
 // This hook is intentionally non-destructive. It discovers clients generically
-// from clients/* and injects a hard-stop instruction when a root-session prompt
-// clearly targets exactly one client. The assistant must then confirm scope
-// before creating root memory, root projects, or root outputs for client work.
+// from clients/* and, when a root-session prompt clearly targets exactly one
+// client, injects a scope-declaration instruction. Per Agency Discipline
+// (AGENTS.md), the assistant does NOT stop to ask: it states the scope in one
+// line and proceeds under the client scope by default, correctable in one line.
+// It only pauses first if the target is genuinely ambiguous or the action is
+// irreversible or outward-facing.
 
 const fs = require("fs");
 const path = require("path");
@@ -122,14 +125,14 @@ process.stdin.on("end", () => {
     const client = target.client;
     const relativeDir = `clients/${client.slug}`;
     const message =
-      `AI-OS client routing hard stop: this prompt appears to target ` +
+      `AI-OS client routing (Agency Discipline): this prompt appears to target ` +
       `${client.displayName} (${relativeDir}) while the session is at the root. ` +
-      `Before doing file edits, memory writes, project outputs, commits, or ` +
-      `external actions, ask exactly one confirmation question: ` +
-      `"This looks like ${client.displayName} work. Should I switch scope to ` +
-      `${relativeDir}/ before proceeding?" If the user confirms, keep outputs, ` +
-      `memory, learnings, and project files under ${relativeDir}/. If they say ` +
-      `it is root/shared AI-OS work, proceed at the root.`;
+      `Do not stop to ask. State the scope in one line and proceed under the ` +
+      `client scope by default: "Reading this as ${client.displayName} work, ` +
+      `working under ${relativeDir}/ - say so if this is root/shared." Keep ` +
+      `outputs, memory, learnings, and project files under ${relativeDir}/, ` +
+      `correctable in one line. Only pause to ask first if the target is ` +
+      `genuinely ambiguous or the action is irreversible or outward-facing.`;
 
     process.stdout.write(
       JSON.stringify({

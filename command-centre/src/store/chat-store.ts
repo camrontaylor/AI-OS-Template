@@ -136,7 +136,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
       return conv;
     }
 
-    // No active conversation - create one
+    // No active conversation — create one
     const createRes = await fetch("/api/chat/conversations", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

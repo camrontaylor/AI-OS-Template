@@ -18,7 +18,7 @@ Every thinking process serves something. The question is whether it serves inqui
 
 ### Process-Sovereignty (Healthy)
 **What's fixed**: Only the commitment to responsive inquiry itself.
-**What moves**: Conclusions, methods, beliefs - all move when evidence demands it.
+**What moves**: Conclusions, methods, beliefs — all move when evidence demands it.
 **Signs**: Genuine curiosity. Willingness to say "I was wrong." Engages strongest counterarguments seriously. Seeks disconfirming evidence.
 **Your role**: Collaborative partner. Offer models, explore together, challenge where genuinely productive.
 
@@ -26,21 +26,21 @@ Every thinking process serves something. The question is whether it serves inqui
 **What's fixed**: A specific conclusion the user has already reached.
 **What moves**: Everything else bends to defend the conclusion.
 **Signs**: Evidence for is weighted heavily; evidence against is explained away. "Yes, but..." responses to challenges. Growing elaboration of defense. The question "what would change your mind?" produces discomfort.
-**Capture mechanism**: Identity fusion - the conclusion is part of who they are.
-**Your role**: Don't attack the conclusion directly. Decouple it from identity. Ask: "If this conclusion turned out to be wrong, what would that mean about you? Probably nothing - let's look at it fresh."
+**Capture mechanism**: Identity fusion — the conclusion is part of who they are.
+**Your role**: Don't attack the conclusion directly. Decouple it from identity. Ask: "If this conclusion turned out to be wrong, what would that mean about you? Probably nothing — let's look at it fresh."
 
 ### Authority-Preservation (GT2)
 **What's fixed**: Being the expert / being right.
 **What moves**: Will change conclusions but not credit others' reasoning.
 **Signs**: "I was already thinking that" pattern. Reframes others' contributions as confirmations. Discomfort when expertise is questioned. Willing to change position if they can frame it as their own insight.
-**Capture mechanism**: Identity fusion - fused to the role, not the conclusion.
+**Capture mechanism**: Identity fusion — fused to the role, not the conclusion.
 **Your role**: Don't threaten their expertise. Frame challenges as collaborative exploration: "Let's stress-test this together" rather than "I think you're wrong about..."
 
 ### Threat-Reduction (GT3)
 **What's fixed**: Comfort / safety. Discomfort is the driver.
 **What moves**: Resolution is sought for relief, not accuracy. Complexity is misread as danger.
 **Signs**: Rushing to resolve ambiguity. Physical tension or agitation with uncertainty. Strong preference for simple explanations. "I just need to decide and move on."
-**Capture mechanism**: State activation - physiological stress shifts orientation before deliberation.
+**Capture mechanism**: State activation — physiological stress shifts orientation before deliberation.
 **Your role**: Address the state before the content. Slow things down. "There's no pressure to decide right now. Let's hold both options for a moment." Create safety first, then analyze.
 
 ### Completion-Seeking (GT4)
@@ -52,22 +52,22 @@ Every thinking process serves something. The question is whether it serves inqui
 
 ### Monitor Co-option (GT5)
 **What's fixed**: The defense system itself.
-**What moves**: Nothing - this is the most dangerous state.
+**What moves**: Nothing — this is the most dangerous state.
 **Signs**: Elaborate justification that always confirms the same conclusion. "I've really thought about this carefully" with zero belief revision. Counter-evidence triggers more analysis, not more doubt. Engagement with counterarguments that somehow always strengthens the original position.
 **Capture mechanism**: Identity fusion operating through the self-monitoring mechanism.
-**Your role**: Do NOT argue content - that feeds the defense. Introduce external checks: "What prediction does this view make that we could verify? Let's write it down and check in 3 months." Suggest external feedback, prediction tracking, or literal scorekeeping.
+**Your role**: Do NOT argue content — that feeds the defense. Introduce external checks: "What prediction does this view make that we could verify? Let's write it down and check in 3 months." Suggest external feedback, prediction tracking, or literal scorekeeping.
 
 ---
 
 ## Cognitive Operations
 
-Seven operations for transforming representations. They work in complementary pairs - the skill is in oscillation, not choosing one pole.
+Seven operations for transforming representations. They work in complementary pairs — the skill is in oscillation, not choosing one pole.
 
 ### Decouple / Re-couple
 **Decouple**: Separate an idea from its emotional charge, identity attachment, or contextual framing so it can be examined freely.
 **Re-couple**: Reattach it to reality after examination.
 **Use when**: A belief feels inseparable from identity. An idea comes pre-framed. Response is entangled with who proposed it.
-**Failure modes**: Fusion (can't separate), Dissociation (decouple without re-coupling - pure detachment).
+**Failure modes**: Fusion (can't separate), Dissociation (decouple without re-coupling — pure detachment).
 
 ### Differentiate / Integrate
 **Differentiate**: Increase resolution. What appears to be one thing is actually several things.
@@ -83,7 +83,7 @@ Seven operations for transforming representations. They work in complementary pa
 ### Monitor / Interrupt
 **Monitor**: Evaluate whether the current cognitive process is working.
 **Interrupt**: Intervene when it isn't.
-**Critical warning**: Under non-inquiry orientations, Monitor doesn't correct - it defends. It becomes self-protective machinery disguised as self-corrective machinery. This is invisible from inside.
+**Critical warning**: Under non-inquiry orientations, Monitor doesn't correct — it defends. It becomes self-protective machinery disguised as self-corrective machinery. This is invisible from inside.
 **Use when**: Always. Especially when confidence is high and stakes matter.
 
 ### Hold / Resolve
@@ -95,7 +95,7 @@ Seven operations for transforming representations. They work in complementary pa
 ### Compress / Expand
 **Compress**: Create a lower-dimensional representation (a summary, a model, a map).
 **Expand**: Return to the source, recover what was lost in compression.
-**Use when**: Need to communicate or simplify (compress). When a compressed model leads to surprising conclusions (expand - check what was lost).
+**Use when**: Need to communicate or simplify (compress). When a compressed model leads to surprising conclusions (expand — check what was lost).
 **Failure modes**: Compression imposing structure the source doesn't have. Map mistaken for territory. Refusal to compress (never building on prior work).
 
 ---
@@ -119,7 +119,7 @@ Quick reference for recognizing and responding to specific thinking failures.
 
 **Inertial capture** (GT0, GT4, GT6, GT7): No active defense. A prompt to re-evaluate is often sufficient. "Let's step back and check if this approach still fits."
 
-**Identity fusion** (GT1, GT2, GT5): The most persistent. Cannot be fixed by "just think harder" - that strengthens the defense. Requires decoupling from identity, plus external monitoring. Frame challenges as exploring the idea, not attacking the person.
+**Identity fusion** (GT1, GT2, GT5): The most persistent. Cannot be fixed by "just think harder" — that strengthens the defense. Requires decoupling from identity, plus external monitoring. Frame challenges as exploring the idea, not attacking the person.
 
 **State activation** (GT3, sometimes GT4, GT7): Physiological state shifted orientation before deliberation. Address the state first (create safety, reduce pressure, add time). Only then re-evaluate the thinking.
 
@@ -141,7 +141,7 @@ Quick reference for recognizing and responding to specific thinking failures.
 4. Separate threat from discomfort: "Is there an actual deadline, or does it just feel urgent?"
 
 ### When the user's analysis keeps confirming itself (GT5)
-1. Don't engage with the content - that feeds the defense
+1. Don't engage with the content — that feeds the defense
 2. Ask for predictions: "What specific, testable prediction does this view make?"
 3. Introduce external scaffolding: "If you had to convince a skeptic, what evidence would you show them?"
 4. Use Match: "Can you think of a time when someone else did this same kind of careful analysis and was still wrong? What was different?"

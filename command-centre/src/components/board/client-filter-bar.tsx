@@ -51,7 +51,7 @@ export function ClientFilterBar({
 
   return (
     <div className="flex items-end gap-3">
-      {/* New Goal button - far left */}
+      {/* New Goal button — far left */}
       {onNewGoal && (
         <Button
           onClick={onNewGoal}
@@ -84,7 +84,7 @@ export function ClientFilterBar({
 
           {open && (
             <div className="absolute left-0 top-[calc(100%+4px)] z-50 min-w-[200px] rounded-lg border border-border bg-card py-1 shadow-md">
-              {/* "All" option - selects everything */}
+              {/* "All" option — selects everything */}
               <DropdownRow
                 label="All"
                 checked={allSelected}

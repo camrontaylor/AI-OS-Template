@@ -378,7 +378,7 @@ function ChipQuestionField({
     </div>
   );
 
-  // Text / multiline - render as inline input, no notes
+  // Text / multiline — render as inline input, no notes
   if (question.type === "text" || question.type === "multiline") {
     const isMultiline = question.type === "multiline";
     return (
@@ -416,7 +416,7 @@ function ChipQuestionField({
     );
   }
 
-  // Select / multiselect - chips with keyboard nav + always-visible notes
+  // Select / multiselect — chips with keyboard nav + always-visible notes
   const isSelect = question.type === "select";
   const selected = isSelect
     ? typeof value === "string" ? value : ""
@@ -425,7 +425,7 @@ function ChipQuestionField({
   return (
     <div>
       {label}
-      {/* Chip options - keyboard navigable */}
+      {/* Chip options — keyboard navigable */}
       <div
         role="listbox"
         tabIndex={disabled ? -1 : 0}
@@ -476,7 +476,7 @@ function ChipQuestionField({
         })}
       </div>
 
-      {/* Notes - always visible */}
+      {/* Notes — always visible */}
       <textarea
         value={noteValue}
         onChange={(e) => onNoteChange(e.target.value)}

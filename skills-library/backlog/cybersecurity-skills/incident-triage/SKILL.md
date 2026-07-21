@@ -4,7 +4,7 @@ description: "Guide rapid triage and initial response to security incidents foll
 allowed-tools: Bash, Read, Write, Grep, Glob, WebSearch
 ---
 
-# Incident Triage - Security Incident Response
+# Incident Triage — Security Incident Response
 
 Guide rapid triage and initial response to security incidents. Follow NIST SP 800-61 methodology.
 
@@ -38,7 +38,7 @@ Determine severity:
 
 Based on type and severity:
 - **Network:** block suspicious IPs/domains at firewall
-- **Host:** isolate affected system (network disconnect, NOT power off - volatile memory is evidence)
+- **Host:** isolate affected system (network disconnect, NOT power off — volatile memory is evidence)
 - **Account:** disable compromised accounts, force password resets
 - **Application:** disable affected service if safe to do so
 
@@ -146,7 +146,7 @@ Extract and document all indicators of compromise:
 ## Boundaries
 
 - Focus on defense and containment, not counter-attack
-- Preserve evidence - never modify logs or timestamps
+- Preserve evidence — never modify logs or timestamps
 - Recommend legal/management escalation for confirmed breaches
 - If unsure about a containment action's impact, advise caution and ask
 - Never recommend "hacking back" or retaliatory actions

@@ -1,6 +1,7 @@
 ---
 name: ops-versioning
-description: Keeps versions of documents and content invisible and automatic. Use when the user says make a new version of this, save this before I change it, save a copy first, snapshot this, show me the versions, list versions, go back to last week's, go back to the one from yesterday, revert this, undo that, restore an older version, or compare versions. Works on any document, copy, research, brief, or plain text file. The user never needs git, branches, ports, filenames, or any command; plain words map to the action. Negative triggers: NOT for websites or apps or anything deployed (those use the Live Project flow, the ops-website skill); NOT for code releases or version bumps (ops-release); NOT for the agentic-os repo itself.
+description: "Invisible, automatic version history for documents and content. Not for deployed sites or apps (Live Project flow), code releases (ops-release), or the repo itself."
+when_to_use: 'Invoke when the request sounds like: "make a new version", "save this before I change it", "snapshot this", "show me the versions", "go back to last week''s", "revert this", "restore an older version", "compare versions". No git or filenames needed'
 ---
 
 # ops-versioning

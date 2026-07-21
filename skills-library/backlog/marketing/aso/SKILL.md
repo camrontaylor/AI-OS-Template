@@ -23,7 +23,7 @@ prioritized action plan.
 **Check for product marketing context first:**
 If `.agents/product-marketing.md` exists (or `.claude/product-marketing.md`, or the legacy `product-marketing-context.md` filename, in older setups), read it before asking questions. Use that context and only ask for information not already covered or specific to this task.
 
-## Phase 1 - Identify Store & Fetch
+## Phase 1 — Identify Store & Fetch
 
 ### Detect store type from URL
 
@@ -41,10 +41,10 @@ Use WebFetch to retrieve the listing page. Extract every available field:
 
 **Apple App Store fields:**
 
-- App name (title) - 30 char limit
-- Subtitle - 30 char limit
-- Description (long) - not indexed for search, but matters for conversion
-- Promotional text - 170 chars, updatable without new release
+- App name (title) — 30 char limit
+- Subtitle — 30 char limit
+- Description (long) — not indexed for search, but matters for conversion
+- Promotional text — 170 chars, updatable without new release
 - Category (primary + secondary)
 - Screenshots (count, order, caption text)
 - Preview video (presence, duration)
@@ -61,9 +61,9 @@ Use WebFetch to retrieve the listing page. Extract every available field:
 
 **Google Play fields:**
 
-- App name (title) - 30 char limit
-- Short description - 80 char limit
-- Full description - 4,000 char limit, IS indexed for search
+- App name (title) — 30 char limit
+- Short description — 80 char limit
+- Full description — 4,000 char limit, IS indexed for search
 - Category + tags
 - Feature graphic (presence)
 - Screenshots (count, order)
@@ -99,10 +99,10 @@ its presence, note this and recommend the user check App Store Connect.
 
 ---
 
-## Phase 1.5 - Assess Brand Maturity
+## Phase 1.5 — Assess Brand Maturity
 
 Before scoring, classify the app into one of three tiers. This determines how
-you interpret "textbook ASO" deviations - a deliberate brand choice by a
+you interpret "textbook ASO" deviations — a deliberate brand choice by a
 household name is not the same as a missed opportunity by an unknown app.
 
 ### Tier definitions
@@ -130,7 +130,7 @@ household name is not the same as a missed opportunity by an unknown app.
 - Strategic description choices get benefit of the doubt
 - Other dimensions scored normally
 
-**Challenger apps** are scored strictly against textbook ASO best practices - every character, screenshot, and keyword matters.
+**Challenger apps** are scored strictly against textbook ASO best practices — every character, screenshot, and keyword matters.
 
 **Key principle:** Before docking points, ask: "Is this a mistake or a deliberate
 choice by a team that has data I don't?" If the app has 1M+ ratings and a
@@ -138,16 +138,16 @@ dedicated ASO team, assume their choices are data-informed unless clearly wrong.
 
 ---
 
-## Phase 2 - Score Each Dimension
+## Phase 2 — Score Each Dimension
 
 Score each dimension 0-10 using the criteria in `references/scoring-criteria.md`.
 Apply the brand maturity tier adjustments from Phase 1.5.
 
 Reference files for platform specs and benchmarks:
 
-- `references/apple-specs.md` - Official Apple character limits, screenshot/video specs, CPP/PPO rules, rejection triggers
-- `references/google-play-specs.md` - Official Google Play limits, screenshot specs, Android Vitals thresholds, policies
-- `references/benchmarks.md` - Conversion data, rating impact, video lift, screenshot behavior, CPP/event benchmarks
+- `references/apple-specs.md` — Official Apple character limits, screenshot/video specs, CPP/PPO rules, rejection triggers
+- `references/google-play-specs.md` — Official Google Play limits, screenshot specs, Android Vitals thresholds, policies
+- `references/benchmarks.md` — Conversion data, rating impact, video lift, screenshot behavior, CPP/event benchmarks
 
 ### Dimensions and Weights
 
@@ -174,32 +174,32 @@ Reference files for platform specs and benchmarks:
 
 ---
 
-## Phase 3 - Competitor Comparison (Optional)
+## Phase 3 — Competitor Comparison (Optional)
 
 If the user provides competitor URLs or asks for comparison:
 
 1. Fetch 2-3 top competitors in the same category
 2. Run the same scoring on each
 3. Build a comparison table highlighting where the user's app is weaker/stronger
-4. Identify keyword gaps - terms competitors rank for that the user's app doesn't target
+4. Identify keyword gaps — terms competitors rank for that the user's app doesn't target
 
 If no competitors are specified, suggest the user provide 2-3 or offer to search
 for top apps in their category.
 
 ---
 
-## Phase 4 - Generate Report
+## Phase 4 — Generate Report
 
 Use the template in `references/report-template.md` to structure the output.
 
 The report must include:
 
-1. **Score card** - table with all 6 dimensions, scores, and grade
-2. **Top 3 quick wins** - changes that take <1 hour and have highest impact
-3. **Detailed findings** - per-dimension breakdown with specific issues and fixes
-4. **Keyword suggestions** - based on title/description analysis and competitor gaps
-5. **Visual asset recommendations** - specific screenshot/video improvements
-6. **Priority action plan** - ordered list of changes by impact vs effort
+1. **Score card** — table with all 6 dimensions, scores, and grade
+2. **Top 3 quick wins** — changes that take <1 hour and have highest impact
+3. **Detailed findings** — per-dimension breakdown with specific issues and fixes
+4. **Keyword suggestions** — based on title/description analysis and competitor gaps
+5. **Visual asset recommendations** — specific screenshot/video improvements
+6. **Priority action plan** — ordered list of changes by impact vs effort
 
 ### Report rules
 
@@ -213,33 +213,33 @@ The report must include:
 
 ## Platform-Specific Rules
 
-### Apple App Store - Key Facts
+### Apple App Store — Key Facts
 
 - Title (30 chars) + Subtitle (30 chars) + Keyword field (100 **bytes**, hidden) = indexed text
-- Keywords field is bytes not chars - Arabic/CJK use 2-3 bytes per char
-- Long description is NOT indexed for search - optimize for conversion only
+- Keywords field is bytes not chars — Arabic/CJK use 2-3 bytes per char
+- Long description is NOT indexed for search — optimize for conversion only
 - Promotional text (170 chars) does NOT affect search (Apple confirmed)
 - Never repeat words across title/subtitle/keyword field (Apple indexes each word once)
 - Keyword field: commas, no spaces ("photo,editor,filter" not "photo, editor, filter")
-- Screenshots: up to 10 per device. First 3 visible in search - 90% never scroll past 3rd
+- Screenshots: up to 10 per device. First 3 visible in search — 90% never scroll past 3rd
 - Screenshot captions indexed since June 2025 (AI extraction)
 - In-app events: max 10 published at once, max 31 days each. Indexed and appear in search
 - Custom Product Pages (up to 70) in organic search since July 2025. +5.9% avg conversion lift
-- App preview video: up to 3, 15-30s each. Autoplays muted - +20-40% conversion lift
+- App preview video: up to 3, 15-30s each. Autoplays muted — +20-40% conversion lift
 - SKStoreReviewController: max 3 prompts per 365 days
-- Apple has human editorial curation - quality and design matter more
+- Apple has human editorial curation — quality and design matter more
 - See `references/apple-specs.md` for full specs, dimensions, and rejection triggers
 
-### Google Play - Key Facts
+### Google Play — Key Facts
 
 - Title (30 chars) + Short description (80 chars) + Full description (4,000 chars) = indexed text
-- Full description IS indexed - target 2-3% keyword density naturally
-- No hidden keyword field - all keywords must be in visible text
-- Google NLP/semantic understanding - keyword stuffing detected and penalized
+- Full description IS indexed — target 2-3% keyword density naturally
+- No hidden keyword field — all keywords must be in visible text
+- Google NLP/semantic understanding — keyword stuffing detected and penalized
 - Prohibited in title: emojis, ALL CAPS, "best"/"#1"/"free", CTAs (enforced since 2021)
 - Screenshots: min 2, **max 8** per device (not 10 like Apple)
 - Feature graphic (1024x500, exact) required for featured placements
-- Video does NOT autoplay - only ~6% of users tap play (low ROI vs iOS)
+- Video does NOT autoplay — only ~6% of users tap play (low ROI vs iOS)
 - Android Vitals directly affect ranking: crash >1.09% or ANR >0.47% = reduced visibility
 - Promotional Content: submit 14 days early for featuring. Apps see 2x explore acquisitions
 - Custom Store Listings: up to 50 (can target churned users, specific countries, ad campaigns)
@@ -264,7 +264,7 @@ The report must include:
 ## Common Issues Checklist
 
 Flag these if found. Items marked _(tier-dependent)_ should be evaluated against
-the app's brand maturity tier - they may be deliberate choices for Dominant apps.
+the app's brand maturity tier — they may be deliberate choices for Dominant apps.
 
 **Always flag (all tiers):**
 
@@ -273,7 +273,7 @@ the app's brand maturity tier - they may be deliberate choices for Dominant apps
 - [ ] Google Play description has no keyword strategy (under 1% density)
 - [ ] Google Play missing feature graphic
 - [ ] Apple keyword field likely has repeated words (inferred from title+subtitle)
-- [ ] Category mismatch - app would face less competition in a different category
+- [ ] Category mismatch — app would face less competition in a different category
 - [ ] Fewer than 5 screenshots
 
 **Flag for Challenger/Established only** _(not mistakes for Dominant apps):_
@@ -288,7 +288,7 @@ the app's brand maturity tier - they may be deliberate choices for Dominant apps
 
 **Flag for all tiers but note context:**
 
-- [ ] No developer responses to negative reviews _(note volume - responding at 10M+ reviews is a different challenge than at 1K)_
+- [ ] No developer responses to negative reviews _(note volume — responding at 10M+ reviews is a different challenge than at 1K)_
 - [ ] Generic "What's New" text _(acceptable at weekly+ release cadence for Established/Dominant)_
 
 ---

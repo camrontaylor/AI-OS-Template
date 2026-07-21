@@ -69,10 +69,10 @@ there with its REST API database ID. The currently configured REST IDs are:
 
 | Database     | REST API database ID               |
 |--------------|------------------------------------|
-| Stack        | `YOUR_STACK_DB_ID` |
-| Resources    | `YOUR_RESOURCES_DB_ID` |
-| Notes        | `YOUR_NOTES_DB_ID` |
-| Global Tags  | `YOUR_GLOBAL_TAGS_DB_ID` |
+| Stack        | `188c6192c266805c8c77d6ff2ce28728` |
+| Resources    | `17ec6192c2668099b853c9074f1c5abb` |
+| Notes        | `19ec6192c26680139071c6f3071a89f8` |
+| Global Tags  | `19ec6192c26680acae31ed9eed5c89c1` |
 
 ## One-time setup
 
@@ -120,11 +120,11 @@ nightly memsearch index (23:30), which then picks up the freshly synced folder.
 
 ```bash
 # Copy the job into LaunchAgents
-cp "scripts/notion-sync/com.example.notion-sync.plist" \
-   ~/Library/LaunchAgents/com.example.notion-sync.plist
+cp "scripts/notion-sync/com.camron.notion-sync.plist" \
+   ~/Library/LaunchAgents/com.camron.notion-sync.plist
 
 # Load it
-launchctl load ~/Library/LaunchAgents/com.example.notion-sync.plist
+launchctl load ~/Library/LaunchAgents/com.camron.notion-sync.plist
 ```
 
 Verify it is registered:
@@ -136,7 +136,7 @@ launchctl list | grep notion-sync
 Run it immediately to test the loaded job (does not wait for Sunday):
 
 ```bash
-launchctl start com.example.notion-sync
+launchctl start com.camron.notion-sync
 ```
 
 Logs are written to `context/notion/sync.log` and `context/notion/sync.err.log`.
@@ -145,16 +145,16 @@ Logs are written to `context/notion/sync.log` and `context/notion/sync.err.log`.
 
 ```bash
 # Stop and unregister
-launchctl unload ~/Library/LaunchAgents/com.example.notion-sync.plist
+launchctl unload ~/Library/LaunchAgents/com.camron.notion-sync.plist
 
 # After editing the plist, unload then load again to pick up changes
-launchctl unload ~/Library/LaunchAgents/com.example.notion-sync.plist
-launchctl load   ~/Library/LaunchAgents/com.example.notion-sync.plist
+launchctl unload ~/Library/LaunchAgents/com.camron.notion-sync.plist
+launchctl load   ~/Library/LaunchAgents/com.camron.notion-sync.plist
 ```
 
 > On newer macOS you can also use the modern syntax:
-> `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.example.notion-sync.plist`
-> and `launchctl bootout gui/$(id -u)/com.example.notion-sync`. The
+> `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.camron.notion-sync.plist`
+> and `launchctl bootout gui/$(id -u)/com.camron.notion-sync`. The
 > `load`/`unload` form above works fine for a per-user agent.
 
 ## Notes

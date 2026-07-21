@@ -1,5 +1,5 @@
 /**
- * Structured question system - typed alternative to free-prose Q&A.
+ * Structured question system — typed alternative to free-prose Q&A.
  *
  * A `QuestionSpec` describes a single question the user should answer.
  * A list of them is rendered by the `QuestionModal` component (inline in
@@ -7,8 +7,8 @@
  * clarification).
  *
  * Used in two places:
- *   1. Pre-execution - scope-goal returns typed questions for the wizard
- *   2. Mid-execution - Claude emits a fenced `ask-user-questions` block
+ *   1. Pre-execution — scope-goal returns typed questions for the wizard
+ *   2. Mid-execution — Claude emits a fenced `ask-user-questions` block
  */
 
 export type QuestionType = "text" | "multiline" | "select" | "multiselect";
@@ -20,7 +20,7 @@ export interface QuestionSpec {
   prompt: string;
   /** Input widget type */
   type: QuestionType;
-  /** Only for select/multiselect - list of choices */
+  /** Only for select/multiselect — list of choices */
   options?: string[];
   /** If true, answer required before the form can be submitted */
   required?: boolean;
@@ -144,7 +144,7 @@ export function stripQuestionSpecsFromText(text: string, matchedText?: string): 
 
 /**
  * Serialise a set of answers into a prose block that can be sent to
- * Claude as a continuation message. This preserves session continuity  - 
+ * Claude as a continuation message. This preserves session continuity —
  * the CLI receives a normal text message, no schema changes required.
  */
 export function serializeAnswersToProse(

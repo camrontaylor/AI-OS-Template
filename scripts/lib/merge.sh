@@ -14,7 +14,7 @@ SKILL_REVIEW_MSG=""
 
 # --- User-created skills (always shown first and prominently) ---
 if [[ ${#USER_CREATED_SKILLS[@]} -gt 0 ]]; then
-    printf "  ${GREEN}${BOLD}★ ${#USER_CREATED_SKILLS[@]} custom skill(s) detected${NC} ${DIM}(yours - never touched by updates):${NC}\n"
+    printf "  ${GREEN}${BOLD}★ ${#USER_CREATED_SKILLS[@]} custom skill(s) detected${NC} ${DIM}(yours — never touched by updates):${NC}\n"
     for uc_skill in "${USER_CREATED_SKILLS[@]}"; do
         printf "    ${GREEN}✓${NC} ${BOLD}%s${NC}\n" "$uc_skill"
     done
@@ -43,7 +43,7 @@ if [[ ${#MODIFIED_SKILLS[@]} -gt 0 ]]; then
         info "Merging upstream changes with your local edits..."
         echo ""
     else
-        ok "No upstream changes to these skills - your local versions are kept as-is."
+        ok "No upstream changes to these skills — your local versions are kept as-is."
         echo ""
     fi
 
@@ -71,7 +71,7 @@ if [[ ${#MODIFIED_SKILLS[@]} -gt 0 ]]; then
 
         if [[ -z "$changed_files" ]] && [[ -z "$new_upstream" ]] && [[ -z "$removed_upstream" ]]; then
             echo ""
-            info "No upstream changes to this skill - keeping your version."
+            info "No upstream changes to this skill — keeping your version."
             cp -r "$backup_skill_dir"/* "$skill_dir/" 2>/dev/null || true
             for rf in $(git diff --name-only -- ".claude/skills/$skill_name/" 2>/dev/null || true); do
                 mark_reviewed "$rf"
@@ -93,17 +93,17 @@ if [[ ${#MODIFIED_SKILLS[@]} -gt 0 ]]; then
                 rel_name=$(echo "$upstream_file" | sed "s|$skill_dir/||;s|$skill_dir||")
                 [[ -z "$rel_name" ]] && rel_name=$(basename "$upstream_file")
 
-                # No upstream pull - if SKILL.local.md exists, keep the clean base;
+                # No upstream pull — if SKILL.local.md exists, keep the clean base;
                 # otherwise copy user version back from backup as usual.
                 if ! $HAS_UPSTREAM_CHANGES; then
                     if [[ "$rel_name" == "SKILL.md" ]] && [[ -f "$skill_dir/SKILL.local.md" ]]; then
                         ok "Base kept clean: $rel_name ${DIM}(customizations in SKILL.local.md)${NC}"
-                        file_decisions="${file_decisions}\n    ${GREEN}✓${NC} $rel_name (base kept clean - local overrides in SKILL.local.md)"
+                        file_decisions="${file_decisions}\n    ${GREEN}✓${NC} $rel_name (base kept clean — local overrides in SKILL.local.md)"
                         accepted_count=$((accepted_count + 1))
                     else
                         cp "$backup_file" "$upstream_file" 2>/dev/null || true
                         ok "Kept yours: $rel_name ${DIM}(no upstream changes)${NC}"
-                        file_decisions="${file_decisions}\n    ${YELLOW}○${NC} $rel_name (kept yours - no upstream changes)"
+                        file_decisions="${file_decisions}\n    ${YELLOW}○${NC} $rel_name (kept yours — no upstream changes)"
                         kept_count=$((kept_count + 1))
                     fi
                     continue
@@ -149,25 +149,25 @@ if [[ ${#MODIFIED_SKILLS[@]} -gt 0 ]]; then
                 if ! $has_upstream && $has_yours; then
                     cp "$backup_file" "$upstream_file" 2>/dev/null || true
                     ok "Kept yours: $rel_name ${DIM}(upstream didn't change this file)${NC}"
-                    file_decisions="${file_decisions}\n    ${YELLOW}○${NC} $rel_name (kept yours - upstream unchanged)"
+                    file_decisions="${file_decisions}\n    ${YELLOW}○${NC} $rel_name (kept yours — upstream unchanged)"
                     kept_count=$((kept_count + 1))
                     mark_reviewed "$rel_git_path"
                     rm -f "$ANCESTOR_TMP"
                     continue
                 fi
 
-                # If SKILL.local.md exists, user's customizations are safe there  - 
+                # If SKILL.local.md exists, user's customizations are safe there —
                 # accept upstream SKILL.md as the clean base without merging.
                 if [[ "$rel_name" == "SKILL.md" ]] && [[ -f "$skill_dir/SKILL.local.md" ]]; then
                     ok "Accepted upstream: $rel_name ${DIM}(customizations preserved in SKILL.local.md)${NC}"
-                    file_decisions="${file_decisions}\n    ${GREEN}✓${NC} $rel_name (accepted upstream - local overrides in SKILL.local.md)"
+                    file_decisions="${file_decisions}\n    ${GREEN}✓${NC} $rel_name (accepted upstream — local overrides in SKILL.local.md)"
                     accepted_count=$((accepted_count + 1))
                     mark_reviewed "$rel_git_path"
                     rm -f "$ANCESTOR_TMP"
                     continue
                 fi
 
-                # Smart Merge: both sides changed a SKILL.md - delegate to Claude
+                # Smart Merge: both sides changed a SKILL.md — delegate to Claude
                 if [[ "$rel_name" == "SKILL.md" ]] && $has_upstream && $has_yours; then
                     info "Smart Merge: ${skill_name}/SKILL.md"
                     if smart_merge_file "$backup_file" "$upstream_file" "$ANCESTOR_TMP" "SKILL.md"; then
@@ -176,8 +176,8 @@ if [[ ${#MODIFIED_SKILLS[@]} -gt 0 ]]; then
                         accepted_count=$((accepted_count + 1))
                     else
                         cp "$backup_file" "$upstream_file" 2>/dev/null || true
-                        warn "Smart Merge failed - keeping your version of $rel_name"
-                        file_decisions="${file_decisions}\n    ${YELLOW}○${NC} $rel_name (kept yours - smart merge failed)"
+                        warn "Smart Merge failed — keeping your version of $rel_name"
+                        file_decisions="${file_decisions}\n    ${YELLOW}○${NC} $rel_name (kept yours — smart merge failed)"
                         kept_count=$((kept_count + 1))
                     fi
                     mark_reviewed "$rel_git_path"
@@ -210,7 +210,7 @@ if [[ ${#MODIFIED_SKILLS[@]} -gt 0 ]]; then
         if [[ -n "$removed_upstream" ]]; then
             while IFS= read -r rm_file; do
                 [[ -z "$rm_file" ]] && continue
-                printf "\n  ${YELLOW}−${NC} %s ${DIM}(removed upstream - kept your version)${NC}\n" "$rm_file"
+                printf "\n  ${YELLOW}−${NC} %s ${DIM}(removed upstream — kept your version)${NC}\n" "$rm_file"
                 cp "$backup_skill_dir/$rm_file" "$skill_dir/$rm_file" 2>/dev/null || true
                 file_decisions="${file_decisions}\n    ${YELLOW}○${NC} $rm_file (kept yours, removed upstream)"
                 kept_count=$((kept_count + 1))
@@ -305,14 +305,14 @@ if [[ ${#OTHER_MODIFIED_FILES[@]} -gt 0 ]] && $HAS_UPSTREAM_CHANGES; then
                 [[ "$(dirname "$file")" == "." ]] && _local_md="$REPO_ROOT/CLAUDE.local.md"
                 if [[ -f "$_local_md" ]]; then
                     ok "Accepted upstream: $file ${DIM}(customizations preserved in CLAUDE.local.md)${NC}"
-                    OTHER_REVIEW_MSG="${OTHER_REVIEW_MSG}\n    ${GREEN}✓${NC} $file (accepted upstream - local overrides in CLAUDE.local.md)"
+                    OTHER_REVIEW_MSG="${OTHER_REVIEW_MSG}\n    ${GREEN}✓${NC} $file (accepted upstream — local overrides in CLAUDE.local.md)"
                     mark_reviewed "$file"
                     rm -f "$ANCESTOR_TMP"
                     continue
                 fi
             fi
 
-            # Smart Merge: both sides changed a CLAUDE.md - delegate to Claude
+            # Smart Merge: both sides changed a CLAUDE.md — delegate to Claude
             if [[ "$(basename "$file")" == "CLAUDE.md" ]] && $has_upstream && $has_yours; then
                 info "Smart Merge: $file"
                 if smart_merge_file "$backup_file" "$upstream_file" "$ANCESTOR_TMP" "CLAUDE.md"; then
@@ -320,8 +320,8 @@ if [[ ${#OTHER_MODIFIED_FILES[@]} -gt 0 ]] && $HAS_UPSTREAM_CHANGES; then
                     OTHER_REVIEW_MSG="${OTHER_REVIEW_MSG}\n    ${GREEN}⊕${NC} $file (smart merged)"
                 else
                     cp "$backup_file" "$upstream_file" 2>/dev/null || true
-                    warn "Smart Merge failed - keeping your version of $file"
-                    OTHER_REVIEW_MSG="${OTHER_REVIEW_MSG}\n    ${YELLOW}○${NC} $file (kept yours - smart merge failed)"
+                    warn "Smart Merge failed — keeping your version of $file"
+                    OTHER_REVIEW_MSG="${OTHER_REVIEW_MSG}\n    ${YELLOW}○${NC} $file (kept yours — smart merge failed)"
                 fi
                 mark_reviewed "$file"
                 rm -f "$ANCESTOR_TMP"

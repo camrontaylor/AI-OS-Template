@@ -128,7 +128,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: message }, { status: 400 });
     }
 
-    // Get min columnOrder in queued - new tasks get lowest value to sort to top
+    // Get min columnOrder in queued — new tasks get lowest value to sort to top
     const minOrder = db
       .prepare(
         "SELECT COALESCE(MIN(columnOrder), 1) as minOrder FROM tasks WHERE status = 'queued'"
@@ -136,7 +136,7 @@ export async function POST(request: NextRequest) {
       .get() as { minOrder: number };
 
     const now = new Date().toISOString();
-    // Child tasks (with parentId) start as backlog - the auto-progression
+    // Child tasks (with parentId) start as backlog — the auto-progression
     // system queues them when their turn comes. Top-level tasks start as queued
     // so the queue watcher picks them up immediately.
     // Allow explicit status override (e.g., "review" for scoping flow).

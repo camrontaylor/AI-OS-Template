@@ -4,7 +4,7 @@ source "$(cd "$(dirname "$0")" && pwd)/lib/common.sh"
 
 echo ""
 printf "${CYAN}${BOLD}═══════════════════════════════════════════════${NC}\n"
-printf "${CYAN}${BOLD}  AI-OS - Session End${NC}\n"
+printf "${CYAN}${BOLD}  AI-OS — Session End${NC}\n"
 printf "${CYAN}${BOLD}═══════════════════════════════════════════════${NC}\n"
 echo ""
 
@@ -28,7 +28,7 @@ for path in "${USER_PATHS[@]}"; do
     fi
 done
 
-# context/memory/ - any new or modified files
+# context/memory/ — any new or modified files
 while IFS= read -r memfile; do
     rel="${memfile#$REPO_ROOT/}"
     git -C "$REPO_ROOT" check-ignore -q -- "$rel" && continue
@@ -47,7 +47,7 @@ while IFS= read -r localmd; do
 done < <(find "$REPO_ROOT/.claude/skills" -name "SKILL.local.md" 2>/dev/null)
 
 if [[ ${#STAGED[@]} -eq 0 ]]; then
-    ok "Nothing to save - no changes since last commit."
+    ok "Nothing to save — no changes since last commit."
     echo ""
     exit 0
 fi
@@ -62,5 +62,5 @@ for f in "${STAGED[@]}"; do
 done
 echo ""
 
-git push origin "$(git rev-parse --abbrev-ref HEAD)" 2>/dev/null && ok "Pushed to origin." || warn "Push failed - changes are committed locally."
+git push origin "$(git rev-parse --abbrev-ref HEAD)" 2>/dev/null && ok "Pushed to origin." || warn "Push failed — changes are committed locally."
 echo ""

@@ -4,7 +4,7 @@ import type { TaskLevel } from "@/types/task";
  * Shared signal-word lists used on both the server (`scope-goal`) and
  * client (`task-create-input`) to correct Haiku's bias toward "task".
  *
- * These regexes are intentionally conservative - they only fire on
+ * These regexes are intentionally conservative — they only fire on
  * unambiguous language. If you change them, update the prompt examples
  * in `scope-goal/route.ts` so the model's output matches the rules.
  */
@@ -47,7 +47,7 @@ export function hasProjectSignal(goal: string): boolean {
 
 /**
  * Classify a goal into a level using keyword matching alone. Returns
- * null when no signal words fire - in that case, let the LLM decide.
+ * null when no signal words fire — in that case, let the LLM decide.
  *
  * When `defaultLevel` is provided, it acts as a tiebreaker: if no signal
  * words fire the default is returned instead of null. Signal words always

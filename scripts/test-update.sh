@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ==========================================================
-# AI-OS - Update Script Test Harness
+# Agentic OS — Update Script Test Harness
 #
 # Creates isolated git repos (main + demo) in /tmp and sets
 # up 29 test scenarios to exercise every branch of update.sh.
@@ -111,8 +111,10 @@ create_test_env() {
     "mkt-ugc-scripts",
     "ops-cron",
     "str-trending-research",
+    "tool-firecrawl-scraper",
     "tool-youtube",
-    "viz-excalidraw-diagram"
+    "viz-excalidraw-diagram",
+    "viz-ugc-heygen"
   ]
 }
 IJSON
@@ -121,8 +123,10 @@ IJSON
     rm -rf .claude/skills/mkt-ugc-scripts 2>/dev/null || true
     rm -rf .claude/skills/ops-cron 2>/dev/null || true
     rm -rf .claude/skills/str-trending-research 2>/dev/null || true
+    rm -rf .claude/skills/tool-firecrawl-scraper 2>/dev/null || true
     rm -rf .claude/skills/tool-youtube 2>/dev/null || true
     rm -rf .claude/skills/viz-excalidraw-diagram 2>/dev/null || true
+    rm -rf .claude/skills/viz-ugc-heygen 2>/dev/null || true
 
     git add -A 2>/dev/null
     git commit -m "Post-install state: selected skills only" --quiet 2>/dev/null
@@ -165,8 +169,10 @@ reset_demo() {
     "mkt-ugc-scripts",
     "ops-cron",
     "str-trending-research",
+    "tool-firecrawl-scraper",
     "tool-youtube",
-    "viz-excalidraw-diagram"
+    "viz-excalidraw-diagram",
+    "viz-ugc-heygen"
   ]
 }
 IJSON
@@ -222,7 +228,10 @@ run_version_output_test() {
     cp "$REAL_REPO/scripts/lib/common.sh" scripts/lib/common.sh
     cp "$REAL_REPO/scripts/lib/pull.sh" scripts/lib/pull.sh
     cp "$REAL_REPO/scripts/lib/catalog.sh" scripts/lib/catalog.sh
-    git add VERSION scripts/update.sh scripts/lib/common.sh scripts/lib/pull.sh scripts/lib/catalog.sh
+    cp "$REAL_REPO/scripts/lib/preview.sh" scripts/lib/preview.sh
+    mkdir -p config
+    cp "$REAL_REPO/config/update-manifest.json" config/update-manifest.json
+    git add VERSION scripts/update.sh scripts/lib/common.sh scripts/lib/pull.sh scripts/lib/catalog.sh scripts/lib/preview.sh config/update-manifest.json
     git commit -m "Use current update scripts" --allow-empty --quiet
 
     git clone "$upstream" "$demo" --quiet
@@ -241,7 +250,7 @@ run_version_output_test() {
 
     assert_output_contains "$first_output" "Current version: v$(cat "$REAL_REPO/VERSION")"
     assert_output_contains "$first_output" "Version: v$(cat "$REAL_REPO/VERSION") -> v9.9.9"
-    assert_output_contains "$first_output" "You are now on AI-OS v9.9.9."
+    assert_output_contains "$first_output" "You are now on Agentic OS v9.9.9."
 
     env AGENTIC_OS_UPSTREAM_SLUG=agentic-os-version-output-test/upstream \
         AGENTIC_OS_SKIP_MEMORY_PROMPT=1 \
@@ -249,9 +258,237 @@ run_version_output_test() {
 
     assert_output_contains "$second_output" "Current version: v9.9.9"
     assert_output_contains "$second_output" "Version: v9.9.9 already installed"
-    assert_output_contains "$second_output" "You already have AI-OS v9.9.9."
+    assert_output_contains "$second_output" "You already have Agentic OS v9.9.9."
 
     ok "Version output test passed"
+}
+
+run_update_v2_contract_test() {
+    local test_root
+    test_root="$(mktemp -d "${TMPDIR:-/tmp}/agentic-os-update-v2-test.XXXXXX")"
+    local upstream="$test_root/upstream"
+    local demo="$test_root/demo"
+    local dry_output="$test_root/dry-run.out"
+    local apply_output="$test_root/apply.out"
+    local upstream_slug
+    upstream_slug="$(basename "$test_root")/upstream"
+
+    header "Updater v2 contract test"
+
+    git clone "$REAL_REPO" "$upstream" --quiet
+    cd "$upstream"
+    git checkout -b main --quiet 2>/dev/null || git checkout main --quiet 2>/dev/null || true
+    mkdir -p scripts/lib config
+    cp "$REAL_REPO/scripts/update.sh" scripts/update.sh
+    cp "$REAL_REPO/scripts/lib/common.sh" scripts/lib/common.sh
+    cp "$REAL_REPO/scripts/lib/preview.sh" scripts/lib/preview.sh
+    cp "$REAL_REPO/scripts/lib/backup.sh" scripts/lib/backup.sh
+    cp "$REAL_REPO/scripts/lib/pull.sh" scripts/lib/pull.sh
+    cp "$REAL_REPO/scripts/lib/catalog.sh" scripts/lib/catalog.sh
+    cp "$REAL_REPO/scripts/rollback.sh" scripts/rollback.sh
+    cp "$REAL_REPO/config/update-manifest.json" config/update-manifest.json
+    cp "$REAL_REPO/README.md" README.md
+    cp "$REAL_REPO/AGENTS.md" AGENTS.md
+    git add scripts/update.sh scripts/lib/common.sh scripts/lib/preview.sh scripts/lib/backup.sh scripts/lib/pull.sh scripts/lib/catalog.sh scripts/rollback.sh config/update-manifest.json README.md AGENTS.md
+    git commit -m "Use updater v2 files" --allow-empty --quiet
+
+    git clone "$upstream" "$demo" --quiet
+
+    cd "$upstream"
+    printf "9.9.10\n" > VERSION
+    printf "\n<!-- updater v2 dry-run fixture -->\n" >> AGENTS.md
+    git add VERSION AGENTS.md
+    git commit -m "Publish updater v2 fixture update" --quiet
+
+    cd "$demo"
+    env AGENTIC_OS_UPSTREAM_SLUG="$upstream_slug" \
+        AGENTIC_OS_SKIP_MEMORY_PROMPT=1 \
+        bash scripts/update.sh --dry-run > "$dry_output" 2>&1
+
+    assert_output_contains "$dry_output" "AI-OS Update Preview"
+    assert_output_contains "$dry_output" "Would update:"
+    assert_output_contains "$dry_output" "Protected user data:"
+    if [[ "$(cat VERSION)" != "$(cat "$REAL_REPO/VERSION")" ]]; then
+        err "Dry run changed VERSION"
+        return 1
+    fi
+
+    env AGENTIC_OS_UPSTREAM_SLUG="$upstream_slug" \
+        AGENTIC_OS_SKIP_MEMORY_PROMPT=1 \
+        bash scripts/update.sh > "$apply_output" 2>&1
+
+    assert_output_contains "$apply_output" "Version:"
+    assert_output_contains "$apply_output" "Your data is safe:"
+
+    if ! git for-each-ref --format="%(refname:short)" refs/heads/update-recovery | grep -q '^update-recovery/'; then
+        err "No update recovery branch was created"
+        return 1
+    fi
+    ok "Update recovery branch was created"
+
+    if ! find .backup -maxdepth 1 -type d -name 'update-*' | grep -q .; then
+        err "No per-update backup directory was created"
+        return 1
+    fi
+    ok "Per-update backup directory was created"
+
+    ok "Updater v2 contract test passed"
+}
+
+run_update_v2_corrupt_catalog_test() {
+    local test_root
+    test_root="$(mktemp -d "${TMPDIR:-/tmp}/agentic-os-corrupt-catalog-test.XXXXXX")"
+    local repo="$test_root/repo"
+    local output="$test_root/update.out"
+
+    header "Updater v2 corrupt catalog test"
+
+    git clone "$REAL_REPO" "$repo" --quiet
+    cd "$repo"
+    mkdir -p scripts/lib config
+    cp "$REAL_REPO/scripts/update.sh" scripts/update.sh
+    cp "$REAL_REPO/scripts/lib/common.sh" scripts/lib/common.sh
+    cp "$REAL_REPO/scripts/lib/catalog.sh" scripts/lib/catalog.sh
+    cp "$REAL_REPO/scripts/lib/preview.sh" scripts/lib/preview.sh
+    cp "$REAL_REPO/config/update-manifest.json" config/update-manifest.json
+    git remote add upstream "$REAL_REPO"
+
+    printf '{ broken json\n' > .claude/skills/_catalog/installed.json
+
+    set +e
+    AGENTIC_OS_UPSTREAM_SLUG="$(basename "$REAL_REPO")" \
+        AGENTIC_OS_SKIP_MEMORY_PROMPT=1 \
+        bash scripts/update.sh > "$output" 2>&1
+    local exit_code=$?
+    set -e
+
+    if [[ "$exit_code" -eq 0 ]]; then
+        err "Corrupt installed.json did not stop update"
+        sed -n '1,220p' "$output"
+        return 1
+    fi
+
+    assert_output_contains "$output" "installed.json"
+    assert_output_contains "$output" "corrupt"
+    ok "Corrupt catalog state stops update with a clear error"
+}
+
+run_update_v2_user_owned_preserved_test() {
+    local test_root
+    test_root="$(mktemp -d "${TMPDIR:-/tmp}/agentic-os-user-owned-test.XXXXXX")"
+    local upstream="$test_root/upstream"
+    local demo="$test_root/demo"
+    local output="$test_root/update.out"
+    local protected_file="brand_context/README.md"
+    local upstream_slug
+    upstream_slug="$(basename "$test_root")/upstream"
+
+    header "Updater v2 user-owned preservation test"
+
+    git clone "$REAL_REPO" "$upstream" --quiet
+    cd "$upstream"
+    git checkout -b main --quiet 2>/dev/null || git checkout main --quiet 2>/dev/null || true
+    mkdir -p scripts/lib config
+    cp "$REAL_REPO/scripts/update.sh" scripts/update.sh
+    cp "$REAL_REPO/scripts/lib/common.sh" scripts/lib/common.sh
+    cp "$REAL_REPO/scripts/lib/preview.sh" scripts/lib/preview.sh
+    cp "$REAL_REPO/scripts/lib/backup.sh" scripts/lib/backup.sh
+    cp "$REAL_REPO/scripts/lib/pull.sh" scripts/lib/pull.sh
+    cp "$REAL_REPO/scripts/lib/catalog.sh" scripts/lib/catalog.sh
+    cp "$REAL_REPO/config/update-manifest.json" config/update-manifest.json
+    git add scripts/update.sh scripts/lib/common.sh scripts/lib/preview.sh scripts/lib/backup.sh scripts/lib/pull.sh scripts/lib/catalog.sh config/update-manifest.json
+    git commit -m "Use updater v2 files" --allow-empty --quiet
+
+    git clone "$upstream" "$demo" --quiet
+
+    cd "$demo"
+    printf "USER LOCAL BRAND CONTENT\n" > "$protected_file"
+    git add "$protected_file"
+    git commit -m "User customizes brand context" --quiet
+
+    cd "$upstream"
+    printf "UPSTREAM TEMPLATE CONTENT\n" > "$protected_file"
+    git add "$protected_file"
+    git commit -m "Upstream changes starter brand context" --quiet
+
+    cd "$demo"
+    env AGENTIC_OS_UPSTREAM_SLUG="$upstream_slug" \
+        AGENTIC_OS_SKIP_MEMORY_PROMPT=1 \
+        bash scripts/update.sh > "$output" 2>&1
+
+    if ! grep -q "USER LOCAL BRAND CONTENT" "$protected_file"; then
+        err "User-owned tracked file was overwritten"
+        sed -n '1,220p' "$output"
+        return 1
+    fi
+    ok "User-owned tracked file kept the user's content"
+
+    if ! find .backup -path "*/upstream-user-owned/$protected_file" -type f | grep -q .; then
+        err "Upstream copy of user-owned file was not backed up"
+        return 1
+    fi
+    ok "Upstream copy was saved in the update backup"
+
+    assert_output_contains "$output" "User-owned files preserved"
+}
+
+run_update_v2_ignored_user_owned_collision_test() {
+    local test_root
+    test_root="$(mktemp -d "${TMPDIR:-/tmp}/agentic-os-ignored-user-owned-test.XXXXXX")"
+    local upstream="$test_root/upstream"
+    local demo="$test_root/demo"
+    local output="$test_root/update.out"
+    local protected_file="clients/acme/context/MEMORY.md"
+    local upstream_slug
+    upstream_slug="$(basename "$test_root")/upstream"
+
+    header "Updater v2 ignored user-owned collision test"
+
+    git clone "$REAL_REPO" "$upstream" --quiet
+    cd "$upstream"
+    git checkout -b main --quiet 2>/dev/null || git checkout main --quiet 2>/dev/null || true
+    mkdir -p scripts/lib config
+    cp "$REAL_REPO/scripts/update.sh" scripts/update.sh
+    cp "$REAL_REPO/scripts/lib/common.sh" scripts/lib/common.sh
+    cp "$REAL_REPO/scripts/lib/preview.sh" scripts/lib/preview.sh
+    cp "$REAL_REPO/scripts/lib/backup.sh" scripts/lib/backup.sh
+    cp "$REAL_REPO/scripts/lib/pull.sh" scripts/lib/pull.sh
+    cp "$REAL_REPO/scripts/lib/catalog.sh" scripts/lib/catalog.sh
+    cp "$REAL_REPO/config/update-manifest.json" config/update-manifest.json
+    git add scripts/update.sh scripts/lib/common.sh scripts/lib/preview.sh scripts/lib/backup.sh scripts/lib/pull.sh scripts/lib/catalog.sh config/update-manifest.json
+    git commit -m "Use updater v2 files" --allow-empty --quiet
+
+    git clone "$upstream" "$demo" --quiet
+
+    cd "$demo"
+    mkdir -p "$(dirname "$protected_file")"
+    printf "USER LOCAL MEMORY\n" > "$protected_file"
+
+    cd "$upstream"
+    mkdir -p "$(dirname "$protected_file")"
+    printf "UPSTREAM STARTER MEMORY\n" > "$protected_file"
+    git add -f "$protected_file"
+    git commit -m "Upstream accidentally tracks client memory" --quiet
+
+    cd "$demo"
+    env AGENTIC_OS_UPSTREAM_SLUG="$upstream_slug" \
+        AGENTIC_OS_SKIP_MEMORY_PROMPT=1 \
+        bash scripts/update.sh > "$output" 2>&1
+
+    if ! grep -q "USER LOCAL MEMORY" "$protected_file"; then
+        err "Ignored user-owned file was overwritten"
+        sed -n '1,220p' "$output"
+        return 1
+    fi
+    ok "Ignored user-owned file kept the user's content"
+
+    if ! find .backup -path "*/user-owned-local/$protected_file" -type f | grep -q .; then
+        err "Local ignored user-owned file was not backed up during collision handling"
+        return 1
+    fi
+    ok "Local ignored user-owned collision was backed up before update"
+
+    assert_output_contains "$output" "User-owned files preserved"
 }
 
 # ---------- Scenario Descriptions ----------
@@ -262,7 +499,7 @@ declare -a SCENARIO_NAMES=(
     "Script changes only (scripts/*.sh)"
     "Existing skill updated upstream (no local mods)"
     "New skill added to catalog upstream"
-    "Mixed changes - system + skills + scripts"
+    "Mixed changes — system + skills + scripts"
     "User modified skill, NO upstream change to that skill"
     "User modified skill, upstream ALSO changed same skill"
     "User modified skill, upstream changed DIFFERENT file in same skill"
@@ -274,7 +511,7 @@ declare -a SCENARIO_NAMES=(
     "User selects 'all' in skill install menu"
     "User presses Enter (installs nothing)"
     "No new or available skills"
-    "Clean update with changes - verify summary"
+    "Clean update with changes — verify summary"
     "Clean update with no changes anywhere"
     "Git pull fails (simulated)"
     "User has uncommitted changes in non-skill files"
@@ -304,7 +541,7 @@ declare -a SCENARIO_CATEGORIES=(
 # =========================================================
 
 setup_scenario_1() {
-    # No upstream changes - demo is already up to date
+    # No upstream changes — demo is already up to date
     reset_demo
     ok "Demo repo is up to date with origin. No changes anywhere."
 }
@@ -564,7 +801,7 @@ setup_scenario_16() {
 }
 
 setup_scenario_17() {
-    # No new or available skills - user has everything
+    # No new or available skills — user has everything
     reset_main
     reset_demo
 
@@ -591,7 +828,7 @@ with open('.claude/skills/_catalog/installed.json', 'w') as f:
 }
 
 setup_scenario_18() {
-    # Clean update with changes - for verifying summary
+    # Clean update with changes — for verifying summary
     setup_scenario_6  # Mixed changes
     warn "Focus on Step 4 summary output. Verify all categories reported."
 }
@@ -640,7 +877,7 @@ setup_scenario_22() {
     cd "$DEMO_REPO"
     rm -f .claude/skills/_catalog/installed.json
     ok "Deleted installed.json from demo repo."
-    warn "Script should handle gracefully - warn and continue."
+    warn "Script should handle gracefully — warn and continue."
 }
 
 setup_scenario_23() {
@@ -693,21 +930,23 @@ setup_scenario_25() {
     "mkt-ugc-scripts",
     "ops-cron",
     "str-trending-research",
+    "tool-firecrawl-scraper",
     "tool-youtube",
-    "viz-excalidraw-diagram"
+    "viz-excalidraw-diagram",
+    "viz-ugc-heygen"
   ]
 }
 IJSON
 
     # Remove skills the user "didn't select"
     for skill in mkt-content-repurposing mkt-copywriting mkt-ugc-scripts ops-cron \
-                 str-trending-research tool-youtube \
-                 viz-excalidraw-diagram; do
+                 str-trending-research tool-firecrawl-scraper tool-youtube \
+                 viz-excalidraw-diagram viz-ugc-heygen; do
         rm -rf ".claude/skills/$skill" 2>/dev/null || true
     done
 
     ok "Simulated fresh clone + install (minimal skill selection)."
-    warn "Run update.sh - should show clean 'already up to date' flow."
+    warn "Run update.sh — should show clean 'already up to date' flow."
 }
 
 setup_scenario_26() {
@@ -739,7 +978,7 @@ setup_scenario_29() {
     setup_scenario_8
     echo ""
     warn "When prompted, enter 'n'."
-    warn "Verify: same as 'k' - local version kept."
+    warn "Verify: same as 'k' — local version kept."
 }
 
 # =========================================================
@@ -748,7 +987,7 @@ setup_scenario_29() {
 
 list_scenarios() {
     echo ""
-    printf "${CYAN}${BOLD}  AI-OS - Update Script Test Scenarios${NC}\n"
+    printf "${CYAN}${BOLD}  Agentic OS — Update Script Test Scenarios${NC}\n"
     echo ""
     CURRENT_CAT=""
     for i in "${!SCENARIO_NAMES[@]}"; do
@@ -886,6 +1125,18 @@ case "${1:-}" in
         ;;
     version-output)
         run_version_output_test
+        ;;
+    update-v2)
+        run_update_v2_contract_test
+        ;;
+    update-v2-corrupt-catalog)
+        run_update_v2_corrupt_catalog_test
+        ;;
+    update-v2-user-owned)
+        run_update_v2_user_owned_preserved_test
+        ;;
+    update-v2-ignored-user-owned)
+        run_update_v2_ignored_user_owned_collision_test
         ;;
     setup)
         create_test_env

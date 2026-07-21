@@ -1,13 +1,7 @@
 ---
 name: viz-ad-creative-codex
 description: >
-  Generate consistent, on-brand paid ad creative batches natively in Codex using
-  Codex's built-in image generation, with no Gemini, fal, or other model API key.
-  Use for Meta, Google, TikTok, LinkedIn, YouTube, creative matrices, first-use
-  onboarding, platform-limited copy, image prompt packs, generated still ads,
-  multi-size exports, launch QA, and performance iteration. Use viz-ad-creative-fal
-  for Claude plus fal.ai image/video automation, and viz-ad-creative-figma for
-  Claude plus Figma/template production.
+  Generate on-brand paid ad creative batches natively in Codex using its built-in image generation, with no external image API key. Use for Meta, Google, TikTok, LinkedIn, YouTube, creative matrices, platform-limited copy, generated still ads, and multi-size exports. Use viz-ad-creative-fal for Claude plus fal.ai, or viz-ad-creative-figma for Figma/template production.
 ---
 
 # Ad Creative Factory (Codex-native engine)
@@ -94,7 +88,7 @@ Read `context/learnings.md` for the `## viz-ad-creative-codex` section. Apply an
 
 ## Step 4: Brand Lock
 
-Read `references/brand-lock.md`. The single source of truth is `brand_context/brand-profile.json`. If it exists, load it. If not, build it from `brand_context/voice-profile.md`, `positioning.md`, and `icp.md` when present; otherwise use the client URL with WebFetch or Firecrawl if configured, or ask a short interview. Save the locked reference images (logo, 1 to 3 product shots, 1 to 2 style anchors, color swatch sheet) under `brand_context/assets/`.
+Read `references/brand-lock.md`. The single source of truth is `brand_context/brand-profile.json`. If it exists, load it. If not, build it from `brand_context/voice-profile.md`, `positioning.md`, and `icp.md` when present; otherwise extract from the client URL (use `tool-firecrawl-scraper` if available) or ask a short interview. Save the locked reference images (logo, 1 to 3 product shots, 1 to 2 style anchors, color swatch sheet) under `brand_context/assets/`.
 
 For Codex-native generation, the brand lock becomes prompt discipline: every image prompt must restate the exact brand colors, typography feel, logo rules, product references, exclusions, and safe-zone constraints.
 

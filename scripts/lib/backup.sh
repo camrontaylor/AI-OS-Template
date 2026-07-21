@@ -72,10 +72,64 @@ fi
 
 git fetch "$UPDATE_REMOTE" "$UPSTREAM_BRANCH" --quiet 2>/dev/null || true
 
+# If upstream starts tracking a file under a user-owned path, Git may otherwise
+# overwrite an ignored local file at the same path during a hard reset. Move only
+# exact user-owned collision paths aside, then restore them after the pull/reset.
+USER_OWNED_COLLISION_BACKUP_DIR="$UPDATE_BACKUP_DIR/user-owned-local"
+USER_OWNED_COLLISION_PATHS=()
+
+prepare_user_owned_collision_backups() {
+    local remote_ref="$UPDATE_REMOTE/$UPSTREAM_BRANCH"
+    local changed_files file local_path backup_path
+
+    git rev-parse "$remote_ref" >/dev/null 2>&1 || return 0
+    changed_files=$(git diff --name-only "HEAD..$remote_ref" 2>/dev/null || true)
+    [[ -n "$changed_files" ]] || return 0
+
+    while IFS= read -r file; do
+        [[ -z "$file" ]] && continue
+        path_matches_any "$file" "${USER_OWNED_PATHS[@]}" || continue
+
+        # Tracked user-owned files are restored from OLD_HEAD after the update.
+        if git ls-files --error-unmatch -- "$file" >/dev/null 2>&1; then
+            continue
+        fi
+
+        local_path="$REPO_ROOT/$file"
+        [[ -e "$local_path" || -L "$local_path" ]] || continue
+
+        backup_path="$USER_OWNED_COLLISION_BACKUP_DIR/$file"
+        mkdir -p "$(dirname "$backup_path")"
+        rm -rf "$backup_path"
+        cp -pR "$local_path" "$backup_path"
+        rm -rf "$local_path"
+        USER_OWNED_COLLISION_PATHS+=("$file")
+    done <<< "$changed_files"
+}
+
+restore_user_owned_collision_backups() {
+    local file local_path backup_path
+    [[ ${#USER_OWNED_COLLISION_PATHS[@]} -gt 0 ]] || return 0
+
+    for file in "${USER_OWNED_COLLISION_PATHS[@]}"; do
+        [[ -z "$file" ]] && continue
+        backup_path="$USER_OWNED_COLLISION_BACKUP_DIR/$file"
+        [[ -e "$backup_path" || -L "$backup_path" ]] || continue
+
+        local_path="$REPO_ROOT/$file"
+        mkdir -p "$(dirname "$local_path")"
+        rm -rf "$local_path"
+        cp -pR "$backup_path" "$local_path"
+        USER_OWNED_RESTORED_FILES+=("$file")
+    done
+}
+
+prepare_user_owned_collision_backups
+
 # =========================================================
 # Step 5: Scan local skill modifications before pull
 # =========================================================
-SKILL_BACKUP_DIR="$BACKUP_DIR/skills-${UPDATE_TIMESTAMP}"
+SKILL_BACKUP_DIR="$UPDATE_BACKUP_DIR/skills"
 MODIFIED_SKILLS=()
 MODIFIED_SKILL_FILES=()  # parallel array: pipe-separated file list per skill
 USER_CREATED_SKILLS=()
@@ -126,7 +180,7 @@ fi
 # =========================================================
 # Step 5b: Stash other modified tracked files (not protected, not skills)
 # =========================================================
-OTHER_BACKUP_DIR="$BACKUP_DIR/other-${UPDATE_TIMESTAMP}"
+OTHER_BACKUP_DIR="$UPDATE_BACKUP_DIR/other"
 OTHER_MODIFIED_FILES=()
 
 ALL_MODIFIED=$(git diff --name-only 2>/dev/null || true)

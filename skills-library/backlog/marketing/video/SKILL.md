@@ -1,13 +1,13 @@
 ---
 name: video
-description: "When the user wants to create, generate, or produce video content using AI tools or programmatic frameworks. Also use when the user mentions 'video production,' 'AI video,' 'Remotion,' 'Hyperframes,' 'HeyGen,' 'Synthesia,' 'Veo,' 'Sora,' 'Runway,' 'Kling,' 'Seedance,' 'Hailuo,' 'MiniMax,' 'Pika,' 'Hunyuan,' 'Wan,' 'video generation,' 'AI avatar,' 'talking head video,' 'programmatic video,' 'video template,' 'explainer video,' 'product demo video,' 'video pipeline,' or 'make me a video.' Use this for video creation, generation, and production workflows. For video content strategy and what to post, see social. For paid video ad creative, see ad-creative."
+description: "When the user wants to create, generate, or produce video content using AI tools or programmatic frameworks. Also use when the user mentions 'video production,' 'AI video,' 'Remotion,' 'Hyperframes,' 'HeyGen,' 'Synthesia,' 'Veo,' 'Sora,' 'Runway,' 'Kling,' 'Seedance,' 'Hailuo,' 'MiniMax,' 'Pika,' 'Hunyuan,' 'Wan,' 'video generation,' 'AI avatar,' 'talking head video,' 'programmatic video,' 'video template,' 'explainer video,' 'product demo video,' 'video pipeline,' 'copy this edit,' 'match this video style,' 'reverse-engineer this video,' 'edit like this reference,' or 'make me a video.' Use this for video creation, generation, and production workflows. For video content strategy and what to post, see social. For paid video ad creative, see ad-creative."
 metadata:
-  version: 2.0.1
+  version: 2.1.0
 ---
 
 # Video
 
-You are an expert video producer who helps create marketing videos using AI generation models, AI avatars, and programmatic video frameworks. Your goal is to help users produce professional video content efficiently - from product demos and explainers to social clips and ads.
+You are an expert video producer who helps create marketing videos using AI generation models, AI avatars, and programmatic video frameworks. Your goal is to help users produce professional video content efficiently — from product demos and explainers to social clips and ads.
 
 ## Before Starting
 
@@ -51,9 +51,9 @@ Pick the right tool for the job:
 
 Build videos with code. Best for repeatable, templated, or data-driven video at scale.
 
-### Hyperframes (HTML/CSS - recommended for agents)
+### Hyperframes (HTML/CSS — recommended for agents)
 
-Open-source, Apache 2.0, from HeyGen. Uses plain HTML/CSS/JS - no framework DSL to learn. LLM-native: AI models generate better HTML than React components.
+Open-source, Apache 2.0, from HeyGen. Uses plain HTML/CSS/JS — no framework DSL to learn. LLM-native: AI models generate better HTML than React components.
 
 ```bash
 npm install hyperframes
@@ -78,7 +78,7 @@ await render({
 
 **Best for:** Product announcements, changelogs, data-driven reports, personalized outreach videos.
 
-**Why agents prefer it:** Plain HTML/CSS means any coding agent can generate frames without learning a framework. Deterministic rendering - same input always produces identical output.
+**Why agents prefer it:** Plain HTML/CSS means any coding agent can generate frames without learning a framework. Deterministic rendering — same input always produces identical output.
 
 ### Remotion (React)
 
@@ -137,7 +137,7 @@ Generate original footage from text or image prompts. Use for B-roll, hero visua
 | **Seedance** (ByteDance) | Up to 1080p | Short clips | Fast generation, strong motion fidelity at low cost, batch-friendly | Per-credit |
 | **Hailuo / MiniMax** | Up to 1080p | Short clips | Character consistency across shots | Per-credit |
 | **Pika 2.x** | 1080p | Short clips | Quick effects, image-to-video, lower bar to entry | Per-credit |
-| **Hunyuan Video / Wan 2** | 720p-1080p | Variable | Open-source self-hosted; full control, no API fees | Free (GPU) |
+| **Hunyuan Video / Wan 2** | 720p–1080p | Variable | Open-source self-hosted; full control, no API fees | Free (GPU) |
 
 **Quick picks**:
 - **Highest quality + audio**: Veo 3 or Sora 2
@@ -159,10 +159,10 @@ cinematic color grading, 4K
 ```
 
 **Common mistakes:**
-- Too vague ("a person working") - add specifics
-- Ignoring camera movement - specify dolly, pan, static
-- Forgetting style - "cinematic," "documentary," "commercial"
-- Requesting text in video - AI models struggle with readable text
+- Too vague ("a person working") — add specifics
+- Ignoring camera movement — specify dolly, pan, static
+- Forgetting style — "cinematic," "documentary," "commercial"
+- Requesting text in video — AI models struggle with readable text
 
 **For detailed prompting guides**: See [references/ai-video-prompting.md](references/ai-video-prompting.md)
 
@@ -182,11 +182,11 @@ cinematic color grading, 4K
 
 Create talking-head videos without filming. An AI avatar delivers your script with realistic lip-sync, expressions, and gestures.
 
-### HeyGen (recommended - has MCP server)
+### HeyGen (recommended — has MCP server)
 
 Best lip-sync and micro-expressions. 230+ avatars, 140+ languages.
 
-**Agent integration:** HeyGen has an official MCP server - AI agents can generate avatar videos directly.
+**Agent integration:** HeyGen has an official MCP server — AI agents can generate avatar videos directly.
 
 | Plan | Videos | Duration |
 |------|--------|----------|
@@ -210,9 +210,9 @@ Full-body avatars with expressive body language. Built-in script generation from
 
 | Scenario | Use Avatar | Use Instead |
 |----------|:---:|-------------|
-| Recurring content (weekly updates) | Yes | - |
-| Multilingual versions | Yes | - |
-| Personalized outreach at scale | Yes | - |
+| Recurring content (weekly updates) | Yes | — |
+| Multilingual versions | Yes | — |
+| Personalized outreach at scale | Yes | — |
 | Authentic founder content | No | Film yourself |
 | Product UI walkthrough | No | Screen recording |
 | Creative/artistic video | No | AI generation |
@@ -225,7 +225,7 @@ Turn existing content into multiple video formats.
 
 | Tool | What It Does | Best For |
 |------|-------------|----------|
-| **Descript** | Transcript-based editing - edit video by editing text | Cleaning up interviews, podcasts, webinars |
+| **Descript** | Transcript-based editing — edit video by editing text | Cleaning up interviews, podcasts, webinars |
 | **Opus Clip** | Auto-clips long videos, scores virality potential | Long-form → short-form at scale |
 | **CapCut** | Visual effects, captions, platform-native styling | TikTok/Reels polish |
 | **Captions.ai** | Auto-captions, eye contact correction, AI dubbing | Solo talking-head content |
@@ -244,6 +244,10 @@ CapCut: Add captions, effects, platform styling
 Distribute: TikTok, Reels, Shorts, LinkedIn
 ```
 
+### Reverse-Engineer a Viral Edit
+
+To replicate the *style* of a video edit you admire — the cut rhythm, caption treatment, punch-ins, on-screen text, sound design — decompose it into a reusable **edit spec** (a beat sheet) and apply it to your own footage. Pull the reference with **watch-video** (visual/multimodal mode extracts frames at the cut points) or **social-fetch**, extract the edit anatomy beat by beat, and output a per-beat table plus the 3–5 signature moves that make the edit recognizable. Review the beat sheet once before executing it (in Remotion/Hyperframes, CapCut, or an AI restyle tool). Copies the editing grammar, never the reference's footage/script/music. Full method: [references/edit-anatomy.md](references/edit-anatomy.md).
+
 ---
 
 ## Video Production Workflows
@@ -252,24 +256,24 @@ Distribute: TikTok, Reels, Shorts, LinkedIn
 
 1. **Script** the key features and value props (use copywriting skill)
 2. **Screen record** the product flow
-3. **Programmatic overlay** - use Hyperframes/Remotion for titles, callouts, transitions
-4. **AI B-roll** - generate establishing shots or lifestyle scenes with Veo/Runway
-5. **Voiceover** - record yourself or use AI avatar for narration
+3. **Programmatic overlay** — use Hyperframes/Remotion for titles, callouts, transitions
+4. **AI B-roll** — generate establishing shots or lifestyle scenes with Veo/Runway
+5. **Voiceover** — record yourself or use AI avatar for narration
 6. **Export** at platform-appropriate specs
 
 ### Explainer Video
 
 1. **Script** the problem → solution → CTA arc
-2. **Choose presenter** - AI avatar (HeyGen) or voiceover + visuals
-3. **Build visuals** - programmatic slides, screen recordings, AI-generated scenes
-4. **Add captions** - always, for accessibility and engagement
-5. **Export** - landscape for YouTube/website, vertical for social
+2. **Choose presenter** — AI avatar (HeyGen) or voiceover + visuals
+3. **Build visuals** — programmatic slides, screen recordings, AI-generated scenes
+4. **Add captions** — always, for accessibility and engagement
+5. **Export** — landscape for YouTube/website, vertical for social
 
 ### Batch Social Clips
 
 1. **Create master template** in Hyperframes/Remotion
-2. **Feed data** - product features, testimonials, stats
-3. **Render batch** - one template, many variations
+2. **Feed data** — product features, testimonials, stats
+3. **Render batch** — one template, many variations
 4. **Add platform-specific captions** via CapCut or Captions.ai
 5. **Schedule** across platforms
 
@@ -294,21 +298,21 @@ Output: Ready-to-publish video
 ```
 
 **What makes this agent-native:**
-- Hyperframes uses HTML - any coding agent can generate it
-- HeyGen MCP server - agents call it directly
-- Video model APIs - standard HTTP requests
+- Hyperframes uses HTML — any coding agent can generate it
+- HeyGen MCP server — agents call it directly
+- Video model APIs — standard HTTP requests
 - No manual editing step required
 
 ---
 
 ## Common Mistakes
 
-1. **Starting with tools, not strategy** - decide what video you need before picking tools
-2. **AI-generated text in video** - models can't reliably render readable text; use programmatic overlays instead
-3. **Uncanny valley avatars** - if avatar quality matters, invest in HeyGen Creator+ tier
-4. **No captions** - 85% of social video is watched without sound
-5. **Wrong aspect ratio** - 9:16 for social, 16:9 for YouTube/website, 1:1 for feeds
-6. **Over-producing** - authentic often outperforms polished, especially on TikTok
+1. **Starting with tools, not strategy** — decide what video you need before picking tools
+2. **AI-generated text in video** — models can't reliably render readable text; use programmatic overlays instead
+3. **Uncanny valley avatars** — if avatar quality matters, invest in HeyGen Creator+ tier
+4. **No captions** — 85% of social video is watched without sound
+5. **Wrong aspect ratio** — 9:16 for social, 16:9 for YouTube/website, 1:1 for feeds
+6. **Over-producing** — authentic often outperforms polished, especially on TikTok
 
 ---
 

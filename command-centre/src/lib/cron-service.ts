@@ -141,6 +141,10 @@ export function matchesCronTime(now: Date, schedule: string): boolean {
   return getCronRuntime().matchesTime(now, schedule);
 }
 
+export function matchesCronDays(now: Date, days: string): boolean {
+  return getCronRuntime().matchesDays(now, days);
+}
+
 export function toCronMinuteIso(date: Date): string {
   return getCronRuntime().toMinuteIso(date);
 }

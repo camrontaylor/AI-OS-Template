@@ -7,9 +7,9 @@ Skill selector with two modes:
    py -3 scripts/select-skills.py             # Windows
    → Checkbox UI: arrow keys to navigate, Space to toggle, Enter to confirm
 
-2. CLI mode (for Claude Code or scripts - non-interactive):
-   python3 scripts/select-skills.py --remove "ops-cron"                  # macOS/Linux
-   py -3 scripts/select-skills.py --remove "ops-cron"                    # Windows
+2. CLI mode (for Claude Code or scripts — non-interactive):
+   python3 scripts/select-skills.py --remove "viz-ugc-heygen,ops-cron"                   # macOS/Linux
+   py -3 scripts/select-skills.py --remove "viz-ugc-heygen,ops-cron"                     # Windows
    python3 scripts/select-skills.py --keep "mkt-copywriting,tool-humanizer,str-trending-research"
    py -3 scripts/select-skills.py --keep "mkt-copywriting,tool-humanizer,str-trending-research"
    python3 scripts/select-skills.py --keep all
@@ -134,7 +134,7 @@ def finalize(optional, selected, core_skills, skills_dir, installed_json, catalo
 
     # Write result JSON for Claude to read. Do this BEFORE printing the
     # summary so a downstream print failure can't prevent the consumer
-    # (onboarding command) from seeing the selection result.
+    # (start-here command) from seeing the selection result.
     result = {
         "selected": sorted(selected_names),
         "removed": sorted(removed_names),
@@ -163,7 +163,7 @@ def finalize(optional, selected, core_skills, skills_dir, installed_json, catalo
         print()
 
     if all_services:
-        print(f"  {YELLOW}{BOLD}API keys (optional - skills work without them):{NC}")
+        print(f"  {YELLOW}{BOLD}API keys (optional — skills work without them):{NC}")
         for svc in all_services:
             print(f"    {YELLOW}→{NC} {svc}  {DIM}(add to .env){NC}")
         print()
@@ -333,7 +333,7 @@ def run_cli(optional, keep_str, remove_str):
             if name in name_to_idx:
                 selected[name_to_idx[name]] = False
             else:
-                print(f"  {YELLOW}! Unknown skill: {name} - skipping{NC}")
+                print(f"  {YELLOW}! Unknown skill: {name} — skipping{NC}")
 
     elif keep_str is not None:
         if keep_str.lower() == "all":
@@ -345,7 +345,7 @@ def run_cli(optional, keep_str, remove_str):
             if name in name_to_idx:
                 selected[name_to_idx[name]] = True
             else:
-                print(f"  {YELLOW}! Unknown skill: {name} - skipping{NC}")
+                print(f"  {YELLOW}! Unknown skill: {name} — skipping{NC}")
 
     return selected
 
@@ -386,14 +386,14 @@ def main():
 
     # Decide mode
     if args.remove is not None or args.keep is not None:
-        # CLI mode - explicit flags
+        # CLI mode — explicit flags
         selected = run_cli(optional, args.keep, args.remove)
     elif sys.stdin.isatty():
-        # Interactive mode - real terminal
+        # Interactive mode — real terminal
         selected = run_interactive(optional, core_skills)
     else:
-        # Non-interactive, no flags - keep all (safe default)
-        print(f"  {DIM}Non-interactive mode, no --keep/--remove flags - keeping all skills.{NC}")
+        # Non-interactive, no flags — keep all (safe default)
+        print(f"  {DIM}Non-interactive mode, no --keep/--remove flags — keeping all skills.{NC}")
         selected = [True] * len(optional)
 
     # Resolve deps and finalize

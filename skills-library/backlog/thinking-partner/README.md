@@ -12,12 +12,12 @@ npx skills add mattnowdev/thinking-partner
 
 ## What It Does
 
-Not a lecture - a sparring session. Turns your AI agent into a thinking partner that:
+Not a lecture — a sparring session. Turns your AI agent into a thinking partner that:
 
-- **Challenges assumptions** - Surfaces hidden beliefs you're treating as facts
-- **Applies mental models** - Selects and deploys the right frameworks for your situation (150+ models across 17 disciplines)
-- **Detects orientation capture** - Notices when your thinking serves comfort instead of truth
-- **Maintains productive tension** - Holds complexity open long enough to find real insight
+- **Challenges assumptions** — Surfaces hidden beliefs you're treating as facts
+- **Applies mental models** — Selects and deploys the right frameworks for your situation (150+ models across 17 disciplines)
+- **Detects orientation capture** — Notices when your thinking serves comfort instead of truth
+- **Maintains productive tension** — Holds complexity open long enough to find real insight
 
 ## When It Triggers
 

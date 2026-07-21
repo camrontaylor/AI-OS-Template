@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
-# Sync skills and scripts from the root to all client workspaces.
-# Run this after update.sh to push the latest methodology to all clients.
+# Link shared runtime files from the root into all client workspaces.
+# Run this after update.sh or after adding a shared skill. Shared methodology
+# exists once at root; clients keep only their own data, instructions, cron
+# proxies, runtime logs, and client-only skills.
 # Usage: bash scripts/update-clients.sh
 
 set -euo pipefail
 
 PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 CLIENTS_DIR="${PROJECT_DIR}/clients"
+RUNTIME_BACKUP_DIR="${AIOS_CLIENT_LINK_BACKUP_DIR:-${TMPDIR:-/tmp}/aios-client-runtime-backup-$(date +%Y%m%d-%H%M%S)-$$}"
+MIGRATED_PATHS=0
 
 create_client_agents_file() {
   local target="$1"
@@ -49,6 +53,30 @@ create_memory_scaffold() {
 
 ## Pending Decisions
 EOF
+}
+
+ensure_context_intake_scaffold() {
+  local context_dir="$1"
+  mkdir -p \
+    "${context_dir}/inbox" \
+    "${context_dir}/intake/review" \
+    "${context_dir}/intake/parked" \
+    "${context_dir}/reference"
+
+  touch \
+    "${context_dir}/inbox/.gitkeep" \
+    "${context_dir}/intake/review/.gitkeep" \
+    "${context_dir}/intake/parked/.gitkeep" \
+    "${context_dir}/reference/.gitkeep"
+}
+
+require_shared_file() {
+  local rel="$1"
+  if [[ ! -f "${PROJECT_DIR}/${rel}" ]]; then
+    echo "ERROR: required shared AI-OS file is missing: ${rel}" >&2
+    echo "Refusing to sync clients because rsync --delete would propagate the deletion." >&2
+    exit 1
+  fi
 }
 
 create_client_cron_proxy_scripts() {
@@ -198,32 +226,70 @@ sync_dir() {
   fi
 }
 
-sync_shared_skill_dir() {
-  local src="${1%/}"
-  local dest="${2%/}"
-  local tmp
+backup_and_link() {
+  local target="$1"
+  local link_target="$2"
+  local rel
+  local backup
 
-  tmp="$(mktemp -d "${TMPDIR:-/tmp}/aios-client-skill-local.XXXXXX")"
-
-  if [[ -d "$dest" ]]; then
-    while IFS= read -r local_file; do
-      [[ -f "$local_file" ]] || continue
-      cp -p "$local_file" "$tmp/$(basename "$local_file")"
-    done < <(find "$dest" -maxdepth 1 -type f \( -name 'SKILL.local.md' -o -name '*.local.md' \) -print)
-
-    if [[ -d "$dest/local" ]]; then
-      cp -R "$dest/local" "$tmp/local"
-    fi
-    if [[ -d "$dest/.local" ]]; then
-      cp -R "$dest/.local" "$tmp/.local"
-    fi
+  if [[ -L "$target" ]] && [[ "$(readlink "$target")" == "$link_target" ]]; then
+    return
   fi
 
-  sync_dir "$src" "$dest"
+  if [[ -e "$target" || -L "$target" ]]; then
+    rel="${target#"$PROJECT_DIR/"}"
+    backup="$RUNTIME_BACKUP_DIR/$rel"
+    mkdir -p "$(dirname "$backup")"
+    mv "$target" "$backup"
+    MIGRATED_PATHS=$((MIGRATED_PATHS + 1))
+  fi
 
-  if [[ -d "$tmp" ]]; then
-    cp -R "$tmp/." "$dest/"
-    rm -rf "$tmp"
+  mkdir -p "$(dirname "$target")"
+  ln -s "$link_target" "$target"
+}
+
+preflight_shared_skill_overrides() {
+  local client_dir
+  local root_skill
+  local skill_name
+  local client_skill
+  local local_path
+
+  shopt -s nullglob
+  for client_dir in "$CLIENTS_DIR"/*/; do
+    for root_skill in "$PROJECT_DIR"/.claude/skills/*/; do
+      [[ -f "$root_skill/SKILL.md" ]] || continue
+      skill_name="$(basename "$root_skill")"
+      client_skill="$client_dir/.claude/skills/$skill_name"
+      [[ -d "$client_skill" && ! -L "$client_skill" ]] || continue
+
+      while IFS= read -r local_path; do
+        [[ -n "$local_path" ]] || continue
+        printf 'ERROR: client-local shared-skill override must be moved before linking: %s\n' "${local_path#"$PROJECT_DIR/"}" >&2
+        printf 'Move client behavior into that client context/learnings.md, or make the skill client-only under a distinct name.\n' >&2
+        return 1
+      done < <(find "$client_skill" -maxdepth 1 \( -type f -name 'SKILL.local.md' -o -type f -name '*.local.md' -o -type d -name local -o -type d -name .local \) -print)
+    done
+  done
+  shopt -u nullglob
+}
+
+sync_hooks_info_dir() {
+  local src="${1%/}"
+  local dest="${2%/}"
+  mkdir -p "$dest"
+  if command -v rsync >/dev/null 2>&1; then
+    rsync -a --delete \
+      --exclude 'ccnotify.db' \
+      --exclude 'ccnotify.log*' \
+      --exclude 'footer-misses.log' \
+      "$src/" "$dest/"
+  else
+    find "$src" -maxdepth 1 -type f \
+      ! -name 'ccnotify.db' \
+      ! -name 'ccnotify.log*' \
+      ! -name 'footer-misses.log' \
+      -exec cp -p {} "$dest/" \;
   fi
 }
 
@@ -298,6 +364,10 @@ if [[ ! -d "$CLIENTS_DIR" ]]; then
   exit 0
 fi
 
+require_shared_file "scripts/base-return-to-main.sh"
+require_shared_file "scripts/base-autosave.sh"
+preflight_shared_skill_overrides
+
 # Find client folders (any directory directly under clients/)
 CLIENT_COUNT=0
 SYNCED=0
@@ -316,23 +386,28 @@ for CLIENT_DIR in "${CLIENTS_DIR}"/*/; do
     create_memory_scaffold "${CLIENT_DIR}/context/MEMORY.md"
     echo "  Created MEMORY.md scaffold"
   fi
+  ensure_context_intake_scaffold "${CLIENT_DIR}/context"
 
-  # Sync skills - copy root skills over, but preserve client-only skills
+  # Link every shared skill individually so client-only skills can remain as
+  # real folders beside them.
   if [[ -d "${PROJECT_DIR}/.claude/skills" ]]; then
     mkdir -p "${CLIENT_DIR}/.claude/skills"
 
-    # Copy each root skill folder to the client (overwrite if exists)
     for root_skill in "${PROJECT_DIR}/.claude/skills"/*/; do
-      [[ -d "$root_skill" ]] || continue
+      [[ -f "$root_skill/SKILL.md" ]] || continue
       skill_name=$(basename "$root_skill")
-      [[ "$skill_name" == "_catalog" || "$skill_name" == "_archived" ]] && continue
-      sync_shared_skill_dir "$root_skill" "${CLIENT_DIR}/.claude/skills/${skill_name}"
+      backup_and_link \
+        "${CLIENT_DIR}/.claude/skills/${skill_name}" \
+        "../../../../.claude/skills/${skill_name}"
     done
 
-    # Copy catalog files
-    if [[ -d "${PROJECT_DIR}/.claude/skills/_catalog" ]]; then
-      sync_dir "${PROJECT_DIR}/.claude/skills/_catalog" "${CLIENT_DIR}/.claude/skills/_catalog"
-    fi
+    for shared_meta in _catalog _archived; do
+      if [[ -d "${PROJECT_DIR}/.claude/skills/${shared_meta}" ]]; then
+        backup_and_link \
+          "${CLIENT_DIR}/.claude/skills/${shared_meta}" \
+          "../../../../.claude/skills/${shared_meta}"
+      fi
+    done
 
     # Count client-only skills (exist in client but not in root)
     CLIENT_ONLY=0
@@ -340,51 +415,58 @@ for CLIENT_DIR in "${CLIENTS_DIR}"/*/; do
       [[ -d "$client_skill" ]] || continue
       skill_name=$(basename "$client_skill")
       [[ "$skill_name" == "_catalog" || "$skill_name" == "_archived" ]] && continue
-      if [[ ! -d "${PROJECT_DIR}/.claude/skills/${skill_name}" ]]; then
+      if [[ ! -f "${PROJECT_DIR}/.claude/skills/${skill_name}/SKILL.md" ]]; then
         CLIENT_ONLY=$((CLIENT_ONLY + 1))
       fi
     done
 
     if [[ $CLIENT_ONLY -gt 0 ]]; then
-      echo "  Skills synced (${CLIENT_ONLY} client-only skill(s) preserved)"
+      echo "  Skills linked (${CLIENT_ONLY} client-only skill(s) preserved)"
     else
-      echo "  Skills synced"
+      echo "  Skills linked"
     fi
   fi
 
-  # Sync slash commands
+  # Shared commands, settings, and hooks are single-source links.
   if [[ -d "${PROJECT_DIR}/.claude/commands" ]]; then
-    sync_dir "${PROJECT_DIR}/.claude/commands" "${CLIENT_DIR}/.claude/commands"
-    echo "  Commands synced"
+    backup_and_link "${CLIENT_DIR}/.claude/commands" "../../../.claude/commands"
+    echo "  Commands linked"
   fi
 
-  # Sync Claude Code settings
   if [[ -f "${PROJECT_DIR}/.claude/settings.json" ]]; then
-    cp "${PROJECT_DIR}/.claude/settings.json" "${CLIENT_DIR}/.claude/settings.json"
-    echo "  Settings synced"
+    backup_and_link "${CLIENT_DIR}/.claude/settings.json" "../../../.claude/settings.json"
+    echo "  Settings linked"
   fi
 
   # Sync hooks_info (required by hooks in settings.json)
   if [[ -d "${PROJECT_DIR}/.claude/hooks_info" ]]; then
-    sync_dir "${PROJECT_DIR}/.claude/hooks_info" "${CLIENT_DIR}/.claude/hooks_info"
+    sync_hooks_info_dir "${PROJECT_DIR}/.claude/hooks_info" "${CLIENT_DIR}/.claude/hooks_info"
     echo "  Hooks info synced"
   fi
 
-  # Sync hooks (session-sync, gsd hooks, etc.)
   if [[ -d "${PROJECT_DIR}/.claude/hooks" ]]; then
-    sync_dir "${PROJECT_DIR}/.claude/hooks" "${CLIENT_DIR}/.claude/hooks"
-    echo "  Hooks synced"
+    backup_and_link "${CLIENT_DIR}/.claude/hooks" "../../../.claude/hooks"
+    echo "  Hooks linked"
   fi
 
-  # Sync scripts
-  sync_dir "${PROJECT_DIR}/scripts" "${CLIENT_DIR}/scripts"
+  # Link shared script entries. Client cron proxy scripts stay real because
+  # they inject the active client slug before delegating to root.
+  mkdir -p "${CLIENT_DIR}/scripts"
+  for root_entry in "${PROJECT_DIR}/scripts"/*; do
+    entry_name="$(basename "$root_entry")"
+    case "$entry_name" in
+      start-crons.sh|stop-crons.sh|status-crons.sh|logs-crons.sh|run-job.sh|\
+      start-crons.ps1|stop-crons.ps1|status-crons.ps1|logs-crons.ps1|run-job.ps1) continue ;;
+    esac
+    backup_and_link "${CLIENT_DIR}/scripts/${entry_name}" "../../../scripts/${entry_name}"
+  done
   create_client_cron_proxy_scripts "${CLIENT_DIR}/scripts"
-  echo "  Scripts synced"
+  echo "  Scripts linked (client cron proxies kept local)"
 
-  # Sync cron templates
+  # Cron templates are shared methodology too.
   if [[ -d "${PROJECT_DIR}/cron/templates" ]]; then
-    sync_dir "${PROJECT_DIR}/cron/templates" "${CLIENT_DIR}/cron/templates"
-    echo "  Cron templates synced"
+    backup_and_link "${CLIENT_DIR}/cron/templates" "../../../cron/templates"
+    echo "  Cron templates linked"
   fi
 
   SYNCED=$((SYNCED + 1))
@@ -395,9 +477,12 @@ if [[ $CLIENT_COUNT -eq 0 ]]; then
   echo "No client folders found in clients/."
   echo "Create a client first: bash scripts/add-client.sh \"Client Name\""
 else
-  echo "Done. Synced ${SYNCED} client(s)."
+  echo "Done. Reconciled ${SYNCED} client(s)."
   echo ""
-  echo "What was synced: client instruction files, skills, commands, scripts, settings, hooks, cron templates."
+  echo "What is linked: shared skills, commands, scripts, settings, hooks, cron templates."
   echo "What was NOT overwritten: brand_context, existing memory, learnings, projects, .env, cron jobs."
   echo "Missing client context/MEMORY.md files may be scaffolded."
+  if [[ "$MIGRATED_PATHS" -gt 0 ]]; then
+    echo "Reversible migration backup: $RUNTIME_BACKUP_DIR"
+  fi
 fi

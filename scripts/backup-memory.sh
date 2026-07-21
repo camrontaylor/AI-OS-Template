@@ -135,6 +135,8 @@ cmd_backup() {
   if [ -n "$current_hash" ] && [ -n "$prev" ] && [ -f "$prev/.manifest-hash" ] \
      && [ "$(cat "$prev/.manifest-hash" 2>/dev/null)" = "$current_hash" ]; then
     echo "backup-memory: no changes since $(basename "$prev") - skipped."
+    mirror_off_machine
+    push_to_github
     return 0
   fi
 
@@ -162,6 +164,79 @@ cmd_backup() {
   file_count="$(find "$snapshot" -type f -o -type l | wc -l | tr -d ' ')"
   size="$(du -sh "$DEST_ROOT" 2>/dev/null | cut -f1 | tr -d ' ')"
   echo "backup-memory: snapshot $stamp - $file_count files. Total backup store: ${size:-?} at $DEST_ROOT"
+
+  mirror_off_machine
+  push_to_github
+}
+
+# GitHub autosync (built 2026-07-16 at the user's direction): the snapshot
+# store is itself a git repo pushing to the PRIVATE camrontaylor/AI-OS-Brain
+# repo, so the gitignored brain always has an off-machine copy with full
+# history - no external disk required. Non-fatal: an offline laptop defers
+# the push and retries next run; sustained failure surfaces through the
+# systems-check freshness stamp, never as a failed backup.
+push_to_github() {
+  [ -d "$DEST_ROOT/.git" ] || return 0
+  git -C "$DEST_ROOT" remote get-url origin >/dev/null 2>&1 || return 0
+  git -C "$DEST_ROOT" add -A 2>/dev/null
+  if ! git -C "$DEST_ROOT" diff --cached --quiet 2>/dev/null; then
+    git -C "$DEST_ROOT" -c user.name="AI-OS Brain Backup" -c user.email="brain-backup@ai-os.local" \
+      commit -q -m "brain backup: $(date '+%Y-%m-%d %H:%M')" 2>/dev/null || true
+  fi
+  local ahead
+  ahead="$(git -C "$DEST_ROOT" rev-list --count @{upstream}..HEAD 2>/dev/null || echo 1)"
+  if [ "${ahead:-1}" = "0" ]; then
+    return 0
+  fi
+  if git -C "$DEST_ROOT" push -q origin HEAD 2>/dev/null; then
+    date -u '+%Y-%m-%dT%H:%M:%SZ' > "$REPO_ROOT/.command-centre/brain-github-push" 2>/dev/null || true
+    echo "backup-memory: pushed brain store to GitHub (private AI-OS-Brain repo)"
+  else
+    echo "backup-memory: GitHub brain push deferred (offline or rejected); retries next run." >&2
+  fi
+  return 0
+}
+
+# Off-machine mirror (2026-07-16 audit: the whole gitignored brain had zero
+# durability off the boot volume - this store backs up to the SAME disk it
+# protects). When the user has picked a destination (an external disk path or
+# a synced-folder path) and written it to .command-centre/brain-backup-dest,
+# every snapshot run also mirrors the full store there. One plain-text path,
+# no secrets. Set an external volume with:
+#   echo "/Volumes/YourDisk/ai-os-brain" > .command-centre/brain-backup-dest
+# For a trusted cloud-synced folder on the boot volume, use the path on line 1
+# and `kind: synced-folder` on line 2. The backup uses only line 1; the systems
+# check uses line 2 to distinguish an intentional synced destination.
+mirror_off_machine() {
+  local dest_file="$REPO_ROOT/.command-centre/brain-backup-dest"
+  [ -f "$dest_file" ] || return 0
+  local dest
+  # Trim ONLY leading/trailing whitespace: macOS volume names ("/Volumes/My
+  # Backup") legitimately contain spaces, so tr -d '[:space:]' would corrupt
+  # the path and report a phantom "disk not mounted" every night.
+  dest="$(head -1 "$dest_file" 2>/dev/null | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+  [ -n "$dest" ] || return 0
+
+  local dest_parent
+  dest_parent="$(dirname "$dest")"
+  if [ ! -d "$dest_parent" ]; then
+    echo "backup-memory: mirror destination parent missing ($dest_parent) - external disk not mounted?" >&2
+    return 1
+  fi
+  if ! command -v rsync >/dev/null 2>&1; then
+    echo "backup-memory: rsync missing - configured mirror cannot run." >&2
+    return 1
+  fi
+  mkdir -p "$dest" 2>/dev/null || { echo "backup-memory: cannot create $dest." >&2; return 1; }
+  # -H preserves the hardlink dedup so the mirror stays as small as the store.
+  if rsync -aH --delete-excluded "$DEST_ROOT/" "$dest/" 2>/dev/null; then
+    date -u '+%Y-%m-%dT%H:%M:%SZ' > "$dest/.last-mirror" 2>/dev/null || true
+    echo "backup-memory: mirrored store off-machine to $dest"
+    return 0
+  else
+    echo "backup-memory: off-machine mirror to $dest FAILED - check the destination." >&2
+    return 1
+  fi
 }
 
 cmd_list() {

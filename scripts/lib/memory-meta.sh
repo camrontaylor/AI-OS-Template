@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# memory-meta.sh - Temporal inventory of AI-OS memory coverage.
+# memory-meta.sh — Temporal inventory of AI-OS memory coverage.
 # Usage: bash scripts/lib/memory-meta.sh ["topic"]
 # Outputs: MEMORY.md stats, session log date range + gaps, optional topic grep.
 
@@ -56,7 +56,7 @@ else
   for (( i=1; i<${#SESSION_DATES[@]}; i++ )); do
     PREV="${SESSION_DATES[$((i-1))]}"
     CURR="${SESSION_DATES[$i]}"
-    # Convert to epoch - try date -d (Linux/Git Bash) then date -j (macOS)
+    # Convert to epoch — try date -d (Linux/Git Bash) then date -j (macOS)
     if PREV_EPOCH=$(date -d "$PREV" +%s 2>/dev/null); then
       CURR_EPOCH=$(date -d "$CURR" +%s)
     else

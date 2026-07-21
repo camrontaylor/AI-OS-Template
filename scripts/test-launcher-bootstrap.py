@@ -57,23 +57,12 @@ class LauncherBootstrapTests(unittest.TestCase):
         self.assertTrue(result["bootstrap_valid"])
         self.assertIn("env", result["created"])
         self.assertIn("context_user", result["created"])
-        self.assertIn("context_memory", result["created"])
         self.assertIn("context_learnings", result["created"])
         self.assertIn("installed_json", result["created"])
         self.assertTrue((self.repo_root / ".env").is_file())
         self.assertTrue((self.repo_root / "context" / "USER.md").is_file())
-        self.assertTrue((self.repo_root / "context" / "MEMORY.md").is_file())
         self.assertTrue((self.repo_root / "context" / "learnings.md").is_file())
         self.assertTrue((self.repo_root / ".claude" / "skills" / "_catalog" / "installed.json").is_file())
-
-    def test_bootstrap_status_requires_memory_scratchpad(self) -> None:
-        self.run_helper_json("bootstrap-repair")
-        (self.repo_root / "context" / "MEMORY.md").unlink()
-
-        result = self.run_helper_json("bootstrap-status")
-
-        self.assertFalse(result["bootstrap_valid"])
-        self.assertIn("context_memory", result["missing"])
 
     def test_state_status_detects_legacy_install_after_bootstrap_repair(self) -> None:
         self.run_helper_json("bootstrap-repair")

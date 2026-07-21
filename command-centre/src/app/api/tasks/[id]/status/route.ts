@@ -72,7 +72,7 @@ export async function PATCH(
       values.push(now);
     }
 
-    // Set completedAt only when transitioning to done (not review - review is a pause)
+    // Set completedAt only when transitioning to done (not review — review is a pause)
     if (body.status === "done" && !existing.completedAt) {
       updates.push("completedAt = ?");
       values.push(now);

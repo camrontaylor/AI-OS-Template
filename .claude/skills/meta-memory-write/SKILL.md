@@ -1,15 +1,7 @@
 ---
 name: meta-memory-write
-description: >
-  Saves durable facts to context/MEMORY.md, the curated working scratchpad
-  read at session start. Triggers on "remember this", "remember that",
-  "note that", "save this to memory", "update memory", "log this",
-  "forget about", "remove from memory". Three actions: add (append under
-  the correct section after dedup check), replace (substring match + swap),
-  remove (confirm with user first). Enforces a 2,500 character cap with
-  consolidation when over. Does NOT trigger for daily session logging
-  (handled by Returning Mode auto-tracking), learnings updates (handled
-  by meta-wrap-up), or one-off in-conversation reminders.
+description: "Save durable facts to context/MEMORY.md, the scratchpad read at session start. Not for daily session logging or learnings updates (meta-wrap-up)."
+when_to_use: 'Invoke when the request sounds like: "remember this", "note that", "save this to memory", "update memory", "log this", "forget about", "remove from memory". Adds, replaces, or removes with a dedup check and a 2,500 character cap'
 ---
 
 # Memory Write

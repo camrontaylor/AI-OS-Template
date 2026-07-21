@@ -28,6 +28,13 @@ function isGreetingOnly(prompt) {
   return cleaned.length <= 30 && GREETING_RE.test(cleaned);
 }
 
+function isScheduledAutomation(prompt) {
+  const cleaned = String(prompt || "")
+    .replace(/<environment_context[\s\S]*?<\/environment_context>/gi, " ")
+    .trim();
+  return /^you are running as a scheduled (?:cron )?job for ai-?os\b/i.test(cleaned);
+}
+
 function dateStr(d) {
   const yyyy = d.getFullYear();
   const mm = String(d.getMonth() + 1).padStart(2, "0");
@@ -37,8 +44,22 @@ function dateStr(d) {
 
 function visiblePromptLine(prompt) {
   let cleaned = prompt
-    .replace(/<codex_internal_context[\s\S]*?<\/codex_internal_context>/gi, " ")
     .replace(/<environment_context[\s\S]*?<\/environment_context>/gi, " ")
+    .trim();
+
+  const taskMatch = cleaned.match(
+    /(?:^|\n|\s)\s*(?:#{1,6}\s*)?Task:?\s*([\s\S]*?)(?=(?:\n|\s+)\s*(?:#{1,6}\s*)?(?:Steps?|Rules?|Requirements?|Output):?|\n\s*\d+[.)]\s|$)/i
+  );
+  if (taskMatch && taskMatch[1].trim()) {
+    cleaned = taskMatch[1].trim();
+  } else {
+    cleaned = cleaned
+      .replace(/^\s*you are running as a scheduled (?:cron )?job for ai-?os[.!]?\s*/i, "")
+      .replace(/^\s*read claude\.md for system context[.!]?\s*/i, "");
+  }
+
+  cleaned = cleaned
+    .replace(/^\s*(?:#{1,6}\s*)?Task:?\s*/i, "")
     .replace(/\s+/g, " ")
     .trim();
 
@@ -73,7 +94,10 @@ process.stdin.on("end", () => {
     const prompt = data.prompt || data.message || "";
     const cwd = data.cwd || process.env.CLAUDE_PROJECT_DIR || process.cwd();
 
-    if (!sessionId || isGreetingOnly(prompt)) return;
+    // Cron has its own status, logs, and durable reports. Treating each routine
+    // run as a human session filled daily logs and semantic recall with system
+    // procedure text, so scheduled automation is intentionally not captured.
+    if (!sessionId || isGreetingOnly(prompt) || isScheduledAutomation(prompt)) return;
 
     const marker = path.join(os.tmpdir(), `aios-session-memory-${sessionId}.done`);
     if (fs.existsSync(marker)) return;

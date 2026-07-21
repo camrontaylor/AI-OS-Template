@@ -56,7 +56,7 @@ export async function POST(
     // Priority:
     //   1. Explicit parentTaskId from the caller
     //   2. The existing materialized project parent row for this slug
-    //   3. Create one inline - we cannot rely on the background syncProjects
+    //   3. Create one inline — we cannot rely on the background syncProjects
     //      having run yet, and without a parent row the subtasks surface as
     //      orphans in the feed instead of grouping under the project card.
     let parentId: string | null = body.parentTaskId || null;

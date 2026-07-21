@@ -18,7 +18,7 @@ export const useContextStore = create<ContextStore>((set) => ({
       const data = await res.json();
       set({ hasBrandContext: data.hasBrandContext });
     } catch {
-      // Silently fail - context status is non-critical
+      // Silently fail — context status is non-critical
     }
   },
 }));

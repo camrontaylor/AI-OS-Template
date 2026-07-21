@@ -1,30 +1,20 @@
 ---
 name: mkt-content-repurposing
-description: >
-  Repurpose one piece of content into platform-native posts across LinkedIn,
-  Twitter/X, Instagram, TikTok, YouTube, Threads, Bluesky, and Reddit.
-  Triggers on: "repurpose this", "turn this into social posts", "atomize this",
-  "create social content from", "LinkedIn post from this", "thread from this",
-  "repurpose for Threads", "Bluesky post from this", "Reddit strategy",
-  "content calendar from this", "schedule across platforms".
-  Reads source content, extracts core atoms, adapts voice per platform,
-  generates platform-native assets with proven hooks and formats.
-  Saves per-platform files to projects/mkt-content-repurposing/.
-  Does NOT trigger for original content creation, brand voice, positioning,
-  or audience research.
+description: "Repurpose one piece of content into platform-native posts (LinkedIn, X, Instagram, TikTok, YouTube, Threads, Bluesky, Reddit). Not for original content creation, brand voice, positioning, or audience research."
+when_to_use: 'Invoke when the request sounds like: "repurpose this", "turn this into social posts", "atomize this", "LinkedIn post from this", "thread from this", "content calendar from this"'
 ---
 
 # Content Repurposing
 
 ## Outcome
 
-One piece of source content turned into 10-16 platform-native assets, saved to `projects/mkt-content-repurposing/{YYYY-MM-DD}_{campaign-name}/`. Each file is ready to copy-paste and publish - not a reworded version of the same post, but content that feels like it belongs on each platform.
+One piece of source content turned into 10-16 platform-native assets, saved to `projects/mkt-content-repurposing/{YYYY-MM-DD}_{campaign-name}/`. Each file is ready to copy-paste and publish — not a reworded version of the same post, but content that feels like it belongs on each platform.
 
 ## Context Needs
 
 | File | What to load | Why |
 |------|-------------|-----|
-| `brand_context/voice-profile.md` | Full | Tone, vocabulary, rhythm - adapted per platform |
+| `brand_context/voice-profile.md` | Full | Tone, vocabulary, rhythm — adapted per platform |
 | `brand_context/samples.md` | Yes | Reference for how they actually write |
 | `context/learnings.md` | `## mkt-content-repurposing` section | What's worked before, what hasn't |
 
@@ -54,30 +44,30 @@ If voice profile exists, note the tone in one line. If not, work with a neutral 
 
 ## Step 2: Get the Source Content
 
-Take whatever the user gives you - pasted text, a URL, a file path. Valid sources:
+Take whatever the user gives you — pasted text, a URL, a file path. Valid sources:
 
 | Source | How Much You Can Get From It |
 |--------|----------------------------|
-| Blog post / article | A lot - usually 10+ assets |
-| Newsletter | Similar to blog - lots of material |
-| Podcast / video transcript | Even more - spoken content is rich |
-| Case study | Good - built-in narrative arc |
-| Framework / process | Good - naturally breaks into steps |
-| Data / research | Moderate - needs more creative framing |
+| Blog post / article | A lot — usually 10+ assets |
+| Newsletter | Similar to blog — lots of material |
+| Podcast / video transcript | Even more — spoken content is rich |
+| Case study | Good — built-in narrative arc |
+| Framework / process | Good — naturally breaks into steps |
+| Data / research | Moderate — needs more creative framing |
 
-If they give a URL, try WebFetch first. If that fails (JS-heavy site, bot protection) and `FIRECRAWL_API_KEY` is configured, use Firecrawl directly. If both paths fail, ask them to paste the content.
+If they give a URL, try WebFetch first. If that fails (JS-heavy site, bot protection), fall back to `firecrawl-scraper` (needs `FIRECRAWL_API_KEY` in `.env`). If both fail, ask them to paste the content.
 
 ## Step 3: Break It Into Atoms
 
 Pull the source apart into the pieces you'll remix across platforms:
 
-1. **The core insight** - if someone remembers one thing, this is it
-2. **Supporting points** - 3-7 ideas that build the case
-3. **Stories and examples** - specific, concrete moments
-4. **Numbers and proof** - data, stats, results
-5. **Spicy takes** - opinions that challenge what people assume
-6. **Action steps** - things the reader can actually go and do
-7. **Quotable lines** - punchy phrases that work as standalone posts
+1. **The core insight** — if someone remembers one thing, this is it
+2. **Supporting points** — 3-7 ideas that build the case
+3. **Stories and examples** — specific, concrete moments
+4. **Numbers and proof** — data, stats, results
+5. **Spicy takes** — opinions that challenge what people assume
+6. **Action steps** — things the reader can actually go and do
+7. **Quotable lines** — punchy phrases that work as standalone posts
 
 Show the atoms to the user before generating. "Here's what I pulled out. Anything to add or drop?"
 
@@ -111,7 +101,7 @@ For each platform, read the relevant reference:
 - Instagram + TikTok + YouTube: `references/platform-visual-video.md`
 - Threads + Bluesky + Reddit: `references/platform-emerging.md`
 
-Use the hooks, templates, format specs, and CTAs from those references. Write content that feels native to each platform - not the same post reformatted.
+Use the hooks, templates, format specs, and CTAs from those references. Write content that feels native to each platform — not the same post reformatted.
 
 For each piece, include:
 - The content itself (publish-ready)
@@ -133,7 +123,7 @@ Create: `projects/mkt-content-repurposing/{YYYY-MM-DD}_{campaign-name}/`
 
 One file per platform: `linkedin.md`, `twitter-x.md`, `instagram.md`, `tiktok.md`, `youtube.md`, `threads.md`, `bluesky.md`, `reddit.md`. Add `calendar.md` if they asked for scheduling.
 
-Show actual content previews - the hook and format for each platform. Don't just list file paths.
+Show actual content previews — the hook and format for each platform. Don't just list file paths.
 
 ---
 
@@ -145,7 +135,7 @@ Show actual content previews - the hook and format for each platform. Don't just
 
 ## Self-Update
 
-If the user says something's off - wrong tone, bad format, missing nuance - fix the `## Rules` section here immediately. Also log to `context/learnings.md` under `## mkt-content-repurposing`.
+If the user says something's off — wrong tone, bad format, missing nuance — fix the `## Rules` section here immediately. Also log to `context/learnings.md` under `## mkt-content-repurposing`.
 
 ---
 
@@ -155,4 +145,4 @@ If the user says something's off - wrong tone, bad format, missing nuance - fix 
 **Output sounds generic:** Probably missing brand context. Offer `/mkt-brand-voice` or ask for 2-3 sentences in their voice as a quick reference.
 **Platform doesn't fit:** Don't force it. Skip platforms where their audience doesn't exist unless they specifically ask.
 **Algorithm data might be outdated:** If the references are 3+ months old and search turned up nothing, say so and proceed with best available.
-**They want to schedule posts:** This skill writes the content. Point them to Buffer or Hootsuite for scheduling - include optimal posting times in the output so they can plug it straight in.
+**They want to schedule posts:** This skill writes the content. Point them to Buffer or Hootsuite for scheduling — include optimal posting times in the output so they can plug it straight in.

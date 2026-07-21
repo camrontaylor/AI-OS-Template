@@ -25,7 +25,7 @@ export interface PlannedSubtask {
 }
 
 export interface PlanSubtasksResult {
-  /** The generated breakdown - empty when the model asked for follow-ups */
+  /** The generated breakdown — empty when the model asked for follow-ups */
   suggestedSubtasks: PlannedSubtask[];
   /**
    * Sonnet can ask its own clarifying questions before committing to a
@@ -89,21 +89,21 @@ export async function POST(request: NextRequest) {
     const level = body.level === "gsd" ? "gsd" : "project";
     const contextBlock =
       typeof body.contextSummary === "string" && body.contextSummary.trim().length > 0
-        ? `\n\n## Known context (already loaded - use this to ground the breakdown)\n\n${body.contextSummary.trim()}`
+        ? `\n\n## Known context (already loaded — use this to ground the breakdown)\n\n${body.contextSummary.trim()}`
         : "";
 
     // Build a compact log of what's already been asked so Sonnet doesn't
     // repeat itself. IDs are what the client uses to dedupe new questions.
     const askedIdsLine =
       specs.length > 0
-        ? `\n\nQuestions already asked (IDs - do NOT repeat these): ${specs.map((s) => s.id).join(", ")}`
+        ? `\n\nQuestions already asked (IDs — do NOT repeat these): ${specs.map((s) => s.id).join(", ")}`
         : "";
 
-    const prompt = `You are a senior project planner. A user submitted this goal and answered some upfront clarifying questions. Your job is to produce a concrete breakdown of the work into 3-7 actionable subtasks - OR, if you genuinely need more information before you can do that well, ask up to 3 targeted follow-up questions.
+    const prompt = `You are a senior project planner. A user submitted this goal and answered some upfront clarifying questions. Your job is to produce a concrete breakdown of the work into 3-7 actionable subtasks — OR, if you genuinely need more information before you can do that well, ask up to 3 targeted follow-up questions.
 
 ## Decision rule (read carefully)
 
-Default to producing subtasks. Only ask follow-up questions when the answers so far are missing something essential that would fundamentally change the shape of the plan - not things you could reasonably guess or assume. Examples of legitimate follow-ups:
+Default to producing subtasks. Only ask follow-up questions when the answers so far are missing something essential that would fundamentally change the shape of the plan — not things you could reasonably guess or assume. Examples of legitimate follow-ups:
 - The goal says "landing page" but doesn't reveal the product; you literally don't know what to write copy about.
 - Success criteria are undefined and the deliverable depends on them (e.g. "build a dashboard" with no idea what metrics matter).
 - There are two fundamentally different directions the project could take and you need the user to pick one.
@@ -117,10 +117,10 @@ Do NOT ask follow-ups for:
 
 - Each title starts with an action verb (Draft, Write, Design, Build, Configure, Test, Launch, Review, etc.)
 - Wave 1 = foundation work with no dependencies. Wave 2+ can run in parallel after their dependencies are met. Same-wave tasks cannot depend on each other.
-- Each subtask must have at least one **observable** acceptance criterion (not vague - something you could literally check).
+- Each subtask must have at least one **observable** acceptance criterion (not vague — something you could literally check).
 - dependsOn is an array of 0-based indices into this same list. Wave 1 subtasks have dependsOn: [].
-- Aim for ${level === "gsd" ? "5-7" : "3-6"} subtasks. Meaningful chunks only - no "set up folder" filler.
-- Tailor the breakdown to the SPECIFIC goal and the user's SPECIFIC answers. Don't produce a generic "brief → build → review" template - use the actual context.
+- Aim for ${level === "gsd" ? "5-7" : "3-6"} subtasks. Meaningful chunks only — no "set up folder" filler.
+- Tailor the breakdown to the SPECIFIC goal and the user's SPECIFIC answers. Don't produce a generic "brief → build → review" template — use the actual context.
 
 ## Follow-up question rules (when asking)
 
@@ -139,14 +139,14 @@ ${answersBlock ? `\n## Clarifications so far\n\n${answersBlock}` : ""}${contextB
 
 Return ONLY valid JSON (no markdown, no explanation). Use exactly one of these two shapes:
 
-Shape A - subtask breakdown:
+Shape A — subtask breakdown:
 {
   "suggestedSubtasks": [
     { "title": "…", "description": "…", "dependsOn": [0], "wave": 2, "acceptanceCriteria": ["…"] }
   ]
 }
 
-Shape B - follow-up questions:
+Shape B — follow-up questions:
 {
   "followUpQuestions": [
     { "id": "…", "prompt": "…", "type": "select", "options": ["…", "…"], "required": true }
@@ -155,12 +155,12 @@ Shape B - follow-up questions:
 
     const result = await runClaude(prompt);
     if (!result) {
-      console.error("[plan-subtasks] Sonnet returned null - using fallback scaffold");
+      console.error("[plan-subtasks] Sonnet returned null — using fallback scaffold");
       return NextResponse.json({
         suggestedSubtasks: fallbackSubtasks(goal),
         followUpQuestions: [],
         source: "fallback",
-        note: "Planner was unavailable - showing a generic scaffold. Edit or replace before creating the project.",
+        note: "Planner was unavailable — showing a generic scaffold. Edit or replace before creating the project.",
       } satisfies PlanSubtasksResult);
     }
 
@@ -219,12 +219,12 @@ Shape B - follow-up questions:
         } satisfies PlanSubtasksResult);
       }
 
-      console.warn("[plan-subtasks] Sonnet returned no usable subtasks - using fallback");
+      console.warn("[plan-subtasks] Sonnet returned no usable subtasks — using fallback");
       return NextResponse.json({
         suggestedSubtasks: fallbackSubtasks(goal),
         followUpQuestions: [],
         source: "fallback",
-        note: "Planner returned an empty breakdown - showing a generic scaffold. Edit or replace before creating.",
+        note: "Planner returned an empty breakdown — showing a generic scaffold. Edit or replace before creating.",
       } satisfies PlanSubtasksResult);
     } catch (err) {
       console.error("[plan-subtasks] Parse failure:", err);
@@ -233,7 +233,7 @@ Shape B - follow-up questions:
         suggestedSubtasks: fallbackSubtasks(goal),
         followUpQuestions: [],
         source: "fallback",
-        note: "Planner output couldn't be parsed - showing a generic scaffold.",
+        note: "Planner output couldn't be parsed — showing a generic scaffold.",
       } satisfies PlanSubtasksResult);
     }
   } catch (err) {

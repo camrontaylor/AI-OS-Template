@@ -22,7 +22,7 @@ interface TasksPopoverProps {
   subtasks?: SubtaskSummary[];
   /** Optional click handler for a subtask row (e.g. scroll to / focus). */
   onSelectSubtask?: (id: string) => void;
-  /** Execute a subtask - POST /api/tasks/:id/execute */
+  /** Execute a subtask — POST /api/tasks/:id/execute */
   onRunSubtask?: (id: string) => void;
   /** Execute a subtask in a new chat pane */
   onRunSubtaskInNewChat?: (id: string, title: string) => void;
@@ -34,7 +34,7 @@ interface TasksPopoverProps {
   availablePanes?: Array<{ id: string; label: string; isMain?: boolean }>;
   /** Run a subtask in a specific existing pane */
   onRunSubtaskInPane?: (subtaskId: string, paneId: string) => void;
-  /** Compact mode - icon only, no label text (for multi-pane layouts) */
+  /** Compact mode — icon only, no label text (for multi-pane layouts) */
   compact?: boolean;
 }
 
@@ -205,7 +205,7 @@ export function TasksPopover({ todos, subtasks, onSelectSubtask, onRunSubtask, o
                         : "transparent";
                     }}
                   >
-                    {/* Status checkbox - clickable to toggle done */}
+                    {/* Status checkbox — clickable to toggle done */}
                     <button
                       type="button"
                       onClick={(e) => {

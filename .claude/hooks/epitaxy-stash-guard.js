@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// SessionStart hook - Epitaxy Stash Guard.
+// SessionStart hook — Epitaxy Stash Guard.
 //
 // Problem it solves: when a concurrent session or tool switches branches in a
 // SHARED git checkout, it runs `git stash push --include-untracked` (the stash is
@@ -11,7 +11,7 @@
 // visible and never silently lost.
 //
 // Safety: READ-ONLY. It only runs `git stash list` / `git stash show`. It never
-// applies, pops, or drops a stash. Fire-and-forget - never blocks session start.
+// applies, pops, or drops a stash. Fire-and-forget — never blocks session start.
 // Silent when there are no epitaxy stashes.
 
 const { execSync } = require('child_process');
@@ -26,7 +26,7 @@ process.stdin.on('end', () => {
   try {
     data = JSON.parse(input);
   } catch {
-    // No JSON - fall back to env / cwd
+    // No JSON — fall back to env / cwd
   }
 
   const cwd = data.cwd || process.env.CLAUDE_PROJECT_DIR || process.cwd();
@@ -81,7 +81,7 @@ process.stdin.on('end', () => {
     `# Stranded work detected (epitaxy stash guard)\n\n` +
     `A concurrent session or tool stashed uncommitted work when it switched ` +
     `branches in this shared checkout. ${details.length} orphaned \`epitaxy:\` ` +
-    `stash(es) are present. Nothing is lost - each can be recovered.\n\n` +
+    `stash(es) are present. Nothing is lost — each can be recovered.\n\n` +
     `${bullets}\n\n` +
     `To recover one onto its branch: \`git checkout <branch> && git stash apply <ref>\` ` +
     `(use \`apply\`, not \`pop\`, so the stash stays as a backup until verified). ` +
@@ -98,5 +98,5 @@ process.stdin.on('end', () => {
   );
 });
 
-// Safety net - exit if stdin never delivers.
+// Safety net — exit if stdin never delivers.
 setTimeout(() => process.exit(0), 5000);

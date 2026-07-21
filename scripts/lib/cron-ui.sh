@@ -17,7 +17,7 @@ agentic_os_cron_banner() {
     cat <<'EOF'
 ╔══════════════════════════════════════════════╗
 ║                                              ║
-║                    A I - O S                 ║
+║               A G E N T I C   O S            ║
 ║                                              ║
 ║               C R O N   R U N T I M E        ║
 ║                                              ║

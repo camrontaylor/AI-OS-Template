@@ -1,6 +1,6 @@
-# Updating to v0.2.0 - What's Changed and How to Migrate
+# Updating to v0.2.0 — What's Changed and How to Migrate
 
-This is a significant update. We've reorganised how the system works under the hood to make it faster, more compatible with other AI tools, and better at handling multiple projects at once. Your data - brand context, memory, projects, learnings - is all safe and doesn't need to change. But the system files around it have moved.
+This is a significant update. We've reorganised how the system works under the hood to make it faster, more compatible with other AI tools, and better at handling multiple projects at once. Your data — brand context, memory, projects, learnings — is all safe and doesn't need to change. But the system files around it have moved.
 
 This guide walks you through updating manually, step by step.
 
@@ -10,28 +10,28 @@ This guide walks you through updating manually, step by step.
 
 Three things drove this update:
 
-1. **Cross-tool compatibility.** Until now, everything lived in `CLAUDE.md` - a single 500+ line file that only Claude Code could read. Other tools like Codex use a file called `AGENTS.md` instead. We've split the instructions so the shared operating rules live in `AGENTS.md` (which any AI tool can read) and Claude-specific behaviour stays in `CLAUDE.md` (which is now much smaller and just imports `AGENTS.md`). Same brain, more ways to access it.
+1. **Cross-tool compatibility.** Until now, everything lived in `CLAUDE.md` - a single 500+ line file that only Claude Code could read. We've split the instructions so the shared operating rules live in `AGENTS.md` (which compatible AI tools can read) and Claude-specific behaviour stays in `CLAUDE.md` (which is now much smaller and just imports `AGENTS.md`). Same brain, more ways to access it.
 
 2. **Multiple projects at once.** Previously, the GSD planning system (the `.planning/` folder) sat at the root of your install, which meant you could only run one structured project at a time. Now each project owns its own `.planning/` folder inside its project directory. You can have multiple GSD projects running in parallel.
 
-3. **Silent, fast startup.** The old system ran a long checklist every time you opened Claude - reading files, scanning skills, checking for stale context, running reconciliation. Now startup is silent. Claude reads what it needs and gets to work. Everything else is deferred to when it's actually needed.
+3. **Silent, fast startup.** The old system ran a long checklist every time you opened Claude — reading files, scanning skills, checking for stale context, running reconciliation. Now startup is silent. Claude reads what it needs and gets to work. Everything else is deferred to when it's actually needed.
 
 ---
 
 ## What's new
 
-- **Command Centre** - a full task board UI with Kanban view, project dashboards, cron scheduling, and client management. It now lives at `command-centre/` in the repo root.
-- **Branching workflow** - `/new-feature` starts a feature branch, `/release` cuts a version. A branch-guard hook gently reminds you to use feature branches for code changes.
-- **Cron system** - scheduled jobs now run in-process (they stop when the server stops, no orphaned tasks). Full Windows support.
-- **New workflow skills** - `ops-cron` for scheduled jobs plus the current AI-OS skill set selected in `.claude/skills/`.
-- **CI pipeline** - automated checks on pull requests, with path-based filtering so content changes don't trigger code checks.
-- **Version tracking** - `CHANGELOG.md` and `VERSION` file so you can see what changed between updates.
+- **Command Centre** — a full task board UI with Kanban view, project dashboards, cron scheduling, and client management. It now lives at `command-centre/` in the repo root.
+- **Branching workflow** — `/new-feature` starts a feature branch, `/release` cuts a version. A branch-guard hook gently reminds you to use feature branches for code changes.
+- **Cron system** — scheduled jobs now run in-process (they stop when the server stops, no orphaned tasks). Full Windows support.
+- **4 new skills** — `ops-cron` (scheduled jobs), `tool-stitch` (fetch UI designs), `viz-interface-design` (dashboard/admin UI), `viz-stitch-design` (design generation).
+- **CI pipeline** — automated checks on pull requests, with path-based filtering so content changes don't trigger code checks.
+- **Version tracking** — `CHANGELOG.md` and `VERSION` file so you can see what changed between updates.
 
 ---
 
 ## Before you start
 
-You'll need about 10 minutes. Nothing here is destructive - you're copying things, not deleting them.
+You'll need about 10 minutes. Nothing here is destructive — you're copying things, not deleting them.
 
 Make sure you know where your AI-OS folder is. We'll call it `AI-OS` in these instructions, but yours might be named differently.
 
@@ -39,22 +39,22 @@ Make sure you know where your AI-OS folder is. We'll call it `AI-OS` in these in
 
 ## Step 1: Back up your personal data
 
-These are the files that belong to you - your brand, your memory, your projects, your API keys. They don't exist in the template, so if you lose them, they're gone.
+These are the files that belong to you — your brand, your memory, your projects, your API keys. They don't exist in the template, so if you lose them, they're gone.
 
 Copy these folders and files somewhere safe (your Desktop, a backup folder, wherever you like):
 
 ```
-brand_context/                  - your brand voice, positioning, ICP, writing samples
-context/memory/                 - all your session history
-context/learnings.md            - feedback and lessons the system has learned
-context/USER.md                 - your preferences and working style
-context/SOUL.md                 - your personality config (only if you customised it)
-projects/                       - all your project outputs, briefs, and source code
-cron/jobs/                      - any scheduled jobs you've set up
-clients/                        - client workspaces (only if you use multi-client)
-.env                            - your API keys
-.mcp.json                       - your MCP server connections (if you have any)
-.claude/skills/_catalog/installed.json  - which skills you chose during setup
+brand_context/                  — your brand voice, positioning, ICP, writing samples
+context/memory/                 — all your session history
+context/learnings.md            — feedback and lessons the system has learned
+context/USER.md                 — your preferences and working style
+context/SOUL.md                 — your personality config (only if you customised it)
+projects/                       — all your project outputs, briefs, and source code
+cron/jobs/                      — any scheduled jobs you've set up
+clients/                        — client workspaces (only if you use multi-client)
+.env                            — your API keys
+.mcp.json                       — your MCP server connections (if you have any)
+.claude/skills/_catalog/installed.json  — which skills you chose during setup
 ```
 
 **If you created or heavily customised any skills**, also back up those individual skill folders from `.claude/skills/`.
@@ -71,7 +71,7 @@ Now, each project owns its `.planning/` folder inside its own directory under `p
 
 If you do have one:
 
-1. **Figure out which project it belongs to.** Open `.planning/PROJECT.md` - it'll have the project name. Find the matching folder in `projects/briefs/` if there is one (there may not be - in which case - you can create one). For example, if the project is "website-rebuild", the folder is `projects/briefs/website-rebuild/`.
+1. **Figure out which project it belongs to.** Open `.planning/PROJECT.md` — it'll have the project name. Find the matching folder in `projects/briefs/` if there is one (there may not be - in which case - you can create one). For example, if the project is "website-rebuild", the folder is `projects/briefs/website-rebuild/`.
 
 2. **Move the `.planning/` folder into that project folder:**
    ```
@@ -115,15 +115,15 @@ Rather than trying to merge all the changes into your existing install (which wi
 
 2. **Clone the latest version:**
    ```bash
-   git clone https://github.com/camrontaylor/ai-os-template.git AI-OS
+   git clone https://YOUR-TOKEN@github.com/camrontaylor/AI-OS.git
    ```
-   This public template does not need an access token to clone. Keep your own private backup as `origin` after setup.
+   Use the Camron-owned AI-OS repo or template as the source. Do not use any third-party classroom token.
 
 ---
 
 ## Step 4: Restore your data
 
-Copy everything you backed up in Step 1 back into the new install. The folder structure is the same - your data goes in the same places it was before. OR ask Claude to do it - you can say the below actions need taking place (requires skip-permissions mode)
+Copy everything you backed up in Step 1 back into the new install. The folder structure is the same — your data goes in the same places it was before. OR ask Claude to do it - you can say the below actions need taking place (requires skip-permissions mode)
 
 ```bash
 cd AI-OS
@@ -178,11 +178,11 @@ If you want to run the maintenance scripts manually, `bash scripts/install.sh` s
 
 ## Step 6: Launch the Command Centre
 
-The Command Centre is a web-based dashboard that shows your tasks, projects, scheduled jobs, and client workspaces in one place. It runs locally on your machine - nothing is sent to external servers.
+The Command Centre is a web-based dashboard that shows your tasks, projects, scheduled jobs, and client workspaces in one place. It runs locally on your machine — nothing is sent to external servers.
 
 **Using the `centre` alias (easiest):**
 
-If you chose to install the optional shortcut during the guided first launch, open a new terminal window (important - the shortcut will not be available in the same terminal that installed it) and type:
+If you chose to install the optional shortcut during the guided first launch, open a new terminal window (important — the shortcut will not be available in the same terminal that installed it) and type:
 
 ```bash
 centre
@@ -224,7 +224,7 @@ claude
 ```
 
 A healthy first session should:
-- Start silently (no long greeting or checklist - that's the new behaviour)
+- Start silently (no long greeting or checklist — that's the new behaviour)
 - Pick up your memory and open threads when you say hello
 - Have access to all your brand context and skills
 - Show the GSD status line at the bottom if you have active projects
@@ -241,7 +241,7 @@ Once you're happy everything works, you can delete the backup:
 rm -rf AI-OS-backup
 ```
 
-No rush on this - keep it around for a few days if you want to be safe.
+No rush on this — keep it around for a few days if you want to be safe.
 
 ---
 
@@ -249,7 +249,7 @@ No rush on this - keep it around for a few days if you want to be safe.
 
 ### The CLAUDE.md split
 
-The old `CLAUDE.md` (517 lines) did everything - operating rules, skill registry, context matrix, service registry, runtime behaviour. Now:
+The old `CLAUDE.md` (517 lines) did everything — operating rules, skill registry, context matrix, service registry, runtime behaviour. Now:
 
 - **`AGENTS.md`** (446 lines) holds the shared operating rules. Any AI tool can read this.
 - **`CLAUDE.md`** (92 lines) holds Claude-specific runtime behaviour and imports AGENTS.md with `@AGENTS.md`.
@@ -258,18 +258,18 @@ If you'd added custom instructions to `CLAUDE.md`, those operating-level changes
 
 ### Hooks moved from Python to Node.js
 
-The notification hooks that connect Claude to the Command Centre used to run via Python. They're now Node.js scripts in `.claude/hooks/`. This is handled by the new `settings.json` - you don't need to do anything.
+The notification hooks that connect Claude to the Command Centre used to run via Python. They're now Node.js scripts in `.claude/hooks/`. This is handled by the new `settings.json` — you don't need to do anything.
 
 ### New hooks
 
 Several new hooks were added:
-- **Session sync** - keeps the Command Centre in sync with your Claude sessions
-- **Branch guard** - gently reminds you to use feature branches for code changes (advisory only, never blocks you)
-- **GSD status line** - shows project progress in your terminal
+- **Session sync** — keeps the Command Centre in sync with your Claude sessions
+- **Branch guard** — gently reminds you to use feature branches for code changes (advisory only, never blocks you)
+- **GSD status line** — shows project progress in your terminal
 
 ### settings.json changes
 
-The `.claude/settings.json` file has new entries for all the hooks above, plus an experimental agent teams setting. If you'd manually edited this file, compare your backup against the new version - the hook command format changed from `python3 .claude/hooks_info/ccnotify.py` to `node .claude/hooks/run-ccnotify.js`.
+The `.claude/settings.json` file has new entries for all the hooks above, plus an experimental agent teams setting. If you'd manually edited this file, compare your backup against the new version — the hook command format changed from `python3 .claude/hooks_info/ccnotify.py` to `node .claude/hooks/run-ccnotify.js`.
 
 ### GSD project structure
 
@@ -287,7 +287,7 @@ AI-OS/
     └── .planning/                <-- each project owns its own
 ```
 
-This means you can have several GSD projects running simultaneously. The `/archive-gsd` command now just flips the brief status - it doesn't need to move anything.
+This means you can have several GSD projects running simultaneously. The `/archive-gsd` command now just flips the brief status — it doesn't need to move anything.
 
 ---
 
@@ -295,4 +295,4 @@ This means you can have several GSD projects running simultaneously. The `/archi
 
 - Your backup is still at `AI-OS-backup/` (unless you deleted it in Step 8)
 - The update script (`bash scripts/update.sh`) also keeps automatic backups in `.backup/` every time it runs
-- Open a Claude session and ask - the system knows about its own architecture and can help diagnose issues
+- Open a Claude session and ask — the system knows about its own architecture and can help diagnose issues

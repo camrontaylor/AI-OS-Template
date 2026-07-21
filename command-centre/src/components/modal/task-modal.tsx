@@ -56,7 +56,7 @@ export function TaskModal() {
   // don't re-open them if the user navigates away. Keyed by `${taskId}:${id}`.
   const autoPreviewedRef = useRef<Set<string>>(new Set());
   // Tracks whether the user has manually interacted with the file preview for
-  // a given task - if so, we stop auto-opening new HTML outputs for that task.
+  // a given task — if so, we stop auto-opening new HTML outputs for that task.
   const userDismissedAutoPreviewRef = useRef<Set<string>>(new Set());
 
   // Resizable panel
@@ -261,7 +261,7 @@ export function TaskModal() {
     );
     if (htmlOutputs.length === 0) return;
 
-    // Sort newest first - OutputFile has createdAt
+    // Sort newest first — OutputFile has createdAt
     const sorted = [...htmlOutputs].sort((a, b) => {
       const ta = new Date(a.createdAt).getTime();
       const tb = new Date(b.createdAt).getTime();
@@ -275,11 +275,11 @@ export function TaskModal() {
     setActiveFile(latest);
   }, [viewingTaskId, currentOutputs, activeFile]);
 
-  // Read logs directly from the store - single source of truth
+  // Read logs directly from the store — single source of truth
   const allLogEntries = useTaskStore((s) => s.logEntries);
   const logEntries = (viewingTaskId ? allLogEntries[viewingTaskId] : undefined) ?? EMPTY_LOG_ENTRIES;
 
-  // Build child log entries record - always build for any task with children
+  // Build child log entries record — always build for any task with children
   const childLogEntries: Record<string, LogEntry[]> = {};
   for (const child of childTasks) {
     childLogEntries[child.id] = allLogEntries[child.id] ?? EMPTY_LOG_ENTRIES;
@@ -308,12 +308,12 @@ export function TaskModal() {
           closePanel();
         }
       }
-      // Cmd+\ - split with new chat
+      // Cmd+\ — split with new chat
       if (e.key === "\\" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         handleSplitWithNew();
       }
-      // Cmd+1/2/3/4 - switch pane focus by position
+      // Cmd+1/2/3/4 — switch pane focus by position
       if (["1", "2", "3", "4"].includes(e.key) && (e.metaKey || e.ctrlKey) && visiblePanes.length > 1) {
         e.preventDefault();
         const idx = parseInt(e.key) - 1;
@@ -546,7 +546,7 @@ export function TaskModal() {
           </div>
         )}
 
-        {/* Tab bar - Chat / Files / Plan */}
+        {/* Tab bar — Chat / Files / Plan */}
         {!activeFile && !newTaskAttachment && (
           <div
             style={{
@@ -796,7 +796,7 @@ export function TaskModal() {
                   />
                 </div>
 
-                {/* Pane sidebar - shows open panes, + to add chat/terminal */}
+                {/* Pane sidebar — shows open panes, + to add chat/terminal */}
                 <ChatList
                   openPanes={paneState.openPanes}
                   activePaneId={paneState.activePaneId}
@@ -877,7 +877,7 @@ export function TaskModal() {
         </div>
       </div>
 
-      {/* Structured-question overlay - blocks the task panel until answered */}
+      {/* Structured-question overlay — blocks the task panel until answered */}
       {pendingStructured && !planApprovalQuestion && (
         <QuestionModal
           open

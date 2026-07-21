@@ -1,0 +1,24 @@
+{
+  "name": "team-knowledge",
+  "description": "Curated shared team knowledge without merging personal memory.",
+  "status": "available",
+  "default": false,
+  "loads_at_startup": false,
+  "activation": "copy-templates",
+  "template_root": "templates/root",
+  "creates": [
+    "team_context/"
+  ],
+  "writes": [
+    "team_context/"
+  ],
+  "commands": [
+    "bash scripts/optional-enable.sh team-knowledge",
+    "bash scripts/optional-status.sh team-knowledge",
+    "bash scripts/optional-disable.sh team-knowledge"
+  ],
+  "services": [],
+  "permissions": "shared-curated-docs-only",
+  "docs": ".aios/optional/team-knowledge/CAPABILITY.md",
+  "rollback": "bash scripts/optional-disable.sh team-knowledge removes only the enabled marker by default; team_context/ is preserved."
+}

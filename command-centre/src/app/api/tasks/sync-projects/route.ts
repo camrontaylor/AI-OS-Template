@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
               }
 
               const taskId = crypto.randomUUID();
-              const title = `Phase ${phase.number}: ${STEP_TITLES[step]} - ${phase.name}`;
+              const title = `Phase ${phase.number}: ${STEP_TITLES[step]} — ${phase.name}`;
               const columnOrder = phase.number * 100 + stepIdx;
 
               const inheritedPermissionMode = getActivePermissionMode(
@@ -151,7 +151,7 @@ export async function POST(request: NextRequest) {
           }
 
           // Update parent activity label with phase progress.
-          // IMPORTANT: never force status back to 'running' - if the user has
+          // IMPORTANT: never force status back to 'running' — if the user has
           // manually marked the project done (or review), respect that and
           // only refresh the activity label. Forcing status here would
           // resurrect completed GSD projects on every sync.
@@ -172,7 +172,7 @@ export async function POST(request: NextRequest) {
 
       // For Level 2 projects, sync deliverables from brief as child tasks.
       // IMPORTANT: only run this on the FIRST sync (when no children exist yet).
-      // After initial creation the subtask table is authoritative - re-parsing
+      // After initial creation the subtask table is authoritative — re-parsing
       // brief.md on every sync causes duplicate rows whenever Claude rewrites
       // a bullet with slightly different phrasing, and can leak prompt-prefix
       // artifacts ("[Project Context: ...]") into the subtask list.

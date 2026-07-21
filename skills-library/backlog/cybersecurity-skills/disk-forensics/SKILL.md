@@ -4,18 +4,18 @@ description: "Analyze disk images, file systems, and memory captures for digital
 allowed-tools: Bash, Read, Write, Grep, Glob
 ---
 
-# Disk Forensics - Digital Evidence Analysis
+# Disk Forensics — Digital Evidence Analysis
 
 Analyze disk images and file systems to recover evidence, reconstruct timelines, and identify artifacts.
 
-Cross-references: `incident-triage` for the upstream containment phase that captures the image this skill analyzes - that skill makes the bit-for-bit copy; this skill analyzes it. `breach-patterns` for translating the forensic findings into preemptive controls so the same root cause doesn't recur.
+Cross-references: `incident-triage` for the upstream containment phase that captures the image this skill analyzes — that skill makes the bit-for-bit copy; this skill analyzes it. `breach-patterns` for translating the forensic findings into preemptive controls so the same root cause doesn't recur.
 
 ## Authorization Check
 
 Before analyzing any image, confirm:
-1. **Lawful basis** - the user has authorization for this analysis (internal investigation with documented scope, court-ordered work, signed IR engagement, your own system, CTF / lab environment)
-2. **Chain of custody is preserved** - the image and its hashes were captured in a way that survives evidentiary scrutiny, OR the scope is explicitly non-evidentiary (CTF, internal triage where chain-of-custody is not the goal)
-3. **Privacy scope** - the analysis stays within what was authorized; personal data outside the scope is not pulled, analyzed, or reported
+1. **Lawful basis** — the user has authorization for this analysis (internal investigation with documented scope, court-ordered work, signed IR engagement, your own system, CTF / lab environment)
+2. **Chain of custody is preserved** — the image and its hashes were captured in a way that survives evidentiary scrutiny, OR the scope is explicitly non-evidentiary (CTF, internal triage where chain-of-custody is not the goal)
+3. **Privacy scope** — the analysis stays within what was authorized; personal data outside the scope is not pulled, analyzed, or reported
 
 If lawful basis is unclear, ask before proceeding. Never analyze an image you cannot confirm the user is authorized to possess.
 
@@ -25,7 +25,7 @@ If lawful basis is unclear, ask before proceeding. Never analyze an image you ca
 - Verify image integrity with hash comparison before analysis
 - Mount everything read-only
 - Document every command and finding
-- Preserve timestamps - never modify source evidence
+- Preserve timestamps — never modify source evidence
 
 ## Methodology
 
@@ -119,7 +119,7 @@ Collect all timestamps into a unified timeline. Cross-reference file events with
 ```markdown
 # Forensic Analysis Report
 ## Case: [identifier]
-## Image: [filename] - SHA256: [hash]
+## Image: [filename] — SHA256: [hash]
 ## Date of Analysis: [date]
 
 ### Image Integrity

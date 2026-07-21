@@ -170,7 +170,7 @@ Hey [Name],
 
 I'm [Role] at [Your Company]. We [one-line description].
 
-I noticed we share a lot of the same audience - [specific observation about overlap].
+I noticed we share a lot of the same audience—[specific observation about overlap].
 
 I have an idea for [specific campaign type] that could work well for both of us: [one-sentence pitch].
 
@@ -284,7 +284,7 @@ For implementation, see the [tools registry](../../tools/REGISTRY.md). Key tools
 
 ## Related Skills
 
-- **referrals** - For customer referral and affiliate programs (customers referring customers)
-- **launch** - For product launches with partners; covers co-marketing as a "borrowed channel"
-- **content-strategy** - For content planning including co-created content
-- **sales-enablement** - For partner-facing collateral and enablement materials
+- **referrals** — For customer referral and affiliate programs (customers referring customers)
+- **launch** — For product launches with partners; covers co-marketing as a "borrowed channel"
+- **content-strategy** — For content planning including co-created content
+- **sales-enablement** — For partner-facing collateral and enablement materials

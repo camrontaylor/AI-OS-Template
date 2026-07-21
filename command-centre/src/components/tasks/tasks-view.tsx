@@ -45,16 +45,16 @@ function formatElapsedLive(startedAt: string | null): string {
   return `${hr}h ${remMin}m`;
 }
 
-/** Extract the action summary - what does the operator need to do? */
+/** Extract the action summary — what does the operator need to do? */
 function getActionSummary(task: Task, logEntries: LogEntry[]): string | null {
   if (task.errorMessage) {
     return `Error: ${task.errorMessage.length > 120 ? task.errorMessage.slice(0, 120) + "..." : task.errorMessage}`;
   }
 
-  // Review tasks are completed - show completion message.
+  // Review tasks are completed — show completion message.
   // Only show question text for tasks genuinely waiting for input (running + needsInput).
   if (task.status === "review") {
-    return "Claude has finished - review the outputs and mark as done.";
+    return "Claude has finished — review the outputs and mark as done.";
   }
 
   if (task.status === "running" && task.needsInput) {
@@ -201,7 +201,7 @@ function TaskDetail({ task, parentTask }: { task: Task; parentTask: Task | null 
         backgroundColor: "var(--muted)",
       }}
     >
-      {/* Action summary - the key thing the operator needs to know */}
+      {/* Action summary — the key thing the operator needs to know */}
       {actionSummary && (
         <div
           style={{
@@ -295,7 +295,7 @@ function TaskDetail({ task, parentTask }: { task: Task; parentTask: Task | null 
         </div>
       )}
 
-      {/* Reply input - only for tasks genuinely waiting for input (running + needsInput) */}
+      {/* Reply input — only for tasks genuinely waiting for input (running + needsInput) */}
       {isWaitingForInput && <InlineReply taskId={task.id} />}
 
       {/* Action buttons row */}
@@ -481,7 +481,7 @@ function TaskRow({ task, parentTask }: { task: Task; parentTask: Task | null }) 
               ↳ {parentTask.title}
             </div>
           )}
-          {/* Action summary preview - visible when collapsed */}
+          {/* Action summary preview — visible when collapsed */}
           {!expanded && actionSummary && (
             <div
               style={{
@@ -521,7 +521,7 @@ function TaskRow({ task, parentTask }: { task: Task; parentTask: Task | null }) 
                   : "Done"}
         </span>
 
-        {/* Mark as done - quick action for review tasks */}
+        {/* Mark as done — quick action for review tasks */}
         {task.status === "review" && (
           <button
             onClick={(e) => {
@@ -553,7 +553,7 @@ function TaskRow({ task, parentTask }: { task: Task; parentTask: Task | null }) 
           </button>
         )}
 
-        {/* Time - show last reply time when available, otherwise updated time */}
+        {/* Time — show last reply time when available, otherwise updated time */}
         <span
           style={{
             fontSize: 11,
@@ -622,7 +622,7 @@ function groupTasksByProject(
       }
       groups.get(parentKey)!.children.push(t);
     } else if (t.projectSlug && t.level === "task") {
-      // Task with projectSlug but no parentId - find parent by projectSlug
+      // Task with projectSlug but no parentId — find parent by projectSlug
       const parentEntry = tasks.find(
         (p) => p.projectSlug === t.projectSlug && (p.level === "project" || p.level === "gsd")
       );
@@ -657,7 +657,7 @@ function groupTasksByProject(
 
   const result = Array.from(groups.values());
 
-  // Add goal groups as virtual groups (no parent task - label comes from goalGroup)
+  // Add goal groups as virtual groups (no parent task — label comes from goalGroup)
   for (const [goal, goalTasks] of goalBuckets) {
     // Create a virtual parent-like task for the header display
     const virtualParent: Task = {
@@ -803,7 +803,7 @@ function ProjectGroupHeader({
   // GSD phase context
   const phaseLabel =
     parent?.level === "gsd" && parent.phaseNumber != null
-      ? `Phase ${parent.phaseNumber}${parent.gsdStep ? ` - ${parent.gsdStep.charAt(0).toUpperCase() + parent.gsdStep.slice(1)}` : ""}`
+      ? `Phase ${parent.phaseNumber}${parent.gsdStep ? ` — ${parent.gsdStep.charAt(0).toUpperCase() + parent.gsdStep.slice(1)}` : ""}`
       : null;
 
   return (
@@ -924,7 +924,7 @@ function ProjectGroupHeader({
           </div>
         </div>
 
-        {/* Open parent panel - not for goal groups (virtual parent) */}
+        {/* Open parent panel — not for goal groups (virtual parent) */}
         {parent && !isGoalGroup && (
           <button
             onClick={(e) => {
@@ -973,7 +973,7 @@ function GroupedTaskList({
   // If there are no project groups (only quick tasks or empty), render flat
   const hasProjectGroups = groups.some((g) => g.key !== QUICK_TASKS_KEY);
   if (!hasProjectGroups && groups.length <= 1) {
-    // All orphans, no grouping needed - render flat
+    // All orphans, no grouping needed — render flat
     const orphans = groups[0]?.children ?? [];
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -996,7 +996,7 @@ function GroupedTaskList({
     <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
       {groups.map((group) => {
         const isExpanded = collapsedGroups[group.key] !== true; // default expanded
-        // For project groups, show children (not the parent as a row - it's in the header)
+        // For project groups, show children (not the parent as a row — it's in the header)
         // For quick tasks, show all children
         const visibleTasks = group.children;
 
@@ -1141,7 +1141,7 @@ export function TasksView() {
         </div>
       ) : (
         <>
-          {/* Waiting on you - grouped by project */}
+          {/* Waiting on you — grouped by project */}
           {waitingTasks.length > 0 && (
             <div style={{ marginBottom: runningTasks.length > 0 ? 24 : 0 }}>
               <SectionHeader label="Waiting on you" count={waitingTasks.length} color="var(--primary)" />
@@ -1149,7 +1149,7 @@ export function TasksView() {
             </div>
           )}
 
-          {/* Running in background - grouped by project */}
+          {/* Running in background — grouped by project */}
           {runningTasks.length > 0 && (
             <div>
               <SectionHeader label="Running" count={runningTasks.length} color="var(--primary)" />

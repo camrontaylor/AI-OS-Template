@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Step 0: Self-update - fetch the latest update.sh first.
+# Step 0: Self-update — fetch the latest update.sh first.
 # Solves the chicken-and-egg problem: this script can't fix bugs in itself
 # if the user is running the old version. Re-execs with __SELF_UPDATED=1
 # to prevent infinite loops.
@@ -14,7 +14,7 @@ if [[ -z "${__SELF_UPDATED:-}" ]]; then
         || md5sum "$SCRIPT_DIR/update.sh" 2>/dev/null | awk '{print $1}' \
         || echo "")
     if [[ -n "$REMOTE_HASH" ]] && [[ -n "$LOCAL_HASH" ]] && [[ "$REMOTE_HASH" != "$LOCAL_HASH" ]]; then
-        ok "Update script has changed - reloading with latest version..."
+        ok "Update script has changed — reloading with latest version..."
         echo ""
         git checkout origin/main -- scripts/update.sh 2>/dev/null || true
         __SELF_UPDATED=1 exec bash "$SCRIPT_DIR/update.sh" "$@"

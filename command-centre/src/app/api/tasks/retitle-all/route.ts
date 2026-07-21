@@ -9,7 +9,7 @@ import { runClaudeTextPrompt } from "@/lib/run-claude-text-prompt";
  *
  * One-shot migration: walks every task currently in the DB and asks Haiku to
  * distill each title into a short, human-readable label (3-6 words, Title
- * Case, filler prefixes stripped) - the same shape the scoping wizard now
+ * Case, filler prefixes stripped) — the same shape the scoping wizard now
  * produces via scope-goal's new `projectTitle` field.
  *
  * Batched: a single Haiku call handles up to 40 titles at a time so the
@@ -78,7 +78,7 @@ export async function POST(request: Request) {
         .map(
           (t, i) =>
             `${i + 1}. [id=${t.id.slice(0, 8)}] ${t.title}${
-              t.description ? ` - ${t.description.slice(0, 120)}` : ""
+              t.description ? ` — ${t.description.slice(0, 120)}` : ""
             }`
         )
         .join("\n");
@@ -89,7 +89,7 @@ Rules for each new title:
 - 3-6 words, Title Case
 - Strip filler prefixes: "Help me…", "I want to…", "Can you…", "Please…", "Let's…"
 - Name the THING, not the request
-- Preserve meaning - a copywriting task stays a copywriting task
+- Preserve meaning — a copywriting task stays a copywriting task
 - If a title is already clean (e.g. "Q2 Newsletter Launch"), return it unchanged
 
 Examples:
@@ -103,7 +103,7 @@ Tasks to rename (numbered, with partial id for reference):
 
 ${lines}
 
-Return ONLY valid JSON - an array of objects matching the input order:
+Return ONLY valid JSON — an array of objects matching the input order:
 [{"n": 1, "title": "New Title"}, {"n": 2, "title": "Another Title"}, ...]`;
 
       const result = await runClaude(prompt);

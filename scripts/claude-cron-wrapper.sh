@@ -7,18 +7,15 @@
 #   API Error: 401 authentication_error "Invalid authentication credentials"
 #
 # Point the cron runtime at this wrapper with:
-#   AGENTIC_OS_CLAUDE_BIN=/path/to/ai-os/scripts/claude-cron-wrapper.sh
-# (set in the launchd plist env; cron-runtime.js honors AGENTIC_OS_CLAUDE_BIN).
+#   AI_OS_CLAUDE_BIN=/path/to/AI-OS/scripts/claude-cron-wrapper.sh
+# (set in the launchd plist env; cron-runtime.js honors AI_OS_CLAUDE_BIN).
 #
 # AUTH, in order of preference:
 #   1. CLAUDE_CODE_OAUTH_TOKEN (the right answer). A long-lived (~1 year) token from
-#      `claude setup-token`. Headless, no 1Password, survives reboots. Store it in
+#      `claude setup-token`. Headless, survives reboots. Store it in
 #      ~/.config/claude-code-oauth-token (chmod 600) or the launchd env. Run
 #      `bash scripts/enable-cron.sh <token>` to wire it up.
-#   2. op run + 1Password (the interactive alias's method). Needs the 1Password
-#      desktop app unlocked or an OP_SERVICE_ACCOUNT_TOKEN; not reliable unattended
-#      (op blocks on a biometric prompt at 3am), so this is a fallback only.
-#   3. Bare binary. Works only if ~/.claude/.credentials.json exists from `/login`.
+#   2. Bare binary. Works only if ~/.claude/.credentials.json exists from `/login`.
 set -euo pipefail
 
 # Keep the Mac awake for the duration of THIS job only, so an idle-sleep timer cannot
@@ -37,6 +34,42 @@ REAL_CLAUDE="${REAL_CLAUDE_BIN:-$(command -v claude 2>/dev/null || echo /usr/loc
 ENV_FILE="${AI_KEYS_ENV_FILE:-$HOME/.config/ai-keys.env}"
 OAUTH_TOKEN_FILE="${CLAUDE_OAUTH_TOKEN_FILE:-$HOME/.config/claude-code-oauth-token}"
 
+load_env_file() {
+  local file="$1"
+  [[ -f "$file" ]] || return 0
+
+  while IFS= read -r raw_line || [[ -n "$raw_line" ]]; do
+    local line name value
+    line="${raw_line#"${raw_line%%[![:space:]]*}"}"
+    line="${line%"${line##*[![:space:]]}"}"
+    [[ -z "$line" || "${line:0:1}" == "#" ]] && continue
+    [[ "$line" == export\ * ]] && line="${line#export }"
+    [[ "$line" == *=* ]] || continue
+
+    name="${line%%=*}"
+    value="${line#*=}"
+    name="${name%"${name##*[![:space:]]}"}"
+    value="${value#"${value%%[![:space:]]*}"}"
+    value="${value%"${value##*[![:space:]]}"}"
+    [[ "$name" =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]] || continue
+
+    if [[ "$value" == \"*\" && "$value" == *\" ]]; then
+      value="${value:1:${#value}-2}"
+    elif [[ "$value" == \'*\' && "$value" == *\' ]]; then
+      value="${value:1:${#value}-2}"
+    fi
+
+    if [[ -z "${!name:-}" ]]; then
+      export "$name=$value"
+    fi
+  done < "$file"
+}
+
+# Load integration keys before the Claude OAuth fast path. Previously the wrapper
+# skipped this when CLAUDE_CODE_OAUTH_TOKEN was present, so scheduled Claude runs
+# could authenticate to Anthropic but still miss NOTION_API_KEY and other MCP/API keys.
+load_env_file "$ENV_FILE"
+
 # 1. Long-lived OAuth token (preferred). From `claude setup-token`.
 if [[ -z "${CLAUDE_CODE_OAUTH_TOKEN:-}" && -f "$OAUTH_TOKEN_FILE" ]]; then
   export CLAUDE_CODE_OAUTH_TOKEN="$(tr -d '[:space:]' < "$OAUTH_TOKEN_FILE")"
@@ -45,14 +78,5 @@ if [[ -n "${CLAUDE_CODE_OAUTH_TOKEN:-}" ]]; then
   exec "$REAL_CLAUDE" "$@"
 fi
 
-# 2. op run + 1Password fallback (also picks up a service-account token if present).
-OP_TOKEN_FILE="${OP_TOKEN_FILE:-$HOME/.config/op-cron-token}"
-if [[ -z "${OP_SERVICE_ACCOUNT_TOKEN:-}" && -f "$OP_TOKEN_FILE" ]]; then
-  export OP_SERVICE_ACCOUNT_TOKEN="$(cat "$OP_TOKEN_FILE")"
-fi
-if command -v op >/dev/null 2>&1 && [[ -f "$ENV_FILE" ]]; then
-  exec op run --env-file="$ENV_FILE" -- "$REAL_CLAUDE" "$@"
-fi
-
-# 3. Bare binary (works only if OAuth /login credentials exist).
+# 2. Bare binary (works only if OAuth /login credentials exist).
 exec "$REAL_CLAUDE" "$@"

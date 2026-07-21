@@ -1,4 +1,4 @@
-# Apple App Store - Official Specs & Guidelines
+# Apple App Store — Official Specs & Guidelines
 
 All data from developer.apple.com as of March 2026.
 

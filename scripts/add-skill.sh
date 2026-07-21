@@ -65,7 +65,7 @@ if skill_name not in all_known:
 
 # Block if core skill
 if skill_name in core_skills:
-    print(f'\033[1;33m{skill_name}\033[0m is a core skill - always installed.')
+    print(f'\033[1;33m{skill_name}\033[0m is a core skill — always installed.')
     sys.exit(0)
 
 # Block if already installed (directory exists)
@@ -104,8 +104,15 @@ for s in to_install:
         seen.add(s)
         unique_install.append(s)
 
-# Restore each from git
+# Restore each: a parked skill moves back from _archived/, everything else
+# restores from git.
 for name in unique_install:
+    parked = os.path.join(skills_dir, '_archived', name)
+    if os.path.isdir(parked):
+        os.rename(parked, os.path.join(skills_dir, name))
+        tag = ' (dependency)' if name != skill_name else ''
+        print(f'\033[0;32m✓\033[0m Unparked {name}{tag} from _archived/')
+        continue
     path = f'.claude/skills/{name}/'
     result = subprocess.run(
         ['git', 'checkout', 'HEAD', '--', path],
@@ -141,7 +148,7 @@ with open(installed_path, 'w') as f:
     f.write('\n')
 
 print()
-print(f'\033[0;32mInstalled {skill_name}.\033[0m Start a new Claude Code session - it will auto-register.')
+print(f'\033[0;32mInstalled {skill_name}.\033[0m')
 
 # Remind about required services
 info = optional_skills.get(skill_name, {})
@@ -152,3 +159,15 @@ if services:
     for svc in services:
         print(f'  • {svc}')
 " "$SKILL_NAME" "$CATALOG" "$INSTALLED_JSON" "$SKILLS_DIR" "$REPO_ROOT"
+
+# Rebuild derived discovery surfaces from the live filesystem.
+"${PYTHON_CMD[@]}" "$REPO_ROOT/scripts/gen-skills-catalog.py"
+bash "$REPO_ROOT/scripts/update-clients.sh"
+bash "$REPO_ROOT/scripts/skill-system-audit.sh"
+echo "Start a fresh agent session to verify the skill appears in the affected tool."
+
+# Parity check - catch any gap between .claude/skills and .agents/skills immediately
+parity_out=$(bash "$REPO_ROOT/scripts/lib/skills-parity-check.sh" "$REPO_ROOT" 2>/dev/null) || {
+  echo ""
+  echo -e "${YELLOW}Warning:${NC} $parity_out"
+}

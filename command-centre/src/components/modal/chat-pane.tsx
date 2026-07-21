@@ -19,7 +19,7 @@ interface ChatPaneProps {
   onPreviewFile: (file: OutputFile) => void;
   /** Compact mode for when split with another pane */
   compact?: boolean;
-  /** Parent's planned subtasks - shown in the subtasks popover */
+  /** Parent's planned subtasks — shown in the subtasks popover */
   subtasks?: SubtaskSummary[];
   /** Handler when a subtask is selected from the popover */
   onSelectSubtask?: (id: string) => void;
@@ -99,7 +99,7 @@ export function ChatPane({
         isDone ? "border-border opacity-70" : "border-border",
       )}
     >
-      {/* Action bar - mark done + resume */}
+      {/* Action bar — mark done + resume */}
       {(sessionId || showDoneToggle || isDone) && (
         <div
           className={cn(
@@ -194,7 +194,7 @@ export function ChatPane({
         onRefresh={() => fetchLogEntries(task.id)}
       />
 
-      {/* Reply input - hidden when done */}
+      {/* Reply input — hidden when done */}
       {!isDone && (
         <ReplyInput
           taskId={task.id}

@@ -1,6 +1,7 @@
 ---
 name: meta-find-skills
-description: Find the right skill for what the user wants to do, searching AI-OS's own curated sources before reaching outside. Triggers on "find a skill", "find-skills", "is there a skill for", "do we have a skill for", "find me a skill for X", "what skill handles X", "search for a skill", "I wish I had a skill for", "can the system already do X", "extend my capabilities". Searches in order live AI-OS skills, the Skills Library backlog (skills-library/INDEX.md), the optional-skills catalog (_catalog/catalog.json), and usage/tier data; only as a last resort searches the external ecosystem, and then vendors the find into the backlog rather than installing it into the menu. Does NOT trigger for building a brand-new skill from scratch (use meta-skill-creator), ranking skills by usage (skill-tiers), or installing a specific named optional skill (add-skill.sh).
+description: "Find the right skill for a task, searching AI-OS's own curated sources before reaching outside. Not for building a new skill from scratch (meta-skill-creator) or installing a named optional skill (add-skill.sh)."
+when_to_use: 'Invoke when the request sounds like: "find a skill", "is there a skill for", "do we have a skill for", "what skill handles X", "can the system already do X"'
 ---
 
 # Find Skills
@@ -21,6 +22,15 @@ reaches outside or builds from scratch.
 - Ranking which skills get used most -> `python3 scripts/skill-tiers.py`
 - Installing a specific named optional skill -> `bash scripts/add-skill.sh <name>`
 
+## Context Needs
+
+| File | Load level | Why |
+|---|---|---|
+| `.claude/skills/*/SKILL.md` | frontmatter; full file only for the match | Live capability authority |
+| `skills-library/INDEX.md` | targeted search | Inert candidate inventory |
+| `.claude/skills/_catalog/catalog.json` | targeted search | First-run optional menu only |
+| `context/learnings.md` | `## meta-find-skills` | Prior discovery and intake lessons |
+
 ## The one hard rule
 
 NEVER install an external skill globally (`npx skills add -g`, or any global
@@ -34,8 +44,9 @@ curated source of truth; nothing skips the line.
 Search the cheapest, most-curated source first. Recommend ONE path with its command.
 
 ### 1. Live AI-OS skills (already have it?)
-Search `.claude/skills/*/SKILL.md` frontmatter and the AGENTS.md Skill Registry for
-a trigger match. If one exists, name it and use it. Done.
+Search `.claude/skills/*/SKILL.md` frontmatter for a trigger match. The live
+filesystem is authoritative; `docs/skills-catalog.md` is its generated overview.
+If one exists, name it and use it. Done.
 
 ### 2. Skills Library backlog (a parked candidate?)
 Search `skills-library/INDEX.md` (the vendored candidates, ~118 of them). If one fits:
@@ -75,8 +86,27 @@ step. If you reached step 5, state the quality signals you checked.
 
 ## Why this shape
 
-AI-OS already has the discovery primitives - the live registry, the backlog INDEX,
+AI-OS already has the discovery primitives - the live filesystem, the backlog INDEX,
 the optional catalog, the usage tiers, and `meta-skill-creator`. This skill is the
 single front door over them, ordered so the curated, no-flood paths win and the
 external ecosystem is a fallback that still respects the pipeline. See
 `docs/skill-tiers.md` for the graduation rule this serves.
+
+## Eval
+
+Run this manual eval before changing search order, install rules, or external
+skill handling:
+
+1. Ask for a capability already covered by a live skill. Pass if the answer names
+   the live skill and does not search externally.
+2. Ask for a capability present only in `skills-library/INDEX.md`. Pass if the
+   answer offers to trial or promote the backlog candidate without treating it as
+   live.
+3. Ask for an unknown external skill. Pass if the answer vendors or recommends
+   backlog intake and does not run `npx skills add -g`.
+4. Ask to install a specific optional catalog skill. Pass if the answer routes to
+   `bash scripts/add-skill.sh <name>`.
+
+The eval fails if the skill silently falls back to base knowledge when a curated
+skill exists, globally installs an external skill, or presents a menu instead of
+one recommended path.

@@ -44,7 +44,7 @@ Decompose complex problems into fundamental truths and reason up from there.
 ### Thought Experiments
 Test ideas in the laboratory of the mind by constructing simplified scenarios.
 **Use when**: Real-world testing is impossible, too expensive, or too slow.
-**Key question**: "What if we changed just this one variable - what would happen?"
+**Key question**: "What if we changed just this one variable — what would happen?"
 
 ### Second-Order Thinking
 Consider the consequences of consequences. Think beyond the immediate effect.
@@ -57,7 +57,7 @@ Think in probabilities, not certainties. Assign likelihoods and update with evid
 **Key question**: "What probability would I assign to this? What evidence would shift it?"
 
 ### Inversion
-Instead of asking how to succeed, ask how to guarantee failure - then avoid those things.
+Instead of asking how to succeed, ask how to guarantee failure — then avoid those things.
 **Use when**: Stuck on a problem, planning a strategy, or evaluating risks.
 **Key question**: "What would guarantee failure here? Am I accidentally doing any of those things?"
 
@@ -97,7 +97,7 @@ Imagining "what if" alternative scenarios to understand causation and improve fu
 **Key question**: "If I changed this one variable, would the outcome have been different?"
 
 ### Thinking in Bets (Resulting)
-Separating decision quality from outcome quality - good decisions can produce bad outcomes and vice versa.
+Separating decision quality from outcome quality — good decisions can produce bad outcomes and vice versa.
 **Use when**: Evaluating past decisions or calibrating whether to change your approach after a result.
 **Key question**: "Was the process sound given what I knew at the time, regardless of how it turned out?"
 
@@ -146,7 +146,7 @@ Map Strengths, Weaknesses, Opportunities, and Threats for a structured overview.
 **Key question**: "What internal strengths/weaknesses and external opportunities/threats shape this situation?"
 
 ### Satisficing vs Maximizing
-Sometimes "good enough" is better than "optimal" - especially for low-stakes decisions.
+Sometimes "good enough" is better than "optimal" — especially for low-stakes decisions.
 **Use when**: Deciding how much effort to put into a decision.
 **Key question**: "Is the marginal improvement from more analysis worth the time and energy cost?"
 
@@ -156,7 +156,7 @@ When uncertainty is high, prefer choices that keep future options open rather th
 **Key question**: "Does this choice close doors I may want open later?"
 
 ### Asymmetric Risk (Convexity)
-Seek decisions where the upside is much larger than the downside - capped loss, uncapped gain.
+Seek decisions where the upside is much larger than the downside — capped loss, uncapped gain.
 **Use when**: You can structure a bet where you lose small but win big.
 **Key question**: "What is the maximum I can lose versus the potential I can gain?"
 
@@ -275,7 +275,7 @@ A threshold after which a system's behavior shifts non-linearly and often irreve
 
 ### Hysteresis / Path Dependence
 A system's current state depends on its history; the same inputs can produce different outputs depending on what came before.
-**Use when**: Assuming a problem is reversible - undoing damage may require far more effort than causing it.
+**Use when**: Assuming a problem is reversible — undoing damage may require far more effort than causing it.
 **Key question**: "Can we actually reverse this, or has the system locked into a new path?"
 
 ### Antifragility
@@ -367,7 +367,7 @@ Combining elements produces properties none have individually. Diversity creates
 **Key question**: "What combination of elements creates something stronger than any individual component?"
 
 ### Coevolution
-Two or more entities reciprocally shape each other's evolution over time - an arms race of mutual adaptation.
+Two or more entities reciprocally shape each other's evolution over time — an arms race of mutual adaptation.
 **Use when**: Competitors, regulators, or partners are adapting in response to your moves.
 **Key question**: "How is the other side evolving in response to us, and how should that change our next move?"
 
@@ -383,7 +383,7 @@ Organisms actively modify their own environment, which in turn shapes future sel
 ### Incentives
 People respond to incentives. Understand what someone is incentivized to do and you understand their behavior.
 **Use when**: Predicting behavior, designing systems, or understanding why someone is acting a certain way.
-**Key question**: "What are the actual incentives at play here? (Not the stated ones - the real ones.)"
+**Key question**: "What are the actual incentives at play here? (Not the stated ones — the real ones.)"
 
 ### Comparative Advantage
 Focus on what you do relatively better than alternatives, even if you're not the absolute best.
@@ -391,7 +391,7 @@ Focus on what you do relatively better than alternatives, even if you're not the
 **Key question**: "What can I do relatively better than my alternatives, even if I'm not the absolute best?"
 
 ### Economies of Scale
-Unit costs decrease as volume increases. There are advantages to being bigger - up to a point.
+Unit costs decrease as volume increases. There are advantages to being bigger — up to a point.
 **Use when**: Evaluating business strategy, growth decisions, or operational efficiency.
 **Key question**: "Does scaling up reduce per-unit costs, or are we past the point of scale benefits?"
 
@@ -506,7 +506,7 @@ Systematic error introduced by non-random selection of data, making the sample u
 
 ### Gambler's Fallacy
 Believing that past independent events affect the probability of future independent events.
-**Use when**: Interpreting streaks or runs in independent processes - coin flips, market returns, hiring outcomes.
+**Use when**: Interpreting streaks or runs in independent processes — coin flips, market returns, hiring outcomes.
 **Key question**: "Are these events actually dependent on each other, or am I seeing a pattern in genuinely independent trials?"
 
 ---
@@ -623,7 +623,7 @@ Humans process and retain information far better in story form than in abstract 
 **Key question**: "What is the story here, and who is the protagonist?"
 
 ### Reciprocity
-People feel compelled to return favors, concessions, and gestures - giving first creates social debt.
+People feel compelled to return favors, concessions, and gestures — giving first creates social debt.
 **Use when**: Building relationships, opening negotiations, or seeking buy-in.
 **Key question**: "What can I give first to create a natural obligation to reciprocate?"
 
@@ -696,7 +696,7 @@ Reviewing material at increasing intervals dramatically improves long-term reten
 **Key question**: "Am I spacing my review to match how memory actually fades?"
 
 ### Zone of Proximal Development
-The sweet spot between what a learner can do alone and what they cannot do at all - where guided challenge produces maximum growth.
+The sweet spot between what a learner can do alone and what they cannot do at all — where guided challenge produces maximum growth.
 **Use when**: Setting difficulty levels for yourself or others, coaching, or designing training.
 **Key question**: "Is this challenge just beyond current ability but achievable with support?"
 
@@ -720,7 +720,7 @@ Work expands to fill the time available. Shorter deadlines can increase focus.
 **Key question**: "If I had half the time, what would I cut? That's probably what's not essential."
 
 ### Time Boxing
-Allocate a fixed time block to a task, then stop - regardless of completion.
+Allocate a fixed time block to a task, then stop — regardless of completion.
 **Use when**: Tasks that tend to expand infinitely (research, editing, deliberation).
 **Key question**: "How much time is this decision/task actually worth?"
 
@@ -769,7 +769,7 @@ In the absence of communication, people tend to converge on solutions that seem 
 **Key question**: "What is the obvious default that everyone would independently converge on?"
 
 ### Tit for Tat
-Start cooperative, then mirror the other party's last move. Simple, forgiving, and retaliatory - the most robust strategy in iterated Prisoner's Dilemma.
+Start cooperative, then mirror the other party's last move. Simple, forgiving, and retaliatory — the most robust strategy in iterated Prisoner's Dilemma.
 **Use when**: Repeated interactions where you need to build cooperation while deterring exploitation.
 **Key question**: "Am I rewarding cooperation and punishing defection proportionally?"
 
@@ -788,7 +788,7 @@ When a party is insulated from risk, they behave more recklessly than they other
 ## Negotiation
 
 ### BATNA (Best Alternative to a Negotiated Agreement)
-Your best fallback option if the current negotiation fails - the true source of negotiating power.
+Your best fallback option if the current negotiation fails — the true source of negotiating power.
 **Use when**: Preparing for any negotiation; knowing when to walk away.
 **Key question**: "What is my best option if this deal falls through, and how good is it really?"
 
@@ -798,7 +798,7 @@ The range between each party's reservation price where a deal is possible for bo
 **Key question**: "Is there overlap between what I'd accept and what they'd accept?"
 
 ### Logrolling
-Trading concessions on issues you value less for gains on issues you value more - expanding the pie before dividing it.
+Trading concessions on issues you value less for gains on issues you value more — expanding the pie before dividing it.
 **Use when**: Multi-issue negotiations where parties have different priorities.
 **Key question**: "What do I care about less that they care about more, and vice versa?"
 
@@ -807,7 +807,7 @@ Trading concessions on issues you value less for gains on issues you value more 
 ## Resilience & Antifragility
 
 ### Barbell Strategy
-Combine extreme safety on one side with small, high-upside bets on the other - avoid the mediocre middle.
+Combine extreme safety on one side with small, high-upside bets on the other — avoid the mediocre middle.
 **Use when**: Allocating resources, investments, or career moves under deep uncertainty.
 **Key question**: "Am I protected against catastrophic downside while maintaining exposure to outsized upside?"
 
@@ -818,12 +818,12 @@ People make better decisions and behave more ethically when they bear the conseq
 
 ### Via Negativa
 Improve by removing what's harmful rather than adding what might help. Subtraction is often more powerful and less risky than addition.
-**Use when**: Improving processes, products, health, or strategies - when additive solutions keep failing.
+**Use when**: Improving processes, products, health, or strategies — when additive solutions keep failing.
 **Key question**: "What should I stop doing or remove, rather than what should I add?"
 
 ### Hormesis
 Small doses of a stressor that would be harmful in large doses actually produce a beneficial adaptive response.
-**Use when**: Designing training, challenge, or stress exposure - calibrating the right dose.
+**Use when**: Designing training, challenge, or stress exposure — calibrating the right dose.
 **Key question**: "Is this the right dose of stress to trigger adaptation without causing damage?"
 
 ---
@@ -831,7 +831,7 @@ Small doses of a stressor that would be harmful in large doses actually produce 
 ## Ethics & Responsibility
 
 ### Veil of Ignorance
-Design rules as if you don't know which position in the system you'll occupy - fairness emerges from impartiality.
+Design rules as if you don't know which position in the system you'll occupy — fairness emerges from impartiality.
 **Use when**: Designing policies, rules, compensation structures, or team norms.
 **Key question**: "Would I accept this arrangement if I didn't know which role I'd be assigned?"
 

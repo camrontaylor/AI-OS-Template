@@ -49,7 +49,7 @@ function formatLiveClaudeTime(task: Task): string {
     return formatDuration(accumulated);
   }
 
-  // Task was recently updated - add live elapsed for the current turn only
+  // Task was recently updated — add live elapsed for the current turn only
   const currentTurnMs = Math.max(0, Date.now() - lastUpdate);
   return formatDuration(accumulated + currentTurnMs);
 }
@@ -134,7 +134,7 @@ export function FeedCard({ task, isOverlay }: { task: Task; isOverlay?: boolean 
     : variant === "needsInput"
       ? (task.errorMessage || task.activityLabel || "Claude needs your input to continue.")
       : variant === "review"
-        ? (task.activityLabel || task.description || "Claude has finished - review the output.")
+        ? (task.activityLabel || task.description || "Claude has finished — review the output.")
         : (task.activityLabel || task.description || null);
 
   const isQueued = variant === "queued";

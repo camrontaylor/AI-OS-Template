@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ==========================================================
-# AI-OS - Check for Updates
+# AI-OS — Check for Updates
 # Shows if upstream has new commits without pulling them.
 #
 # Usage: bash scripts/check-updates.sh
@@ -40,13 +40,13 @@ if ! git rev-parse --is-inside-work-tree &>/dev/null; then
 fi
 
 echo ""
-printf "${CYAN}${BOLD}  AI-OS - Checking for updates...${NC}\n"
+printf "${CYAN}${BOLD}  AI-OS — Checking for updates...${NC}\n"
 echo ""
 
 # ---------- Resolve the canonical update remote by URL ----------
-# Updates come from the public AI-OS template repo, never a user's backup fork.
+# Updates come from the Camron-owned public AI-OS template, never a user's backup fork.
 # Mirrors resolve_update_remote() in scripts/lib/common.sh.
-UPSTREAM_SLUG="${AGENTIC_OS_UPSTREAM_SLUG:-camrontaylor/ai-os-template}"
+UPSTREAM_SLUG="${AGENTIC_OS_UPSTREAM_SLUG:-camrontaylor/AI-OS-Template}"
 UPSTREAM_BRANCH="${AGENTIC_OS_UPSTREAM_BRANCH:-main}"
 UPDATE_REMOTE=""
 for _remote in upstream origin $(git remote 2>/dev/null); do
@@ -58,15 +58,28 @@ for _remote in upstream origin $(git remote 2>/dev/null); do
     fi
 done
 if [[ -z "$UPDATE_REMOTE" ]]; then
+    UPDATE_URL="${AGENTIC_OS_UPSTREAM_URL:-https://github.com/$UPSTREAM_SLUG.git}"
+    if ! git remote get-url upstream >/dev/null 2>&1; then
+        git remote add upstream "$UPDATE_URL" 2>/dev/null || true
+        UPDATE_REMOTE="upstream"
+    else
+        git remote add ai-os-upstream "$UPDATE_URL" 2>/dev/null || git remote set-url ai-os-upstream "$UPDATE_URL" 2>/dev/null || true
+        UPDATE_REMOTE="ai-os-upstream"
+    fi
+    if [[ -n "$UPDATE_REMOTE" ]]; then
+        success "Connected this AI-OS folder to updates from $UPSTREAM_SLUG using remote $UPDATE_REMOTE."
+    fi
+fi
+if [[ -z "$UPDATE_REMOTE" ]]; then
     fail "No git remote points at the AI-OS update repo ($UPSTREAM_SLUG)."
-    info "Add one with: git remote add upstream https://github.com/$UPSTREAM_SLUG.git"
+    info "Run this from inside the existing AI-OS folder: bash scripts/update.sh --dry-run"
     exit 1
 fi
 
 # ---------- Fetch latest from the update remote ----------
 info "Fetching from $UPDATE_REMOTE ($UPSTREAM_SLUG)..."
 if ! git fetch "$UPDATE_REMOTE" "$UPSTREAM_BRANCH" --quiet 2>/dev/null; then
-    fail "Could not reach $UPDATE_REMOTE. Check your connection or remote URL."
+    fail "Could not reach $UPDATE_REMOTE. Check your connection or access token."
     exit 1
 fi
 
@@ -100,5 +113,6 @@ git log --oneline "HEAD..$UPDATE_REMOTE/$UPSTREAM_BRANCH" | while IFS= read -r l
     printf "    ${BOLD}•${NC} %s\n" "$line"
 done
 echo ""
-printf "  Run ${BOLD}bash scripts/update.sh${NC} to update.\n"
+printf "  Run ${BOLD}bash scripts/update.sh --dry-run${NC} to preview the update.\n"
+printf "  Run ${BOLD}bash scripts/update.sh${NC} to apply it.\n"
 echo ""

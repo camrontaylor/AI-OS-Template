@@ -170,7 +170,7 @@ export async function POST(
     ).run(JSON.stringify(structuredAnswers), answeredLogId);
   }
 
-  // Persist user reply as log entry - include the permission mode chosen at reply time
+  // Persist user reply as log entry — include the permission mode chosen at reply time
   const normalizedReplyPermission = permissionMode && VALID_PERMISSION_MODES.includes(permissionMode)
     ? getActivePermissionMode(permissionMode, task.permissionMode || "bypassPermissions")
     : null;
@@ -180,7 +180,7 @@ export async function POST(
   ).run(entryId, id, "user_reply", now, trimmed, null, null, null, 0, null, null, replyPermMode);
 
   // Title is set once at creation (via AI generation or fallback).
-  // User replies are follow-ups, not new goals - don't overwrite the title.
+  // User replies are follow-ups, not new goals — don't overwrite the title.
 
   // Persist permission settings, model, and thinking effort on the task BEFORE spawning so the next
   // turn picks them up. In plan mode, picker changes stage the execution mode.
@@ -252,7 +252,7 @@ export async function POST(
 
       db.prepare(
         "UPDATE tasks SET status = 'running', permissionMode = ?, executionPermissionMode = ?, updatedAt = ?, lastReplyAt = ?, activityLabel = ?, needsInput = 0, errorMessage = NULL, startedAt = COALESCE(startedAt, ?) WHERE id = ?"
-      ).run(executionMode, executionMode, now, now, "Plan approved - starting execution", now, id);
+      ).run(executionMode, executionMode, now, now, "Plan approved — starting execution", now, id);
 
       const updatedAfterApproval = db.prepare("SELECT * FROM tasks WHERE id = ?").get(id) as Task;
       emitTaskEvent({
@@ -332,8 +332,8 @@ export async function POST(
   try {
     const success = await processManager.replyToTask(id, trimmed);
     if (!success) {
-      // In-memory state was stale - spawn resume turn directly
-      console.log(`[reply-route] In-memory replyToTask returned false - spawning via DB path`);
+      // In-memory state was stale — spawn resume turn directly
+      console.log(`[reply-route] In-memory replyToTask returned false — spawning via DB path`);
       try {
         await processManager.spawnContinueTurn(id, trimmed, isResuming);
       } catch (err) {

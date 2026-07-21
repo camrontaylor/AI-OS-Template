@@ -1,0 +1,27 @@
+{
+  "name": "context-farmers",
+  "description": "Dormant MCP/source-adapter scaffold for external context ingestion.",
+  "status": "scaffold",
+  "default": false,
+  "loads_at_startup": false,
+  "activation": "copy-templates",
+  "template_root": "templates/root",
+  "creates": [
+    "context_farmers/"
+  ],
+  "writes": [
+    "context_farmers/",
+    "team_context/inbox/ when combined with team-knowledge"
+  ],
+  "commands": [
+    "bash scripts/optional-enable.sh context-farmers",
+    "bash scripts/optional-status.sh context-farmers",
+    "bash scripts/optional-disable.sh context-farmers"
+  ],
+  "services": [
+    "Optional MCP servers or connector credentials, adapter by adapter"
+  ],
+  "permissions": "source-adapters-write-to-inbox-only",
+  "docs": ".aios/optional/context-farmers/CAPABILITY.md",
+  "rollback": "bash scripts/optional-disable.sh context-farmers removes only the enabled marker by default; context_farmers/ is preserved."
+}

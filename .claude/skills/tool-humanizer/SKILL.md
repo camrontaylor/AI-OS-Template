@@ -1,17 +1,7 @@
 ---
 name: tool-humanizer
 description: >
-  Remove AI-generated writing patterns and restore natural human voice.
-  Detects and fixes 50+ AI tells: inflated symbolism, promotional language,
-  hedging, corporate buzzwords, robotic structure, em dash overuse, rule of
-  three, vague attributions, negative parallelisms, conjunctive phrase abuse.
-  Three modes: quick (obvious patterns), standard (full scan + score),
-  deep (voice-matched using brand_context/voice-profile.md).
-  Called automatically by execution skills as a post-processing step.
-  Also invoked standalone: "humanize this", "de-AI this", "make this sound
-  human", "remove AI patterns", "clean up this copy".
-  Does NOT trigger for brand voice extraction, positioning, or ICP work.
-  Does NOT trigger for content that is intentionally formal or academic.
+  Remove AI-writing patterns and restore a natural human voice: fixes 50+ tells like inflated symbolism, hedging, buzzwords, em-dash overuse, and rule-of-three. Modes: quick, standard, deep (voice-matched). Runs automatically after execution skills, or standalone: "humanize this", "de-AI this", "make this sound human", "remove AI patterns". Not for brand voice extraction or intentionally formal writing.
 ---
 
 # Humanizer

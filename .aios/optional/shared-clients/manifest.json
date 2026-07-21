@@ -1,0 +1,24 @@
+{
+  "name": "shared-clients",
+  "description": "Dormant scaffold for future shared client collaboration.",
+  "status": "scaffold",
+  "default": false,
+  "loads_at_startup": false,
+  "activation": "copy-templates",
+  "template_root": "templates/root",
+  "creates": [
+    "shared_clients/"
+  ],
+  "writes": [
+    "shared_clients/"
+  ],
+  "commands": [
+    "bash scripts/optional-enable.sh shared-clients",
+    "bash scripts/optional-status.sh shared-clients",
+    "bash scripts/optional-disable.sh shared-clients"
+  ],
+  "services": [],
+  "permissions": "explicit-shared-client-docs-only",
+  "docs": ".aios/optional/shared-clients/CAPABILITY.md",
+  "rollback": "bash scripts/optional-disable.sh shared-clients removes only the enabled marker by default; shared_clients/ is preserved."
+}

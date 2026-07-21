@@ -4,7 +4,7 @@ description: "Audit project dependencies, frameworks, languages, and dev tools f
 allowed-tools: Bash, Read, Write, Grep, Glob, WebSearch
 ---
 
-# Dependency Audit - Framework, Package, and Toolchain Security
+# Dependency Audit — Framework, Package, and Toolchain Security
 
 Audit project dependencies, frameworks, language runtimes, and dev tools for known vulnerabilities (CVEs), security anti-patterns, and supply chain risks.
 
@@ -12,9 +12,9 @@ Audit project dependencies, frameworks, language runtimes, and dev tools for kno
 
 ### Step 1: Inventory the Stack
 
-Identify everything in use - not just direct dependencies but the full chain:
+Identify everything in use — not just direct dependencies but the full chain:
 
-**Package manifests - read and catalog:**
+**Package manifests — read and catalog:**
 ```
 Node/JS:    package.json, package-lock.json, yarn.lock, pnpm-lock.yaml
 Python:     requirements.txt, Pipfile.lock, pyproject.toml, poetry.lock
@@ -38,11 +38,11 @@ PHP:        composer.json, composer.lock
 - Check IaC tool versions (Terraform, Pulumi, CDK)
 
 **Edge cases in package manifests:**
-- `optionalDependencies` - installed but not audited by default
-- `peerDependencies` - version range may not match what's installed
-- `overrides` / yarn `resolutions` / pnpm `overrides` - check if used to *silence* advisories rather than fix them
+- `optionalDependencies` — installed but not audited by default
+- `peerDependencies` — version range may not match what's installed
+- `overrides` / yarn `resolutions` / pnpm `overrides` — check if used to *silence* advisories rather than fix them
 - Monorepos: read every `packages/*/package.json` and `apps/*/package.json`, not just the root
-- `engines` field - older-than-LTS Node makes other audits moot
+- `engines` field — older-than-LTS Node makes other audits moot
 
 ### Step 2: Run Automated Audit Tools
 
@@ -52,7 +52,7 @@ Run the appropriate audit command for the project:
 # Node.js
 npm audit --json                # full structured output
 npm audit --omit=dev --json     # production-only: filters dev/build-time vulns
-# Compare the two - vulns only in dev/build tooling do not ship to users
+# Compare the two — vulns only in dev/build tooling do not ship to users
 # and should be triaged as lower priority. Don't bury this in the report.
 
 # Python
@@ -82,7 +82,7 @@ trivy image <image>
 trivy fs .
 ```
 
-**Applying fixes - read before you `--force`:**
+**Applying fixes — read before you `--force`:**
 
 ```bash
 npm audit fix                   # safe: upgrades within stated ranges
@@ -90,12 +90,12 @@ npm audit fix --dry-run --force # ALWAYS dry-run first
 npm audit fix --force           # only after reviewing the dry-run
 ```
 
-`npm audit fix --force` can resolve an advisory by DOWNGRADING a package to an older version that doesn't trigger the audit signature. This is almost always wrong (e.g. downgrading `next@16` to `next@9` to "fix" a transitive postcss CVE). Inspect dry-run output for "Will install X@Y, which is a breaking change" - that's the tool trying to downgrade.
+`npm audit fix --force` can resolve an advisory by DOWNGRADING a package to an older version that doesn't trigger the audit signature. This is almost always wrong (e.g. downgrading `next@16` to `next@9` to "fix" a transitive postcss CVE). Inspect dry-run output for "Will install X@Y, which is a breaking change" — that's the tool trying to downgrade.
 
 **When `npm audit fix` cannot resolve an advisory** (transitive dep pinned by an upstream package):
 
-1. **Determine reachability** - is the vulnerable code path actually invoked in your usage? `npm ls <package>` + reading the parent's source can rule it out as unreachable.
-2. **Consider a `package.json` `overrides` pin** to a patched version (test thoroughly - overrides can break the parent).
+1. **Determine reachability** — is the vulnerable code path actually invoked in your usage? `npm ls <package>` + reading the parent's source can rule it out as unreachable.
+2. **Consider a `package.json` `overrides` pin** to a patched version (test thoroughly — overrides can break the parent).
 3. **Consider swapping the parent provider entirely.**
 4. **If none apply:** document explicitly, track upstream, and note in the audit report rather than silently dropping the finding.
 
@@ -114,9 +114,9 @@ The framework-specific patterns below cover *evergreen* anti-patterns (mass assi
 - `dangerouslySetInnerHTML` without sanitization
 - SSRF through image optimization (`next/image` with unrestricted domains)
 - Exposed `.env` files in public directory or client bundle (`NEXT_PUBLIC_` prefix leaking secrets)
-- Middleware auth bypass patterns - check middleware.ts matches all protected routes
+- Middleware auth bypass patterns — check middleware.ts matches all protected routes
 - Server Component / Client Component boundary leaking server-only data:
-  - Any module reading `process.env.SECRET` or instantiating a DB client should start with `import "server-only";` - fails the build if imported from a Client Component
+  - Any module reading `process.env.SECRET` or instantiating a DB client should start with `import "server-only";` — fails the build if imported from a Client Component
   - Grep for: files in `lib/` that touch `process.env.[A-Z_]+` but do NOT import `server-only`
   - Inverse check: any file with `"use client"` importing from such a module is a leak
 - Outdated `next.config.js` security headers
@@ -147,7 +147,7 @@ The framework-specific patterns below cover *evergreen* anti-patterns (mass assi
 **Serverless / edge runtimes (Vercel, Lambda, Cloud Run, Workers):**
 - **In-memory state ≠ rate limit.** A module-scoped `Map` or `Set` for rate limiting, sessions, or caches is per-instance. Cold starts reset state; load spreads across instances; attackers bypass trivially.
   - Grep for: `const rateLimitMap = new Map`, `const cache = new Map` in server-action / API-route files
-  - Fix: shared store - Vercel KV, Upstash Ratelimit, Redis, DynamoDB
+  - Fix: shared store — Vercel KV, Upstash Ratelimit, Redis, DynamoDB
 - **Unbounded in-memory collections** leak memory under traffic. Cap size and evict (LRU or FIFO).
 - **`x-forwarded-for` trust:** only trustworthy when the edge overwrites it. Behind misconfigured proxy chains it's attacker-spoofable. A fallback to a single `"unknown"` bucket throttles all anonymous traffic together; random-fallback silently disables the limit.
 
@@ -257,10 +257,10 @@ Where reachable values: `runtime` / `build-only` / `dev-only`. Confirm with `npm
 |------|-------|----------|-------------|
 
 ### Prioritized Action Plan
-1. [Critical - actively exploited CVEs, RCE vulnerabilities]
-2. [High - known CVEs with public exploits, supply chain risks]
-3. [Medium - framework misconfigurations, outdated dependencies]
-4. [Low - maintenance risks, best practice improvements]
+1. [Critical — actively exploited CVEs, RCE vulnerabilities]
+2. [High — known CVEs with public exploits, supply chain risks]
+3. [Medium — framework misconfigurations, outdated dependencies]
+4. [Low — maintenance risks, best practice improvements]
 ```
 
 ## Boundaries

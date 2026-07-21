@@ -112,9 +112,21 @@ if [[ "$DEPENDENTS" != "OK" ]]; then
   fi
 fi
 
-# Remove the directory
-rm -rf "$SKILLS_DIR/$SKILL_NAME/"
-echo -e "${GREEN}✓${NC} Removed $SKILL_NAME"
+# Park the skill instead of deleting it. add-skill.sh restores from _archived/
+# first and only falls back to `git checkout HEAD`, so a hard delete made
+# remove-then-re-add depend on git history - fine on a maintainer checkout, but
+# it silently loses the skill wherever that history is absent (a fresh template
+# clone, a team copy, a shallow clone). Parking also honours the repo-wide
+# no-hard-deletes rule: nothing is unrecoverable.
+mkdir -p "$SKILLS_DIR/_archived"
+if [[ -e "$SKILLS_DIR/_archived/$SKILL_NAME" ]]; then
+  # An older parked copy exists. Keep it, timestamped, rather than overwriting.
+  mv "$SKILLS_DIR/_archived/$SKILL_NAME" \
+     "$SKILLS_DIR/_archived/${SKILL_NAME}.superseded-$(date +%Y%m%d-%H%M%S)"
+fi
+mv "$SKILLS_DIR/$SKILL_NAME" "$SKILLS_DIR/_archived/$SKILL_NAME"
+echo -e "${GREEN}✓${NC} Parked $SKILL_NAME in .claude/skills/_archived/"
+echo -e "  Restore it any time with: bash scripts/add-skill.sh $SKILL_NAME"
 
 # Update installed.json
 "${PYTHON_CMD[@]}" -c "
@@ -143,5 +155,16 @@ with open(installed_path, 'w') as f:
     f.write('\n')
 " "$SKILL_NAME" "$INSTALLED_JSON"
 
+"${PYTHON_CMD[@]}" "$REPO_ROOT/scripts/gen-skills-catalog.py"
+bash "$REPO_ROOT/scripts/update-clients.sh"
+bash "$REPO_ROOT/scripts/skill-system-audit.sh"
+
 echo ""
-echo -e "Removed ${CYAN}$SKILL_NAME${NC}. Next Claude Code session will clean up AGENTS.md references."
+echo -e "Removed ${CYAN}$SKILL_NAME${NC}. Its learnings and user-facing docs were preserved for review."
+echo "Start a fresh agent session to verify it no longer appears in the affected tool."
+
+# Parity check - catch any gap between .claude/skills and .agents/skills immediately
+parity_out=$(bash "$REPO_ROOT/scripts/lib/skills-parity-check.sh" "$REPO_ROOT" 2>/dev/null) || {
+  echo ""
+  echo -e "${YELLOW}Warning:${NC} $parity_out"
+}

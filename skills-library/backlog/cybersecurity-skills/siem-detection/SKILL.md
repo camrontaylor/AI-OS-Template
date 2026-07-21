@@ -1,12 +1,12 @@
 ---
 name: siem-detection
-description: "Engineer and audit SIEM detection rules - log source coverage, Sigma / KQL / SPL / Elastic query authoring, MITRE ATT&CK mapping, false-positive tuning, and detection-as-code workflows. Use when the user mentions 'SIEM,' 'detection engineering,' 'detection rules,' 'Sigma,' 'KQL,' 'SPL,' 'Splunk,' 'Sentinel,' 'Elastic,' 'Wazuh,' 'Chronicle,' 'detection-as-code,' 'MITRE ATT&CK mapping,' 'log coverage,' 'alert tuning,' 'use case development,' or needs help building or improving security detections."
+description: "Engineer and audit SIEM detection rules — log source coverage, Sigma / KQL / SPL / Elastic query authoring, MITRE ATT&CK mapping, false-positive tuning, and detection-as-code workflows. Use when the user mentions 'SIEM,' 'detection engineering,' 'detection rules,' 'Sigma,' 'KQL,' 'SPL,' 'Splunk,' 'Sentinel,' 'Elastic,' 'Wazuh,' 'Chronicle,' 'detection-as-code,' 'MITRE ATT&CK mapping,' 'log coverage,' 'alert tuning,' 'use case development,' or needs help building or improving security detections."
 allowed-tools: Read, Write, Bash, Grep, Glob, WebSearch
 ---
 
-# SIEM Detection - Detection Engineering
+# SIEM Detection — Detection Engineering
 
-Build, audit, and maintain SIEM detection content - the rules that fire alerts. Distinct from `incident-triage` (responds when alerts fire) and from `soc-operations` (runs the SOC that triages alerts). This skill is the engineering layer: log coverage, rule authoring, tuning, and detection-as-code workflows.
+Build, audit, and maintain SIEM detection content — the rules that fire alerts. Distinct from `incident-triage` (responds when alerts fire) and from `soc-operations` (runs the SOC that triages alerts). This skill is the engineering layer: log coverage, rule authoring, tuning, and detection-as-code workflows.
 
 Cross-references: `incident-triage` for what happens after the alert, `threat-hunting` for proactive hypothesis-driven hunts that often graduate into detection rules, `breach-patterns` for detection ideas pulled from public breach disclosures, `soc-operations` for the alert-triage operations on top of the detections engineered here.
 
@@ -15,9 +15,9 @@ Cross-references: `incident-triage` for what happens after the alert, `threat-hu
 This skill covers:
 - Log source coverage assessment ("are we even collecting the events we'd need to detect X?")
 - Rule authoring across major SIEM query languages (Sigma, KQL, SPL, Elastic ES|QL, Chronicle YARA-L)
-- MITRE ATT&CK mapping - every rule tagged with technique IDs for coverage analysis
+- MITRE ATT&CK mapping — every rule tagged with technique IDs for coverage analysis
 - Detection-as-code workflows (rules in Git, CI tests, deployment automation)
-- Alert tuning workflow - reducing false positives without losing true positives
+- Alert tuning workflow — reducing false positives without losing true positives
 - Coverage gap analysis using ATT&CK Navigator
 
 This skill does NOT cover:
@@ -38,20 +38,20 @@ Before writing any rule, audit what you can detect.
 | Endpoint | EDR (CrowdStrike, SentinelOne, Defender), Sysmon, osquery | Process exec, file write, network, registry, parent-child |
 | Network | Zeek/Bro, Suricata, NSM, firewall, DNS query logs | Connections, protocols, DNS queries, TLS metadata |
 | Identity | Okta, Entra ID, AD, Auth0, GCP/AWS sign-in | Authentications, MFA, group changes, role assignments |
-| Cloud | CloudTrail (AWS), Audit Logs (GCP), Activity Log (Azure) | API calls - what was created/changed/deleted |
+| Cloud | CloudTrail (AWS), Audit Logs (GCP), Activity Log (Azure) | API calls — what was created/changed/deleted |
 | Application | App logs, WAF logs, load balancer logs, gateway logs | Request URLs, status codes, auth outcomes |
 | SaaS | Google Workspace, M365, Salesforce, GitHub audit | Admin actions, sharing, sensitive doc access |
 
 **Run a gap check:**
 - Pull the [MITRE ATT&CK Enterprise matrix](https://attack.mitre.org/matrices/enterprise/)
 - For each technique relevant to your environment, ask: which of my log sources would surface this?
-- Techniques with NO source mapped are blind spots - write them down before writing any rules
+- Techniques with NO source mapped are blind spots — write them down before writing any rules
 
 **Common blind spots:**
 - Endpoint logs but no command-line argument capture (most Windows event logs default to logging only the binary, not the args)
-- Cloud audit logs collected but `ReadOnly: true` events filtered out - pre-attack recon invisible
-- No SaaS audit logs - every modern attack involves a SaaS pivot at some point
-- App logs without correlation IDs - can't connect "WAF saw payload" to "app processed payload"
+- Cloud audit logs collected but `ReadOnly: true` events filtered out — pre-attack recon invisible
+- No SaaS audit logs — every modern attack involves a SaaS pivot at some point
+- App logs without correlation IDs — can't connect "WAF saw payload" to "app processed payload"
 
 ### Step 2: Pick the right detection model per case
 
@@ -118,7 +118,7 @@ SigninLogs
 | project TimeGenerated, UserPrincipalName, IPAddress, FailureCount
 ```
 
-(Failed logons spike on one user/IP, then a success on the same user/IP - classic password spray success.)
+(Failed logons spike on one user/IP, then a success on the same user/IP — classic password spray success.)
 
 #### SPL (Splunk)
 
@@ -147,7 +147,7 @@ Every rule should tag at least one ATT&CK technique. Coverage maps roll up to AT
 
 - Export your rules with their ATT&CK tags
 - Render onto the Navigator matrix
-- Identify coverage gaps by tactic - "we have nothing for Initial Access via Phishing" is more actionable than "we need more rules"
+- Identify coverage gaps by tactic — "we have nothing for Initial Access via Phishing" is more actionable than "we need more rules"
 
 The Navigator JSON format is open; building this report from your rules-as-code repo is a few hundred lines of Python and pays for itself the first time someone asks "what do we detect?"
 
@@ -156,12 +156,12 @@ The Navigator JSON format is open; building this report from your rules-as-code 
 The false-positive lifecycle:
 
 1. **Deploy the rule with `level: experimental`** for 1-2 weeks
-2. **Review every fire** - true positive, false positive, suppressible?
+2. **Review every fire** — true positive, false positive, suppressible?
 3. **For each FP, ask:** can I narrow the rule (more specific filter) or add a tuning exception (allow-list specific known-good)?
-4. **Track the ratio** - if FPs are > 80% after tuning, the detection model is wrong (signature might need to be statistical, or vice versa). Don't paper over a bad model with 100 allow-list entries.
+4. **Track the ratio** — if FPs are > 80% after tuning, the detection model is wrong (signature might need to be statistical, or vice versa). Don't paper over a bad model with 100 allow-list entries.
 5. **Promote to `level: high` / production** only after FP rate is acceptable
 
-Rules that have never fired are also a signal - either the log coverage is broken, the query is wrong, or the threat truly hasn't occurred. Verify which by running a deliberate-test event through the system.
+Rules that have never fired are also a signal — either the log coverage is broken, the query is wrong, or the threat truly hasn't occurred. Verify which by running a deliberate-test event through the system.
 
 ### Step 6: Detection-as-code
 
@@ -215,7 +215,7 @@ Deployment: post-merge, push rules to the SIEM via API. Roll back via Git revert
 [Rules in experimental / needing FP triage]
 
 ### Recommended next 30 days
-[Prioritized - usually 3-5 items]
+[Prioritized — usually 3-5 items]
 ```
 
 **Per-rule documentation lives with the rule** (Sigma YAML), not in a separate runbook. The `description`, `references`, and `falsepositives` fields are the runbook.
@@ -224,7 +224,7 @@ Deployment: post-merge, push rules to the SIEM via API. Roll back via Git revert
 
 - Detection content for your own environment, or environments where the user has explicit authorization
 - Refuse to write evasion rules or detections designed to flag legitimate security tools
-- Detections that intentionally surveil employees beyond what HR/legal have approved are out of scope - escalate to the user
+- Detections that intentionally surveil employees beyond what HR/legal have approved are out of scope — escalate to the user
 - Provide enough context with each rule that the analyst who triages the alert understands what to do; rules without that context produce alert fatigue
 
 ## References
@@ -235,5 +235,5 @@ Deployment: post-merge, push rules to the SIEM via API. Roll back via Git revert
 - Florian Roth's "Detection Engineering" writings
 - Splunk Security Essentials / Microsoft Sentinel content hub / Elastic detection rules repo
 - "Detection Engineering Maturity Matrix" (Florian Roth)
-- "The Pyramid of Pain" (David Bianco) - IOC value hierarchy
+- "The Pyramid of Pain" (David Bianco) — IOC value hierarchy
 - NIST SP 800-92 (Computer Security Log Management)

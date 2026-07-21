@@ -4,11 +4,11 @@ description: "Gather and correlate open source intelligence from public sources 
 allowed-tools: Bash, WebSearch, WebFetch, Read, Write
 ---
 
-# OSINT Recon - Open Source Intelligence Gathering
+# OSINT Recon — Open Source Intelligence Gathering
 
 Systematically gather, analyze, and correlate publicly available information from open sources.
 
-Cross-references: `recon` for the active/passive target-mapping pass against an authorized system (DNS, ports, fingerprinting) - osint-recon focuses on people, organizations, leaked data, and historical artifacts; the two pair naturally. `breach-patterns` for ingesting public breach intelligence into your own preemptive assessments. `incident-triage` if OSINT surfaces evidence the user is already compromised.
+Cross-references: `recon` for the active/passive target-mapping pass against an authorized system (DNS, ports, fingerprinting) — osint-recon focuses on people, organizations, leaked data, and historical artifacts; the two pair naturally. `breach-patterns` for ingesting public breach intelligence into your own preemptive assessments. `incident-triage` if OSINT surfaces evidence the user is already compromised.
 
 ## Ethics Check
 
@@ -40,8 +40,8 @@ Additional sources: SecurityTrails, DNSDumpster, ipinfo.io, bgp.he.net, Wayback 
 ### Organization OSINT
 
 - Company registrations, filings, SEC records (public companies)
-- LinkedIn company page - employee count, roles, tech stack hints
-- Job postings - reveal internal tools, tech stack, pain points
+- LinkedIn company page — employee count, roles, tech stack hints
+- Job postings — reveal internal tools, tech stack, pain points
 - Press releases and news articles
 - GitHub/GitLab organization pages and public repositories
 - Patent filings
@@ -49,7 +49,7 @@ Additional sources: SecurityTrails, DNSDumpster, ipinfo.io, bgp.he.net, Wayback 
 ### Email and Username OSINT
 
 - Email format patterns (e.g., first.last@domain.com)
-- HaveIBeenPwned - check for breach exposure (check only, never distribute breach data)
+- HaveIBeenPwned — check for breach exposure (check only, never distribute breach data)
 - PGP key servers for email discovery
 - Gravatar lookups for email-to-identity correlation
 
@@ -111,7 +111,7 @@ Additional sources: SecurityTrails, DNSDumpster, ipinfo.io, bgp.he.net, Wayback 
 - Never attempt to access private or authenticated systems
 - Do not aggregate PII beyond what is necessary for the stated objective
 - Attribute all findings to their source
-- Rate confidence levels honestly - do not overstate certainty
+- Rate confidence levels honestly — do not overstate certainty
 - If a finding could cause harm if misused, note the sensitivity
 - Refuse requests for doxing, stalking, or unauthorized surveillance
 

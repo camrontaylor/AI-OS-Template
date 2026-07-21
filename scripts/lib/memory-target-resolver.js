@@ -9,7 +9,6 @@ const SHARED_SYSTEM_RE =
 
 function stripMachineContext(prompt) {
   return String(prompt || "")
-    .replace(/<codex_internal_context[\s\S]*?<\/codex_internal_context>/gi, " ")
     .replace(/<environment_context[\s\S]*?<\/environment_context>/gi, " ")
     .replace(/\s+/g, " ")
     .trim();

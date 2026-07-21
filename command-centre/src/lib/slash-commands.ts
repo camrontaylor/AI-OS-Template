@@ -7,8 +7,8 @@ export interface SlashCommand {
 
 export const SLASH_COMMANDS: SlashCommand[] = [
   // Session
-  { command: "/start-here", label: "Start Here", description: "Kick off the day - session recap, goal-setting", category: "session" },
-  { command: "/wrap-up", label: "Wrap Up", description: "Close out the session - review, feedback, commit", category: "session" },
+  { command: "/onboarding", label: "Onboarding", description: "First-run setup - build your brand voice, positioning, and audience", category: "session" },
+  { command: "/wrap-up", label: "Wrap Up", description: "Close out the session — review, feedback, commit", category: "session" },
 
   // GSD workflow
   { command: "/gsd-discuss-phase", label: "Discuss Phase", description: "Gather context before planning a phase", category: "gsd" },
@@ -16,7 +16,7 @@ export const SLASH_COMMANDS: SlashCommand[] = [
   { command: "/gsd-execute-phase", label: "Execute Phase", description: "Execute all plans in a phase", category: "gsd" },
   { command: "/gsd-verify-work", label: "Verify Work", description: "Validate built features through UAT", category: "gsd" },
   { command: "/gsd-progress", label: "Progress", description: "Check project progress and next steps", category: "gsd" },
-  { command: "/gsd-stats", label: "Stats", description: "Project statistics - phases, plans, timeline", category: "gsd" },
+  { command: "/gsd-stats", label: "Stats", description: "Project statistics — phases, plans, timeline", category: "gsd" },
   { command: "/gsd-autonomous", label: "Autonomous", description: "Run all remaining phases autonomously", category: "gsd" },
   { command: "/gsd-new-project", label: "New Project", description: "Initialize a new GSD project", category: "gsd" },
   { command: "/gsd-new-milestone", label: "New Milestone", description: "Start a new milestone cycle", category: "gsd" },
@@ -42,6 +42,7 @@ export const SLASH_COMMANDS: SlashCommand[] = [
   { command: "/mkt-ugc-scripts", label: "UGC Scripts", description: "Short-form video scripts", category: "skill" },
   { command: "/str-ai-seo", label: "AI SEO", description: "Optimize for AI search engines", category: "skill" },
   { command: "/str-trending-research", label: "Trending Research", description: "Research what's trending in the last 30 days", category: "skill" },
+  { command: "/viz-stitch-design", label: "Stitch Design", description: "Design UI screens using Stitch", category: "skill" },
   { command: "/viz-excalidraw-diagram", label: "Diagram", description: "Generate Excalidraw diagrams", category: "skill" },
   { command: "/ops-cron", label: "Schedule", description: "Schedule recurring tasks", category: "skill" },
 

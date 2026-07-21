@@ -67,7 +67,7 @@ function Test-AgenticOsPathWithin {
 function Get-AgenticOsGsdReduxVersion {
     param([string]$RepoRoot)
 
-    # get-shit-done/VERSION is the marker that Redux is installed - the same
+    # get-shit-done/VERSION is the marker that Redux is installed — the same
     # signal the update hook trusts (.claude/hooks/gsd-check-update.js).
     foreach ($configDir in Get-AgenticOsGsdConfigDirs -RepoRoot $RepoRoot) {
         $versionFile = Join-Path $configDir "get-shit-done\VERSION"
@@ -128,7 +128,7 @@ function Find-AgenticOsLegacyGsd {
         # update hook trusts (.claude/hooks/gsd-check-update.js).
         $reduxPresent = Test-Path -LiteralPath (Join-Path $legacyRuntime "VERSION")
 
-        # Old command-bundle layout - never produced by Redux.
+        # Old command-bundle layout — never produced by Redux.
         if (Test-Path -LiteralPath $commandsGsd) {
             $findings.Add([pscustomobject]@{ Type = "File"; Scope = $null; Package = $null; Path = $commandsGsd; ConfigRoot = $configDir }) | Out-Null
         }

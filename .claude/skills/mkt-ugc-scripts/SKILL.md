@@ -1,21 +1,12 @@
 ---
 name: mkt-ugc-scripts
-description: >
-  Write short-form UGC video scripts for talking-head and avatar delivery.
-  Triggers on: "write a script", "UGC script", "video script for", "short form
-  script", "TikTok script", "Reels script", "Shorts script", "script for a
-  video about", "write me a hook", "batch scripts", "script ideas for",
-  "what should I make a video about". Picks script format based on topic and
-  platform, writes with timing cues and delivery notes, suggests on-screen text.
-  Can use str-trending-research to find topic angles before scripting.
-  Saves to projects/mkt-ugc-scripts/.
-  Does NOT trigger for video production workflows, content repurposing
-  (use mkt-content-repurposing), or ad copy (use mkt-copywriting).
+description: "Write short-form UGC video scripts for talking-head and avatar delivery. Not for video generation (viz-ugc-heygen), repurposing (mkt-content-repurposing), or ad copy (mkt-copywriting)."
+when_to_use: 'Invoke when the request sounds like: "write a script", "UGC script", "video script for", "TikTok script", "Reels script", "write me a hook", "batch scripts", "what should I make a video about". Writes with timing cues and delivery notes'
 ---
 
 # UGC Script Writing
 
-Write scripts people actually want to watch. Every script is built for someone talking to a camera - a real person or an avatar. The goal is a script that sounds natural when spoken aloud, holds attention through the first 3 seconds, and delivers one clear idea.
+Write scripts people actually want to watch. Every script is built for someone talking to a camera — a real person or an avatar. The goal is a script that sounds natural when spoken aloud, holds attention through the first 3 seconds, and delivers one clear idea.
 
 ## Outcome
 
@@ -37,13 +28,13 @@ Load what exists. Skip what doesn't. This skill works standalone.
 
 | Skill | Required? | What it provides | Without it |
 |-------|-----------|-----------------|------------|
-| `str-trending-research` | Optional | Trending topics and angles from Reddit, X, and web | User provides their own topic - no research-driven suggestions |
+| `str-trending-research` | Optional | Trending topics and angles from Reddit, X, and web | User provides their own topic — no research-driven suggestions |
 | `tool-humanizer` | Optional | AI pattern removal before saving | Scripts saved without humanizer pass |
 
 ## Skill Relationships
 
 - **Upstream:** `str-trending-research` (topic angles), `mkt-brand-voice` (voice context), `mkt-icp` (audience language)
-- **Downstream:** `mkt-content-repurposing` (scripts can be atomized into text posts), or whichever video production tool the user already uses
+- **Downstream:** `viz-ugc-heygen` (takes finished scripts and generates avatar videos), `mkt-content-repurposing` (scripts can be atomized into text posts)
 
 ---
 
@@ -67,9 +58,9 @@ If voice profile is missing, work with a natural conversational tone and mention
 
 Two paths:
 
-**Path A - User has a topic:** They tell you what to script. Confirm the core message and move to Step 3.
+**Path A — User has a topic:** They tell you what to script. Confirm the core message and move to Step 3.
 
-**Path B - Research-driven:** If the user wants ideas, or says something like "what should I make a video about":
+**Path B — Research-driven:** If the user wants ideas, or says something like "what should I make a video about":
 
 1. Ask: "What's your niche or business area? I'll research what's trending."
 2. Run `str-trending-research` on their niche (or read a recent research brief if one exists in `projects/str-trending-research/`)
@@ -103,9 +94,9 @@ Tell the user which format you're using and why. If they want a different one, s
 
 ## Step 4: Write the Script
 
-Read `references/script-frameworks.md` for the chosen format's structure and `references/hook-library.md` for hook options. Before writing, read the reference script in `assets/reference-script-openclaw-loop.md` to calibrate tone - scripts should match that energy: personal experience, specific details, natural flow, no listicle structure.
+Read `references/script-frameworks.md` for the chosen format's structure and `references/hook-library.md` for hook options. Before writing, read the reference script in `assets/reference-script-openclaw-loop.md` to calibrate tone — scripts should match that energy: personal experience, specific details, natural flow, no listicle structure.
 
-**The script IS the spoken words.** Nothing else. No timestamps like `[0-3s]`, no stage directions like `[lean in]`, no `[ON SCREEN:]` annotations. The output must be directly pasteable into an avatar/video tool or readable as a teleprompter script. Use the spoken-delivery rules below.
+**The script IS the spoken words.** Nothing else. No timestamps like `[0-3s]`, no stage directions like `[lean in]`, no `[ON SCREEN:]` annotations. The output must be directly pasteable into HeyGen or readable as a teleprompter script. Follow the scripting conventions from `viz-ugc-heygen/references/scripting-guide.md`.
 
 **Script format:**
 
@@ -139,17 +130,17 @@ ON-SCREEN TEXT:
 This keeps the script clean and pasteable while still providing production notes.
 
 **Writing rules for spoken delivery:**
-- 150 words per minute at natural pace - use this to estimate duration
+- 150 words per minute at natural pace — use this to estimate duration
 - Sentences: 10-20 words max. No run-on sentences.
 - Use contractions. "It's" not "it is". "Don't" not "do not".
 - Write how people talk, not how they write. Read it aloud.
-- No parenthetical asides - AI voices struggle with them
-- Front-load the hook - the first sentence decides if they stay
+- No parenthetical asides — AI voices struggle with them
+- Front-load the hook — the first sentence decides if they stay
 - One idea per beat. Don't stack concepts.
 - Use `<break time="Xs"/>` for pauses: 0.3-0.5s between sentences, 0.8-1.0s between sections, 1.2-1.5s for dramatic beats
-- Every script ends with a soft, context-appropriate CTA. If no offer or link is known, ask what CTA to use or leave a neutral placeholder.
+- Every script ends by directing to the configured community link in bio. Vary the phrasing naturally — never repeat the same CTA across a batch.
 
-Present the script to the user. This is a creative checkpoint - wait for their feedback before finalising.
+Present the script to the user. This is a creative checkpoint — wait for their feedback before finalising.
 
 ## Step 5: Batch Mode (If Asked)
 
@@ -163,11 +154,11 @@ If the user wants multiple scripts:
 
 Before saving, run all scripts through `tool-humanizer` in pipeline mode. Use `deep` mode if `brand_context/voice-profile.md` was loaded, `standard` otherwise. Only show the score summary if the delta exceeds 2 points.
 
-Spoken scripts should score high naturally since they're already conversational - if the humanizer is changing a lot, the script probably needs a rewrite, not just pattern removal.
+Spoken scripts should score high naturally since they're already conversational — if the humanizer is changing a lot, the script probably needs a rewrite, not just pattern removal.
 
 ## Step 7: Save Output
 
-**Always save scripts to disk.** This is not optional - every script produced by this skill gets saved as a file, every time.
+**Always save scripts to disk.** This is not optional — every script produced by this skill gets saved as a file, every time.
 
 Create folder: `projects/mkt-ugc-scripts/{YYYY-MM-DD}_{batch-name}/`
 
@@ -198,10 +189,10 @@ ON-SCREEN TEXT:
 - Close: text overlay
 ```
 
-After saving, show actual script excerpts - not just file paths.
+After saving, show actual script excerpts — not just file paths.
 
 Suggest next steps:
-- "Want a production plan for turning this into video?"
+- "Want to generate this as a video? I can send it to HeyGen." (→ `viz-ugc-heygen`)
 - "Want more scripts on related angles?"
 - "Want to repurpose this script into text posts?" (→ `mkt-content-repurposing`)
 
@@ -216,12 +207,12 @@ Log feedback to `context/learnings.md` → `## mkt-ugc-scripts` with date and co
 ## Rules
 
 - 2026-03-10: Maximum script duration is 90 seconds. Never write a script longer than 90s. Most scripts should land between 15-60s.
-- 2026-03-10: Every script must end with a context-appropriate CTA. Use the user's actual offer, lead magnet, waitlist, sales page, or profile link. If none is known, use a soft placeholder and ask for the destination before final production. Never repeat the same CTA phrasing twice in a batch.
-- 2026-03-10: Scripts must be the exact spoken words only - no timestamps like [0-3s], no stage directions like [lean in], no [ON SCREEN:] inline. Output must be directly pasteable into an avatar/video tool or usable as a teleprompter. Use SSML `<break time="Xs"/>` for pauses only where a dramatic beat is needed - don't litter the script with them. Most scripts flow naturally without any. On-screen text suggestions go in a separate section after the script body.
-- 2026-03-10: Scripts must sound like personal experience, not teaching or selling. Write in first person about what YOU did, what YOU switched to, what problems YOU had. Name specific tools, specific frustrations, specific results. The audience learns by overhearing your experience, not by being lectured. "I will never use X again because..." beats "Stop using X. Here's why." No promotional language, no listicle energy, no "here are 3 tips" structure unless specifically asked for. The CTA should be soft and conditional: "If you want the full breakdown, link's in my bio" not a hard sell.
+- 2026-03-10: Every script must end with a community CTA. The close/CTA section always directs viewers to the configured community link in bio. Use natural variations like "Link to the free community is in my bio", "Join the free community — link in bio", "I break this down deeper inside the community — link in bio". Never use the same CTA phrasing twice in a batch.
+- 2026-03-10: Scripts must be the exact spoken words only — no timestamps like [0-3s], no stage directions like [lean in], no [ON SCREEN:] inline. Output must be directly pasteable into HeyGen or usable as a teleprompter. Use SSML `<break time="Xs"/>` for pauses only where a dramatic beat is needed — don't litter the script with them. Most scripts flow naturally without any. On-screen text suggestions go in a separate section after the script body.
+- 2026-03-10: Scripts must sound like personal experience, not teaching or selling. Write in first person about what YOU did, what YOU switched to, what problems YOU had. Name specific tools, specific frustrations, specific results. The audience learns by overhearing your experience, not by being lectured. "I will never use X again because..." beats "Stop using X. Here's why." No promotional language, no listicle energy, no "here are 3 tips" structure unless specifically asked for. The CTA should be soft and conditional: "If you want the full breakdown, link's in my bio" not "Join the free community!"
 
 ---
 
 ## Self-Update
 
-If the user flags an issue - wrong tone, bad pacing, unnatural hook, script too long - update the `## Rules` section immediately with the correction and today's date. Don't just log it to learnings; fix the skill so it doesn't repeat the mistake.
+If the user flags an issue — wrong tone, bad pacing, unnatural hook, script too long — update the `## Rules` section immediately with the correction and today's date. Don't just log it to learnings; fix the skill so it doesn't repeat the mistake.

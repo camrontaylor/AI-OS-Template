@@ -14,7 +14,7 @@ A strong image prompt follows this formula:
 
 ### Example Prompts by Use Case
 
-**Blog hero - SaaS product:**
+**Blog hero — SaaS product:**
 ```
 A clean workspace with a laptop displaying a colorful analytics dashboard,
 minimalist desk with a coffee cup and notebook,
@@ -23,7 +23,7 @@ shallow depth of field, commercial photography style,
 1200x630, high resolution
 ```
 
-**Social media graphic - announcement:**
+**Social media graphic — announcement:**
 ```
 Abstract flowing gradient in deep purple and electric blue,
 geometric shapes forming a network pattern,
@@ -40,7 +40,7 @@ warm candid photography, natural lighting,
 medium shot, shallow depth of field, editorial style
 ```
 
-**Profile banner - professional:**
+**Profile banner — professional:**
 ```
 Wide panoramic abstract background in navy blue and teal,
 subtle geometric grid pattern with soft gradient,
@@ -48,7 +48,7 @@ clean corporate aesthetic, muted lighting,
 1584x396, no text, space for logo overlay on left third
 ```
 
-**Directory listing - Product Hunt:**
+**Directory listing — Product Hunt:**
 ```
 Product screenshot on a clean gradient background,
 soft shadow underneath, slight 3D perspective tilt,
@@ -130,21 +130,21 @@ modern SaaS product presentation style,
 
 ### Gemini Image (Google)
 
-- Best all-around for marketing images - good quality, reasonable cost
-- Supports **image editing** - upload an existing image and describe changes
-- Decent text rendering - can handle short headlines
+- Best all-around for marketing images — good quality, reasonable cost
+- Supports **image editing** — upload an existing image and describe changes
+- Decent text rendering — can handle short headlines
 - Specify "high resolution" for best output
 - Works well with detailed, descriptive prompts
-- Same API as text generation - easy to integrate
+- Same API as text generation — easy to integrate
 
 ### Flux (Black Forest Labs)
 
-- **Multi-image reference** is the killer feature - upload product screenshots, brand assets, or style references
+- **Multi-image reference** is the killer feature — upload product screenshots, brand assets, or style references
 - Best for **brand consistency** across a set of images
 - Use Flux Pro for final assets, Flux Dev for rapid iteration
 - Flux Klein for high-volume batch generation (cheapest)
 - Style transfer via reference images > style keywords in prompt
-- Prompts can be shorter than other models - the references do heavy lifting
+- Prompts can be shorter than other models — the references do heavy lifting
 
 ### Ideogram
 
@@ -152,24 +152,24 @@ modern SaaS product presentation style,
 - Use when you need headlines, taglines, or brand names in the image
 - Style reference system (up to 3 images) for brand consistency
 - Supports "Magic Prompt" auto-enhancement
-- Keep text requests simple - 3-5 words max for reliability
+- Keep text requests simple — 3-5 words max for reliability
 - Best for social graphics and banners that need text baked in
 
 ### GPT Image (OpenAI)
 
 - Current models: `gpt-image-1` and variants (DALL-E 3 is deprecated)
-- Integrated with ChatGPT - conversational image generation
+- Integrated with ChatGPT — conversational image generation
 - Good at following detailed prompts
 - Decent text rendering (behind Ideogram, comparable to Gemini)
-- Automatic prompt rewriting - may deviate from exact request
+- Automatic prompt rewriting — may deviate from exact request
 - Best for quick one-offs through ChatGPT interface
 - API gives more control than ChatGPT interface
 
 ### Midjourney
 
 - Highest aesthetic quality for artistic/editorial images
-- No official API - Discord-based or web interface
-- **Not agent-friendly** - use for manual creative exploration only
+- No official API — Discord-based or web interface
+- **Not agent-friendly** — use for manual creative exploration only
 - Style flags: `--style raw` for less stylized, `--ar 16:9` for aspect ratio
 - Best for hero images where pure visual quality matters most
 - V6+ has improved text rendering but still unreliable
@@ -198,9 +198,9 @@ When you need multiple images with consistent style (e.g., a blog series or soci
 1. **Generate 3-4 test images** with different style prompts
 2. **Pick the winning style** based on brand fit
 3. **Save the exact prompt** as your template
-4. **Use Flux multi-reference** - upload the winning image as a style reference
+4. **Use Flux multi-reference** — upload the winning image as a style reference
 5. **Batch generate** variations with the same style, different subjects
-6. **Post-process** - add text overlays, logos, crop to platform sizes
+6. **Post-process** — add text overlays, logos, crop to platform sizes
 
 ---
 
@@ -222,8 +222,8 @@ When you need multiple images with consistent style (e.g., a blog series or soci
 
 ## Cost Optimization
 
-- **Iterate at low quality first** - use Flux Dev or Gemini Flash for drafts, upgrade for finals
-- **Use references over long prompts** - Flux multi-reference produces more consistent results with fewer retries
-- **Batch similar requests** - generate all blog headers in one session with the same style
-- **Cache and reuse** - abstract backgrounds, patterns, and textures can be reused across multiple images
-- **Post-process instead of re-generate** - crop, overlay text, and adjust color in code rather than generating new images
+- **Iterate at low quality first** — use Flux Dev or Gemini Flash for drafts, upgrade for finals
+- **Use references over long prompts** — Flux multi-reference produces more consistent results with fewer retries
+- **Batch similar requests** — generate all blog headers in one session with the same style
+- **Cache and reuse** — abstract backgrounds, patterns, and textures can be reused across multiple images
+- **Post-process instead of re-generate** — crop, overlay text, and adjust color in code rather than generating new images

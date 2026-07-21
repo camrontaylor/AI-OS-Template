@@ -74,7 +74,7 @@ EOF
     bash scripts/memsearch-search.sh "Acme Ops" 7 > "$TEST_ROOT/out.json"
   )
 
-  assert_contains "$TEST_ROOT/memsearch.log" "search Acme Ops --top-k 7 --json-output --collection test_collection"
+  assert_contains "$TEST_ROOT/memsearch.log" "search Acme Ops --top-k 56 --json-output --collection test_collection"
   python3 - "$TEST_ROOT/out.json" <<'PY'
 import json, sys
 data = json.load(open(sys.argv[1]))
@@ -83,7 +83,7 @@ modes = {mode for item in data for mode in item.get("search_modes", [item.get("s
 assert "semantic" in modes, data
 assert "markdown_fallback" in modes, data
 PY
-  ok "search wrapper resolves the canonical collection"
+  ok "search wrapper resolves the canonical collection and widens the rerank candidate pool"
 }
 
 test_sandbox_failure_returns_markdown_fallback() {
@@ -102,7 +102,7 @@ EOF
   )
 
   assert_contains "$TEST_ROOT/err.txt" "Returning sandbox-safe markdown recall results instead"
-  assert_contains "$TEST_ROOT/err.txt" "sandbox_permissions=\"require_escalated\""
+  assert_contains "$TEST_ROOT/err.txt" "rerun this command in a shell with access to Milvus Lite"
   python3 - "$TEST_ROOT/out.json" <<'PY'
 import json, sys
 data = json.load(open(sys.argv[1]))
@@ -110,6 +110,32 @@ assert data, "expected fallback results"
 assert data[0]["search_mode"] == "markdown_fallback", data[0]
 PY
   ok "sandbox failures return markdown fallback results"
+}
+
+test_semantic_timeout_returns_markdown_fallback() {
+  make_fake_repo
+  cat > "$TEST_ROOT/bin/memsearch" <<'EOF'
+#!/usr/bin/env bash
+sleep 3
+printf '[{"source":"context/MEMORY.md","text":"late semantic"}]\n'
+EOF
+  chmod +x "$TEST_ROOT/bin/memsearch"
+
+  (
+    cd "$TEST_ROOT/repo"
+    export PATH="$TEST_ROOT/bin:$PATH"
+    AI_OS_MEMSEARCH_TIMEOUT_SECONDS=1 bash scripts/memsearch-search.sh "prior decisions" > "$TEST_ROOT/out.json" 2> "$TEST_ROOT/err.txt"
+  )
+
+  assert_contains "$TEST_ROOT/err.txt" "MemSearch semantic search timed out"
+  assert_contains "$TEST_ROOT/err.txt" "Returning sandbox-safe markdown recall results instead"
+  python3 - "$TEST_ROOT/out.json" <<'PY'
+import json, sys
+data = json.load(open(sys.argv[1]))
+assert data, "expected fallback results"
+assert data[0]["search_mode"] == "markdown_fallback", data[0]
+PY
+  ok "semantic timeouts return markdown fallback results"
 }
 
 test_root_default_filters_client_results() {
@@ -165,6 +191,7 @@ PY
 info "Running memsearch search wrapper tests..."
 test_success_uses_canonical_collection
 test_sandbox_failure_returns_markdown_fallback
+test_semantic_timeout_returns_markdown_fallback
 test_root_default_filters_client_results
 test_client_scope_filters_semantic_and_markdown
 ok "memsearch search wrapper tests passed"

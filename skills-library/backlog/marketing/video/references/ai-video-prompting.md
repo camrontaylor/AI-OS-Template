@@ -47,7 +47,7 @@ clean corporate style, even lighting, 1080p
 
 ## Camera Movement Vocabulary
 
-Use these terms - video models understand them:
+Use these terms — video models understand them:
 
 | Term | Effect |
 |------|--------|
@@ -60,7 +60,7 @@ Use these terms - video models understand them:
 | **Crane/aerial** | Camera rises or descends |
 | **Handheld** | Subtle shake, documentary feel |
 | **Zoom** | Lens zoom (different from dolly) |
-| **Slow push** | Gradual dolly in - builds tension/focus |
+| **Slow push** | Gradual dolly in — builds tension/focus |
 
 ---
 
@@ -105,10 +105,10 @@ Use these terms - video models understand them:
 
 ### Runway Gen-4
 
-- Strong motion control - specify camera movements precisely
+- Strong motion control — specify camera movements precisely
 - Best temporal consistency (subjects stay consistent across frames)
 - Use motion brush for specific area animation
-- Image-to-video works well - provide a reference frame
+- Image-to-video works well — provide a reference frame
 - Keep prompts under 100 words for best results
 
 ### Kling
@@ -144,11 +144,11 @@ Use these terms - video models understand them:
 
 ## Prompting Workflow
 
-1. **Reference first** - find a real video that looks like what you want
-2. **Describe it** - break down: subject, action, camera, style, mood
-3. **Generate 3-4 variations** - same concept, different angles or styles
-4. **Iterate on the best** - refine the prompt based on results
-5. **Composite** - combine AI footage with programmatic text/overlays
+1. **Reference first** — find a real video that looks like what you want
+2. **Describe it** — break down: subject, action, camera, style, mood
+3. **Generate 3-4 variations** — same concept, different angles or styles
+4. **Iterate on the best** — refine the prompt based on results
+5. **Composite** — combine AI footage with programmatic text/overlays
 
 ---
 
@@ -168,8 +168,8 @@ Always specify in your prompt or generation settings:
 
 ## Cost Optimization
 
-- **Iterate at low resolution** - upscale only the final version
-- **Use Kling for drafts** - cheapest per second, switch to Veo/Runway for finals
-- **Image-to-video** - providing a reference frame saves generation credits and gives better results
-- **Batch similar prompts** - models often offer volume discounts
-- **Cache and reuse** - B-roll clips can be reused across multiple videos
+- **Iterate at low resolution** — upscale only the final version
+- **Use Kling for drafts** — cheapest per second, switch to Veo/Runway for finals
+- **Image-to-video** — providing a reference frame saves generation credits and gives better results
+- **Batch similar prompts** — models often offer volume discounts
+- **Cache and reuse** — B-roll clips can be reused across multiple videos

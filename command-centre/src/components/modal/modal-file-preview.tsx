@@ -82,7 +82,7 @@ export function ModalFilePreview({
   );
 
   useEffect(() => {
-    // HTML files are rendered directly in an iframe - no need to fetch content.
+    // HTML files are rendered directly in an iframe — no need to fetch content.
     if (isHtml) {
       setIsLoading(false);
       setError(null);

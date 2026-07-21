@@ -1,15 +1,7 @@
 ---
 name: viz-ad-creative-figma
 description: >
-  Generate consistent, on-brand paid ad creative batches in Claude with a
-  deterministic Figma, Figma MCP, Figma Buzz/Weave-style, or local HTML template
-  engine. Use for paid social ads, Meta/Google/TikTok ad sets, batch variations,
-  regulated categories, text-heavy offer cards, carousels, and any job needing
-  exact brand control or no AI-content label. Runs first-use onboarding, brand
-  lock, scratch or performance-data strategy, platform-limited copy, template
-  fill, multi-size export, slate tracking, launch QA, and performance iteration.
-  Use viz-ad-creative-codex for Codex-native image generation and
-  viz-ad-creative-fal for Claude plus fal.ai generated imagery/video.
+  Generate on-brand paid ad creative batches in Claude with a deterministic Figma or local HTML template engine. Use for paid social ads, batch variations, regulated categories, text-heavy offer cards, carousels, and any job needing exact brand control or no AI-content label. Use viz-ad-creative-fal for fal.ai generated imagery and video.
 ---
 
 # Ad Creative Factory (Figma / template engine)
@@ -66,13 +58,13 @@ Run first-use onboarding once, then run `bash scripts/setup.sh` to check which p
 ## Skill Relationships
 
 - Upstream: `mkt-brand-voice`, `mkt-positioning`, `mkt-icp` build the brand lock this skill reads.
-- Sibling variants: `viz-ad-creative-codex` (Codex-native no-key image generation) and `viz-ad-creative-fal` (Claude plus fal.ai image/video generation). Same pipeline, different generation step.
-- Related AI-OS skills: the `figma` plugin skills for driving Figma, plus `mkt-copywriting` and `tool-humanizer` for final copy.
+- Sibling variant: `viz-ad-creative-fal` (Claude plus fal.ai image/video generation). Same pipeline, different generation step.
+- Related AI-OS skills: `viz-stitch-design` and `viz-interface-design` for HTML and CSS design output; the `figma` plugin skills for driving Figma.
 - Trigger conflicts: the two generative variants. This skill wins when the user wants pixel-exact, brand-locked, or AI-label-free output.
 
 ## Before You Start
 
-Confirm three things, then move: which client, what is being sold or offered, and the platforms. If the onboarding profile exists, load it before asking anything so you do not re-ask known preferences. Pick this Figma/template variant when the operator is in Claude and the output must be exact and brand-safe, the ad is text-heavy, the client wants no AI label, or a repeatable Figma/Buzz/Weave-style production flow matters more than image novelty. If they want no-key generated imagery inside Codex, route to `viz-ad-creative-codex`; if they want photoreal or generated video in Claude, route to `viz-ad-creative-fal`.
+Confirm three things, then move: which client, what is being sold or offered, and the platforms. If the onboarding profile exists, load it before asking anything so you do not re-ask known preferences. Pick this Figma/template variant when the operator is in Claude and the output must be exact and brand-safe, the ad is text-heavy, the client wants no AI label, or a repeatable Figma/Buzz/Weave-style production flow matters more than image novelty. If they want photoreal or generated video in Claude, route to `viz-ad-creative-fal`.
 
 ## Step 1: First-Run Onboarding
 
@@ -94,7 +86,7 @@ Read `context/learnings.md` for the `## viz-ad-creative-figma` section. Apply an
 
 ## Step 4: Brand Lock
 
-Read `references/brand-lock.md`. The single source of truth is `brand_context/brand-profile.json`. If it exists, load it. If not, build it from `brand_context/voice-profile.md`, `positioning.md`, and `icp.md` when present; otherwise use the client URL with WebFetch or Firecrawl if configured, or ask a short interview. For this engine the brand lock is literal: in Figma it is locked layers, bound variables, and component instances; in the HTML path it is a locked CSS layer with the exact hex, fonts, and logo. The agent only fills text and image slots, never restyles.
+Read `references/brand-lock.md`. The single source of truth is `brand_context/brand-profile.json`. If it exists, load it. If not, build it from `brand_context/voice-profile.md`, `positioning.md`, and `icp.md` when present; otherwise extract from the client URL (use `tool-firecrawl-scraper` if available) or ask a short interview. For this engine the brand lock is literal: in Figma it is locked layers, bound variables, and component instances; in the HTML path it is a locked CSS layer with the exact hex, fonts, and logo. The agent only fills text and image slots, never restyles.
 
 ## Step 5: Strategy, Angles, and Matrix
 

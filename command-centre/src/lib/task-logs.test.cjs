@@ -419,7 +419,7 @@ First run body
 
 === [2026-04-14T05:14:17.464Z] START: test22 ===
 Created \`projects/test-mock.md\` with mock content for testing.
-[cron-daemon] Client cron job touched files outside its workspace: command-centre\\src\\lib\\task-logs.ts
+  [cron-daemon] Client cron job touched files outside its workspace: command-centre\\src\\lib\\task-logs.ts
 === [2026-04-14T05:14:28.918Z] FAILURE: test22 (11s) ===
 `.trim();
 

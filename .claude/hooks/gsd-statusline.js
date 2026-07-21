@@ -101,7 +101,7 @@ process.stdin.on('end', () => {
           gsdUpdate = '\x1b[33m⬆ /gsd-update\x1b[0m │ ';
         }
         if (cache.stale_hooks && cache.stale_hooks.length > 0) {
-          gsdUpdate += '\x1b[31m⚠ stale hooks - run /gsd-update\x1b[0m │ ';
+          gsdUpdate += '\x1b[31m⚠ stale hooks — run /gsd-update\x1b[0m │ ';
         }
       } catch (e) {}
     }

@@ -3,7 +3,7 @@
 
 # =========================================================
 # Gate new skills: remove any that arrived via pull but
-# aren't in installed.json - they'll be offered in Step 3
+# aren't in installed.json — they'll be offered in Step 3
 # =========================================================
 REMOVED_SKILLS_MSG=""
 
@@ -132,7 +132,7 @@ def format_skill(name):
     info = catalog_skills[name]
     services = ','.join(info.get('requires_services', []))
     deps = ','.join(info.get('dependencies', []))
-    return f'{name}|{info[\"category\"]}|{info[\"description\"]}|{services}|{deps}'
+    return f'{name}|{info["category"]}|{info["description"]}|{services}|{deps}'
 
 for s in sorted(new_skills, key=lambda n: (order.get(catalog_skills[n].get('category',''), 99), n)):
     print(format_skill(s))
@@ -184,7 +184,7 @@ for s in sorted(available_skills, key=lambda n: (order.get(catalog_skills.get(n,
             dep_note=""
             [[ -n "${NS_DEPS[$i]}" ]] && dep_note=" ${DIM}(auto-adds: ${NS_DEPS[$i]})${NC}"
 
-            printf "     ${BOLD}[%2d]${NC} %-26s ${DIM} -  %s${NC}%b%b\n" \
+            printf "     ${BOLD}[%2d]${NC} %-26s ${DIM}— %s${NC}%b%b\n" \
                 "$NUM" "${NS_NAMES[$i]}" "${NS_DESCRIPTIONS[$i]}" "$svc_note" "$dep_note"
         done
         echo ""
@@ -238,7 +238,7 @@ for s in sorted(available_skills, key=lambda n: (order.get(catalog_skills.get(n,
             dep_note=""
             [[ -n "${AV_DEPS[$i]}" ]] && dep_note=" ${DIM}(auto-adds: ${AV_DEPS[$i]})${NC}"
 
-            printf "     ${DIM}[%2d]${NC} %-26s ${DIM} -  %s${NC}%b%b\n" \
+            printf "     ${DIM}[%2d]${NC} %-26s ${DIM}— %s${NC}%b%b\n" \
                 "$NUM" "${AV_NAMES[$i]}" "${AV_DESCRIPTIONS[$i]}" "$svc_note" "$dep_note"
         done
         echo ""
@@ -273,7 +273,7 @@ for s in sorted(available_skills, key=lambda n: (order.get(catalog_skills.get(n,
         fi
     fi
 else
-    warn "Skill catalog not found - skipping skill check."
+    warn "Skill catalog not found — skipping skill check."
     echo ""
 fi
 
@@ -316,8 +316,7 @@ offer_memory_setup_after_update() {
     printf "${CYAN}${BOLD}═══════════════════════════════════════════════${NC}\n"
     echo ""
     echo "  MemSearch lets AI-OS search older memory, daily logs,"
-    echo "  learnings, and client-scoped brand context. Claude Code is the recommended default,"
-    echo "  but Codex and Claude Code + Codex are also supported."
+    echo "  learnings, and client-scoped brand context. Claude Code is the recommended default."
     echo ""
     printf "  Set it up now? ${BOLD}[Y/n]${NC} "
     if ! read -r reply; then
@@ -389,7 +388,7 @@ fi
 if [[ -n "$SKILL_REVIEW_MSG" ]]; then
     printf "\n  ${BOLD}Skill review:${NC}"
     printf "$SKILL_REVIEW_MSG\n"
-    info "Backups saved to ${BOLD}.backup/${NC} if you change your mind."
+    info "Backups saved to ${BOLD}.backup/update-${UPDATE_TIMESTAMP}/${NC} if you change your mind."
 elif [[ ${#MODIFIED_SKILLS[@]} -gt 0 ]]; then
     printf "\n"
     ok "Local skill changes: kept as-is (no upstream conflicts)"
@@ -409,6 +408,14 @@ if [[ -n "$REMOVED_SKILLS_MSG" ]]; then
     printf "$REMOVED_SKILLS_MSG\n"
 fi
 
+if [[ ${#USER_OWNED_RESTORED_FILES[@]} -gt 0 ]]; then
+    printf "\n  ${BOLD}User-owned files preserved:${NC}\n"
+    for file in "${USER_OWNED_RESTORED_FILES[@]}"; do
+        printf "    ${GREEN}✓${NC} %s ${DIM}(kept your local copy)${NC}\n" "$file"
+    done
+    info "Upstream copies were saved under ${BOLD}.backup/update-${UPDATE_TIMESTAMP}/upstream-user-owned/${NC}."
+fi
+
 if [[ -n "$GSD_STATUS" ]]; then
     echo ""
     ok "GSD framework: ${GSD_STATUS}"
@@ -417,7 +424,7 @@ fi
 offer_memory_setup_after_update
 
 # =========================================================
-# What's New - compare old vs new catalog.json
+# What's New — compare old vs new catalog.json
 # =========================================================
 if $HAS_UPSTREAM_CHANGES && [[ -f "$CATALOG" ]]; then
     WHATS_NEW=$("${PYTHON_CMD[@]}" -c "
@@ -494,7 +501,7 @@ for l in skill_lines:
         echo ""
         printf "${CYAN}${BOLD}═══════════════════════════════════════════════${NC}\n"
         if [[ -n "$CURRENT_VERSION" ]]; then
-            printf "${CYAN}${BOLD}  What's New - v${CURRENT_VERSION}${NC}\n"
+            printf "${CYAN}${BOLD}  What's New — v${CURRENT_VERSION}${NC}\n"
         else
             printf "${CYAN}${BOLD}  What's New${NC}\n"
         fi
@@ -535,7 +542,7 @@ fi
 # Protected files
 echo ""
 ok "Your data is safe:"
-printf "    brand_context/  ${GREEN}✓${NC}   .env  ${GREEN}✓${NC}   context/  ${GREEN}✓${NC}   projects/  ${GREEN}✓${NC}\n"
+printf "    clients/  ${GREEN}✓${NC}   brand_context/  ${GREEN}✓${NC}   context/  ${GREEN}✓${NC}   projects/  ${GREEN}✓${NC}   cron/jobs/  ${GREEN}✓${NC}   .env  ${GREEN}✓${NC}\n"
 
 echo ""
 if $HAS_UPSTREAM_CHANGES; then

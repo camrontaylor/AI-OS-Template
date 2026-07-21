@@ -51,7 +51,7 @@ function areDependenciesSatisfied(
  * When a child task completes, auto-queue unblocked siblings.
  * Supports dependency-aware parallel execution:
  * - If siblings have dependsOn metadata: queue all whose deps are satisfied
- * - If no dependsOn metadata (legacy): sequential - queue next backlog sibling
+ * - If no dependsOn metadata (legacy): sequential — queue next backlog sibling
  */
 function autoQueueUnblockedSiblings(db: Database.Database, completedChild: Task, now: string): void {
   if (!completedChild.parentId) return;
@@ -67,10 +67,10 @@ function autoQueueUnblockedSiblings(db: Database.Database, completedChild: Task,
     ).get(completedChild.parentId) as { count: number };
 
     if (remaining.count === 0) {
-      // All done - check if this is a GSD verify completion that should trigger next phase
+      // All done — check if this is a GSD verify completion that should trigger next phase
       autoQueueNextPhase(db, completedChild, now);
 
-      // Don't override a user-initiated "done" state - only move to review if not already done
+      // Don't override a user-initiated "done" state — only move to review if not already done
       const parent = db.prepare("SELECT status FROM tasks WHERE id = ?").get(completedChild.parentId) as { status: string } | undefined;
       if (parent && parent.status !== "done") {
         db.prepare(
@@ -91,7 +91,7 @@ function autoQueueUnblockedSiblings(db: Database.Database, completedChild: Task,
     let queuedCount = 0;
     for (const sibling of backlogSiblings) {
       if (areDependenciesSatisfied(db, sibling, completedChild.parentId)) {
-        // Auto-queue - no user gate for parallel execution
+        // Auto-queue — no user gate for parallel execution
         db.prepare(
           "UPDATE tasks SET status = 'queued', updatedAt = ?, activityLabel = NULL WHERE id = ?"
         ).run(now, sibling.id);
@@ -110,8 +110,8 @@ function autoQueueUnblockedSiblings(db: Database.Database, completedChild: Task,
     ).get(completedChild.parentId) as { count: number };
 
     const label = queuedCount > 1
-      ? `${completedCount.count}/${totalCount.count} done - ${queuedCount} tasks running in parallel`
-      : `${completedCount.count}/${totalCount.count} tasks done - next task queued`;
+      ? `${completedCount.count}/${totalCount.count} done — ${queuedCount} tasks running in parallel`
+      : `${completedCount.count}/${totalCount.count} tasks done — next task queued`;
 
     db.prepare(
       "UPDATE tasks SET status = 'running', updatedAt = ?, activityLabel = ?, startedAt = COALESCE(startedAt, ?) WHERE id = ?"
@@ -124,7 +124,7 @@ function autoQueueUnblockedSiblings(db: Database.Database, completedChild: Task,
 
     db.prepare(
       "UPDATE tasks SET status = 'review', updatedAt = ?, needsInput = 1, activityLabel = ? WHERE id = ?"
-    ).run(now, "Ready to start - waiting for go-ahead", nextSibling.id);
+    ).run(now, "Ready to start — waiting for go-ahead", nextSibling.id);
     const updatedSibling = db.prepare("SELECT * FROM tasks WHERE id = ?").get(nextSibling.id) as Task;
     emitTaskEvent({ type: "task:status", task: { ...updatedSibling, needsInput: Boolean(updatedSibling.needsInput) }, timestamp: now });
 
@@ -138,7 +138,7 @@ function autoQueueUnblockedSiblings(db: Database.Database, completedChild: Task,
 
     db.prepare(
       "UPDATE tasks SET status = 'running', updatedAt = ?, activityLabel = ?, startedAt = COALESCE(startedAt, ?) WHERE id = ?"
-    ).run(now, `${completedCount.count}/${totalCount.count} tasks done - next task queued`, now, completedChild.parentId);
+    ).run(now, `${completedCount.count}/${totalCount.count} tasks done — next task queued`, now, completedChild.parentId);
     const updatedParent = db.prepare("SELECT * FROM tasks WHERE id = ?").get(completedChild.parentId) as Task;
     emitTaskEvent({ type: "task:status", task: { ...updatedParent, needsInput: Boolean(updatedParent.needsInput) }, timestamp: now });
   }
@@ -180,10 +180,10 @@ function autoQueueNextPhase(db: Database.Database, completedChild: Task, now: st
   const nextPhase = currentPhase + 1;
 
   if (totalPhases > 0 && nextPhase > totalPhases) {
-    // Final phase verified - mark parent as review (project complete)
+    // Final phase verified — mark parent as review (project complete)
     db.prepare(
       "UPDATE tasks SET status = 'review', updatedAt = ?, activityLabel = ? WHERE id = ?"
-    ).run(now, `All ${totalPhases} phases verified - project complete`, parent.id);
+    ).run(now, `All ${totalPhases} phases verified — project complete`, parent.id);
     const updatedParent = db.prepare("SELECT * FROM tasks WHERE id = ?").get(parent.id) as Task;
     emitTaskEvent({ type: "task:status", task: { ...updatedParent, needsInput: Boolean(updatedParent.needsInput) }, timestamp: now });
     return;
@@ -199,7 +199,7 @@ function autoQueueNextPhase(db: Database.Database, completedChild: Task, now: st
   ).run(
     nextPhaseId,
     nextTitle,
-    `Phase ${nextPhase} discussion - auto-started after Phase ${currentPhase} verification`,
+    `Phase ${nextPhase} discussion — auto-started after Phase ${currentPhase} verification`,
     parent.id,
     parent.projectSlug,
     Date.now(),
@@ -218,7 +218,7 @@ function autoQueueNextPhase(db: Database.Database, completedChild: Task, now: st
   // Update parent activity
   db.prepare(
     "UPDATE tasks SET updatedAt = ?, activityLabel = ? WHERE id = ?"
-  ).run(now, `Phase ${currentPhase} verified - Phase ${nextPhase} starting`, parent.id);
+  ).run(now, `Phase ${currentPhase} verified — Phase ${nextPhase} starting`, parent.id);
   const updatedParent = db.prepare("SELECT * FROM tasks WHERE id = ?").get(parent.id) as Task;
   emitTaskEvent({ type: "task:status", task: { ...updatedParent, needsInput: Boolean(updatedParent.needsInput) }, timestamp: now });
 }
@@ -379,7 +379,7 @@ export async function PATCH(
         id: crypto.randomUUID(),
         type: "system" as const,
         timestamp: now,
-        content: "Process terminated - task marked as done.",
+        content: "Process terminated — task marked as done.",
         toolName: undefined,
         toolArgs: undefined,
         toolResult: undefined,
@@ -387,7 +387,7 @@ export async function PATCH(
         questionSpec: undefined,
         questionAnswers: undefined,
       });
-      // Kill process only - don't touch DB or emit SSE (we already set status=done above)
+      // Kill process only — don't touch DB or emit SSE (we already set status=done above)
       await processManager.killSession(id).catch(() => {});
     }
 
@@ -415,7 +415,7 @@ export async function PATCH(
             }
           }
         } catch {
-          // Non-critical - skip silently on failure
+          // Non-critical — skip silently on failure
         }
       }
     }

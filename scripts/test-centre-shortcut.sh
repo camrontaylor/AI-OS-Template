@@ -71,13 +71,12 @@ mkdir -p "$HOME/.config/fish"
 export SHELL="/bin/bash"
 
 centre_script="$SCRIPT_DIR/centre.sh"
-rc_path=""
+bash_rc="$HOME/.bashrc"
 
 # Fresh install should create a managed block in the current shell profile.
 agentic_os_centre_install_current_unix_shortcut "$centre_script"
-rc_path="$AGENTIC_OS_CENTRE_CURRENT_TARGET_PATH"
 assert_equal "added" "$AGENTIC_OS_CENTRE_LAST_ACTION" "Fresh install should add a shortcut block."
-fresh_content="$(cat "$rc_path")"
+fresh_content="$(cat "$bash_rc")"
 assert_contains "$fresh_content" "$AGENTIC_OS_CENTRE_BLOCK_START" "Fresh install should use the managed block start marker."
 assert_contains "$fresh_content" "$centre_script" "Fresh install should point to the current repo launcher."
 
@@ -87,19 +86,19 @@ assert_equal "unchanged" "$AGENTIC_OS_CENTRE_LAST_ACTION" "Installing twice shou
 
 # Legacy marker content should migrate to the managed block.
 legacy_script="/tmp/legacy/projects/agentic-os/scripts/centre.sh"
-cat > "$rc_path" <<EOF
+cat > "$bash_rc" <<EOF
 $AGENTIC_OS_CENTRE_LEGACY_MARKER
 alias centre='bash "$legacy_script"'
 EOF
 
 agentic_os_centre_install_current_unix_shortcut "$centre_script"
 assert_equal "updated" "$AGENTIC_OS_CENTRE_LAST_ACTION" "Legacy marker content should be updated."
-migrated_content="$(cat "$rc_path")"
+migrated_content="$(cat "$bash_rc")"
 assert_contains "$migrated_content" "$AGENTIC_OS_CENTRE_BLOCK_END" "Migrated content should use the managed block end marker."
 assert_true "$([[ "$migrated_content" == *"$legacy_script"* ]] && printf 'false' || printf 'true')" "Migrated content should remove the old script path."
 
 # Scan should detect mismatches and older projects-folder layouts.
-cat > "$rc_path" <<EOF
+cat > "$bash_rc" <<EOF
 $AGENTIC_OS_CENTRE_BLOCK_START
 alias centre='bash "$legacy_script"'
 $AGENTIC_OS_CENTRE_BLOCK_END
@@ -114,7 +113,7 @@ assert_equal "true" "${AGENTIC_OS_CENTRE_SCAN_LEGACY_LAYOUT[0]}" "Scan should fl
 # Repair should rewrite detected shortcuts to the current repo path.
 agentic_os_centre_repair_detected_unix_shortcuts "$centre_script"
 assert_equal "1" "$AGENTIC_OS_CENTRE_REPAIR_UPDATED_COUNT" "Repair should update the detected shortcut."
-repaired_content="$(cat "$rc_path")"
+repaired_content="$(cat "$bash_rc")"
 assert_contains "$repaired_content" "$centre_script" "Repair should point the shortcut to the current repo."
 assert_true "$([[ "$repaired_content" == *"$legacy_script"* ]] && printf 'false' || printf 'true')" "Repair should remove the stale repo path."
 

@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [switch]$Check,
-    [ValidateSet("claude", "codex", "both", "none")]
+    [ValidateSet("claude", "none")]
     [string]$Target,
     [switch]$Yes
 )
@@ -96,10 +96,6 @@ function Test-ClaudeAvailable {
     return Test-CommandAvailable -Name "claude"
 }
 
-function Test-CodexAvailable {
-    return Test-CommandAvailable -Name "codex"
-}
-
 function Test-ClaudeMemSearchInstalled {
     if (-not (Test-ClaudeAvailable)) { return $false }
     try {
@@ -140,30 +136,6 @@ function Test-ClaudeMemSearchEnabled {
     return (Test-ClaudeMemSearchInstalled) -and (-not (Test-ClaudeMemSearchDisabled))
 }
 
-function Test-CodexMemSearchInstalled {
-    if (Test-CodexAvailable) {
-        try {
-            $output = & codex plugin list 2>$null | Out-String
-            if ($output -match "(?im)(^|[\s>])memsearch(@|\s|$)") {
-                return $true
-            }
-        }
-        catch {}
-    }
-
-    $hooksPath = Join-Path $HOME ".codex\hooks.json"
-    if (Test-Path -LiteralPath $hooksPath) {
-        try {
-            $hooks = Get-Content -LiteralPath $hooksPath -Raw
-            if ($hooks -match "memsearch") { return $true }
-        }
-        catch {}
-    }
-
-    $skillPath = Join-Path $HOME ".agents\skills\memory-recall"
-    return (Test-Path -LiteralPath $skillPath)
-}
-
 function Test-ZillizConfigured {
     if (-not (Test-WindowsPlatform)) { return $true }
 
@@ -196,7 +168,7 @@ function Test-MemoryReady {
     if (-not (Test-MemSearchInstalled)) { return $false }
     if (-not (Test-ZillizConfigured)) { return $false }
     if (-not (Test-WindowsWatchDisabled)) { return $false }
-    return (Test-ClaudeMemSearchEnabled) -or (Test-CodexMemSearchInstalled)
+    return (Test-ClaudeMemSearchEnabled)
 }
 
 function Show-Status {
@@ -235,18 +207,6 @@ function Show-Status {
     }
     else {
         Warn "Claude Code CLI not found"
-    }
-
-    if (Test-CodexAvailable) {
-        if (Test-CodexMemSearchInstalled) {
-            Success "Codex MemSearch setup detected"
-        }
-        else {
-            Warn "Codex found, but MemSearch setup was not detected"
-        }
-    }
-    else {
-        Warn "Codex CLI not found"
     }
 
     if (Test-WindowsPlatform) {
@@ -303,15 +263,13 @@ function Select-Target {
 
     Write-Host ""
     Write-Host "Searchable Memory" -ForegroundColor Cyan
-    Write-Host "  MemSearch lets Claude Code or Codex search older sessions,"
+    Write-Host "  MemSearch lets Claude Code search older sessions,"
     Write-Host "  pinned memory, and learnings. AI-OS keeps markdown as the"
     Write-Host "  source of truth; MemSearch is only a rebuildable search index."
     Write-Host ""
     Write-Host "  Choose where to enable it:"
     Write-Host "    1. Claude Code only (recommended)"
-    Write-Host "    2. Codex only"
-    Write-Host "    3. Claude Code + Codex"
-    Write-Host "    4. Skip for now"
+    Write-Host "    2. Skip for now"
     Write-Host ""
 
     $reply = Read-Host "  Selection [1]"
@@ -319,9 +277,7 @@ function Select-Target {
 
     switch ($reply) {
         "1" { $script:Target = "claude" }
-        "2" { $script:Target = "codex" }
-        "3" { $script:Target = "both" }
-        "4" { $script:Target = "none" }
+        "2" { $script:Target = "none" }
         default {
             Warn "Unknown selection: $reply"
             $script:Target = "none"
@@ -349,8 +305,6 @@ function Confirm-Setup {
     Write-Host "  - Index only AI-OS memory files, not the full repo."
     switch ($Target) {
         "claude" { Write-Host "  - Configure the Claude Code MemSearch plugin." }
-        "codex" { Write-Host "  - Configure MemSearch for Codex with the official installer." }
-        "both" { Write-Host "  - Configure both Claude Code and Codex." }
     }
     Write-Host ""
 
@@ -375,7 +329,7 @@ function Disable-WindowsWatch {
     }
 
     Success "Disabled real-time MemSearch watch on Windows (MEMSEARCH_NO_WATCH=1)"
-    Warn "Restart Claude Code, Codex, and any open terminals for this to take effect."
+    Warn "Restart Claude Code and any open terminals for this to take effect."
     Info "Automatic memory refresh uses Command Centre or the managed cron daemon."
     Info "Daemon command: powershell -NoProfile -ExecutionPolicy Bypass -File scripts\start-crons.ps1"
     return $true
@@ -617,69 +571,6 @@ function Install-ClaudePlugin {
     return $true
 }
 
-function Install-CodexPlugin {
-    if (-not (Test-CodexAvailable)) {
-        Warn "Codex CLI not found. Install Codex, then run this script again."
-        return $false
-    }
-
-    if (Test-CodexMemSearchInstalled) {
-        Success "Codex MemSearch setup already detected"
-        return $true
-    }
-
-    if (-not (Test-CommandAvailable -Name "git")) {
-        Fail "git is required to fetch the official MemSearch Codex installer."
-        return $false
-    }
-
-    $cacheRoot = if ($env:AGENTIC_OS_MEMSEARCH_CACHE) {
-        $env:AGENTIC_OS_MEMSEARCH_CACHE
-    }
-    elseif ($env:LOCALAPPDATA) {
-        Join-Path $env:LOCALAPPDATA "AgenticOS\memsearch"
-    }
-    else {
-        Join-Path $HOME ".cache\agentic-os\memsearch"
-    }
-    $installer = Join-Path $cacheRoot "plugins\codex\scripts\install.sh"
-
-    Info "Fetching official MemSearch Codex installer..."
-    if (Test-Path -LiteralPath (Join-Path $cacheRoot ".git")) {
-        & git -C $cacheRoot pull --ff-only
-    }
-    elseif (Test-Path -LiteralPath $cacheRoot) {
-        Fail "MemSearch cache path exists but is not a git repo: $cacheRoot"
-        return $false
-    }
-    else {
-        New-Item -ItemType Directory -Force -Path (Split-Path -Parent $cacheRoot) | Out-Null
-        & git clone https://github.com/zilliztech/memsearch.git $cacheRoot
-    }
-
-    if ($LASTEXITCODE -ne 0) {
-        return $false
-    }
-
-    if (-not (Test-Path -LiteralPath $installer)) {
-        Fail "Codex installer not found at $installer"
-        Write-Host "  Native setup may be blocked. Use WSL/Linux or follow:"
-        Write-Host "  https://zilliztech.github.io/memsearch/platforms/codex/installation/"
-        return $false
-    }
-
-    if (Test-CommandAvailable -Name "bash") {
-        & bash $installer
-    }
-    else {
-        & $installer
-    }
-
-    if ($LASTEXITCODE -ne 0) { return $false }
-    Success "Codex MemSearch setup finished"
-    return $true
-}
-
 Select-Target
 
 if ($Target -eq "none") {
@@ -706,13 +597,6 @@ if (Test-MemSearchInstalled) {
 switch ($Target) {
     "claude" {
         if (-not (Install-ClaudePlugin)) { $errors++ }
-    }
-    "codex" {
-        if (-not (Install-CodexPlugin)) { $errors++ }
-    }
-    "both" {
-        if (-not (Install-ClaudePlugin)) { $errors++ }
-        if (-not (Install-CodexPlugin)) { $errors++ }
     }
 }
 

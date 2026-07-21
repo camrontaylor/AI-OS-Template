@@ -24,7 +24,7 @@ export const SCRIPT_REGISTRY: ScriptDefinition[] = [
     file: "add-client.sh",
     args: [{ name: "clientName", label: "Client Name", required: true, placeholder: "e.g. Acme Corp" }],
     destructive: false,
-    helpUrl: "https://github.com/camrontaylor/ai-os-template/blob/main/docs/multi-client-guide.md",
+    helpUrl: "https://github.com/camrontaylor/AI-OS/blob/main/docs/multi-client-guide.md",
   },
   {
     id: "update",
@@ -34,7 +34,7 @@ export const SCRIPT_REGISTRY: ScriptDefinition[] = [
     args: [],
     destructive: true,
     longRunning: true,
-    helpUrl: "https://github.com/camrontaylor/ai-os-template/blob/main/docs/update-guide-v0.2.0.md",
+    helpUrl: "https://github.com/camrontaylor/AI-OS/blob/main/docs/update-guide.md",
   },
   {
     id: "memory-setup",

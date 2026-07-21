@@ -8,24 +8,16 @@ const modulePath = path.resolve(__dirname, "chat-message-content.ts");
 const content = loadTsModule(modulePath, {
   stubs: {
     "@/types/chat-composer": {},
-    "@/lib/pasted-text": {
-      appendPendingPastedText(value, blocks) {
-        const base = value.trim();
-        const appended = blocks.map((block) => block.text).filter(Boolean).join("\n\n---\n\n");
-        if (!appended) return base;
-        return base ? `${base}\n\n${appended}` : appended;
-      },
-    },
   },
 });
 
-test("expandComposerPastedBlocks appends captured pasted text before send", () => {
+test("expandComposerPastedBlocks restores collapsed pasted text before send", () => {
   const expanded = content.expandComposerPastedBlocks(
-    "Please review",
-    [{ id: "abc123", text: "line 1\nline 2" }],
+    "Please review [Pasted text +12 lines abc123]",
+    [{ id: "abc123", label: "[Pasted text +12 lines abc123]", text: "line 1\nline 2" }],
   );
 
-  assert.equal(expanded, "Please review\n\nline 1\nline 2");
+  assert.equal(expanded, "Please review line 1\nline 2");
 });
 
 test("composeMessageWithAttachments appends relative file paths in Claude-friendly format", () => {

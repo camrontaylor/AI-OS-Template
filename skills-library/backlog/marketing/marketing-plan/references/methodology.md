@@ -1,12 +1,12 @@
-# Methodology - How a Marketing Plan Gets Made
+# Methodology — How a Marketing Plan Gets Made
 
 The three-phase workflow that produces a comprehensive marketing plan. SKILL.md is the orchestration layer; this is the operational detail.
 
-## Phase 1 - INIT (research + intake)
+## Phase 1 — INIT (research + intake)
 
 **Goal:** Walk into Phase 2 with enough context to draft every section without guessing.
 
-### Step 1.1 - Set up the plan folder
+### Step 1.1 — Set up the plan folder
 
 Canonical file layout for every plan:
 
@@ -14,7 +14,7 @@ Canonical file layout for every plan:
 ~/marketing-plans/{client-slug}/
 ├── materials/         # Client-provided files (decks, audit output, brand-voice doc, etc.)
 ├── research.md        # Written in Phase 1 (INIT)
-├── progress.md        # State machine - see Step 1.1.1 for schema
+├── progress.md        # State machine — see Step 1.1.1 for schema
 ├── sections/
 │   ├── 01.md          # Executive summary (written last, ordered first)
 │   ├── 02.md          # Strategic frame
@@ -23,12 +23,12 @@ Canonical file layout for every plan:
 └── final_plan.md      # Compiled deliverable (Phase 3 output)
 ```
 
-### Step 1.1.1 - `progress.md` state schema
+### Step 1.1.1 — `progress.md` state schema
 
 Every plan tracks a single `progress.md` file at the plan root. It's the source of truth for resumption. Schema:
 
 ```markdown
-# {Client} - Marketing Plan Progress
+# {Client} — Marketing Plan Progress
 
 phase: init | review | finalize | finalized
 current_section: <number, only meaningful during review phase>
@@ -57,7 +57,7 @@ sections/02.md, sections/03.md, ... (list as they're written)
 <any open decisions, blockers, or out-of-band context that aren't in research.md>
 ```
 
-### Step 1.1.2 - Resumption decision tree
+### Step 1.1.2 — Resumption decision tree
 
 On every invocation, check state in this order:
 
@@ -70,7 +70,7 @@ On every invocation, check state in this order:
 
 Update `phase` and `last_updated` whenever state changes.
 
-### Step 1.2 - Read existing materials
+### Step 1.2 — Read existing materials
 
 If `materials/` has files, read all of them. Common drops:
 - Pitch deck / investor deck
@@ -85,7 +85,7 @@ If `materials/` has files, read all of them. Common drops:
 
 Read everything. Capture key facts to `research.md` as you go.
 
-### Step 1.3 - Pull live data where wired
+### Step 1.3 — Pull live data where wired
 
 If MCPs/APIs are wired for this client, pull:
 
@@ -100,30 +100,30 @@ If MCPs/APIs are wired for this client, pull:
 
 Don't ask the user to copy/paste data that can be pulled directly.
 
-### Step 1.4 - Conduct structured intake
+### Step 1.4 — Conduct structured intake
 
 For every gap in the materials, ask the user. The minimum intake covers ten topics:
 
-#### Intake 1 - Client overview
+#### Intake 1 — Client overview
 - What does the company do, in one sentence (founder's words)?
 - What's the primary product?
 - What other products / SKUs / tiers exist?
 - Is the product live, beta, or pre-launch?
 - If beta: throttling? GA timeline?
 
-#### Intake 2 - ICP
+#### Intake 2 — ICP
 - Who are you for, in one sentence?
 - What do they say they want?
 - What do they actually want?
 - What's their stated problem? Their real problem?
 - Demographics / firmographics: who fits the ICP exactly?
 
-#### Intake 3 - Funnel state today
+#### Intake 3 — Funnel state today
 - What are the current funnel numbers? (signups, activations, paid, retention)
-- What's the funnel *shape* - is it bottle-necked at top, middle, or bottom?
+- What's the funnel *shape* — is it bottle-necked at top, middle, or bottom?
 - What's the biggest leak?
 
-#### Intake 4 - Funding state
+#### Intake 4 — Funding state
 - Current round (pre-seed / seed / Series A / etc.)?
 - Total raised to date?
 - Current burn / runway?
@@ -131,7 +131,7 @@ For every gap in the materials, ask the user. The minimum intake covers ten topi
 - Investors of note?
 - Permission to mention fCMO engagement in pitches?
 
-#### Intake 5 - Team
+#### Intake 5 — Team
 - Founders and what each owns (product, marketing, sales, etc.)?
 - Other roles on the team and their marketing surface area?
 - Advisors who touch marketing?
@@ -139,21 +139,21 @@ For every gap in the materials, ask the user. The minimum intake covers ten topi
 - Where are the obvious gaps?
 - For the team's current marketing owner (if there is one): is the shape π-shaped (two deep skill sets), T-shaped (one deep, broad), or tactical-only? See `team-and-agency-model.md` for the framework that informs Section 11 RACI and the first-hire recommendation in Section 9.
 
-#### Intake 6 - Budget
+#### Intake 6 — Budget
 - Current monthly marketing spend, broken down: paid acquisition, tools, retainers, headcount?
 - Budget tier this maps to (see `funding-stage-unlocks.md`)?
 - What budget unlocks when the next round closes?
-- Blended CAC if known (including salaries, content costs, tools, retainers - not just paid ad spend). If unknown, flag as the top Section 13 open decision - every revenue projection depends on it.
+- Blended CAC if known (including salaries, content costs, tools, retainers — not just paid ad spend). If unknown, flag as the top Section 13 open decision — every revenue projection depends on it.
 - ARPC, annual retention rate (or churn rate), so the budget math in `budget-planning.md` can be applied to Section 8 (Revenue) and Section 10 (12-month outlook).
 
-#### Intake 7 - Channels currently active
-- Acquisition: organic SEO, paid search, paid social, content, social, partnerships, events, PR, ambassadors, etc. - for each, status (live / paused / never tried)
+#### Intake 7 — Channels currently active
+- Acquisition: organic SEO, paid search, paid social, content, social, partnerships, events, PR, ambassadors, etc. — for each, status (live / paused / never tried)
 - Activation: onboarding state, signup flow, paywall, first-session experience, app store listing
 - Retention: lifecycle email state, in-app upsells, churn cohort
 - Referral: program existence, attribution, inbound interest
 - Revenue: pricing structure, plan mix, recent experiments
 
-#### Intake 8 - Already done
+#### Intake 8 — Already done
 What past work should this plan acknowledge?
 - Major launches and dates
 - PR moments and who covered
@@ -163,33 +163,33 @@ What past work should this plan acknowledge?
 - Notable customers / users (if consumer-named users)
 - Past advisors / fractionals
 
-#### Intake 9 - In-flight and stuck
+#### Intake 9 — In-flight and stuck
 - What's drafted but not shipped? Why?
 - What's been "almost ready" for months?
 - What's blocking each?
 - What's broken or actively harmful?
 
-#### Intake 10 - Strategic posture
+#### Intake 10 — Strategic posture
 - The most important thing to fix this quarter (founder's read)
 - The most important thing to ignore this quarter (founder's read)
 - What investors / board are asking about most
 - Any constraints not visible elsewhere (legal, partnership-related, brand-related)
 
-### Step 1.5 - Score current state against the rubric
+### Step 1.5 — Score current state against the rubric
 
 Use the 17-section rubric in `references/current-state-rubric.md` as your scoring lens. Two modes:
 
-- **From rich materials.** When the team has shared decks, prior content audits, an existing brand voice doc, recent positioning work, or a kickoff call transcript - score from those. Mark "scored from materials" in the section heading.
+- **From rich materials.** When the team has shared decks, prior content audits, an existing brand voice doc, recent positioning work, or a kickoff call transcript — score from those. Mark "scored from materials" in the section heading.
 - **From a separately scored audit.** If the team already has a scored current-state assessment (in any format), ingest those numbers directly. Don't redo the work.
 
-Either way, the output is the scored 17-row table that becomes Section 3 of the plan, followed by a 2-4 sentence "shape interpretation" calling out where strengths and gaps cluster.
+Either way, the output is the scored 17-row table that becomes Section 3 of the plan, followed by a 2–4 sentence "shape interpretation" calling out where strengths and gaps cluster.
 
-### Step 1.6 - Write research.md
+### Step 1.6 — Write research.md
 
 Compile everything into `research.md` with this structure:
 
 ```markdown
-# {Client} - Marketing Plan Research Record
+# {Client} — Marketing Plan Research Record
 
 **Date:** YYYY-MM-DD
 **Author:** (fCMO / planner name)
@@ -250,42 +250,42 @@ Save. Move to Phase 2.
 
 ---
 
-## Phase 2 - REVIEW (section-by-section drafting)
+## Phase 2 — REVIEW (section-by-section drafting)
 
 **Goal:** Walk through all 13 sections of the plan template (`references/plan-template.md`), drafting each, getting user confirmation, saving as you go.
 
-### Step 2.1 - Initialize progress.md
+### Step 2.1 — Initialize progress.md
 
 Use the schema defined in Step 1.1.1 above. Set `phase: review`, `current_section: 2`, `plan_version: v1`, and stamp `last_updated`.
 
-### Step 2.2 - Walk each section in this order: 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, then 1
+### Step 2.2 — Walk each section in this order: 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, then 1
 
 Section 1 (Executive Summary) is drafted **last** because it depends on every other section's conclusions. Walk Sections 2 → 13 in numeric order, then synthesize Section 1 from the others. The final compiled `final_plan.md` is always presented in canonical order 1 → 13.
 
 For each section, use the template at `references/plan-template.md` to draft. Then in chat:
 
-1. Present the draft (or key bullets - short sections inline, long sections as bullet outline first)
+1. Present the draft (or key bullets — short sections inline, long sections as bullet outline first)
 2. Ask: *"Approve, adjust, or expand?"*
 3. Iterate until user confirms
-4. Save the confirmed text to `sections/01.md` ... `sections/13.md` (one file per section, zero-padded for sort order). This is the canonical persisted artifact - recovery depends on it.
+4. Save the confirmed text to `sections/01.md` ... `sections/13.md` (one file per section, zero-padded for sort order). This is the canonical persisted artifact — recovery depends on it.
 5. Check the box in `progress.md`
 6. Move to next section
 
-### Step 2.3 - Section-specific guidance
+### Step 2.3 — Section-specific guidance
 
-**Section 1 (Executive summary)** is synthesized from Sections 2-13 after they're all approved. Draft it last; present it first in the output document.
+**Section 1 (Executive summary)** is synthesized from Sections 2–13 after they're all approved. Draft it last; present it first in the output document.
 
 **Section 3 (Current state)** uses the embedded 17-section rubric in `references/current-state-rubric.md`. If a prior scored audit exists, paste those scores in. If not, score from available materials.
 
-**Sections 4-8 (AARRR)** each follow the same internal structure: current state, the plan (numbered moves), 90-day moves, 12-month outlook, skills + tools. Don't skip the skills + tools sub-section - it's what makes the plan operationally honest.
+**Sections 4–8 (AARRR)** each follow the same internal structure: current state, the plan (numbered moves), 90-day moves, 12-month outlook, skills + tools. Don't skip the skills + tools sub-section — it's what makes the plan operationally honest.
 
-**Section 11 (Marketing operations stack)** is auto-generatable from `references/ops-stack-mapping.md` plus the specific moves named in Sections 4-8.
+**Section 11 (Marketing operations stack)** is auto-generatable from `references/ops-stack-mapping.md` plus the specific moves named in Sections 4–8.
 
 **Section 12 (Idea bank)** is auto-generatable from `references/idea-cross-reference.md` plus client-specific filters (skip ideas that conflict with brand voice; status moves based on funding-stage timing).
 
 **Section 13** lives at the end. Open decisions should be ranked by impact. Appendix should reference only files the team can access (warn about machine-local paths).
 
-### Step 2.4 - Brand voice consistency
+### Step 2.4 — Brand voice consistency
 
 If the client has documented brand voice rules (captured in research.md / Section 2), every section must respect them. Common voice constraints:
 - Vocabulary rules (YES / NO lists)
@@ -297,35 +297,35 @@ If a section's draft violates the brand voice, redo it before showing it to the 
 
 ---
 
-## Phase 3 - FINALIZE (compile + verify + publish)
+## Phase 3 — FINALIZE (compile + verify + publish)
 
 **Goal:** Produce `final_plan.md` and optionally publish to a shared repo.
 
-### Step 3.1 - Compile
+### Step 3.1 — Compile
 
 Set `phase: finalize` in `progress.md` before starting. Concatenate `sections/01.md` through `sections/13.md` into `final_plan.md` (canonical order 1 → 13, regardless of drafting order). Add:
 - Title header with date and "v1" version marker
 - "Prepared by / For / Date / Status" frontmatter
 - Section anchors that work in Notion paste
 
-### Step 3.2 - Verification pass
+### Step 3.2 — Verification pass
 
 Before printing:
 
-- **Cross-reference check** - every marketing-ideas number (e.g., "idea #17") matches the actual idea in `references/idea-cross-reference.md`. Every related-skill mention either exists in the `marketingskills` repo or is documented as an external dependency (see ops-stack-mapping note on cross-marketplace skills).
-- **MCP/API check** - every tool mentioned in Section 11 actually exists in the user's stack (per research.md intake) OR is flagged as "future / not yet wired."
-- **Path check** - no machine-specific paths (`/Users/...`, `/home/...`) in the output. Replace with descriptive references.
-- **Voice check** - final read against brand voice rules. Flag and fix violations.
-- **Open-decisions check** - every "TBD" or unanswered question from intake is listed in Section 13's open decisions, not hidden in the body.
-- **Acknowledge check** - every item from "already done" in research.md is acknowledged somewhere in the plan.
+- **Cross-reference check** — every marketing-ideas number (e.g., "idea #17") matches the actual idea in `references/idea-cross-reference.md`. Every related-skill mention either exists in the `marketingskills` repo or is documented as an external dependency (see ops-stack-mapping note on cross-marketplace skills).
+- **MCP/API check** — every tool mentioned in Section 11 actually exists in the user's stack (per research.md intake) OR is flagged as "future / not yet wired."
+- **Path check** — no machine-specific paths (`/Users/...`, `/home/...`) in the output. Replace with descriptive references.
+- **Voice check** — final read against brand voice rules. Flag and fix violations.
+- **Open-decisions check** — every "TBD" or unanswered question from intake is listed in Section 13's open decisions, not hidden in the body.
+- **Acknowledge check** — every item from "already done" in research.md is acknowledged somewhere in the plan.
 
-### Step 3.3 - Print
+### Step 3.3 — Print
 
 Output `final_plan.md` to the plan folder. Print a summary to chat:
 
 > *"Marketing Plan v1 saved to `~/marketing-plans/{client-slug}/final_plan.md`. ~X,XXX words across 13 sections. Ready to paste into Notion or share with the team."*
 
-### Step 3.4 - Publish (optional)
+### Step 3.4 — Publish (optional)
 
 Ask the user:
 > *"Want me to publish this to a shared GitHub repo so the team can access it? If yes, what's the target repo and path (e.g., `{client-org}/{client-context}/marketing/plan.md`)?"*
@@ -340,7 +340,7 @@ If yes:
 
 If no: leave it local. Done.
 
-### Step 3.5 - Mark finalized
+### Step 3.5 — Mark finalized
 
 Set `phase: finalized` in `progress.md` and stamp `last_updated`. This is the terminal state and prevents future `/marketing-plan` invocations from silently overwriting the plan (see Step 1.1.2 case 6).
 
@@ -348,7 +348,7 @@ Set `phase: finalized` in `progress.md` and stamp `last_updated`. This is the te
 
 ## Resuming a plan
 
-Resumption is governed entirely by the decision tree in Step 1.1.2 above - always check state in that order on every invocation.
+Resumption is governed entirely by the decision tree in Step 1.1.2 above — always check state in that order on every invocation.
 
 If the user says *"start over"* → ask whether they want to delete the existing folder or move it to `archive/` first; don't silently overwrite.
 If the user says *"redo Section X"* → uncheck that box in `progress.md`, delete `sections/0X.md`, and re-draft.
@@ -356,7 +356,7 @@ If the user says *"redo Section X"* → uncheck that box in `progress.md`, delet
 ## Failure modes to watch for
 
 - **Skipping intake.** A plan written without proper intake is generic and won't survive contact with the founder. Always do the full ten-topic intake unless the user explicitly waives it.
-- **Pretending data exists.** If you can't confirm a number (current MRR, retention rate, etc.), don't guess. Mark it `[TBD - to confirm with team]` in the plan and add to open decisions.
+- **Pretending data exists.** If you can't confirm a number (current MRR, retention rate, etc.), don't guess. Mark it `[TBD — to confirm with team]` in the plan and add to open decisions.
 - **Ignoring the brand voice.** If the client has a strong voice (most do), every section must respect it. Read the voice rules before drafting any copy-adjacent text.
 - **Padding the idea bank.** Section 12 is comprehensive only if it includes the skip list with reasons. Don't pad with ideas that clearly don't fit just to hit the 139.
 - **Glossing over uncomfortable metrics.** If churn is high or activation is low, name it in Current State. Founders read past sugar-coating.

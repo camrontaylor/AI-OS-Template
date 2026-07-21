@@ -4,7 +4,7 @@ import type { TaskLevel } from "@/types/task";
  * Shared level constants for UI routing across the app.
  *
  * Colors are kept in sync with the values used inline in
- * `src/components/board/task-create-input.tsx` - update both if they change.
+ * `src/components/board/task-create-input.tsx` — update both if they change.
  */
 
 export const LEVEL_COLORS: Record<TaskLevel, { bg: string; text: string }> = {

@@ -49,7 +49,7 @@ export function ContentViewer({ selectedPath, onFileDeleted }: ContentViewerProp
   const isBinaryFile = selectedPath ? BINARY_EXTENSIONS.has(getExtension(selectedPath)) : false;
   const isHtmlFile = selectedPath ? HTML_EXTENSIONS.has(getExtension(selectedPath)) : false;
   const [htmlView, setHtmlView] = useState<"preview" | "source">("preview");
-  // Treat paths without a file extension as directories - don't try to fetch as a file.
+  // Treat paths without a file extension as directories — don't try to fetch as a file.
   const isDirectoryPath = selectedPath ? getExtension(selectedPath) === "" : false;
 
   const fetchFile = useCallback(async (filePath: string) => {
@@ -147,7 +147,7 @@ export function ContentViewer({ selectedPath, onFileDeleted }: ContentViewerProp
     );
   }
 
-  // Directory placeholder - the tree highlights the folder, viewer waits for a file pick.
+  // Directory placeholder — the tree highlights the folder, viewer waits for a file pick.
   if (isDirectoryPath) {
     const folderName = selectedPath.split("/").filter(Boolean).pop() || selectedPath;
     return (

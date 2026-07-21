@@ -132,7 +132,7 @@ export function TagPicker({ value, onChange, mode = "inline", open, onOpenChange
 
   return (
     <div ref={containerRef} style={{ position: "relative", display: "inline-flex" }}>
-      {/* Trigger - tag pill or "add tag" button */}
+      {/* Trigger — tag pill or "add tag" button */}
       <button
         type="button"
         onClick={(e) => {
@@ -260,7 +260,7 @@ export function TagPill({ tag }: { tag: string }) {
   );
 }
 
-/** Tag filter bar - shows all distinct tags as toggle chips. */
+/** Tag filter bar — shows all distinct tags as toggle chips. */
 export function TagFilterBar({
   tasks,
   activeTag,

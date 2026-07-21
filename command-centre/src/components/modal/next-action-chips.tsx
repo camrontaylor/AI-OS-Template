@@ -65,7 +65,7 @@ function getGsdChips(childTasks: Task[]): ChipDef[] {
   const currentStep = currentPhase.gsdStep;
   const currentStepIdx = currentStep ? GSD_STEP_ORDER.indexOf(currentStep) : -1;
 
-  // Not started yet - offer to run the phase
+  // Not started yet — offer to run the phase
   if (currentPhase.status === "backlog" || currentPhase.status === "queued") {
     if (!currentStep || currentStep === "discuss") {
       return [
@@ -92,7 +92,7 @@ function getGsdChips(childTasks: Task[]): ChipDef[] {
     }
   }
 
-  // Needs input - suggest replying
+  // Needs input — suggest replying
   if (currentPhase.needsInput) {
     return [
       {
@@ -105,7 +105,7 @@ function getGsdChips(childTasks: Task[]): ChipDef[] {
     ];
   }
 
-  // In progress - suggest next GSD step
+  // In progress — suggest next GSD step
   const chips: ChipDef[] = [];
 
   if (currentStep === "discuss") {

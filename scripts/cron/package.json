@@ -1,0 +1,9 @@
+{
+  "name": "aios-cron",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Standalone AI-OS cron scheduler runtime. Runs without the Command Centre app.",
+  "dependencies": {
+    "better-sqlite3": "^12.8.0"
+  }
+}

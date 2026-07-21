@@ -1,13 +1,23 @@
 ---
+description: AI-OS canonical instructions for Cursor.
 alwaysApply: true
 ---
 
-# AI-OS Project Instructions
+# AI-OS
 
-The canonical instructions for this repository live in `AGENTS.md` at the
-repository root. Read and follow that file before making changes here.
+AGENTS.md is the canonical instruction file for this repository. Cursor reads
+it through this adapter, per the Tool-Agnostic Runtime Contract in AGENTS.md.
 
-If this Cursor adapter and `AGENTS.md` ever conflict, `AGENTS.md` is the source
-of truth.
+Read and follow AGENTS.md fully. Operating rules, branching policy, memory
+authority, skill resolution, and hook conventions all live there.
 
-@../../AGENTS.md
+Tool-level Cursor defaults must not outrank AI-OS. If a global Cursor rule
+conflicts with AGENTS.md, neutralize it or scope it away from this repo.
+
+Note on automation: AI-OS's automatic "keep the primary checkout clean"
+SessionEnd autosave runs in Claude Code and Codex sessions. Cursor cannot
+run hooks, so a Cursor-only session may leave the primary checkout dirty;
+the next Claude or Codex session will clean it. If you see a Stash /
+Discard / Commit box in Claude Desktop, click Commit. Never Discard.
+
+@AGENTS.md

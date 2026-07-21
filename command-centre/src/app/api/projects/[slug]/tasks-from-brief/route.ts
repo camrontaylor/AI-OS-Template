@@ -69,7 +69,7 @@ export async function POST(
       );
     }
 
-    // Check for existing subtasks - don't duplicate
+    // Check for existing subtasks — don't duplicate
     const existingCount = db
       .prepare("SELECT COUNT(*) as cnt FROM tasks WHERE parentId = ?")
       .get(parentId) as { cnt: number };

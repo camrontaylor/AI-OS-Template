@@ -39,19 +39,6 @@ function loadStore() {
       "@/types/chat": {},
       "@/types/task": {},
       "@/types/chat-composer": {},
-      "@/lib/api-error": {
-        async readApiError(response, fallbackMessage) {
-          try {
-            const data = await response.json();
-            if (typeof data?.error === "string" && data.error.trim()) {
-              return data.error;
-            }
-          } catch {
-            // Test stub falls through to the supplied message.
-          }
-          return fallbackMessage;
-        },
-      },
       "@/lib/chat-drafts": {
         clearChatDraft(surface, scopeId) {
           clearedDrafts.push([surface, scopeId]);

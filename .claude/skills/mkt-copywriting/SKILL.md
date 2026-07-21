@@ -1,20 +1,12 @@
 ---
 name: mkt-copywriting
-description: >
-  Persuasive writing for anything that needs to sell. Landing pages, sales
-  pages, emails, ads, social posts, headlines, CTAs. Triggers on: "write
-  copy for", "landing page copy", "sales page", "help me sell", "punch
-  this up", "make this convert", "write a headline", "score this copy",
-  "review my copy", "email copy", "ad copy". Produces multiple variants
-  per piece, rates output on 7 quality dimensions, and recommends split
-  tests. Loads brand voice and positioning for consistency. Does NOT
-  trigger for content repurposing (use mkt-content-repurposing), email
-  sequences (use mkt-email-sequences), or long-form SEO articles.
+description: "Persuasive writing that needs to sell: landing pages, sales pages, emails, ads, social posts, headlines, CTAs. Not for content repurposing (mkt-content-repurposing) or SEO articles."
+when_to_use: 'Invoke when the request sounds like: "write copy for", "landing page copy", "sales page", "make this convert", "write a headline", "score this copy", "review my copy", "ad copy". Gives multiple variants and scores them'
 ---
 
 # Copywriting
 
-Good copy reads like a smart person explaining something they care about. No one notices they're being persuaded - they just keep reading because it's useful and specific. Every technique in this skill exists to serve that feeling.
+Good copy reads like a smart person explaining something they care about. No one notices they're being persuaded — they just keep reading because it's useful and specific. Every technique in this skill exists to serve that feeling.
 
 ## Outcome
 
@@ -30,7 +22,7 @@ Persuasive copy saved to `projects/mkt-copywriting/{campaign-name}/`, scored on 
 | `brand_context/samples.md` | yes | Reference for voice consistency |
 | `context/learnings.md` | `## mkt-copywriting` section | Apply previous feedback before starting |
 
-Load if they exist. Proceed without them if not - this skill works standalone.
+Load if they exist. Proceed without them if not — this skill works standalone.
 
 ---
 
@@ -41,7 +33,7 @@ Check `brand_context/` and load per the table above. Show a brief status:
 - Voice loaded: "[tone summary]. All copy will match."
 - Positioning loaded: "Building around '[angle]' frame."
 - ICP loaded: "Writing for [audience]. Awareness level: [level]."
-- Nothing found: "No brand context yet. I'll write solid copy - we can build your brand profile anytime to make it on-brand."
+- Nothing found: "No brand context yet. I'll write solid copy — we can build your brand profile anytime to make it on-brand."
 
 Read `context/learnings.md` → `## mkt-copywriting` section. Apply any previous corrections.
 
@@ -68,10 +60,10 @@ If `projects/mkt-copywriting/{campaign-name}/` exists, read what's there. Show a
 
 Before writing, confirm these (ask the user if unclear):
 
-1. **Audience awareness level** - Schwartz 1-5 (read `references/classic-frameworks.md` for the full model). Determines headline approach and copy length.
-2. **Core transformation** - Not features. Run the "So What?" chain three levels deep until you hit something emotional or financial. Read `references/persuasion-toolkit.md` § The So What? Chain.
-3. **Proof inventory** - What testimonials, data, case studies are available?
-4. **Positioning angle** - From brand_context or stated by user.
+1. **Audience awareness level** — Schwartz 1-5 (read `references/classic-frameworks.md` for the full model). Determines headline approach and copy length.
+2. **Core transformation** — Not features. Run the "So What?" chain three levels deep until you hit something emotional or financial. Read `references/persuasion-toolkit.md` § The So What? Chain.
+3. **Proof inventory** — What testimonials, data, case studies are available?
+4. **Positioning angle** — From brand_context or stated by user.
 
 ## Step 5: Write the Copy
 
@@ -79,25 +71,25 @@ Read `references/persuasion-toolkit.md` and apply the techniques that fit the fo
 
 - **Headlines**: Generate 5-10 using different angles (outcome, curiosity, proof, contrarian, story). Star your recommendation.
 - **Openings**: Pick the entry style that best matches the audience's awareness level. Scene-setting for cold audiences, data or challenge for warm ones.
-- **Body**: Keep the reader moving - vary sentence length, bridge sections, plant unanswered questions. Make pain concrete with numbers. Dig three levels past features to find the real benefit.
+- **Body**: Keep the reader moving — vary sentence length, bridge sections, plant unanswered questions. Make pain concrete with numbers. Dig three levels past features to find the real benefit.
 - **Evidence**: Every claim needs backup. Structure results as mini-stories: who they were, what they did, what changed, how long it took.
 - **CTAs**: Name the reward, not the action. Below the button, reduce friction: remove risk, show peers, emphasise speed.
 
-For landing/sales pages, use the full arc from the persuasion toolkit - hook through final CTA - adapting which sections to include based on format and audience awareness.
+For landing/sales pages, use the full arc from the persuasion toolkit — hook through final CTA — adapting which sections to include based on format and audience awareness.
 
 ## Step 6: Generate Variants
 
 Read `references/variants-and-scoring.md` for the full protocol.
 
 - **Headlines**: 5-10 variants across different frameworks. Lead with a QUICK PICK summary.
-- **Body copy** (landing/sales pages): 2-3 variants - Control (strongest primary angle), Contrarian (counterintuitive entry), Proof-Led (evidence first).
+- **Body copy** (landing/sales pages): 2-3 variants — Control (strongest primary angle), Contrarian (counterintuitive entry), Proof-Led (evidence first).
 - **Email subject lines**: 5-7 variants when writing emails.
 
 ## Step 7: Score the Copy
 
 Use the 7-dimension rubric from `references/variants-and-scoring.md`:
 
-Clarity, Specificity, Voice, Desire, Proof, Urgency, Flow - each 1-10. Total out of 70.
+Clarity, Specificity, Voice, Desire, Proof, Urgency, Flow — each 1-10. Total out of 70.
 - 90%+ = ship it
 - 80-89% = ship with tweaks
 - 70-79% = functional but leaving performance on the table
@@ -105,7 +97,7 @@ Clarity, Specificity, Voice, Desire, Proof, Urgency, Flow - each 1-10. Total out
 
 Self-score generated copy honestly. If any dimension is below 7, note what would fix it and offer to revise.
 
-When the user asks to "score this" or "review my copy" - score first, show weaknesses, then offer to rewrite.
+When the user asks to "score this" or "review my copy" — score first, show weaknesses, then offer to rewrite.
 
 ## Step 8: Humanizer Gate
 
@@ -125,7 +117,7 @@ Save to `projects/mkt-copywriting/{campaign-name}/`:
 
 Include YAML frontmatter: type, campaign, awareness_level, variant, platform, word_count, date, score.
 
-After saving, show the user actual copy excerpts - not just file paths.
+After saving, show the user actual copy excerpts — not just file paths.
 
 Suggest A/B tests from `references/variants-and-scoring.md` § A/B Testing.
 
@@ -159,4 +151,4 @@ Suggest logical next skills based on what was created (e.g., after landing page 
 
 ## Self-Update
 
-If the user flags an issue - wrong tone, weak copy, bad format - update the `## Rules` section immediately with the correction and today's date.
+If the user flags an issue — wrong tone, weak copy, bad format — update the `## Rules` section immediately with the correction and today's date.

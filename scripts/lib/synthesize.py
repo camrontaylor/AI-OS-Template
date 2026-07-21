@@ -66,7 +66,7 @@ out = []
 
 for heading, content in local_sections:
     if not heading:
-        continue  # pre-heading content (title, separators) - skip
+        continue  # pre-heading content (title, separators) — skip
 
     base_content = base_map.get(heading)
 
@@ -75,10 +75,10 @@ for heading, content in local_sections:
         new_entries = [l for l in content if is_dated_rule(l) and l not in base_rules_text]
         out.append((heading, new_entries))
     elif base_content is None:
-        out.append((heading, content))  # section not in base - user-added
+        out.append((heading, content))  # section not in base — user-added
     elif not content_equal(content, base_content):
         out.append((heading, content))  # user modified this section
-    # else: identical to base - drop
+    # else: identical to base — drop
 
 # Always include ## Rules (even if empty)
 if not any(h == "## Rules" for h, _ in out):

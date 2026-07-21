@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
             } catch {}
           };
 
-          // Subscribe immediately - earlyBuffer replays any output that arrived before this
+          // Subscribe immediately — earlyBuffer replays any output that arrived before this
           const unsub = subscribe(sessionId, (event, data) => {
             send(event, data);
           });

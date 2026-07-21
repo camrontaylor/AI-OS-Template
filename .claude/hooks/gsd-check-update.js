@@ -64,7 +64,7 @@ const child = spawn(process.execPath, ['-e', `
     }
   } catch (e) {}
 
-  // Check for stale hooks - compare hook version headers against installed VERSION
+  // Check for stale hooks — compare hook version headers against installed VERSION
   // Hooks live inside get-shit-done/hooks/, not configDir/hooks/
   let staleHooks = [];
   if (configDir) {
@@ -82,7 +82,7 @@ const child = spawn(process.execPath, ['-e', `
                 staleHooks.push({ file: hookFile, hookVersion, installedVersion: installed });
               }
             } else {
-              // No version header at all - definitely stale (pre-version-tracking)
+              // No version header at all — definitely stale (pre-version-tracking)
               staleHooks.push({ file: hookFile, hookVersion: 'unknown', installedVersion: installed });
             }
           } catch (e) {}

@@ -59,7 +59,7 @@ function buildChatDigest(logEntries: LogEntry[]): { type: "text" | "tools" | "qu
       continue;
     }
 
-    // Non-tool entry - flush any pending tools first
+    // Non-tool entry — flush any pending tools first
     flushTools();
 
     if (entry.type === "text" && entry.content.length > 30) {
@@ -246,7 +246,7 @@ export function ModalSummaryTab({
           </div>
           {task.status === "review" && (
             <div style={{ fontSize: 12, fontFamily: "var(--font-inter), Inter, sans-serif", color: "var(--muted-foreground)", marginTop: 2 }}>
-              Claude has finished - check the outputs and mark as done.
+              Claude has finished — check the outputs and mark as done.
             </div>
           )}
           {isRunning && task.activityLabel && (
@@ -316,7 +316,7 @@ export function ModalSummaryTab({
         </div>
       )}
 
-      {/* Resume in terminal - for session-linked tasks that aren't currently running */}
+      {/* Resume in terminal — for session-linked tasks that aren't currently running */}
       {task.claudeSessionId && task.status !== "running" && (
         <ResumeSessionButton sessionId={task.claudeSessionId} />
       )}
@@ -328,7 +328,7 @@ export function ModalSummaryTab({
         </div>
       )}
 
-      {/* Chat log digest - hidden for project/gsd parents (those surface their
+      {/* Chat log digest — hidden for project/gsd parents (those surface their
           subtasks as the main content and clicking a subtask drills straight
           into that child's own full conversation). */}
       {!isParent && (
@@ -417,7 +417,7 @@ export function ModalSummaryTab({
       </div>
       )}
 
-      {/* Output files (parent + aggregated child outputs) - under activity */}
+      {/* Output files (parent + aggregated child outputs) — under activity */}
       <div style={{ padding: "16px 24px 0 24px" }}>
         <SectionHeader
           label="Output Files"
@@ -548,7 +548,7 @@ export function ModalSummaryTab({
                 flex: 1,
               }}
             >
-              {task.projectSlug} - brief.md
+              {task.projectSlug} — brief.md
             </span>
             <ChevronRight size={14} color="var(--muted-foreground)" />
           </button>
@@ -875,7 +875,7 @@ function ExpandableSubtaskRow({
 
   return (
     <div>
-      {/* Row - click drills straight into the child's full conversation */}
+      {/* Row — click drills straight into the child's full conversation */}
       <button
         onClick={() => onViewFull?.(child.id)}
         style={{
@@ -995,7 +995,7 @@ function ExpandableSubtaskRow({
               e.stopPropagation();
               updateTask(child.id, { status: "backlog" });
             }}
-            title="Undo - move back to backlog"
+            title="Undo — move back to backlog"
             style={{
               display: "flex",
               alignItems: "center",

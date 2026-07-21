@@ -22,7 +22,7 @@ import type { QuestionSpec } from "@/types/question-spec";
  * prose. The prose-detection path still catches cases where Claude
  * ignores this instruction.
  */
-const STRUCTURED_QUESTION_ADDENDUM = `\n\n---\nWhen you need clarification from the user, do NOT ask in prose. Instead emit a fenced code block with the language tag \`ask-user-questions\` containing a JSON array of typed question objects. Each object has: id (short string), prompt (the question), type ("text" | "multiline" | "select" | "multiselect"), required (boolean), and options (array of strings, only for select/multiselect). Prefer select/multiselect when the set of reasonable answers is small. Example:\n\n\`\`\`ask-user-questions\n[\n  { "id": "audience", "prompt": "Who is the primary audience?", "type": "text", "required": true },\n  { "id": "tone", "prompt": "What tone should this take?", "type": "select", "options": ["Formal", "Casual", "Playful"], "required": true }\n]\n\`\`\`\n\nEmit the block and stop - the system will surface it to the user, collect answers, and resume you with their replies.\n---\n`;
+const STRUCTURED_QUESTION_ADDENDUM = `\n\n---\nWhen you need clarification from the user, do NOT ask in prose. Instead emit a fenced code block with the language tag \`ask-user-questions\` containing a JSON array of typed question objects. Each object has: id (short string), prompt (the question), type ("text" | "multiline" | "select" | "multiselect"), required (boolean), and options (array of strings, only for select/multiselect). Prefer select/multiselect when the set of reasonable answers is small. Example:\n\n\`\`\`ask-user-questions\n[\n  { "id": "audience", "prompt": "Who is the primary audience?", "type": "text", "required": true },\n  { "id": "tone", "prompt": "What tone should this take?", "type": "select", "options": ["Formal", "Casual", "Playful"], "required": true }\n]\n\`\`\`\n\nEmit the block and stop — the system will surface it to the user, collect answers, and resume you with their replies.\n---\n`;
 const PERMISSION_BRIDGE_SERVER = "permissions";
 const PERMISSION_BRIDGE_TOOL_NAME = "approval_prompt";
 const PERMISSION_BRIDGE_TOOL_ID = `mcp__${PERMISSION_BRIDGE_SERVER}__${PERMISSION_BRIDGE_TOOL_NAME}`;
@@ -39,13 +39,13 @@ const PERMISSION_BRIDGE_RELATIVE_PATH = path.join(
  */
 interface SessionEntry {
   proc: ChildProcess;
-  /** Set when a question was detected during this turn - prevents handleComplete from finalising */
+  /** Set when a question was detected during this turn — prevents handleComplete from finalising */
   pendingQuestion: boolean;
   /** Accumulated cost across multiple turns */
   totalCostUsd: number;
   totalTokensUsed: number;
   totalDurationMs: number;
-  /** True when this turn was resumed from "review" status (for logging only - tasks always go through review) */
+  /** True when this turn was resumed from "review" status (for logging only — tasks always go through review) */
   resumedFromReview: boolean;
 }
 
@@ -202,11 +202,11 @@ class ProcessManager {
           // Set parent to "running" as a container
           db.prepare(
             "UPDATE tasks SET status = 'running', startedAt = ?, updatedAt = ?, activityLabel = ? WHERE id = ?"
-          ).run(now, now, `0/${childCount.count} subtasks done - first task queued`, taskId);
+          ).run(now, now, `0/${childCount.count} subtasks done — first task queued`, taskId);
           const updatedParent = db.prepare("SELECT * FROM tasks WHERE id = ?").get(taskId) as Task;
           emitTaskEvent({ type: "task:status", task: { ...updatedParent, needsInput: Boolean(updatedParent.needsInput) }, timestamp: now });
 
-          console.log(`[process-manager] Task ${taskId} has ${childCount.count} children - running as container, not executing`);
+          console.log(`[process-manager] Task ${taskId} has ${childCount.count} children — running as container, not executing`);
           return;
         }
       }
@@ -308,7 +308,7 @@ class ProcessManager {
         } catch { /* ignore */ }
       }
 
-      // Build prompt - detect special task types first
+      // Build prompt — detect special task types first
       let prompt = "";
       const isSlashCommand = task.description?.match(/^Run \/[\w:.-]+/);
       const taskRow = db.prepare("SELECT gsdStep, phaseNumber FROM tasks WHERE id = ?").get(taskId) as { gsdStep: string | null; phaseNumber: number | null } | undefined;
@@ -318,7 +318,7 @@ class ProcessManager {
 
 
       if (isSlashCommand) {
-        // Slash command task - pass the description as-is (e.g. "Run /start-here", "Run /gsd-plan-phase 6")
+        // Slash command task — pass the description as-is (e.g. "Run /onboarding", "Run /gsd-plan-phase 6")
         prompt = task.description!;
       } else if (gsdStep) {
         // Target the explicit phase number the user clicked so each GSD step
@@ -326,17 +326,17 @@ class ProcessManager {
         // instead of the ambiguous "current phase".
         const phaseArg = gsdPhaseNumber != null ? ` ${gsdPhaseNumber}` : "";
         const gsdPrompts: Record<string, string> = {
-          discuss: `Run /gsd-discuss-phase${phaseArg}. Ask the user interactive questions - do NOT use --auto. Wait for their replies.`,
+          discuss: `Run /gsd-discuss-phase${phaseArg}. Ask the user interactive questions — do NOT use --auto. Wait for their replies.`,
           plan: `Run /gsd-plan-phase${phaseArg}.`,
           execute: `Run /gsd-execute-phase${phaseArg}.`,
           verify: `Run /gsd-verify-work${phaseArg}.`,
         };
         prompt = gsdPrompts[gsdStep] || task.title;
       } else if (task.level === "project" && isTopLevelParent) {
-        // Project scoping - interactive conversation with brand context
+        // Project scoping — interactive conversation with brand context
         prompt = this.buildProjectScopingPrompt(task, cwd);
       } else if (task.level === "gsd" && isTopLevelParent) {
-        // GSD project - run /gsd-new-project which handles interviews, research, and roadmap creation
+        // GSD project — run /gsd-new-project which handles interviews, research, and roadmap creation
         prompt = `Run /gsd-new-project "${task.title}"${task.description ? `\n\nContext from user: ${task.description}` : ""}`;
       } else {
         if (task.projectSlug) {
@@ -349,7 +349,7 @@ class ProcessManager {
             }
           } catch { /* proceed without context */ }
         }
-        // Sibling context - only for GSD/phase subtasks so they know what
+        // Sibling context — only for GSD/phase subtasks so they know what
         // siblings have done. Ad-hoc pane chats (no gsdStep, no phaseNumber)
         // are independent conversations and should not see sibling context.
         if (gsdStep || gsdPhaseNumber != null) {
@@ -373,14 +373,14 @@ class ProcessManager {
       }
 
       // Inject session activity summary for wrap-up and session-aware tasks.
-      // Skip when resuming a parent session - that session already has today's
+      // Skip when resuming a parent session — that session already has today's
       // context in its own memory and doesn't need a cross-task summary.
       const needsSessionContext = this.isSessionContextTask(task);
       console.log(`[process-manager] Session context check for "${task.title}" (desc: "${task.description?.slice(0, 50)}"): ${needsSessionContext}`);
       if (needsSessionContext) {
         const sessionSummary = this.buildSessionSummary(cwd, taskId);
         console.log(`[process-manager] Session summary length: ${sessionSummary.length} chars`);
-        prompt = `IMPORTANT: The following session activity summary contains the complete record of what was done today across ALL tasks in the Command Centre. Use this as your primary source of truth for the session wrap-up - do NOT rely solely on git status or your own conversation history, as you are running in a fresh context window without visibility into other task conversations.\n\n${sessionSummary}\nNow proceed with the task:\n\n${prompt}`;
+        prompt = `IMPORTANT: The following session activity summary contains the complete record of what was done today across ALL tasks in the Command Centre. Use this as your primary source of truth for the session wrap-up — do NOT rely solely on git status or your own conversation history, as you are running in a fresh context window without visibility into other task conversations.\n\n${sessionSummary}\nNow proceed with the task:\n\n${prompt}`;
         contextSources.push({ type: "system", label: "Session Activity Summary" });
       }
 
@@ -425,7 +425,7 @@ class ProcessManager {
       prompt = prompt + STRUCTURED_QUESTION_ADDENDUM;
 
       // Spawn the turn. When resuming a parent-owned session, flag
-      // Every task starts fresh - no parent session continuation.
+      // Every task starts fresh — no parent session continuation.
       this.spawnClaudeTurn(taskId, prompt, cwd, false, false, snapshotContent);
     } finally {
       this.startingTasks.delete(taskId);
@@ -450,25 +450,25 @@ class ProcessManager {
     console.log(`[process-manager] replyToTask sessions:`, [...this.sessions.keys()].map(k => k.slice(0, 8)));
     console.log(`[process-manager] replyToTask waitingForReply:`, [...this.waitingForReply].map(k => k.slice(0, 8)));
 
-    // Also check if the DB says needsInput - if so, trust the DB over in-memory state
+    // Also check if the DB says needsInput — if so, trust the DB over in-memory state
     // (handles HMR or other edge cases where in-memory state was lost)
     if (!isWaiting && !isPendingQuestion) {
       const db = getDb();
       const dbTask = db.prepare("SELECT needsInput FROM tasks WHERE id = ?").get(taskId) as { needsInput: number } | undefined;
       const dbNeedsInput = dbTask?.needsInput === 1;
-      console.log(`[process-manager] In-memory state empty - DB needsInput=${dbNeedsInput}`);
+      console.log(`[process-manager] In-memory state empty — DB needsInput=${dbNeedsInput}`);
 
       if (!dbNeedsInput) {
         console.warn(`[process-manager] Task ${taskId} is not waiting for a reply (both in-memory and DB)`);
         return false;
       }
 
-      // DB says needsInput but in-memory state is gone - proceed anyway
+      // DB says needsInput but in-memory state is gone — proceed anyway
       console.log(`[process-manager] DB says needsInput=true, proceeding with reply despite empty in-memory state`);
     }
 
     // If the process is still running (user replied before process exited),
-    // kill it - we'll spawn a new --continue process
+    // kill it — we'll spawn a new --continue process
     if (session) {
       console.log(`[process-manager] Killing running process tree for ${taskId} before reply`);
       killChildProcessTree(session.proc);
@@ -503,7 +503,7 @@ class ProcessManager {
     const now = new Date().toISOString();
     db.prepare(
       "UPDATE tasks SET status = ?, updatedAt = ?, activityLabel = ?, costUsd = NULL, tokensUsed = NULL, durationMs = NULL, errorMessage = NULL, startedAt = NULL, completedAt = NULL, needsInput = 0 WHERE id = ?"
-    ).run("review", now, "Cancelled - re-queue or delete", taskId);
+    ).run("review", now, "Cancelled — re-queue or delete", taskId);
 
     const updated = db.prepare("SELECT * FROM tasks WHERE id = ?").get(taskId) as Task;
     emitTaskEvent({ type: "task:status", task: this.normalizeTask(updated), timestamp: now });
@@ -588,7 +588,7 @@ class ProcessManager {
   }
 
   /**
-   * Read the session snapshot - agent identity, user preferences, working
+   * Read the session snapshot — agent identity, user preferences, working
    * memory, and today's daily log. Prepended to every task prompt so the
    * command-centre's spawned -p sessions have the same baseline context as
    * a fresh Claude Code CLI session would have via .claude/hooks/load-memory-snapshot.js.
@@ -596,10 +596,10 @@ class ProcessManager {
    * Loads (when present):
    *   - context/SOUL.md            (agent identity)
    *   - context/USER.md            (user profile)
-   *   - context/MEMORY.md          (curated working scratchpad - frozen snapshot)
+   *   - context/MEMORY.md          (curated working scratchpad — frozen snapshot)
    *   - context/memory/{today}.md  (today's daily log, with yesterday as fallback)
    *
-   * Does NOT load context/learnings.md - that file is lazy-loaded per skill
+   * Does NOT load context/learnings.md — that file is lazy-loaded per skill
    * by design (see AGENTS.md "Memory System").
    */
   private readSessionSnapshot(cwd: string): { content: string; loaded: string[] } {
@@ -636,7 +636,7 @@ class ProcessManager {
     if (fs.existsSync(pathMod.join(cwd, todayLogRel))) {
       tryLoad(todayLogRel, `memory/${today}.md (today)`);
     } else {
-      tryLoad(yesterdayLogRel, `memory/${yesterday}.md (yesterday - no session today yet)`);
+      tryLoad(yesterdayLogRel, `memory/${yesterday}.md (yesterday — no session today yet)`);
     }
 
     if (sections.length === 0) return { content: "", loaded: [] };
@@ -663,8 +663,8 @@ Project: "${task.title}"${userContext}
 IMPORTANT INSTRUCTIONS:
 1. You are running in -p mode. Each message you produce will be your COMPLETE turn. The user will reply, and you'll be resumed with --resume.
 
-2. Your FIRST turn - do ALL of this:
-   a. Use the brand context and goal above to infer what the user needs. Don't ask questions first - make your best judgement call based on what you know.
+2. Your FIRST turn — do ALL of this:
+   a. Use the brand context and goal above to infer what the user needs. Don't ask questions first — make your best judgement call based on what you know.
    b. Save the brief to ${briefPath} with this format:
       ---
       project: ${slug}
@@ -679,15 +679,15 @@ IMPORTANT INSTRUCTIONS:
       {One clear sentence describing what this project delivers}
 
       ## Deliverables
-      - [ ] **{Deliverable 1}** - {what it is and acceptance criteria}
-      - [ ] **{Deliverable 2}** - {what it is and acceptance criteria}
-      {etc - one per major deliverable, not every granular step}
+      - [ ] **{Deliverable 1}** — {what it is and acceptance criteria}
+      - [ ] **{Deliverable 2}** — {what it is and acceptance criteria}
+      {etc — one per major deliverable, not every granular step}
 
       ## Acceptance Criteria
-      {How the user will know the project is done - bullet points}
+      {How the user will know the project is done — bullet points}
 
       ## Constraints
-      {Any timeline, format, or technical constraints - or "None specified"}
+      {Any timeline, format, or technical constraints — or "None specified"}
 
    c. Output subtasks (one per deliverable from the brief):
       \`\`\`subtasks
@@ -709,7 +709,7 @@ IMPORTANT INSTRUCTIONS:
    - Match done-titles exactly as they appear in the current list (case is ignored). Use this whenever you complete a deliverable so the user can see progress.
 
 CRITICAL: Every turn MUST end with a question mark (?). This is how the system detects that you need user input.
-Keep subtasks high-level - one per major deliverable, not every granular step.`;
+Keep subtasks high-level — one per major deliverable, not every granular step.`;
   }
 
   private slugify(text: string): string {
@@ -757,7 +757,7 @@ Keep subtasks high-level - one per major deliverable, not every granular step.`;
       for (const t of allTasks) {
         const cost = t.costUsd ? ` ($${t.costUsd.toFixed(2)})` : "";
         const project = t.projectSlug ? ` [${t.projectSlug}]` : "";
-        parts.push(`- **${t.title}**${project} - ${t.status}${cost}`);
+        parts.push(`- **${t.title}**${project} — ${t.status}${cost}`);
 
         // Get skills invoked by this task
         const skillMentions = db.prepare(
@@ -814,7 +814,7 @@ Keep subtasks high-level - one per major deliverable, not every granular step.`;
       }
     }
 
-    // 2. Git history - commits from today
+    // 2. Git history — commits from today
     try {
       const gitLog = execSync(
         `git log --since="today 00:00" --format="%h %s" --no-merges 2>/dev/null`,
@@ -902,33 +902,33 @@ Keep subtasks high-level - one per major deliverable, not every granular step.`;
     ).get(completedChild.parentId) as Task | undefined;
 
     if (!nextSibling) {
-      // No more siblings to queue - check if all are done
+      // No more siblings to queue — check if all are done
       const remaining = db.prepare(
         `SELECT COUNT(*) as count FROM tasks WHERE parentId = ? AND status != 'done'`
       ).get(completedChild.parentId) as { count: number };
 
       if (remaining.count === 0) {
-        // All subtasks complete - move parent to review
+        // All subtasks complete — move parent to review
         db.prepare(
           "UPDATE tasks SET status = 'review', updatedAt = ?, activityLabel = NULL, needsInput = 0 WHERE id = ?"
         ).run(now, completedChild.parentId);
 
         const updatedParent = db.prepare("SELECT * FROM tasks WHERE id = ?").get(completedChild.parentId) as Task;
         emitTaskEvent({ type: "task:status", task: this.normalizeTask(updatedParent), timestamp: now });
-        console.log(`[process-manager] All subtasks done - parent ${completedChild.parentId.slice(0, 8)} moved to review`);
+        console.log(`[process-manager] All subtasks done — parent ${completedChild.parentId.slice(0, 8)} moved to review`);
       }
       return;
     }
 
-    // Queue the next sibling - it will need user go-ahead to start
+    // Queue the next sibling — it will need user go-ahead to start
     db.prepare(
       "UPDATE tasks SET status = 'review', updatedAt = ?, needsInput = 1, activityLabel = ? WHERE id = ?"
-    ).run(now, "Ready to start - waiting for go-ahead", nextSibling.id);
+    ).run(now, "Ready to start — waiting for go-ahead", nextSibling.id);
 
     const updatedSibling = db.prepare("SELECT * FROM tasks WHERE id = ?").get(nextSibling.id) as Task;
     emitTaskEvent({ type: "task:status", task: this.normalizeTask(updatedSibling), timestamp: now });
 
-    // Keep parent in "in progress" - update its activity
+    // Keep parent in "in progress" — update its activity
     const completedCount = db.prepare(
       `SELECT COUNT(*) as count FROM tasks WHERE parentId = ? AND status = 'done'`
     ).get(completedChild.parentId) as { count: number };
@@ -938,12 +938,12 @@ Keep subtasks high-level - one per major deliverable, not every granular step.`;
 
     db.prepare(
       "UPDATE tasks SET status = 'running', updatedAt = ?, activityLabel = ? WHERE id = ?"
-    ).run(now, `${completedCount.count}/${totalCount.count} tasks done - next task queued`, completedChild.parentId);
+    ).run(now, `${completedCount.count}/${totalCount.count} tasks done — next task queued`, completedChild.parentId);
 
     const updatedParent = db.prepare("SELECT * FROM tasks WHERE id = ?").get(completedChild.parentId) as Task;
     emitTaskEvent({ type: "task:status", task: this.normalizeTask(updatedParent), timestamp: now });
 
-    console.log(`[process-manager] Auto-queued next sibling ${nextSibling.id.slice(0, 8)} "${nextSibling.title}" - ${completedCount.count}/${totalCount.count} done`);
+    console.log(`[process-manager] Auto-queued next sibling ${nextSibling.id.slice(0, 8)} "${nextSibling.title}" — ${completedCount.count}/${totalCount.count} done`);
   }
 
   // ── Subtask extraction from structured output ──────────────────
@@ -1027,7 +1027,7 @@ Keep subtasks high-level - one per major deliverable, not every granular step.`;
         if (delMatch) {
           const lines = delMatch[1].split("\n");
           for (const line of lines) {
-            const item = line.match(/^-\s*\[[ x]\]\s*\**(.+?)\**\s*(?: - \s*(.*))?$/);
+            const item = line.match(/^-\s*\[[ x]\]\s*\**(.+?)\**\s*(?:—\s*(.*))?$/);
             if (item) {
               subtasks.push({
                 title: item[1].trim(),
@@ -1083,7 +1083,7 @@ Keep subtasks high-level - one per major deliverable, not every granular step.`;
     const newSubtasks = subtasks.filter((sub) => {
       const key = sub.title.trim().toLowerCase();
       if (existingTitles.has(key)) {
-        // Existing subtask - update status if Claude marked it done.
+        // Existing subtask — update status if Claude marked it done.
         if (sub.status === "done") {
           const match = existingChildren.find(
             (c) => c.title.trim().toLowerCase() === key
@@ -1256,7 +1256,7 @@ Keep subtasks high-level - one per major deliverable, not every granular step.`;
     if (taskRow?.projectSlug) {
       cleanEnv.AI_OS_ACTIVE_PROJECT = taskRow.projectSlug;
     }
-    // Cron tasks always run with bypassPermissions - they execute unattended
+    // Cron tasks always run with bypassPermissions — they execute unattended
     const permissionMode = taskRow?.cronJobSlug
       ? "bypassPermissions"
       : (taskRow?.permissionMode || "bypassPermissions");
@@ -1386,7 +1386,7 @@ Keep subtasks high-level - one per major deliverable, not every granular step.`;
       proc.unref();
       console.log(`[process-manager] Spawn succeeded, pid=${proc.pid}`);
 
-      // Close stdin immediately - in -p mode the prompt is in the flag.
+      // Close stdin immediately — in -p mode the prompt is in the flag.
       // For replies, we use --continue with a new process instead of stdin.
       if (proc.stdin) {
         proc.stdin.end();
@@ -1495,11 +1495,11 @@ Keep subtasks high-level - one per major deliverable, not every granular step.`;
       // If not (e.g., replyToTask killed it and spawned a new one), ignore this close.
       const currentSession = this.sessions.get(taskId);
       if (currentSession && currentSession.proc !== proc) {
-        console.log(`[process-manager] Stale close for ${taskId.slice(0, 8)} (replaced by new turn) - ignoring`);
+        console.log(`[process-manager] Stale close for ${taskId.slice(0, 8)} (replaced by new turn) — ignoring`);
         return;
       }
 
-      // If the parser already fired onComplete/onError, it handled cleanup - skip
+      // If the parser already fired onComplete/onError, it handled cleanup — skip
       if (parser.isCompleted) {
         if (currentSession?.proc === proc) {
           this.sessions.delete(taskId);
@@ -1510,13 +1510,13 @@ Keep subtasks high-level - one per major deliverable, not every granular step.`;
 
       // No current session means it was killed (e.g., by replyToTask or cancelTask)
       if (!currentSession) {
-        console.log(`[process-manager] Close for ${taskId.slice(0, 8)} with no active session - ignoring`);
+        console.log(`[process-manager] Close for ${taskId.slice(0, 8)} with no active session — ignoring`);
         this.lastProgressEmit.delete(taskId);
         return;
       }
 
-      // Parser didn't fire - handle based on exit code
-      // NOTE: Do NOT delete the session yet - handleTurnComplete/handleTaskError need it
+      // Parser didn't fire — handle based on exit code
+      // NOTE: Do NOT delete the session yet — handleTurnComplete/handleTaskError need it
       if (code !== 0) {
         const trimmedStderr = stderrBuffer.trim();
         const permissionBridgeFailure =
@@ -1609,7 +1609,7 @@ Keep subtasks high-level - one per major deliverable, not every granular step.`;
   /**
    * Called when a single Claude turn completes (result message received).
    * If a question was asked during this turn, the task stays in "running"
-   * with needsInput - waiting for user to reply via --continue.
+   * with needsInput — waiting for user to reply via --continue.
    * Otherwise, the task is finalised to "review".
    */
   handleTurnComplete(
@@ -1666,13 +1666,13 @@ Keep subtasks high-level - one per major deliverable, not every granular step.`;
     // via the UI while Claude was finishing, don't override it.
     const currentStatus = (db.prepare("SELECT status FROM tasks WHERE id = ?").get(taskId) as { status: string } | undefined)?.status;
     if (currentStatus === "done") {
-      console.log(`[process-manager] Task ${taskId.slice(0, 8)} already marked done by user - respecting explicit status`);
+      console.log(`[process-manager] Task ${taskId.slice(0, 8)} already marked done by user — respecting explicit status`);
       this.sessions.delete(taskId);
       this.waitingForReply.delete(taskId);
       return;
     }
 
-    // Determine if this is a subtask (has a parent) - subtasks can auto-complete
+    // Determine if this is a subtask (has a parent) — subtasks can auto-complete
     // since their lifecycle is managed by the parent task flow.
     const taskCheck = db.prepare("SELECT level, parentId, completedAt FROM tasks WHERE id = ?").get(taskId) as
       { level: string; parentId: string | null; completedAt: string | null } | undefined;
@@ -1684,13 +1684,13 @@ Keep subtasks high-level - one per major deliverable, not every granular step.`;
 
     // For cron tasks and subtasks: use question detection to decide flow.
     // For all other tasks (user-facing): ALWAYS keep interactive.
-    // The user decides when a task is done - not the system.
+    // The user decides when a task is done — not the system.
     if (!isCronTask && !isSubtask) {
       // Top-level interactive task: move to "review" (Your Turn) with needsInput.
       // Question detection is only used to surface the specific question text.
       const completionLabel = questionAsked
         ? undefined  // handleQuestion already set the activityLabel
-        : this.buildCompletionSummary(taskId, db) || "Claude has finished this step - review and reply, or mark as done";
+        : this.buildCompletionSummary(taskId, db) || "Claude has finished this step — review and reply, or mark as done";
 
       if (completionLabel) {
         db.prepare("UPDATE tasks SET activityLabel = ? WHERE id = ?").run(completionLabel, taskId);
@@ -1724,8 +1724,8 @@ Keep subtasks high-level - one per major deliverable, not every granular step.`;
     }
 
     if (questionAsked) {
-      // Subtask or cron asked a question - keep interactive
-      console.log(`[process-manager] Turn complete with pending question for ${taskId} - adding to waitingForReply`);
+      // Subtask or cron asked a question — keep interactive
+      console.log(`[process-manager] Turn complete with pending question for ${taskId} — adding to waitingForReply`);
 
       if (isCronTask) {
         db.prepare(
@@ -1756,10 +1756,10 @@ Keep subtasks high-level - one per major deliverable, not every granular step.`;
 
       emitTaskEvent({ type: "task:status", task: this.normalizeTask(updated), timestamp: now });
     } else {
-      // Subtask or cron completed without question - finalize.
+      // Subtask or cron completed without question — finalize.
       // Cron tasks go to "done", subtasks go to "done" (parent manages lifecycle).
       const finalStatus = "done";
-      console.log(`[process-manager] Task ${taskId} completed - moving to ${finalStatus} (${isCronTask ? "cron" : "subtask"})`);
+      console.log(`[process-manager] Task ${taskId} completed — moving to ${finalStatus} (${isCronTask ? "cron" : "subtask"})`);
 
       fileWatcher.stopWatching(taskId).catch(() => {});
 
@@ -1808,7 +1808,7 @@ Keep subtasks high-level - one per major deliverable, not every granular step.`;
 
   /**
    * Called when question-like text is detected in Claude's output.
-   * Updates the UI to show the question, but does NOT set session.pendingQuestion  - 
+   * Updates the UI to show the question, but does NOT set session.pendingQuestion —
    * that's controlled by the turn-aware wrapper so only the LAST text block's
    * question state matters (intermediate questions followed by more work don't count).
    */
@@ -1944,7 +1944,7 @@ Keep subtasks high-level - one per major deliverable, not every granular step.`;
       // Cron task continuations still need a human to step in when they fail.
       db.prepare(
         "UPDATE tasks SET status = 'review', completedAt = NULL, updatedAt = ?, errorMessage = ?, activityLabel = ?, needsInput = 1 WHERE id = ?"
-      ).run(now, errorMessage, "Error - needs attention", taskId);
+      ).run(now, errorMessage, "Error — needs attention", taskId);
 
       this.waitingForReply.add(taskId);
       this.sessions.delete(taskId);
@@ -1953,7 +1953,7 @@ Keep subtasks high-level - one per major deliverable, not every granular step.`;
       // Interactive tasks: stay in "running" with needsInput flag
       db.prepare(
         "UPDATE tasks SET updatedAt = ?, errorMessage = ?, activityLabel = ?, needsInput = 1 WHERE id = ?"
-      ).run(now, errorMessage, "Error - needs attention", taskId);
+      ).run(now, errorMessage, "Error — needs attention", taskId);
 
       this.waitingForReply.add(taskId);
       this.sessions.delete(taskId);
@@ -2054,7 +2054,7 @@ Keep subtasks high-level - one per major deliverable, not every granular step.`;
         emitTaskEvent({ type: "task:output", task: this.normalizeTask(task), timestamp: now });
       }
     } catch {
-      // Non-critical - don't break log entry processing
+      // Non-critical — don't break log entry processing
     }
   }
 
@@ -2214,7 +2214,7 @@ class ClauseOutputParserWithTurnAwareness {
   ) {
     this.parser = new ClaudeOutputParser({
       onProgress: (data) => {
-        // New assistant text arriving - reset question flag (will be re-set by onQuestion if this text IS a question)
+        // New assistant text arriving — reset question flag (will be re-set by onQuestion if this text IS a question)
         if (data.activityLabel) {
           this.lastTextWasQuestion = false;
         }
@@ -2248,7 +2248,7 @@ class ClauseOutputParserWithTurnAwareness {
   }
 }
 
-// Singleton instance - use globalThis to survive Next.js HMR in dev mode
+// Singleton instance — use globalThis to survive Next.js HMR in dev mode
 const globalForPM = globalThis as unknown as { __processManager?: ProcessManager };
 export const processManager = globalForPM.__processManager ?? new ProcessManager();
 if (process.env.NODE_ENV !== "production") {

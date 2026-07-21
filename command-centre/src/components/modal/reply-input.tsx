@@ -135,7 +135,7 @@ interface ReplyInputProps {
   subtasks?: SubtaskSummary[];
   /** Click handler for a subtask row. */
   onSelectSubtask?: (id: string) => void;
-  /** Execute a subtask - POST /api/tasks/:id/execute */
+  /** Execute a subtask — POST /api/tasks/:id/execute */
   onRunSubtask?: (id: string) => void;
   /** Execute a subtask in a new chat pane */
   onRunSubtaskInNewChat?: (id: string, title: string) => void;
@@ -150,9 +150,9 @@ interface ReplyInputProps {
   /** When set, the first message creates a new pane task instead of replying.
    *  Returns the new task ID on success, null on failure. */
   onCreatePaneTask?: (message: string, permissionMode: string, model: ClaudeModel | null, thinkingEffort: ClaudeThinkingEffort | null, attachments: ChatAttachment[]) => Promise<string | null>;
-  /** Compact mode - shrink toolbar elements (for multi-pane layouts) */
+  /** Compact mode — shrink toolbar elements (for multi-pane layouts) */
   compact?: boolean;
-  /** Project slug - used to pin the relevant brief at the top of the @ menu */
+  /** Project slug — used to pin the relevant brief at the top of the @ menu */
   projectSlug?: string | null;
   /** Hide the tasks/todos popover (e.g. for single tasks without a plan) */
   hideTasksPopover?: boolean;
@@ -401,11 +401,11 @@ export function ReplyInput({
       });
       if (!res.ok) {
         console.error(`[reply-input] Reply failed: ${res.status}`);
-        setError("Reply failed - try again");
+        setError("Reply failed — try again");
         setTimeout(() => setError(null), 3000);
       }
     } catch {
-      setError("Reply failed - try again");
+      setError("Reply failed — try again");
       setTimeout(() => setError(null), 3000);
     } finally {
       setIsSending(false);
@@ -620,7 +620,7 @@ export function ReplyInput({
               }}
             />
           )}
-          {/* Inner wrapper - position:relative so the highlight mirror
+          {/* Inner wrapper — position:relative so the highlight mirror
               aligns exactly with the textarea (not offset by parent padding). */}
           <div style={{ position: "relative", minWidth: 0, overflow: "hidden" }}>
             {(composer.message.includes("@") || composer.message.includes("/")) && (

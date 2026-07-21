@@ -127,7 +127,7 @@ class WorktreeManager {
           : [];
 
         if (conflictingFiles.length > 0) {
-          // Abort the merge - let the user resolve
+          // Abort the merge — let the user resolve
           execSync("git merge --abort", {
             cwd: repoRoot,
             stdio: "pipe",
@@ -166,7 +166,7 @@ class WorktreeManager {
         stdio: "pipe",
       });
     } catch {
-      // May already be removed - clean up directory manually
+      // May already be removed — clean up directory manually
       if (fs.existsSync(worktreePath)) {
         fs.rmSync(worktreePath, { recursive: true, force: true });
       }

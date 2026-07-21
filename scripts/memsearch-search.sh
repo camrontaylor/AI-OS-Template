@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 # memsearch-search.sh - canonical AI-OS semantic memory search wrapper.
 #
-# This wrapper resolves the AI-OS collection and turns the common Codex Milvus
-# Lite sandbox failure into an actionable message. It cannot grant sandbox
-# permissions itself; in Codex, run this command with escalated permissions.
+# This wrapper resolves the AI-OS collection and turns common Milvus Lite access
+# failures into actionable messages. It cannot grant sandbox permissions itself.
 
 set -euo pipefail
 
@@ -27,6 +26,7 @@ QUERY="$1"
 shift
 
 TOP_K="10"
+MEMSEARCH_TIMEOUT_SECONDS="${AI_OS_MEMSEARCH_TIMEOUT_SECONDS:-12}"
 if [ $# -gt 0 ] && [[ "${1:-}" =~ ^[0-9]+$ ]]; then
   TOP_K="$1"
   shift
@@ -36,6 +36,14 @@ if ! [[ "$TOP_K" =~ ^[0-9]+$ ]] || [ "$TOP_K" -lt 1 ]; then
   echo "top-k must be a positive integer." >&2
   exit 64
 fi
+
+# Retrieve a wider candidate pool before authority reranking and reciprocal-rank
+# fusion. Fetching only the requested final count meant a durable learning that
+# ranked fourth semantically could never be promoted into a top-three answer,
+# even when its source carried more authority than duplicate session notes.
+CANDIDATE_K=$((TOP_K * 8))
+[ "$CANDIDATE_K" -lt 24 ] && CANDIDATE_K=24
+[ "$CANDIDATE_K" -gt 100 ] && CANDIDATE_K=100
 
 client_from_path() {
   local path="$1"
@@ -126,22 +134,44 @@ cleanup() {
 trap cleanup EXIT
 
 set +e
-GLOG_minloglevel=3 GRPC_VERBOSITY=NONE "${MEMSEARCH_CMD[@]}" search "$QUERY" \
-  --top-k "$TOP_K" \
+python3 - "$MEMSEARCH_TIMEOUT_SECONDS" "${MEMSEARCH_CMD[@]}" search "$QUERY" \
+  --top-k "$CANDIDATE_K" \
   --json-output \
   --collection "$COLLECTION" \
-  >"$RAW_OUT" 2>"$ERR_OUT"
+  >"$RAW_OUT" 2>"$ERR_OUT" <<'PY'
+import os
+import subprocess
+import sys
+
+timeout = float(sys.argv[1])
+cmd = sys.argv[2:]
+env = dict(os.environ)
+env["GLOG_minloglevel"] = "3"
+env["GRPC_VERBOSITY"] = "NONE"
+
+try:
+    completed = subprocess.run(cmd, env=env, timeout=timeout)
+except subprocess.TimeoutExpired:
+    print(f"AI_OS_TIMEOUT: semantic MemSearch exceeded {timeout:g}s", file=sys.stderr)
+    raise SystemExit(124)
+
+raise SystemExit(completed.returncode)
+PY
 STATUS=$?
 set -e
 
 if [ "$STATUS" -ne 0 ]; then
-  if grep -qiE 'Operation not permitted|Failed to bind to address|Open local milvus failed|/LOCK|127\.0\.0\.1|DataDirLockedError|another process holds the lock' "$ERR_OUT"; then
+  if grep -qiE 'AI_OS_TIMEOUT|Operation not permitted|Failed to bind to address|Open local milvus failed|/LOCK|127\.0\.0\.1|DataDirLockedError|another process holds the lock' "$ERR_OUT"; then
     {
-      echo "MemSearch semantic search was blocked by Milvus Lite access."
+      if grep -qi 'AI_OS_TIMEOUT' "$ERR_OUT"; then
+        echo "MemSearch semantic search timed out."
+      else
+        echo "MemSearch semantic search was blocked by Milvus Lite access."
+      fi
       echo "Milvus Lite needs access to its LOCK file and a local 127.0.0.1 port even for read-only search."
       echo ""
       echo "Returning sandbox-safe markdown recall results instead."
-      echo "For semantic recall in Codex, rerun this command with sandbox_permissions=\"require_escalated\"."
+      echo "For semantic recall, rerun this command in a shell with access to Milvus Lite."
       echo ""
       echo "Original error excerpt:"
       sed -n '1,24p' "$ERR_OUT"
@@ -154,28 +184,35 @@ if [ "$STATUS" -ne 0 ]; then
   exit "$STATUS"
 fi
 
-if [ -f "$ROOT/scripts/lib/reranker.py" ]; then
-  python3 "$ROOT/scripts/lib/reranker.py" "$QUERY" <"$RAW_OUT" >"$SEMANTIC_OUT"
+# Scope-filter the RAW semantic results BEFORE reranking. The reranker's
+# Stage 3 floor-gate derives its cutoff from the top-scoring result, so a
+# high-scoring out-of-scope (wrong-client) hit would raise the gate and drop a
+# correct in-scope result before scope was ever applied. Filtering first keeps
+# recall scope-honest at any client count. (SCOPE=all skips the filter.)
+if [ "$SCOPE" != "all" ] && [ -f "$ROOT/scripts/lib/filter-memory-results.py" ]; then
+  python3 "$ROOT/scripts/lib/filter-memory-results.py" "$ROOT" "$SCOPE" "$CLIENT" "$RAW_OUT" >"$FILTERED_SEMANTIC_OUT"
 else
-  cp "$RAW_OUT" "$SEMANTIC_OUT"
+  cp "$RAW_OUT" "$FILTERED_SEMANTIC_OUT"
 fi
 
-if [ "$SCOPE" != "all" ] && [ -f "$ROOT/scripts/lib/filter-memory-results.py" ]; then
-  python3 "$ROOT/scripts/lib/filter-memory-results.py" "$ROOT" "$SCOPE" "$CLIENT" "$SEMANTIC_OUT" >"$FILTERED_SEMANTIC_OUT"
+# Rerank the in-scope set (authority boost, recency decay, floor gating).
+if [ -f "$ROOT/scripts/lib/reranker.py" ]; then
+  python3 "$ROOT/scripts/lib/reranker.py" "$QUERY" <"$FILTERED_SEMANTIC_OUT" >"$SEMANTIC_OUT"
 else
-  cp "$SEMANTIC_OUT" "$FILTERED_SEMANTIC_OUT"
+  cp "$FILTERED_SEMANTIC_OUT" "$SEMANTIC_OUT"
 fi
 
 if [ -f "$ROOT/scripts/memory-search.sh" ]; then
-  args=("$QUERY" "$TOP_K" --scope "$SCOPE")
+  args=("$QUERY" "$CANDIDATE_K" --scope "$SCOPE")
   [ -n "$CLIENT" ] && args+=(--client "$CLIENT")
   bash "$ROOT/scripts/memory-search.sh" "${args[@]}" >"$MARKDOWN_OUT" 2>/dev/null || printf '[]\n' >"$MARKDOWN_OUT"
 else
   printf '[]\n' >"$MARKDOWN_OUT"
 fi
 
+# Merge the filtered+reranked semantic set with markdown recall.
 if [ -f "$ROOT/scripts/lib/merge-memory-results.py" ]; then
-  python3 "$ROOT/scripts/lib/merge-memory-results.py" "$FILTERED_SEMANTIC_OUT" "$MARKDOWN_OUT" "$TOP_K"
+  python3 "$ROOT/scripts/lib/merge-memory-results.py" "$SEMANTIC_OUT" "$MARKDOWN_OUT" "$TOP_K"
 else
-  cat "$FILTERED_SEMANTIC_OUT"
+  cat "$SEMANTIC_OUT"
 fi

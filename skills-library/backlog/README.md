@@ -1,14 +1,17 @@
-# Backlog (skills-library stage 1)
+# Backlog (the one skills-library staging folder)
 
-Where new skill candidates land first. Each pack here is a collection of source skills not yet evaluated or promoted to live use. The folder structure is `backlog/<pack-name>/<skill-name>/SKILL.md`.
+Where new skill candidates land and stay, inert, until you promote or park them. Each pack here is a collection of source skills not yet evaluated or promoted to live use. The folder structure is `backlog/<pack-name>/<skill-name>/SKILL.md`.
 
 ## Current packs
 
 | Pack | Source | Notes |
 |------|--------|-------|
+| `cf-frameworks` | Conversion Factory-style agency skills (anonymized) | 42 skills. Real client/agency names scrubbed. Best-of: `sitemap-workshop`, `brand-strategy`, `growth-engine`, `audit-marketing`, `client-handoff`, `marketing-website-design`, `positioning`, `theme-factory`, `wireframes`. |
+| `copy-qa` | Copywriting QA scripts | 1 skill. Light. |
 | `cybersecurity-skills` | Security audit + prompt injection | 29 skills. OWASP-style. |
 | `marketing` | Marketing planning + ad creative | 44 skills. The biggest pack. |
-| `thinking-partner` | 150+ mental models, bundled as one skill | 1 skill. Router + on-demand catalog. |
+| `planner` | Goal/task planning skill | 1 skill. Includes a profile-template. |
+| `mattpocock-skills` | Matt Pocock (AI Hero) engineering-discipline pack | 37 skills. Real-engineering workflow: grill-me/grill-with-docs, TDD, code-review, diagnosing-bugs, domain-modeling, codebase-design, to-spec/to-tickets/triage/wayfinder. |
 
 ## Candidate sources (not yet vendored)
 
@@ -22,11 +25,11 @@ Repos worth turning into a skill later, but not yet pulled in. They are NOT in `
 ## How a backlog skill graduates
 
 ```
-backlog/<pack>/<name>/   ->   triage/<name>/   ->   review/<name>/   ->   live (.claude/skills/<category>-<name>/)
-                              (sanity check)        (manual approval)        (rename + register)
+backlog/<pack>/<name>/   --assess-->   promote   -->   live (.claude/skills/<category>-<name>/)
+(inert candidate)        (in chat)      or park         (rename + register)
 ```
 
-Promotion is by hand, one skill at a time, because each one needs to be renamed to the AI-OS `{category}-{name}` convention, registered in `AGENTS.md`, and given a learnings section. The automated review and digest jobs (in `cron/jobs/`) ship with `active: false` until a hand-promotion is proven.
+Promotion is by hand, one skill at a time, because each one needs to be renamed to the AI-OS `{category}-{name}` convention, registered in `AGENTS.md`, and given a learnings section. There is no triage or review folder and no sign-off gate - you ask for an assessment, then say promote or park.
 
 ## Browsing tip
 

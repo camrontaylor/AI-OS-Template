@@ -1,0 +1,23 @@
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+node_modules/
+.env
+.env.local
+
+# Personal overlays — never commit
+*.local.md
+*.local.yaml
+*.local.json
+*-local.md
+
+# Migration working files — not for public repo
+MIGRATION-TO-PUBLIC.md
+*-local-backup.md
+
+# Personal archives live in $MAKERSKILLS_CONFIG (~/.config/makerskills), never in-repo.
+# Guard against skills accidentally writing old-style in-repo archives:
+skills/*/references/*archive*/
+skills/*/references/decks-archive.md

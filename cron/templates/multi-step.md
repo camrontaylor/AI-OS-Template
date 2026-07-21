@@ -30,7 +30,7 @@ Do the following in order:
 
 Format the output as:
 - **Open threads** from yesterday
-- **Trending now** - top 3 items with links
-- **Content ideas** - 2 draft angles with hooks
+- **Trending now** — top 3 items with links
+- **Content ideas** — 2 draft angles with hooks
 
 If web search fails, skip the trending section and focus on open threads and content ideas from existing context.

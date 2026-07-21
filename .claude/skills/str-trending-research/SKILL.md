@@ -1,22 +1,14 @@
 ---
 name: str-trending-research
-description: >
-  Research what's trending in the last 30 days across Reddit, X, and the web.
-  Surface real discussions, recommendations, and patterns people are talking
-  about right now. Produces a research brief other skills can consume.
-  Triggers on: "research", "what's trending", "research topic", "research X",
-  "what are people saying about", "trending in", "last 30 days", "recent
-  discussions", "what's hot", "look into", "dig into", "find out what people
-  think about", "what's new with", "community sentiment on".
-  Does NOT trigger for brand voice, positioning, ICP, or content writing.
-  Does NOT trigger for general web browsing or simple URL fetching.
+description: "Research what's trending in the last 30 days across Reddit, X, and the web, and produce a brief other skills can use. Not for feasibility or should-I questions (q-question), brand voice, positioning, or simple URL fetching."
+when_to_use: 'Invoke when the request sounds like: "what''s trending", "trending in", "last 30 days", "recent discussions", "what are people saying about", "community sentiment on"'
 ---
 
 # Trending Research
 
 > Adapted from [last30days by Ronnie-Nutrition](https://github.com/Ronnie-Nutrition/last30days-skill).
 > Original skill focused on research + prompt generation. This version strips the prompt layer
-> and focuses purely on research synthesis - designed as a backend that other skills consume.
+> and focuses purely on research synthesis — designed as a backend that other skills consume.
 
 ## Outcome
 
@@ -44,10 +36,10 @@ Load if they exist. Proceed without them if not.
 1. Check `projects/str-trending-research/` for recent research on the same topic. If a brief exists from the last 7 days, show the user: "I researched [topic] on [date]. Want to use that, refresh it, or research something new?"
 
 2. **Check API keys.** Read `.env` for `OPENAI_API_KEY` and `XAI_API_KEY`. If either is missing, tell the user once before starting:
-   - **Both missing:** "I'll use web search for this research. For much richer results with real engagement data (upvotes, likes, comments), add `OPENAI_API_KEY` (for Reddit - get one at platform.openai.com) and `XAI_API_KEY` (for X - get one at console.x.ai) to your `.env` file."
+   - **Both missing:** "I'll use web search for this research. For much richer results with real engagement data (upvotes, likes, comments), add `OPENAI_API_KEY` (for Reddit — get one at platform.openai.com) and `XAI_API_KEY` (for X — get one at console.x.ai) to your `.env` file."
    - **Only OpenAI missing:** "I have X data but not Reddit. Add `OPENAI_API_KEY` to `.env` for Reddit threads with real upvotes and comments."
    - **Only xAI missing:** "I have Reddit data but not X. Add `XAI_API_KEY` to `.env` for X posts with real likes and reposts."
-   - **Both present:** Skip this - say nothing, just proceed.
+   - **Both present:** Skip this — say nothing, just proceed.
 
    This is informational only. Never block work because keys are missing.
 
@@ -57,15 +49,15 @@ Load if they exist. Proceed without them if not.
 
 Extract from the user's input:
 
-- **TOPIC** - what they want to research
-- **QUERY TYPE** - what kind of research:
-  - **RECOMMENDATIONS** - "best X", "top X", "what X should I use" → wants a ranked list of specific things
-  - **NEWS** - "what's happening with X", "X news", "latest on X" → wants current events
-  - **HOW-TO** - "how to X", "X techniques", "X best practices" → wants methods and approaches
-  - **GENERAL** - anything else → wants broad understanding of community sentiment
-- **SCOPE** - quick (5-8 searches) or deep (12-18 searches). Default: balanced (8-12).
+- **TOPIC** — what they want to research
+- **QUERY TYPE** — what kind of research:
+  - **RECOMMENDATIONS** — "best X", "top X", "what X should I use" → wants a ranked list of specific things
+  - **NEWS** — "what's happening with X", "X news", "latest on X" → wants current events
+  - **HOW-TO** — "how to X", "X techniques", "X best practices" → wants methods and approaches
+  - **GENERAL** — anything else → wants broad understanding of community sentiment
+- **SCOPE** — quick (5-8 searches) or deep (12-18 searches). Default: balanced (8-12).
 
-If the topic is vague, ask one clarifying question. Don't over-ask - get moving.
+If the topic is vague, ask one clarifying question. Don't over-ask — get moving.
 
 ---
 
@@ -81,8 +73,8 @@ The `scripts/last30days.py` script uses external APIs to search Reddit and X wit
 python3 .claude/skills/str-trending-research/scripts/last30days.py "{topic}" --emit=compact
 ```
 
-- **Reddit** via OpenAI Responses API (`web_search` tool, domain-locked to reddit.com) - returns threads with real upvotes, comments, and top comment insights
-- **X / Twitter** via xAI API (`x_search` tool) - returns posts with real likes, reposts, and reply counts
+- **Reddit** via OpenAI Responses API (`web_search` tool, domain-locked to reddit.com) — returns threads with real upvotes, comments, and top comment insights
+- **X / Twitter** via xAI API (`x_search` tool) — returns posts with real likes, reposts, and reply counts
 - Supports `--quick` (fewer sources) and `--deep` (comprehensive) flags
 - Supports `--sources=reddit|x|both|auto` to control which platforms to search
 - Supports `--include-web` to add general web search alongside Reddit/X
@@ -121,8 +113,8 @@ Read `references/synthesis-guide.md` for the full methodology.
 **RECOMMENDATIONS** → Extract specific names, count mentions, rank by popularity:
 ```
 Most mentioned:
-1. [Specific thing] - mentioned 5x (r/sub, @handle, blog.com)
-2. [Specific thing] - mentioned 3x (sources)
+1. [Specific thing] — mentioned 5x (r/sub, @handle, blog.com)
+2. [Specific thing] — mentioned 3x (sources)
 ```
 
 **NEWS** → Timeline of events, key developments, community reactions
@@ -138,7 +130,7 @@ Most mentioned:
 Display the synthesis in this format:
 
 ```
-## What I found - {TOPIC} (last 30 days)
+## What I found — {TOPIC} (last 30 days)
 
 [2-4 sentence synthesis of the key insight]
 
@@ -173,8 +165,8 @@ This file is what other skills consume. Keep it structured and scannable.
 
 Based on the research and installed skills, recommend one action:
 
-- "This would make a strong [LinkedIn post / YouTube video / email topic] - want me to draft something?"
-- "I found [X] trending hard - want me to research deeper on that angle?"
+- "This would make a strong [LinkedIn post / YouTube video / email topic] — want me to draft something?"
+- "I found [X] trending hard — want me to research deeper on that angle?"
 - Route to the appropriate content skill if installed.
 
 ---
@@ -187,7 +179,7 @@ Based on the research and installed skills, recommend one action:
 
 ## Self-Update
 
-If the user flags an issue - bad sources, irrelevant results, wrong synthesis - update the `## Rules` section immediately with the correction and today's date.
+If the user flags an issue — bad sources, irrelevant results, wrong synthesis — update the `## Rules` section immediately with the correction and today's date.
 
 ---
 

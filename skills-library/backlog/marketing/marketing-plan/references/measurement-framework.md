@@ -1,52 +1,52 @@
-# Measurement Framework - KPIs, North Stars, Cadence
+# Measurement Framework — KPIs, North Stars, Cadence
 
 Every plan needs a measurement section that tells the team how to know if the plan is working. This doc is the source for Section 13's measurement subsection.
 
 **Related docs:**
-- `growth-patterns.md` - the 3-3-2-2-2 VC growth path (3× in years 1-2, 2× in years 3-7 from $1M ARR) and which phase of SaaS growth the company is in ($0-10K / $10K-100K / $100K-1M+)
-- `budget-planning.md` - CAC calculation (blended, not paid-only) and the forecasting reality check (forecasts under $100M ARR are educated guesses, not precise predictions)
+- `growth-patterns.md` — the 3-3-2-2-2 VC growth path (3× in years 1–2, 2× in years 3–7 from $1M ARR) and which phase of SaaS growth the company is in ($0–10K / $10K–100K / $100K–1M+)
+- `budget-planning.md` — CAC calculation (blended, not paid-only) and the forecasting reality check (forecasts under $100M ARR are educated guesses, not precise predictions)
 
 ## The north-star principle
 
 A north star is one metric that captures the business-model thesis at the highest level. It should:
 - Be derivable from the funnel + revenue model
 - Move slowly enough to be a strategic compass (not whipsawed by weekly noise)
-- Trade off correctly against other metrics - improving the north star should generally improve the business
+- Trade off correctly against other metrics — improving the north star should generally improve the business
 
 Don't default to "ARR" or "MRR" alone. Those are outcomes, not norths. Pick something that captures the business model.
 
 ## North-star patterns by business model
 
 ### B2B SaaS (subscription)
-- **Net Revenue Retention (NRR)** - keeps existing customers + expansion in focus
+- **Net Revenue Retention (NRR)** — keeps existing customers + expansion in focus
 - Alternative: "Logo retention × expansion ARR"
 - Why: ARR alone hides churn / lets gross-add growth mask product fit problems
 
 ### D2C consumer app (subscription)
-- **Blended LTV / blended CAC** - keeps unit economics honest as paid layer scales
+- **Blended LTV / blended CAC** — keeps unit economics honest as paid layer scales
 - Alternative: "Day-35 paid users from cohort × LTV"
 - Why: monthly subscription metrics are volatile; cohort × LTV smooths it
 
 ### Hybrid hardware + software (e.g., Quietude)
-- **Blended LTV / blended CAC across hardware + software** - captures the wedge thesis
+- **Blended LTV / blended CAC across hardware + software** — captures the wedge thesis
 - Alternative: "Hardware-buyers-to-subscriber conversion × blended margin"
 - Why: hardware revenue isn't free (cost to make); subscription revenue isn't expensive to acquire if hardware funds it
 
 ### Marketplace (two-sided)
-- **Liquidity ratio × take-rate** - captures both sides + monetization
+- **Liquidity ratio × take-rate** — captures both sides + monetization
 - Alternative: "Monthly transacting users × take-rate × repeat frequency"
 - Why: GMV alone doesn't capture whether the marketplace is becoming a habit
 
 ### Developer tool / open source
-- **Weekly active developers × paid-conversion** - captures both adoption and monetization
+- **Weekly active developers × paid-conversion** — captures both adoption and monetization
 - Alternative: "Weekly active orgs × seats per org × ARPU"
 
 ### Content / media business
-- **Daily active readers / listeners × ad revenue per session** - captures both reach and monetization
+- **Daily active readers / listeners × ad revenue per session** — captures both reach and monetization
 - Alternative: "Subscriber count × retention × ARPU"
 
 ### Commerce (DTC, non-subscription)
-- **Repeat purchase rate × AOV × frequency** - captures monetization layered on quality of customer
+- **Repeat purchase rate × AOV × frequency** — captures monetization layered on quality of customer
 - Alternative: "Customer LTV / CAC × payback period"
 
 ## Leading indicators by AARRR stage
@@ -102,42 +102,42 @@ The plan should specify three rhythms:
 
 ### Monthly (metrics review)
 - **Who:** fCMO + founder + extended team (CXO, product lead, designer if applicable)
-- **Duration:** 60-90 min
+- **Duration:** 60–90 min
 - **Format:** Full metrics review + comparison against quarterly KPI targets + qualitative learnings + idea bank reprioritization
 - **Output:** Possible plan adjustments, hire decisions
 
 ### Quarterly (plan recalibration)
 - **Who:** fCMO + founders + key advisors
-- **Duration:** 2-3 hours
+- **Duration:** 2–3 hours
 - **Format:** Full plan review against 90-day and 12-month outcomes, channel-level analysis, funding-stage transition check, recalibration of next 90 days
 - **Output:** Updated plan (could be v2 / v3 document iteration)
 
 ## KPI target setting
 
-For each quarter in Section 10, the plan must include 3-5 specific KPI targets. These should be:
-- **Specific** - not "improve retention," but "Day 30 retention from 22% → 30%"
-- **Measurable** - pull from a wired data source
-- **Stretch but plausible** - based on funnel state + historical patterns
-- **Decision-triggering** - if missed, what does that mean? (Adjust strategy, kill a channel, etc.)
+For each quarter in Section 10, the plan must include 3–5 specific KPI targets. These should be:
+- **Specific** — not "improve retention," but "Day 30 retention from 22% → 30%"
+- **Measurable** — pull from a wired data source
+- **Stretch but plausible** — based on funnel state + historical patterns
+- **Decision-triggering** — if missed, what does that mean? (Adjust strategy, kill a channel, etc.)
 
 ### KPI target patterns by quarter
 
 **Q1 (foundation quarter):**
-- Mostly *bedrock* metrics - fixing leaks. "Headphones-gate conversion drop reverses." "Day 1 → paid +25-50%."
-- Some *foundation* metrics - laying tracks. "4 SEO pillars staked." "App Store rewrite shipped."
-- Avoid bold growth targets - the foundations aren't in yet
+- Mostly *bedrock* metrics — fixing leaks. "Headphones-gate conversion drop reverses." "Day 1 → paid +25–50%."
+- Some *foundation* metrics — laying tracks. "4 SEO pillars staked." "App Store rewrite shipped."
+- Avoid bold growth targets — the foundations aren't in yet
 
 **Q2 (validation quarter):**
-- Mostly *validation* metrics - does what we built work? "Paid CAC < $X blended." "Organic traffic 1,500-3,500/mo."
-- Some *cohort* metrics - do new cohorts behave better? "Day 7 retention for Q2 cohort vs. Q1."
+- Mostly *validation* metrics — does what we built work? "Paid CAC < $X blended." "Organic traffic 1,500–3,500/mo."
+- Some *cohort* metrics — do new cohorts behave better? "Day 7 retention for Q2 cohort vs. Q1."
 
 **Q3 (scaling quarter):**
-- Mostly *scaling* metrics - how far does it go? "Paid scaling to $20-30K/mo with CAC steady." "First B2B install reference case live."
-- Some *capability* metrics - what new things are live? "First Guides pilot launched."
+- Mostly *scaling* metrics — how far does it go? "Paid scaling to $20–30K/mo with CAC steady." "First B2B install reference case live."
+- Some *capability* metrics — what new things are live? "First Guides pilot launched."
 
 **Q4 (compound quarter):**
-- Mostly *compound* metrics - is the flywheel turning? "50%+ of new subs from non-paid channels." "Ambassador-driven 15-25% of new subs."
-- Some *narrative* metrics - does the Series A story write itself? "Blended LTV/CAC > 3."
+- Mostly *compound* metrics — is the flywheel turning? "50%+ of new subs from non-paid channels." "Ambassador-driven 15–25% of new subs."
+- Some *narrative* metrics — does the Series A story write itself? "Blended LTV/CAC > 3."
 
 ## Anchoring against the VC growth path
 
@@ -149,7 +149,7 @@ For non-VC-backed companies (bootstrapped, founder-funded, profit-focused), the 
 
 A plan derives a budget and an annual goal. It does not produce a 12-month month-by-month forecast that's reliably accurate to the dollar.
 
-**Unless the company is publicly traded, all forecasts are educated guesses.** No startup under $100M ARR consistently hits month-by-month forecasts. Quarterly review is when the plan adjusts - not when variance is treated as failure.
+**Unless the company is publicly traded, all forecasts are educated guesses.** No startup under $100M ARR consistently hits month-by-month forecasts. Quarterly review is when the plan adjusts — not when variance is treated as failure.
 
 What the plan commits to honestly:
 - The annual goal is a defensible direction-of-travel
@@ -157,7 +157,7 @@ What the plan commits to honestly:
 - The 90-day roadmap (Section 9) is what's actionable now
 - Month-to-month projection is illustrative, not promised
 
-Founders who over-engineer the forecast end up explaining variance every month instead of executing. The plan should resist this - name the annual target, the quarterly KPIs, and the kill criteria. Don't promise the month.
+Founders who over-engineer the forecast end up explaining variance every month instead of executing. The plan should resist this — name the annual target, the quarterly KPIs, and the kill criteria. Don't promise the month.
 
 Full context in `budget-planning.md`.
 

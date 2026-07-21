@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# list-access.sh - List all collaborators and pending invitations
+# list-access.sh — List all collaborators and pending invitations
 # Usage: bash scripts/admin/list-access.sh
 
 GREEN='\033[0;32m'

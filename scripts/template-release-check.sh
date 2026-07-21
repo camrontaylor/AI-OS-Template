@@ -129,42 +129,54 @@ if find . -name ".DS_Store" -print -quit | grep -q .; then
 fi
 ok "no .DS_Store files found"
 
-declare -a high_risk_strings=()
-run_private_scan=0
+# Proprietary / unverified-licence vendored subtrees must never ship publicly
+# (skills-library/LICENSES.md). template-sync.sh excludes them via the manifest's
+# never_publish list; this is the independent backstop if a sync is bypassed or
+# a file is added by hand.
+for proprietary in \
+  "skills-library/backlog/cf-frameworks" \
+  "skills-library/backlog/planner" \
+  "skills-library/backlog/copy-qa" \
+  "skills-library/backlog/community-claude-md-rules"; do
+  if [ -e "$proprietary" ]; then
+    fail "proprietary/unverified-licence subtree present and must not be published: $proprietary"
+  fi
+done
+ok "no proprietary or unverified-licence vendored subtrees present"
 
-if [ -n "${AI_OS_TEMPLATE_PRIVATE_SCAN_TERMS:-}" ]; then
-  IFS=',' read -r -a extra_terms <<< "$AI_OS_TEMPLATE_PRIVATE_SCAN_TERMS"
-  for extra in "${extra_terms[@]}"; do
-    if [ -n "$extra" ]; then
-      high_risk_strings+=("$extra")
-      run_private_scan=1
-    fi
-  done
-else
-  info "no private scan terms configured; set AI_OS_TEMPLATE_PRIVATE_SCAN_TERMS for maintainer-specific leakage checks"
-fi
+high_risk_strings=(
+  "camron""stricklin"
+  "/Users/camron""stricklin"
+  "Made Simple AF"
+  "made-simple-af"
+  "madesimpleaf"
+  "customaistudio"
+  "Coast"
+  "Crystalix"
+  "TGV"
+  "ERPBridge"
+  "Sitemap Workshop"
+)
 
 scan_hits=""
-if [ "$run_private_scan" -eq 1 ]; then
-  while IFS= read -r file; do
-    case "$file" in
-      scripts/template-release-check.sh)
-        continue
-        ;;
-    esac
-    [ -f "$file" ] || continue
-    if LC_ALL=C grep -Iq . "$file"; then
-      for needle in "${high_risk_strings[@]}"; do
-        if LC_ALL=C grep -nF "$needle" "$file" >/tmp/aios-template-scan-hit.$$ 2>/dev/null; then
-          while IFS= read -r hit; do
-            scan_hits="${scan_hits}${file}:${hit}"$'\n'
-          done < /tmp/aios-template-scan-hit.$$
-        fi
-      done
-    fi
-  done < <(git ls-files)
-  rm -f /tmp/aios-template-scan-hit.$$
-fi
+while IFS= read -r file; do
+  case "$file" in
+    scripts/template-release-check.sh)
+      continue
+      ;;
+  esac
+  [ -f "$file" ] || continue
+  if LC_ALL=C grep -Iq . "$file"; then
+    for needle in "${high_risk_strings[@]}"; do
+      if LC_ALL=C grep -nF "$needle" "$file" >/tmp/aios-template-scan-hit.$$ 2>/dev/null; then
+        while IFS= read -r hit; do
+          scan_hits="${scan_hits}${file}:${hit}"$'\n'
+        done < /tmp/aios-template-scan-hit.$$
+      fi
+    done
+  fi
+done < <(git ls-files)
+rm -f /tmp/aios-template-scan-hit.$$
 
 if [ -n "$scan_hits" ]; then
   printf '%s' "$scan_hits" >&2
@@ -172,12 +184,30 @@ if [ -n "$scan_hits" ]; then
 fi
 ok "tracked files passed high-risk personal/client string scan"
 
+secret_scanner="scripts/lib/secret-scan.py"
+if [ ! -f "$secret_scanner" ]; then
+  fail "credential scanner is missing: $secret_scanner"
+fi
+set +e
+secret_hits="$(python3 "$secret_scanner" "$CHECKOUT" 2>/dev/null)"
+secret_status=$?
+set -e
+if [ "$secret_status" -ne 0 ]; then
+  [ -n "$secret_hits" ] && printf '%s\n' "$secret_hits" >&2
+  fail "credential-shaped values found in tracked files"
+fi
+ok "tracked files passed credential-pattern scan without exposing values"
+
 required_tests=(
   "scripts/test-memory-search.sh"
   "scripts/test-memsearch-search.sh"
   "scripts/test-memsearch-reindex.sh"
+  "scripts/test-memsearch-health.sh"
+  "scripts/test-memsearch-maintain.sh"
+  "scripts/test-secret-scan.sh"
   "scripts/test-client-routing-guard.sh"
   "scripts/test-session-memory-block.sh"
+  "scripts/test-session-memory-finalizer.sh"
   "scripts/test-memory-setup.sh"
 )
 
