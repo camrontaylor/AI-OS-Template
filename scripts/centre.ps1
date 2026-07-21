@@ -167,7 +167,7 @@ if (-not (Test-Path "node_modules")) {
 
 Write-Host ""
 Write-Host "    ==============================================" -ForegroundColor Cyan
-Write-Host "                  A I - O S" -ForegroundColor Cyan
+Write-Host "             A G E N T I C   O S" -ForegroundColor Cyan
 Write-Host "               Command Centre" -ForegroundColor Cyan
 Write-Host "    ==============================================" -ForegroundColor Cyan
 Write-Host ""

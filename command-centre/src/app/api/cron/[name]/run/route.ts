@@ -23,7 +23,7 @@ export async function POST(
       trigger: "manual",
       dedupeByMinute: false,
       titleSuffix: " (manual run)",
-      activityLabel: "Queued - manual trigger",
+      activityLabel: "Queued — manual trigger",
       scheduledFor: new Date().toISOString(),
     });
     const task = queued.task;

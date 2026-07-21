@@ -99,7 +99,7 @@ function oneLiner(text: string, max = 80): string {
   return sentence.length > max ? sentence.slice(0, max - 1) + "\u2026" : sentence;
 }
 
-/** Get the FIRST user message - the original goal */
+/** Get the FIRST user message — the original goal */
 function getOriginalGoal(entries: LogEntry[]): string | null {
   for (const e of entries) {
     if (e.type === "user_reply" && e.content.trim().length > 10) {
@@ -492,7 +492,7 @@ export function ReviewQueue({ tasks, allTasks }: { tasks: Task[]; allTasks?: Tas
       {/* ── Body ── */}
       <div style={{ padding: "12px 12px 8px" }}>
 
-        {/* Goal - the original task, always visible */}
+        {/* Goal — the original task, always visible */}
         <div style={{ marginBottom: 12 }}>
           <div style={{ ...LABEL, marginBottom: 4 }}>Goal</div>
           <div
@@ -513,7 +513,7 @@ export function ReviewQueue({ tasks, allTasks }: { tasks: Task[]; allTasks?: Tas
           </div>
         </div>
 
-        {/* Error / Input prompt - prominent when present */}
+        {/* Error / Input prompt — prominent when present */}
         {prompt && (
           <div style={{
             padding: "8px 12px", marginBottom: 12,
@@ -528,7 +528,7 @@ export function ReviewQueue({ tasks, allTasks }: { tasks: Task[]; allTasks?: Tas
           </div>
         )}
 
-        {/* Claude's status - what it last reported */}
+        {/* Claude's status — what it last reported */}
         {claudeStatus && !prompt && (
           <div style={{ marginBottom: 12 }}>
             <div style={{ ...LABEL, marginBottom: 4 }}>Status</div>
@@ -544,7 +544,7 @@ export function ReviewQueue({ tasks, allTasks }: { tasks: Task[]; allTasks?: Tas
           </div>
         )}
 
-        {/* What happened - action timeline */}
+        {/* What happened — action timeline */}
         {keyActions.length > 0 && (
           <div style={{ marginBottom: 12 }}>
             <div style={{ ...LABEL, marginBottom: 4 }}>What happened</div>
@@ -566,7 +566,7 @@ export function ReviewQueue({ tasks, allTasks }: { tasks: Task[]; allTasks?: Tas
           </div>
         )}
 
-        {/* Outputs - clickable file chips */}
+        {/* Outputs — clickable file chips */}
         {outputFiles.length > 0 && (
           <div style={{ marginBottom: 12 }}>
             <div style={{ ...LABEL, marginBottom: 4 }}>Outputs</div>
@@ -600,7 +600,7 @@ export function ReviewQueue({ tasks, allTasks }: { tasks: Task[]; allTasks?: Tas
           </div>
         )}
 
-        {/* Stats bar - turns, duration, tool calls */}
+        {/* Stats bar — turns, duration, tool calls */}
         <div style={{
           display: "flex", alignItems: "center", gap: 12,
           padding: "4px 0",

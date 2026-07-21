@@ -62,7 +62,7 @@ function generateTitle(description: string): Promise<string | null> {
     proc.on("close", (code) => {
       clearTimeout(timeout);
       if (code === 0 && stdout.trim()) {
-        // Clean up the response - remove quotes, prefixes, trim
+        // Clean up the response — remove quotes, prefixes, trim
         let title = stdout.trim().replace(/^["']|["']$/g, "");
         // Strip common AI-generated prefixes
         title = title.replace(/^(task|title|summary|label)\s*:\s*/i, "");

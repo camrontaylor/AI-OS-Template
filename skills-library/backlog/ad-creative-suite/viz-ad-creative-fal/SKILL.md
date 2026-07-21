@@ -94,7 +94,7 @@ Read `context/learnings.md` for the `## viz-ad-creative-fal` section. Apply any 
 
 ## Step 4: Brand Lock
 
-Read `references/brand-lock.md`. The single source of truth is `brand_context/brand-profile.json`. If it exists, load it. If not, build it: pull from `brand_context/voice-profile.md`, `positioning.md`, and `icp.md` when present; otherwise use the client URL with WebFetch or Firecrawl if configured, or ask a short interview. Save the locked reference images (logo, 1 to 3 product shots, 1 to 2 style anchors, color swatch sheet) under `brand_context/assets/`. These exact images and exact hex values go into every generation call, which is what holds the look steady.
+Read `references/brand-lock.md`. The single source of truth is `brand_context/brand-profile.json`. If it exists, load it. If not, build it: pull from `brand_context/voice-profile.md`, `positioning.md`, and `icp.md` when present; otherwise extract from the client URL (use `tool-firecrawl-scraper` if available) or ask a short interview. Save the locked reference images (logo, 1 to 3 product shots, 1 to 2 style anchors, color swatch sheet) under `brand_context/assets/`. These exact images and exact hex values go into every generation call, which is what holds the look steady.
 
 ## Step 5: Strategy, Angles, and Matrix
 

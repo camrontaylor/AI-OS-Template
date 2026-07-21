@@ -86,7 +86,7 @@ export function PanelOutputs({ taskId, clientId, projectSlug, taskLevel, onFileC
 
   return (
     <div>
-      {/* Plan file - pinned at top when project has a brief */}
+      {/* Plan file — pinned at top when project has a brief */}
       {planFile && (
         <div className="px-6 pt-4">
           <button

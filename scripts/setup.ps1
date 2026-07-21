@@ -141,6 +141,10 @@ else {
     else {
         Add-Missing -Name "uv"
     }
+
+    if (-not $uvInstalled) {
+        $Errors++
+    }
 }
 
 Write-Info "Checking yt-dlp..."
@@ -159,6 +163,10 @@ else {
     else {
         Add-Missing -Name "yt-dlp"
     }
+
+    if (-not $ytDlpInstalled) {
+        $Errors++
+    }
 }
 
 Write-Info "Checking ffmpeg..."
@@ -176,6 +184,10 @@ else {
     }
     else {
         Add-Missing -Name "ffmpeg"
+    }
+
+    if (-not $ffmpegInstalled) {
+        $Errors++
     }
 }
 

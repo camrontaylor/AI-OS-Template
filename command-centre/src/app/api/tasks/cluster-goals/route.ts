@@ -17,7 +17,7 @@ interface TaskRow {
  * POST /api/tasks/cluster-goals
  *
  * Analyzes active ungrouped tasks and assigns semantic goalGroup labels.
- * Tasks with a projectSlug or parentId are skipped - they already have
+ * Tasks with a projectSlug or parentId are skipped — they already have
  * explicit grouping. Only standalone "task" level items get clustered.
  */
 export async function POST() {
@@ -41,7 +41,7 @@ export async function POST() {
       return NextResponse.json({ grouped: 0, message: "Not enough tasks to cluster" });
     }
 
-    // Build the task list for the prompt - include existing groups for context
+    // Build the task list for the prompt — include existing groups for context
     const existingGroups = new Set<string>();
     const ungrouped: TaskRow[] = [];
 
@@ -60,7 +60,7 @@ export async function POST() {
 
     // Build prompt
     const taskLines = ungrouped
-      .map((t) => `- [${t.id}] ${t.title}${t.description ? ` - ${t.description.slice(0, 100)}` : ""}`)
+      .map((t) => `- [${t.id}] ${t.title}${t.description ? ` — ${t.description.slice(0, 100)}` : ""}`)
       .join("\n");
 
     const existingGroupList =
@@ -75,7 +75,7 @@ Rules:
 - A task that doesn't relate to any others gets goalGroup: null (don't force it)
 - Reuse existing group names when a task fits
 - Goal labels should describe the objective, not the action (e.g. "Command centre polish" not "Fix UI bugs")
-- Return ONLY valid JSON - an array of objects with "id" and "goalGroup" fields${existingGroupList}
+- Return ONLY valid JSON — an array of objects with "id" and "goalGroup" fields${existingGroupList}
 
 Tasks to cluster:
 ${taskLines}

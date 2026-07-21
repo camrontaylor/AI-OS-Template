@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Notification hook - updates activity label + logs Claude's output to task history
+// Notification hook — updates activity label + logs Claude's output to task history
 // Fire-and-forget: spawns background process so it doesn't block Claude
 
 const fs = require("fs");
@@ -47,7 +47,7 @@ process.stdin.on("end", () => {
       `
     const http = require("http");
 
-    // 1. Update activity label (do NOT set status - avoids race with Stop hook)
+    // 1. Update activity label (do NOT set status — avoids race with Stop hook)
     const statusPayload = JSON.stringify({
       activityLabel: ${JSON.stringify(label)},
     });

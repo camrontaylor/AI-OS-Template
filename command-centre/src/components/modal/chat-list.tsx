@@ -33,7 +33,7 @@ interface ChatListProps {
   onOpenTerminal: () => void;
   parentTaskTitle?: string;
   mainTaskId?: string;
-  /** Child tasks of the parent - used for the persistent conversation log */
+  /** Child tasks of the parent — used for the persistent conversation log */
   childTasks?: Task[];
   /** Re-open a child task as a side pane */
   onOpenSubtaskPane?: (taskId: string, label: string) => void;
@@ -81,7 +81,7 @@ export function ChatList({
   const mainTask = mainTaskId ? tasks.find((t) => t.id === mainTaskId) : undefined;
   const mainDone = mainTask?.status === "done";
 
-  // All child tasks that have been executed (not backlog) - persistent conversation log
+  // All child tasks that have been executed (not backlog) — persistent conversation log
   const openPaneTaskIds = useMemo(
     () => new Set(openPanes.filter((p) => p.taskId).map((p) => p.taskId!)),
     [openPanes],
@@ -166,7 +166,7 @@ export function ChatList({
           borderBottom: "1px solid var(--border)",
         }}
       >
-        {/* + button - new chat */}
+        {/* + button — new chat */}
         <button
           onClick={() => onOpenChat()}
           title="New chat"
@@ -198,7 +198,7 @@ export function ChatList({
 
       {/* Pane list */}
       <div style={{ flex: 1, overflowY: "auto", padding: "4px 0" }}>
-        {/* Main chat - same as sub-chats but no trash */}
+        {/* Main chat — same as sub-chats but no trash */}
         <div
           onClick={onFocusMainChat}
           onMouseEnter={() => setHoveredId(MAIN_PANE_ID)}
@@ -270,7 +270,7 @@ export function ChatList({
             <CheckCircle2 size={10} style={{ color: "var(--muted-foreground)", flexShrink: 0 }} />
           )}
 
-          {/* Hover actions - edit + mark done + eye (no trash for main) */}
+          {/* Hover actions — edit + mark done + eye (no trash for main) */}
           {hoveredId === MAIN_PANE_ID && editingId !== MAIN_PANE_ID && (
             <div style={{ display: "flex", gap: 2 }}>
               {mainTaskId && (
@@ -468,7 +468,7 @@ export function ChatList({
         })}
       </div>
 
-      {/* Conversation log - ALL child tasks that have been executed, including active ones */}
+      {/* Conversation log — ALL child tasks that have been executed, including active ones */}
       {conversationLog.length > 0 && (
         <div style={{ flexShrink: 0, borderTop: "1px solid var(--border)" }}>
           <div style={{

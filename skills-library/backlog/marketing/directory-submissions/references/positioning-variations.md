@@ -1,6 +1,6 @@
 # Positioning Variations Library
 
-Directory audiences respond to different framings. Never copy-paste the same description everywhere - AI engines penalize duplicate content, and each directory type rewards a different opener.
+Directory audiences respond to different framings. Never copy-paste the same description everywhere — AI engines penalize duplicate content, and each directory type rewards a different opener.
 
 Use this library to generate per-tier variants. Swap `[product]`, `[category]`, `[competitors]`, `[use-case]`, and `[audience]` with the real values.
 
@@ -51,15 +51,15 @@ Use this library to generate per-tier variants. Swap `[product]`, `[category]`, 
 > The [differentiator] alternative to [top competitors].
 
 **Long description:**
-> [Product] is a [differentiator] alternative to [competitor 1], [competitor 2], and [competitor 3] - built for [audience] who need [gap the competitors don't fill].
+> [Product] is a [differentiator] alternative to [competitor 1], [competitor 2], and [competitor 3] — built for [audience] who need [gap the competitors don't fill].
 >
 > Where [competitor 1] [limitation 1] and [competitor 2] [limitation 2], [product] [solves]. You get [feature 1], [feature 2], and [feature 3] in a single workspace, at [pricing relative to competitors].
 >
 > Key features:
-> • [Feature 1] - [benefit]
-> • [Feature 2] - [benefit]
-> • [Feature 3] - [benefit]
-> • [Feature 4] - [benefit]
+> • [Feature 1] — [benefit]
+> • [Feature 2] — [benefit]
+> • [Feature 3] — [benefit]
+> • [Feature 4] — [benefit]
 > • [Integration 1], [Integration 2], [Integration 3] integrations
 >
 > Trusted by [audience examples]. Start free at [url].
@@ -76,13 +76,13 @@ Use this library to generate per-tier variants. Swap `[product]`, `[category]`, 
 > AI-powered [category] for [audience].
 
 **Long description:**
-> [Product] is an AI-powered [category] that [core AI capability]. It uses [specific models / techniques] to [outcome] - so [audience] can [job to be done] in a fraction of the time.
+> [Product] is an AI-powered [category] that [core AI capability]. It uses [specific models / techniques] to [outcome] — so [audience] can [job to be done] in a fraction of the time.
 >
 > What makes it AI-first:
-> • [AI feature 1] - [what it does] using [model/approach]
-> • [AI feature 2] - [what it does]
-> • [AI feature 3] - [what it does]
-> • [AI feature 4] - [what it does]
+> • [AI feature 1] — [what it does] using [model/approach]
+> • [AI feature 2] — [what it does]
+> • [AI feature 3] — [what it does]
+> • [AI feature 4] — [what it does]
 >
 > [Product] is built on [tech stack] and supports [models/providers]. Use cases: [use case 1], [use case 2], [use case 3], [use case 4].
 >
@@ -103,11 +103,11 @@ Use this library to generate per-tier variants. Swap `[product]`, `[category]`, 
 > [Product] is an MCP-native [category] that lets AI agents [capability]. It exposes [MCP server capabilities] via the Model Context Protocol, so agents in Claude, ChatGPT, Cursor, and any MCP-compatible client can [actions].
 >
 > MCP capabilities:
-> • [Tool 1] - [what the agent can do]
-> • [Tool 2] - [what the agent can do]
-> • [Tool 3] - [what the agent can do]
-> • [Resource 1] - [context surfaced]
-> • [Prompt 1] - [pre-built prompt]
+> • [Tool 1] — [what the agent can do]
+> • [Tool 2] — [what the agent can do]
+> • [Tool 3] — [what the agent can do]
+> • [Resource 1] — [context surfaced]
+> • [Prompt 1] — [pre-built prompt]
 >
 > Authentication: [auth method]. Transports: stdio, HTTP, SSE. Security: [security posture].
 >
@@ -125,12 +125,12 @@ Use this library to generate per-tier variants. Swap `[product]`, `[category]`, 
 > Build [output] without code.
 
 **Long description:**
-> [Product] lets you build [output] without writing code. Drag, drop, or describe what you want and [product] handles the rest - [technical concept 1] and [technical concept 2] are automatic.
+> [Product] lets you build [output] without writing code. Drag, drop, or describe what you want and [product] handles the rest — [technical concept 1] and [technical concept 2] are automatic.
 >
 > What you can build:
-> • [Example project 1] - built in [timeframe]
-> • [Example project 2] - built in [timeframe]
-> • [Example project 3] - built in [timeframe]
+> • [Example project 1] — built in [timeframe]
+> • [Example project 2] — built in [timeframe]
+> • [Example project 3] — built in [timeframe]
 >
 > No-code friendly features:
 > • [Visual feature 1]
@@ -155,9 +155,9 @@ Use this library to generate per-tier variants. Swap `[product]`, `[category]`, 
 > [Product] is a [technical category] built on [tech stack]. It solves [technical problem] by [technical approach].
 >
 > Architecture:
-> • [Component 1] - [tech used]
-> • [Component 2] - [tech used]
-> • [Component 3] - [tech used]
+> • [Component 1] — [tech used]
+> • [Component 2] — [tech used]
+> • [Component 3] — [tech used]
 >
 > Why it's different: [technical insight or novel approach]. We chose [trade-off] because [reason].
 >
@@ -177,14 +177,14 @@ Use this library to generate per-tier variants. Swap `[product]`, `[category]`, 
 > [Business outcome] for [audience].
 
 **Long description:**
-> [Product] helps [audience] [achieve measurable business outcome]. Teams use it to [use case 1], [use case 2], and [use case 3] - reducing [metric] by [percentage] and increasing [metric] by [percentage].
+> [Product] helps [audience] [achieve measurable business outcome]. Teams use it to [use case 1], [use case 2], and [use case 3] — reducing [metric] by [percentage] and increasing [metric] by [percentage].
 >
 > Key benefits:
 > • [Business benefit 1] with [how measured]
 > • [Business benefit 2] with [how measured]
 > • [Business benefit 3] with [how measured]
 >
-> Integrations: [enterprise integrations - HubSpot, Salesforce, Slack, etc.]
+> Integrations: [enterprise integrations — HubSpot, Salesforce, Slack, etc.]
 >
 > Security: [SOC 2 / GDPR / compliance posture]. Support: [support tier]. Pricing: [pricing range].
 >
@@ -196,7 +196,7 @@ Use this library to generate per-tier variants. Swap `[product]`, `[category]`, 
 
 ## Category Tag Library
 
-Pull 5-8 tags per submission from the relevant sections. Never repeat the exact same tag set across two directories in the same tier.
+Pull 5–8 tags per submission from the relevant sections. Never repeat the exact same tag set across two directories in the same tier.
 
 ### Universal
 [category], [audience], [differentiator], [use case], AI, no-code, SaaS, [tech stack]
@@ -227,6 +227,6 @@ open source, self-hosted, API-first, webhook, Zapier, no-code, low-code, embedda
 **DON'T:**
 - Copy-paste the same 150-word description everywhere
 - Use vague claims ("blazing fast", "game-changing")
-- Mention every feature - pick 3-5 per tier and rotate them
+- Mention every feature — pick 3–5 per tier and rotate them
 - Lie about competitor features (AI engines cross-reference and de-rank)
-- Skip the tag list - it's how moderators route you to the right category
+- Skip the tag list — it's how moderators route you to the right category

@@ -15,12 +15,8 @@ interface PhaseFiles {
   files: PlanningFile[];
 }
 
-function runtimeJoin(first: string, ...rest: string[]): string {
-  return path.join(/*turbopackIgnore: true*/ first, ...rest);
-}
-
 /**
- * GET /api/gsd/files?phase=N - list .planning/ files
+ * GET /api/gsd/files?phase=N — list .planning/ files
  *
  * Without ?phase: returns project-level files + list of phase directories
  * With ?phase=N: returns files for that specific phase
@@ -43,7 +39,7 @@ export async function GET(request: NextRequest) {
     // Return file content
     if (fileParam) {
       const safePath = fileParam.replace(/\.\./g, "");
-      const fullPath = runtimeJoin(planningDir, safePath);
+      const fullPath = path.join(planningDir, safePath);
       if (!fullPath.startsWith(planningDir) || !fs.existsSync(fullPath) || fs.statSync(fullPath).isDirectory()) {
         return NextResponse.json({ error: "File not found" }, { status: 404 });
       }
@@ -53,7 +49,7 @@ export async function GET(request: NextRequest) {
 
     // Return files for a specific phase
     if (phaseParam) {
-      const phasesDir = runtimeJoin(planningDir, "phases");
+      const phasesDir = path.join(planningDir, "phases");
       if (!fs.existsSync(phasesDir)) {
         return NextResponse.json({ files: [] });
       }
@@ -67,13 +63,13 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ files: [] });
       }
 
-      const dirPath = runtimeJoin(phasesDir, phaseDir.name);
+      const dirPath = path.join(phasesDir, phaseDir.name);
       const files = fs.readdirSync(dirPath)
         .filter((f) => f.endsWith(".md"))
         .map((f) => ({
           name: f,
           relativePath: `phases/${phaseDir.name}/${f}`,
-          size: fs.statSync(runtimeJoin(dirPath, f)).size,
+          size: fs.statSync(path.join(dirPath, f)).size,
         }))
         .sort((a, b) => a.name.localeCompare(b.name));
 
@@ -84,7 +80,7 @@ export async function GET(request: NextRequest) {
     const projectFiles: PlanningFile[] = [];
     const topLevelFiles = ["PROJECT.md", "REQUIREMENTS.md", "ROADMAP.md", "STATE.md"];
     for (const name of topLevelFiles) {
-      const fp = runtimeJoin(planningDir, name);
+      const fp = path.join(planningDir, name);
       if (fs.existsSync(fp)) {
         projectFiles.push({
           name,
@@ -95,7 +91,7 @@ export async function GET(request: NextRequest) {
     }
 
     // List phase directories
-    const phasesDir = runtimeJoin(planningDir, "phases");
+    const phasesDir = path.join(planningDir, "phases");
     const phases: PhaseFiles[] = [];
     if (fs.existsSync(phasesDir)) {
       const entries = fs.readdirSync(phasesDir, { withFileTypes: true })
@@ -106,27 +102,27 @@ export async function GET(request: NextRequest) {
         const match = entry.name.match(/^(\d{2})-/);
         if (!match) continue;
         const phaseNumber = parseInt(match[1], 10);
-        const dirPath = runtimeJoin(phasesDir, entry.name);
+        const dirPath = path.join(phasesDir, entry.name);
         const files = fs.readdirSync(dirPath)
           .filter((f) => f.endsWith(".md"))
           .map((f) => ({
             name: f,
             relativePath: `phases/${entry.name}/${f}`,
-            size: fs.statSync(runtimeJoin(dirPath, f)).size,
+            size: fs.statSync(path.join(dirPath, f)).size,
           }));
         phases.push({ phaseNumber, dirName: entry.name, files });
       }
     }
 
     // Research files
-    const researchDir = runtimeJoin(planningDir, "research");
+    const researchDir = path.join(planningDir, "research");
     const researchFiles: PlanningFile[] = [];
     if (fs.existsSync(researchDir)) {
       for (const f of fs.readdirSync(researchDir).filter((f) => f.endsWith(".md"))) {
         researchFiles.push({
           name: f,
           relativePath: `research/${f}`,
-          size: fs.statSync(runtimeJoin(researchDir, f)).size,
+          size: fs.statSync(path.join(researchDir, f)).size,
         });
       }
     }

@@ -6,10 +6,10 @@
 |--------|-----|
 | Start working (solo) | `cd ~/Projects/AI-OS && claude` |
 | Start working (client) | `cd ~/Projects/AI-OS/clients/client-name && claude` |
-| End session | Just say "done" or "that's it" - wrap-up runs automatically |
-| Switch clients | End session -> new terminal -> `cd` into different client folder |
+| End session | Just say "done" or "that's it" — wrap-up runs automatically |
+| Switch clients | End session → new terminal → `cd` into different client folder |
 | Quick clear (no save) | `/clear` (end session first to save context) |
-| First time with new client | Just open Claude - onboarding runs automatically |
+| First time with new client | Just open Claude — onboarding runs automatically |
 
 ## Client Management
 
@@ -19,6 +19,16 @@
 | Update AI-OS (auto-syncs clients) | `bash scripts/update.sh` |
 | Set up searchable memory | `bash scripts/setup-memory.sh` |
 | Clear stuck Windows MemSearch watchers | `powershell -NoProfile -ExecutionPolicy Bypass -File scripts\stop-memsearch-watchers.ps1` |
+
+## Memory Search
+
+| Action | Command |
+|--------|---------|
+| Search root memory | `bash scripts/memsearch-search.sh "query" 10 --scope root` |
+| Search one client | `bash scripts/memsearch-search.sh "query" 10 --scope client --client client-name` |
+| Search all clients | `bash scripts/memsearch-search.sh "query" 10 --scope clients` |
+| Use markdown fallback directly | `bash scripts/memory-search.sh "query" 10 --scope all` |
+| Refresh semantic index | `bash scripts/memsearch-reindex.sh` |
 
 ## Skills
 
@@ -47,8 +57,8 @@ The Command Centre schedules jobs while it is running. If you want scheduling wi
 | Level | Name | How | Where |
 |-------|------|-----|-------|
 | **1** | Single task | Just ask Claude | `projects/{category}-{type}/` |
-| **2** | Planned project | Claude scopes it -> project folder with `brief.md` | `projects/briefs/{project-name}/` |
-| **3** | GSD project | `/gsd-new-project` -> full phased planning | `projects/briefs/{project-name}/` + `.planning/` |
+| **2** | Planned project | Claude scopes it → project folder with `brief.md` | `projects/briefs/{project-name}/` |
+| **3** | GSD project | `/gsd-new-project` → full phased planning | `projects/briefs/{project-name}/` + `.planning/` |
 
 Level 1 output goes to category folders. Level 2/3 output goes inside the project folder alongside `brief.md`. Claude automatically helps you pick the right level when you state your goal. Run `/archive-gsd` when a GSD project is done; `.planning/` stays in place as the project record.
 
@@ -68,36 +78,31 @@ Level 1 output goes to category folders. Level 2/3 output goes inside the projec
 | Client instructions | `AGENTS.md` (in client folder) |
 | Claude compatibility wrapper | `CLAUDE.md` (in client folder) |
 | Shared methodology | `AGENTS.md` (at AI-OS root) |
+| Design source of truth | `docs/meta/README.md` |
+| Health reports | `projects/system-health/` |
 
 ## Where Skills Live
 
 | What | Path |
 |------|------|
 | Master copy (source of truth) | `.claude/skills/` at root |
-| Client working copy | `clients/client-name/.claude/skills/` |
+| Client discovery links | `clients/client-name/.claude/skills/` |
 | Skill methodology | `.claude/skills/{skill-name}/SKILL.md` |
 | Skill reference material | `.claude/skills/{skill-name}/references/` |
-| Available skills catalog | `.claude/skills/_catalog/catalog.json` |
+| Live skills catalog | `docs/skills-catalog.md` |
+| First-run optional menu | `.claude/skills/_catalog/catalog.json` |
 
 Add/remove/edit skills from the **root**. They sync to clients automatically on `update.sh`. Client-only skills (created directly in a client folder) are preserved during sync.
-
-## Troubleshooting
-
-| Symptom | Fix |
-|---------|-----|
-| Command Centre shows a `NODE_MODULE_VERSION` or `better-sqlite3` error | Your Node version changed since install. Run `npm rebuild better-sqlite3` inside `command-centre/`, then restart the Command Centre. |
-| Every scheduled job fails with HTTP 401 | The cron daemon has no Claude token. Run `claude setup-token`, then `bash scripts/enable-cron.sh <token>`. See `docs/memory-and-cron.md`. |
-| `tool-youtube` errors on a Python version | It needs Python 3.10 or newer. Easiest is `uv` (see `docs/connectors.md`). |
 
 ## Rules of Thumb
 
 - Solo user? Work from the root folder. Nothing extra needed.
 - Multiple clients? One client folder each, inside `clients/`.
-- End session before switching clients - wrap-up runs automatically
+- End session before switching clients — wrap-up runs automatically
 - Onboarding runs automatically on first session per client
-- Edit skills at the **root** level - client copies are overwritten on update
-- Client-only skills are fine - create them in the client's `.claude/skills/` folder
-- Edit root AGENTS.md -> all clients see the shared methodology automatically
-- Edit root SOUL.md / USER.md -> all clients see it automatically
-- `update.sh` auto-syncs skills + scripts to all clients
-- Skills always have fallbacks - no API key required to start working
+- Edit shared skills at the **root** level - client paths resolve to that source
+- Client-only skills are fine — create them in the client's `.claude/skills/` folder
+- Edit root AGENTS.md → all clients see the shared methodology automatically
+- Edit root SOUL.md / USER.md → all clients see it automatically
+- `update.sh` reconciles skill and script discovery links for all clients
+- Skills always have fallbacks — no API key required to start working

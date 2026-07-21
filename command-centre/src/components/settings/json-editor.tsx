@@ -79,7 +79,7 @@ export function JsonEditor({ apiEndpoint, title, description, emptyMessage, mask
   const [focused, setFocused] = useState(false);
   const [secretsRevealed, setSecretsRevealed] = useState(false);
 
-  // Masked display value - only used when maskSecrets is on and secrets aren't revealed
+  // Masked display value — only used when maskSecrets is on and secrets aren't revealed
   const displayContent = useMemo(() => {
     if (!maskSecrets || secretsRevealed || focused) return content;
     return maskJsonSecrets(content);

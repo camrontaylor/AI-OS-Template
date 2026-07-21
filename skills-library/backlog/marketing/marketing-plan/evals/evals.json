@@ -4,7 +4,7 @@
     {
       "id": 1,
       "prompt": "I'm starting a fractional CMO engagement with a Series A B2B SaaS doing $2M ARR, 12-person team with 1 marketer, $20K/month marketing budget. They want a marketing plan we can share with the team and the board. Build it.",
-      "expected_output": "Should check for product-marketing.md first. Should ask for client name or use a slug. Should walk through three-phase workflow (INIT → REVIEW → FINALIZE), starting with intake covering funding state, team, budget, channels, what's done, in-flight, tooling stack. Should produce a 13-section AARRR-structured plan: executive summary, strategic frame, current state (scored against the embedded 17-section rubric), Acquisition, Activation, Retention, Referral, Revenue, 90-day roadmap with owner-assigned moves, 12-month outlook with funding-stage capability unlocks, marketing operations stack mapping skills + MCPs to AARRR stages, tactical idea bank cross-referencing all 139 marketing-ideas to AARRR + client-specific status, measurement framework with north-star + leading indicators + RACI + open decisions. Should be ~8-12K words, Notion-paste-ready. Should be specific to the client (their budget, team, channels), not generic.",
+      "expected_output": "Should check for product-marketing.md first. Should ask for client name or use a slug. Should walk through three-phase workflow (INIT → REVIEW → FINALIZE), starting with intake covering funding state, team, budget, channels, what's done, in-flight, tooling stack. Should produce a 13-section AARRR-structured plan: executive summary, strategic frame, current state (scored against the embedded 17-section rubric), Acquisition, Activation, Retention, Referral, Revenue, 90-day roadmap with owner-assigned moves, 12-month outlook with funding-stage capability unlocks, marketing operations stack mapping skills + MCPs to AARRR stages, tactical idea bank cross-referencing all 139 marketing-ideas to AARRR + client-specific status, measurement framework with north-star + leading indicators + RACI + open decisions. Should be ~8–12K words, Notion-paste-ready. Should be specific to the client (their budget, team, channels), not generic.",
       "assertions": [
         "Checks for product-marketing.md",
         "Asks for client name or uses a slug",
@@ -23,7 +23,7 @@
     {
       "id": 2,
       "prompt": "We're pre-seed bootstrapped, $0 paid marketing budget, 4-person team building a D2C consumer app. Founder wants a 90-day plan + 12-month roadmap they can show investors during the upcoming raise. The product is in beta.",
-      "expected_output": "Should recognize Tier 1 funding profile (pre-seed) and skip paid acquisition recommendations until budget unlocks. Should lean Acquisition heavy on organic + lifecycle + ambassador moves. Should explicitly map what unlocks when seed closes (paid test budget $5-15K/mo, first marketing hire, etc.). Should respect that the product is in beta and account for activation/throttling gates. Should include the AARRR diagnostic - likely binding constraint at this stage is Activation (onboarding) and Referral. Plan must be investor-friendly: exec summary can be lifted into an update.",
+      "expected_output": "Should recognize Tier 1 funding profile (pre-seed) and skip paid acquisition recommendations until budget unlocks. Should lean Acquisition heavy on organic + lifecycle + ambassador moves. Should explicitly map what unlocks when seed closes (paid test budget $5–15K/mo, first marketing hire, etc.). Should respect that the product is in beta and account for activation/throttling gates. Should include the AARRR diagnostic — likely binding constraint at this stage is Activation (onboarding) and Referral. Plan must be investor-friendly: exec summary can be lifted into an update.",
       "assertions": [
         "Recognizes pre-seed tier and uses Tier 1 budget profile",
         "Skips paid acquisition recommendations until budget unlocks",
@@ -32,14 +32,14 @@
         "Accounts for product being in beta",
         "Identifies binding-constraint AARRR stage (likely Activation or Referral)",
         "Executive summary can be lifted into an investor update",
-        "Plan is operationally honest - doesn't pretend paid budget exists"
+        "Plan is operationally honest — doesn't pretend paid budget exists"
       ],
       "files": []
     },
     {
       "id": 3,
-      "prompt": "we have an audit already done - can you take that and turn it into a real plan",
-      "expected_output": "Should ask for the audit output (file path or paste). Should recognize that current-state scoring already exists and ingest it directly into Section 3 - don't re-score. Should note scoring date in case material has shifted since. Should proceed with full 13-section plan generation using audit findings to inform 90-day roadmap and AARRR sections (gaps from audit become moves in the plan).",
+      "prompt": "we have an audit already done — can you take that and turn it into a real plan",
+      "expected_output": "Should ask for the audit output (file path or paste). Should recognize that current-state scoring already exists and ingest it directly into Section 3 — don't re-score. Should note scoring date in case material has shifted since. Should proceed with full 13-section plan generation using audit findings to inform 90-day roadmap and AARRR sections (gaps from audit become moves in the plan).",
       "assertions": [
         "Asks for the audit output",
         "Ingests prior audit scoring directly into Section 3",
@@ -52,7 +52,7 @@
     },
     {
       "id": 4,
-      "prompt": "/marketing-plan acme-saas - pick up where we left off",
+      "prompt": "/marketing-plan acme-saas — pick up where we left off",
       "expected_output": "Should read ~/marketing-plans/acme-saas/progress.md to determine state machine phase. Should resume from the next unfinished section in REVIEW phase, or transition to FINALIZE if all sections approved. Should NOT silently restart from scratch. If progress.md is missing or shows 'finalized', should ask: revise as v{N+1}, start fresh, or re-open a section.",
       "assertions": [
         "Reads ~/marketing-plans/acme-saas/progress.md",

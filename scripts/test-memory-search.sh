@@ -38,7 +38,7 @@ EOF
 ## Session 1
 
 ### Decisions
-- Milvus errors in Codex are sandbox issues, not missing memory.
+- Milvus access errors are environment issues, not missing memory.
 EOF
   cat > "$TEST_ROOT/repo/context/learnings.md" <<'EOF'
 # Learnings Journal
@@ -149,11 +149,14 @@ test_all_scope_searches_all_client_folders() {
   )
 
   python3 - "$TEST_ROOT/all-clients.json" <<'PY'
-import json, sys
+import json, re, sys
 data = json.load(open(sys.argv[1]))
 sources = {item["source"] for item in data}
 assert any("/clients/beta/context/MEMORY.md" in source for source in sources), sources
-assert all("clients/example-alpha" not in source and "clients/example-beta" not in source for source in sources), sources
+# Discovery must be generic: only the fixture clients may appear, so a hardcoded
+# real-client list in the search path would show up here as an extra folder.
+found = {m.group(1) for s in sources if (m := re.search(r"/clients/([^/]+)/", s))}
+assert found <= {"acme", "beta"}, found
 PY
   ok "all scope searches client folders generically"
 }

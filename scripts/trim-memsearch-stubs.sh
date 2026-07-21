@@ -5,9 +5,14 @@
 # Why: the memsearch Claude Code plugin writes a "## Session HH:MM" heading on
 # every session start, even when the session captures nothing. Those empty
 # headings pile up (hundreds a day on a busy multi-session setup), pollute the
-# "# Recent Memory" cold-start injection, and skew the search index because the
-# plugin and AI-OS share one collection. This tool strips ONLY the empty
-# headings. Real session summaries (blocks with ### content) are kept untouched.
+# "# Recent Memory" cold-start injection, and skew the plugin's shadow search
+# collection. This tool strips ONLY the empty headings. Real session summaries
+# (blocks with ### content) are kept untouched.
+#
+# Important: MemSearch indexing is a destructive sync. If a reindex is requested,
+# this script must run the full AI-OS indexer, not `memsearch index .memsearch`.
+# Indexing only the shadow folder into the canonical collection would delete the
+# rest of the canonical corpus.
 #
 # Safety: no hard delete. Before any file is rewritten, the original is copied to
 # ~/.Trash so the removed content stays recoverable, per the no-hard-delete rule.
@@ -15,7 +20,7 @@
 # Usage:
 #   bash scripts/trim-memsearch-stubs.sh [--dry-run] [--reindex] [FILE ...]
 #     --dry-run   Show what would be removed; write nothing, back up nothing.
-#     --reindex   After trimming, re-index the cleaned memory dir so search is clean.
+#     --reindex   After trimming, run the full canonical AI-OS reindex.
 #     FILE ...    Specific files to trim; default = every .md in the shadow dir.
 set -euo pipefail
 
@@ -68,22 +73,16 @@ fi
 python3 "$ROOT/scripts/lib/trim-memsearch-stubs.py" ${PY_ARGS[@]+"${PY_ARGS[@]}"} "${FILES[@]}"
 
 if [ "$REINDEX" -eq 1 ] && [ "$DRY_RUN" -eq 0 ]; then
-  COLL="$(bash "$ROOT/scripts/lib/memsearch-collection.sh" "$ROOT" 2>/dev/null || true)"
-  MS=""
-  if command -v memsearch >/dev/null 2>&1; then
-    MS="memsearch"
-  elif command -v uvx >/dev/null 2>&1; then
-    MS="uvx --from memsearch[onnx] memsearch"
-  fi
-  if [ -n "$MS" ]; then
-    echo "Re-indexing cleaned memory into collection ${COLL:-default} (this can take a minute)..."
-    if GLOG_minloglevel=3 GRPC_VERBOSITY=NONE $MS index "$MEMORY_DIR" ${COLL:+--collection "$COLL"} >/dev/null 2>&1; then
-      echo "Re-index complete."
+  if [ -f "$ROOT/scripts/memsearch-reindex.sh" ]; then
+    echo "Running full canonical AI-OS reindex (safe destructive sync)..."
+    if bash "$ROOT/scripts/memsearch-reindex.sh"; then
+      echo "Full reindex complete."
     else
-      echo "Re-index skipped or failed (non-fatal) - the nightly index job will refresh it."
+      echo "Full reindex skipped or failed (non-fatal) - the nightly index job will refresh it."
     fi
   else
-    echo "memsearch not found - skipped re-index. The nightly index job will refresh it."
+    echo "No full AI-OS reindex script found; refused partial .memsearch-only reindex."
+    echo "Run a complete memsearch index command that lists every memory source instead."
   fi
 fi
 

@@ -65,7 +65,7 @@ agentic_os_gsd_redux_version() {
     local config_dir
     local version_file
 
-    # get-shit-done/VERSION is the marker that Redux is installed - the same
+    # get-shit-done/VERSION is the marker that Redux is installed — the same
     # signal the update hook trusts (.claude/hooks/gsd-check-update.js).
     while IFS= read -r config_dir; do
         [[ -n "$config_dir" ]] || continue
@@ -121,7 +121,7 @@ agentic_os_gsd_detect_legacy_files() {
         redux_present=0
         [[ -f "$config_dir/get-shit-done/VERSION" ]] && redux_present=1
 
-        # Old command-bundle layout - never produced by Redux.
+        # Old command-bundle layout — never produced by Redux.
         if [[ -d "$config_dir/commands/gsd" ]]; then
             printf "file:%s\n" "$config_dir/commands/gsd"
         fi

@@ -1,6 +1,6 @@
 ---
 name: free-tools
-description: When the user wants to plan, evaluate, or build a free tool for marketing purposes - lead generation, SEO value, or brand awareness. Also use when the user mentions "engineering as marketing," "free tool," "marketing tool," "calculator," "generator," "interactive tool," "lead gen tool," "build a tool for leads," "free resource," "ROI calculator," "grader tool," "audit tool," "should I build a free tool," or "tools for lead gen." Use this whenever someone wants to build something useful and give it away to attract leads or earn links. For downloadable content lead magnets (ebooks, checklists, templates), see lead-magnets.
+description: When the user wants to plan, evaluate, or build a free tool for marketing purposes — lead generation, SEO value, or brand awareness. Also use when the user mentions "engineering as marketing," "free tool," "marketing tool," "calculator," "generator," "interactive tool," "lead gen tool," "build a tool for leads," "free resource," "ROI calculator," "grader tool," "audit tool," "should I build a free tool," or "tools for lead gen." Use this whenever someone wants to build something useful and give it away to attract leads or earn links. For downloadable content lead magnets (ebooks, checklists, templates), see lead-magnets.
 metadata:
   version: 2.0.0
 ---
@@ -133,9 +133,9 @@ When: Something good exists, white-label available, not core differentiator
 ## MVP Scope
 
 ### Minimum Viable Tool
-1. Core functionality only - does the one thing, works reliably
-2. Essential UX - clear input, obvious output, mobile works
-3. Basic lead capture - email collection, leads go somewhere useful
+1. Core functionality only—does the one thing, works reliably
+2. Essential UX—clear input, obvious output, mobile works
+3. Basic lead capture—email collection, leads go somewhere useful
 
 ### What to Skip Initially
 Account creation, saving results, advanced features, perfect design, every edge case

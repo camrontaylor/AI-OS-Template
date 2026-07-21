@@ -33,7 +33,7 @@ const INITIAL_STATE: PaneState = {
 const STORAGE_PREFIX = "panes:";
 
 function ensureNotEmpty(state: PaneState): PaneState {
-  // Viewport must have at least one pane - fall back to main chat if empty
+  // Viewport must have at least one pane — fall back to main chat if empty
   if (state.visiblePaneIds.length === 0) {
     return { ...state, visiblePaneIds: [MAIN_PANE_ID], activePaneId: MAIN_PANE_ID };
   }
@@ -108,7 +108,7 @@ export function usePaneState(persistKey?: string) {
   const isMainChatSolo = paneState.visiblePaneIds.length === 1
     && paneState.visiblePaneIds[0] === MAIN_PANE_ID;
 
-  // Resolved visible panes - MAIN_PANE_ID becomes a virtual PaneItem
+  // Resolved visible panes — MAIN_PANE_ID becomes a virtual PaneItem
   const visiblePanes = useMemo(
     () => paneState.visiblePaneIds
       .map((id) => {
@@ -143,7 +143,7 @@ export function usePaneState(persistKey?: string) {
     return id;
   }, [handleOpenPane]);
 
-  /** Open a new terminal pane - added to viewport alongside main chat */
+  /** Open a new terminal pane — added to viewport alongside main chat */
   const handleOpenTerminal = useCallback((label = "Terminal") => {
     const id = `terminal-${++paneCounter}`;
     setPaneState((prev) => {
@@ -163,7 +163,7 @@ export function usePaneState(persistKey?: string) {
     return id;
   }, []);
 
-  /** Open a chat pane for a specific subtask - always forces it into the viewport */
+  /** Open a chat pane for a specific subtask — always forces it into the viewport */
   const handleOpenSubtaskPane = useCallback((taskId: string, label: string) => {
     setPaneState((prev) => {
       const existing = prev.openPanes.find((p) => p.taskId === taskId);
@@ -171,7 +171,7 @@ export function usePaneState(persistKey?: string) {
       const pane: PaneItem = existing ?? { id: paneId, type: "chat", label, taskId };
       const newOpenPanes = existing ? prev.openPanes : [...prev.openPanes, pane];
 
-      // Force the pane into the viewport - evict oldest non-main pane if full
+      // Force the pane into the viewport — evict oldest non-main pane if full
       let newVisible = prev.visiblePaneIds;
       if (!newVisible.includes(paneId)) {
         if (newVisible.length >= MAX_VISIBLE) {
@@ -213,13 +213,13 @@ export function usePaneState(persistKey?: string) {
     });
   }, []);
 
-  /** Click a pane in sidebar - show it solo in the viewport (alongside main chat if it IS main) */
+  /** Click a pane in sidebar — show it solo in the viewport (alongside main chat if it IS main) */
   const handleFocusPane = useCallback((paneId: string) => {
     setPaneState((prev) => {
       if (prev.visiblePaneIds.includes(paneId)) {
         return { ...prev, activePaneId: paneId };
       }
-      // Show solo - but if it's not the main chat, keep main chat visible too? No - solo means solo.
+      // Show solo — but if it's not the main chat, keep main chat visible too? No — solo means solo.
       return { ...prev, visiblePaneIds: [paneId], activePaneId: paneId };
     });
   }, []);
@@ -250,7 +250,7 @@ export function usePaneState(persistKey?: string) {
     setPaneState((prev) => ({ ...prev, layout }));
   }, []);
 
-  /** Close pane from viewport X - remove from viewport, keep in openPanes.
+  /** Close pane from viewport X — remove from viewport, keep in openPanes.
    *  If it's the last pane, show main chat solo. */
   const handleClosePane = useCallback((paneId: string) => {
     setPaneState((prev) => {
@@ -282,7 +282,7 @@ export function usePaneState(persistKey?: string) {
     setPaneState((prev) => ({ ...prev, sidebarCollapsed: !prev.sidebarCollapsed }));
   }, []);
 
-  /** Collapse to main - keeps panes in the sidebar list */
+  /** Collapse to main — keeps panes in the sidebar list */
   const handleCloseAllPanes = useCallback(() => {
     setPaneState((prev) => ({
       ...prev,

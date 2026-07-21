@@ -1,46 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<!--
-  Template launchd job for the optional Notion sync (macOS).
-  Before loading it: copy this file to ~/Library/LaunchAgents/ and replace every
-  /ABSOLUTE/PATH/TO/ai-os below with the real absolute path to your AI-OS repo.
-  See README.md in this folder for the full setup. Runs daily at 22:30 local time.
--->
 <plist version="1.0">
 <dict>
-  <key>Label</key>
-  <string>com.example.notion-sync</string>
+    <key>Label</key>
+    <string>com.example.notion-sync</string>
 
-  <key>ProgramArguments</key>
-  <array>
-    <string>/bin/bash</string>
-    <string>/ABSOLUTE/PATH/TO/ai-os/scripts/notion-sync/run-notion-sync.sh</string>
-  </array>
+    <!--
+      Runs run-notion-sync.sh every 15 minutes (900 seconds). The sync is
+      credit-free and incremental (only pages edited since the last run), so a
+      frequent poll is cheap and makes new Stack/Resources pages show up in
+      AI-OS within minutes of saving them - close enough to a live trigger
+      without any webhook, tunnel, or extra service to keep alive. The nightly
+      memsearch index (23:30) still picks up context/notion/ once a day.
 
-  <key>WorkingDirectory</key>
-  <string>/ABSOLUTE/PATH/TO/ai-os</string>
+      IMPORTANT: the two ProgramArguments paths and the WorkingDirectory below
+      are absolute and must match this machine. If you move the repo, update
+      them and reload the job (see README.md).
+    -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/ABSOLUTE/PATH/TO/AI-OS/scripts/notion-sync/run-notion-sync.sh</string>
+    </array>
 
-  <key>StandardOutPath</key>
-  <string>/ABSOLUTE/PATH/TO/ai-os/context/notion/sync.log</string>
+    <key>WorkingDirectory</key>
+    <string>/ABSOLUTE/PATH/TO/AI-OS</string>
 
-  <key>StandardErrorPath</key>
-  <string>/ABSOLUTE/PATH/TO/ai-os/context/notion/sync.err.log</string>
+    <key>StartInterval</key>
+    <integer>900</integer>
 
-  <key>EnvironmentVariables</key>
-  <dict>
-    <key>PATH</key>
-    <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
-  </dict>
+    <!--
+      If the Mac is asleep when a run is due, launchd coalesces it and runs once
+      at the next wake. The sync is incremental, so it catches up regardless.
+    -->
+    <key>RunAtLoad</key>
+    <false/>
 
-  <key>StartCalendarInterval</key>
-  <dict>
-    <key>Hour</key>
-    <integer>22</integer>
-    <key>Minute</key>
-    <integer>30</integer>
-  </dict>
+    <!-- Logs for debugging. Both files are inside the gitignored sync folder. -->
+    <key>StandardOutPath</key>
+    <string>/ABSOLUTE/PATH/TO/AI-OS/context/notion/sync.log</string>
+    <key>StandardErrorPath</key>
+    <string>/ABSOLUTE/PATH/TO/AI-OS/context/notion/sync.err.log</string>
 
-  <key>RunAtLoad</key>
-  <false/>
+    <!--
+      Give the job a usable PATH so it can find python3 and memsearch.
+      memsearch installs to ~/.local/bin; Homebrew lives in /opt/homebrew/bin
+      on Apple Silicon and /usr/local/bin on Intel.
+    -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/ABSOLUTE/PATH/TO/HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
 </dict>
 </plist>

@@ -67,7 +67,7 @@ UPSTREAM_BRANCH="${AGENTIC_OS_UPSTREAM_BRANCH:-main}"
 # user's backup fork. In the fork workflow `origin` is the user's private fork
 # and the canonical repo lives at `upstream`, so we resolve the update remote by
 # URL rather than trusting a fixed remote name.
-UPSTREAM_SLUG="${AGENTIC_OS_UPSTREAM_SLUG:-camrontaylor/ai-os-template}"
+UPSTREAM_SLUG="${AGENTIC_OS_UPSTREAM_SLUG:-camrontaylor/AI-OS-Template}"
 
 # Echo the name of the first remote whose URL points at the canonical repo.
 # Preference order: upstream, origin, then any other remote. Returns 1 if none.
@@ -92,32 +92,31 @@ print_upstream_help() {
     printf "${YELLOW}${BOLD}  Can't reach the AI-OS update repo${NC}\n"
     printf "${YELLOW}${BOLD}═══════════════════════════════════════════════${NC}\n"
     echo ""
-    warn "Updates come from ${BOLD}${UPSTREAM_SLUG}${NC}, but no working remote points there."
+    warn "Updates come from the Camron-owned ${BOLD}${UPSTREAM_SLUG}${NC} repo, but no working remote points there."
     echo ""
     info "To fix this:"
     echo ""
-    echo "  1. Make sure your AI-OS repo exists on GitHub:"
-    printf "     ${CYAN}https://github.com/%s${NC}" "$UPSTREAM_SLUG"
-    echo ""
-    echo "  2. Point a remote at the update repo:"
+    echo "  1. Point a remote at the update repo:"
     if git remote get-url "$remote" >/dev/null 2>&1; then
         printf "     ${BOLD}git remote set-url %s https://github.com/%s.git${NC}\n" "$remote" "$UPSTREAM_SLUG"
     else
         printf "     ${BOLD}git remote add upstream https://github.com/%s.git${NC}\n" "$UPSTREAM_SLUG"
     fi
     echo ""
-    echo "  3. Run this script again:"
+    echo "  2. Run this script again:"
     printf "     ${BOLD}bash scripts/update.sh${NC}\n"
     echo ""
-    info "Nothing was changed - your local files are untouched."
+    info "Nothing was changed — your local files are untouched."
 }
 
 # ---------- Key paths ----------
+UPDATE_TIMESTAMP=$(date +%Y-%m-%d_%H%M%S)
 BACKUP_DIR="$REPO_ROOT/.backup"
+UPDATE_BACKUP_DIR="$BACKUP_DIR/update-${UPDATE_TIMESTAMP}"
+UPDATE_MANIFEST="$REPO_ROOT/config/update-manifest.json"
 CATALOG="$REPO_ROOT/.claude/skills/_catalog/catalog.json"
 INSTALLED="$REPO_ROOT/.claude/skills/_catalog/installed.json"
 REVIEWED_STATE="$BACKUP_DIR/.update-reviewed"
-UPDATE_TIMESTAMP=$(date +%Y-%m-%d_%H%M%S)
 
 # ---------- Reviewed-state helpers ----------
 file_md5() {
@@ -149,7 +148,7 @@ mark_reviewed() {
 # ---------- Smart Merge helper ----------
 # Merges user's SKILL.md Rules entries into the upstream version.
 # Strategy: take upstream as base, inject any user dated entries missing from it.
-# Pure Python - deterministic, no LLM dependency, works on all platforms.
+# Pure Python — deterministic, no LLM dependency, works on all platforms.
 smart_merge_file() {
     local user_file="$1"
     local upstream_file="$2"
@@ -251,6 +250,123 @@ PROTECTED_PATHS=(
     "context/learnings.md.template"
     "context/memory/"
     "brand_context/"
+    "clients/"
     "projects/"
     ".claude/skills/_catalog/installed.json"
+    ".claude/skills/viz-ugc-heygen/references/avatar-config.md"
 )
+
+AI_OS_OWNED_PATHS=()
+USER_OWNED_PATHS=("${PROTECTED_PATHS[@]}")
+LOCAL_OVERRIDE_GUIDANCE=()
+
+dedupe_array() {
+    local array_name="$1"
+    local count=0
+    local deduped_count=0
+    local -a input_items=()
+    local -a deduped=()
+    local item existing found
+
+    eval "count=\${#${array_name}[@]}"
+    if [[ "$count" -gt 0 ]]; then
+        eval "input_items=(\"\${${array_name}[@]}\")"
+    fi
+
+    if [[ "$count" -gt 0 ]]; then
+        for item in "${input_items[@]}"; do
+            [[ -z "$item" ]] && continue
+            found=false
+            if [[ "$deduped_count" -gt 0 ]]; then
+                for existing in "${deduped[@]}"; do
+                    if [[ "$existing" == "$item" ]]; then
+                        found=true
+                        break
+                    fi
+                done
+            fi
+            if ! $found; then
+                deduped+=("$item")
+                deduped_count=$((deduped_count + 1))
+            fi
+        done
+    fi
+
+    eval "$array_name=()"
+    if [[ "$deduped_count" -gt 0 ]]; then
+        for item in "${deduped[@]}"; do
+            eval "$array_name+=(\"\$item\")"
+        done
+    fi
+}
+
+path_matches_pattern() {
+    local path="$1"
+    local pattern="$2"
+    [[ -z "$pattern" ]] && return 1
+
+    if [[ "$pattern" == */ ]]; then
+        [[ "$path" == "$pattern"* ]]
+        return $?
+    fi
+
+    case "$path" in
+        $pattern) return 0 ;;
+    esac
+    return 1
+}
+
+path_matches_any() {
+    local path="$1"
+    shift || true
+    local pattern
+    for pattern in "$@"; do
+        if path_matches_pattern "$path" "$pattern"; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+load_update_manifest() {
+    AI_OS_OWNED_PATHS=()
+    USER_OWNED_PATHS=("${PROTECTED_PATHS[@]}")
+    LOCAL_OVERRIDE_GUIDANCE=()
+
+    [[ -f "$UPDATE_MANIFEST" ]] || return 0
+    [[ -n "${PYTHON_CMD+x}" ]] || return 0
+
+    while IFS=$'\t' read -r kind value; do
+        [[ -z "$kind" || -z "$value" ]] && continue
+        case "$kind" in
+            ai_os_owned) AI_OS_OWNED_PATHS+=("$value") ;;
+            user_owned)
+                USER_OWNED_PATHS+=("$value")
+                PROTECTED_PATHS+=("$value")
+                ;;
+            local_override_guidance) LOCAL_OVERRIDE_GUIDANCE+=("$value") ;;
+        esac
+    done < <("${PYTHON_CMD[@]}" - "$UPDATE_MANIFEST" <<'PYEOF'
+import json, sys
+
+path = sys.argv[1]
+try:
+    data = json.load(open(path, encoding="utf-8"))
+except Exception:
+    sys.exit(0)
+
+for key in ("ai_os_owned", "user_owned", "local_override_guidance"):
+    values = data.get(key, [])
+    if not isinstance(values, list):
+        continue
+    for value in values:
+        if isinstance(value, str) and value.strip():
+            print(f"{key}\t{value.strip()}")
+PYEOF
+    )
+
+    dedupe_array PROTECTED_PATHS
+    dedupe_array USER_OWNED_PATHS
+    dedupe_array AI_OS_OWNED_PATHS
+    dedupe_array LOCAL_OVERRIDE_GUIDANCE
+}

@@ -69,7 +69,7 @@ Before providing recommendations, understand:
 - **Typical**: 25-50% scroll depth
 - Indicates: Content engagement
 - Best for: Blog posts, long-form content
-- Example: "You're halfway through - get more like this"
+- Example: "You're halfway through—get more like this"
 
 ### Exit Intent
 - Detects cursor moving to close/leave
@@ -182,7 +182,7 @@ Before providing recommendations, understand:
 - Leave space to close (visible X, click outside)
 
 ### Close Button
-- Keep visible (top right is convention) - users who can't find the close button will bounce entirely
+- Keep visible (top right is convention) — users who can't find the close button will bounce entirely
 - Large enough to tap on mobile
 - "No thanks" text link as alternative
 - Click outside to close
@@ -198,7 +198,7 @@ Before providing recommendations, understand:
 - Product image or preview
 - Face if relevant (increases trust)
 - Minimal for speed
-- Optional - copy can work alone
+- Optional—copy can work alone
 
 ---
 

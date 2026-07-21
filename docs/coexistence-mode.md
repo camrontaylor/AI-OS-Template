@@ -12,7 +12,7 @@ uncommitted and untracked files; if that session ends first, the files look dele
 Committed work is never affected.
 
 This is **tool-neutral**. Do not pin it on a specific tool without proof. The incidents here
-have been concurrent **Claude Code** sessions, not Codex or Cursor (an earlier note wrongly
+have been concurrent **Claude Code** sessions, not Cursor (an earlier note wrongly
 blamed those, and that has been corrected).
 
 ## What's installed (`~/.claude/coexistence/`)
@@ -44,7 +44,7 @@ calm list           list your project copies
 
 1. **Safety net (always on in the shared folder).** Stranded files auto-return at the next
    session start; backups are kept; nothing is overwritten.
-2. **Isolation on demand.** `calm new <name>` gives a session or another tool (Cursor, Codex)
+2. **Isolation on demand.** `calm new <name>` gives a session or another tool (Cursor)
    its own private copy of the folder, so there is zero chance of collision. Use it when you
    want to run something heavy in parallel.
 

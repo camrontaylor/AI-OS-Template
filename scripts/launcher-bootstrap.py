@@ -32,29 +32,6 @@ DEFAULT_USER_MD = """# User Preferences
 - Add user-specific preferences here as they become clear.
 """
 
-DEFAULT_MEMORY_MD = """# Working Memory
-
-Curated durable facts, active threads, environment notes, and pending decisions.
-Keep this file under 2,500 characters. Move chronological detail to
-`context/memory/{YYYY-MM-DD}.md`.
-
-## Durable Facts
-
-- Add stable facts here.
-
-## Active Threads
-
-- Add live work threads here.
-
-## Environment Notes
-
-- Add machine or repo notes here.
-
-## Pending Decisions
-
-- Add unresolved decisions here.
-"""
-
 
 def utc_now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
@@ -130,10 +107,6 @@ def learnings_md_path(repo_root: Path) -> Path:
     return repo_root / "context" / "learnings.md"
 
 
-def memory_md_path(repo_root: Path) -> Path:
-    return repo_root / "context" / "MEMORY.md"
-
-
 def env_path(repo_root: Path) -> Path:
     return repo_root / ".env"
 
@@ -196,7 +169,6 @@ def bootstrap_status(repo_root: Path) -> dict[str, Any]:
         ("env", env_path(repo_root).is_file()),
         ("brand_context_dir", brand_context_path(repo_root).is_dir()),
         ("context_user", user_md_path(repo_root).is_file()),
-        ("context_memory", memory_md_path(repo_root).is_file()),
         ("context_learnings", learnings_md_path(repo_root).is_file()),
         ("context_memory_dir", context_memory_path(repo_root).is_dir()),
         ("installed_json", installed_json_path(repo_root).is_file()),
@@ -215,7 +187,6 @@ def bootstrap_status(repo_root: Path) -> dict[str, Any]:
         "errors": errors,
         "env_path": str(env_path(repo_root)),
         "user_md_path": str(user_md_path(repo_root)),
-        "memory_md_path": str(memory_md_path(repo_root)),
         "learnings_md_path": str(learnings_md_path(repo_root)),
         "installed_json_path": str(installed_json_path(repo_root)),
     }
@@ -274,11 +245,6 @@ def repair_bootstrap(repo_root: Path) -> dict[str, Any]:
         user_md_path(repo_root).parent.mkdir(parents=True, exist_ok=True)
         user_md_path(repo_root).write_text(DEFAULT_USER_MD.rstrip() + "\n", encoding="utf-8")
         created.append("context_user")
-
-    if not memory_md_path(repo_root).is_file():
-        memory_md_path(repo_root).parent.mkdir(parents=True, exist_ok=True)
-        memory_md_path(repo_root).write_text(DEFAULT_MEMORY_MD.rstrip() + "\n", encoding="utf-8")
-        created.append("context_memory")
 
     if not learnings_md_path(repo_root).is_file():
         learnings_md_path(repo_root).parent.mkdir(parents=True, exist_ok=True)

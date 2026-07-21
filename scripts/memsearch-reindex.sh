@@ -17,12 +17,36 @@
 # DELIBERATELY different from the memsearch plugin's own collection so the
 # plugin's per-session shadow indexing can never clobber this canonical index.
 #
-# Usage: bash scripts/memsearch-reindex.sh [--force]
+# Usage: bash scripts/memsearch-reindex.sh [--force] [--strict]
 #   --force   re-embed every file (full rebuild); default skips unchanged files.
+#   --strict  treat missing prerequisites, lock skips, and empty sources as failure.
 set -euo pipefail
 
 FORCE=""
-[ "${1:-}" = "--force" ] && FORCE="--force"
+STRICT=0
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --force) FORCE="--force" ;;
+    --strict) STRICT=1 ;;
+    -h|--help)
+      echo "Usage: bash scripts/memsearch-reindex.sh [--force] [--strict]"
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $1" >&2
+      exit 64
+      ;;
+  esac
+  shift
+done
+
+skip_or_fail() {
+  echo "$1"
+  if [ "$STRICT" -eq 1 ]; then
+    exit 1
+  fi
+  exit 0
+}
 
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null || true)"
 if [ -z "$ROOT" ]; then
@@ -31,8 +55,7 @@ fi
 cd "$ROOT"
 
 if ! command -v memsearch >/dev/null 2>&1; then
-  echo "memsearch not installed - reindex skipped."
-  exit 0
+  skip_or_fail "memsearch not installed - reindex skipped."
 fi
 
 LOCK_DIR="$ROOT/.command-centre/memsearch-index.lock"
@@ -57,8 +80,7 @@ else
   fi
 
   if [[ "$LOCK_PID" =~ ^[0-9]+$ ]] && kill -0 "$LOCK_PID" 2>/dev/null; then
-    echo "Another memsearch index job is already running (pid ${LOCK_PID}); skipped to avoid Milvus Lite lock contention."
-    exit 0
+    skip_or_fail "Another memsearch index job is already running (pid ${LOCK_PID}); skipped to avoid Milvus Lite lock contention."
   fi
 
   echo "Removing stale memsearch index lock${LOCK_PID:+ (pid ${LOCK_PID})}."
@@ -73,9 +95,8 @@ fi
 if command -v pgrep >/dev/null 2>&1; then
   EXISTING_INDEX="$(pgrep -fl 'memsearch .*index' 2>/dev/null | grep -v "pgrep -fl" || true)"
   if [ -n "$EXISTING_INDEX" ]; then
-    echo "Another memsearch index process is already running; skipped to avoid Milvus Lite lock contention."
     echo "$EXISTING_INDEX"
-    exit 0
+    skip_or_fail "Another memsearch index process is already running; skipped to avoid Milvus Lite lock contention."
   fi
 fi
 
@@ -110,6 +131,12 @@ add_source() {
 add_source context/MEMORY.md
 add_source context/memory/
 add_source context/learnings.md
+add_source context/wiki/
+# The curated Notion catalog (Stack + Resources), so "what tool did I save for X"
+# is answerable from memory. Deliberately the single generated CATALOG.md and NOT
+# context/notion/items/ - indexing all ~500 raw scraped pages would add more
+# marketing copy than there is real memory, and drown recall in product taglines.
+add_source context/notion/CATALOG.md
 
 shopt -s nullglob
 for client_dir in clients/*/; do
@@ -120,8 +147,7 @@ for client_dir in clients/*/; do
 done
 shopt -u nullglob
 if [ ${#SOURCES[@]} -eq 0 ]; then
-  echo "No memory sources found - nothing to index."
-  exit 0
+  skip_or_fail "No memory sources found - nothing to index."
 fi
 
 echo "Indexing ${#SOURCES[@]} sources into ${COLL}${FORCE:+ (force)}: ${SOURCES[*]}"

@@ -81,7 +81,7 @@ function pushLog(taskId, type, content, offsetSec, fields = {}) {
 }
 
 // --------------------------------------------------------------------------
-// Level 1 - standalone task
+// Level 1 — standalone task
 // --------------------------------------------------------------------------
 
 const L1_ID = "mock-l1-landing-headline";
@@ -109,7 +109,7 @@ pushLog(L1_ID, "tool_use", "", -1785, {
   toolName: "Read",
   toolArgs: { file_path: "/brand_context/voice-profile.md" },
 });
-pushLog(L1_ID, "tool_result", "voice-profile.md - 64 lines", -1782);
+pushLog(L1_ID, "tool_result", "voice-profile.md — 64 lines", -1782);
 pushLog(L1_ID, "text", `Here are three directions I'd take the headline, from safest to sharpest:
 
 **1. "Stop stitching tools together. Ship work instead."**
@@ -127,10 +127,10 @@ pushLog(L1_ID, "text", `Here's the tightened version:
 
 **"Fewer tabs. Same work. Your week back."**
 
-I like cutting "half" - it turns a hedge into a promise.`, -180);
+I like cutting "half" — it turns a hedge into a promise.`, -180);
 
 // --------------------------------------------------------------------------
-// Level 2 - planned project with wizard-style subtasks
+// Level 2 — planned project with wizard-style subtasks
 // --------------------------------------------------------------------------
 
 // Ensure a brief.md exists so the project materializes through syncProjects
@@ -166,7 +166,7 @@ const L2_PARENT_ID = "mock-l2-pricing-launch";
 insertTask.run(
   L2_PARENT_ID,
   "Launch the new pricing page",
-  "Ship the new 3-tier pricing page - copy, design, analytics, SEO.",
+  "Ship the new 3-tier pricing page — copy, design, analytics, SEO.",
   "running",
   "project",
   null,
@@ -186,12 +186,12 @@ insertTask.run(
 pushLog(L2_PARENT_ID, "text", "I've broken the pricing launch into 4 subtasks and kicked them off. Here's how I'm thinking about dependencies:", -7150);
 pushLog(L2_PARENT_ID, "text", `- **Copy** runs first (the design needs the strings)
 - **Design** picks up once tier names are locked
-- **Analytics** can run in parallel - it only needs the page skeleton
+- **Analytics** can run in parallel — it only needs the page skeleton
 - **SEO** is last, after copy is final
 
 Ping me when you want to review individual subtasks.`, -7140);
 pushLog(L2_PARENT_ID, "user_reply", "Sounds right. Let me know which one needs me first.", -3600);
-pushLog(L2_PARENT_ID, "text", "Copy is ready for review - I'll surface it on the subtask row above when the draft lands.", -1800);
+pushLog(L2_PARENT_ID, "text", "Copy is ready for review — I'll surface it on the subtask row above when the draft lands.", -1800);
 
 // Subtasks
 const L2_SUBS = [
@@ -205,16 +205,16 @@ const L2_SUBS = [
     logs: [
       ["text", "Reading the positioning doc and the old pricing page so the voice carries through.", -7100],
       ["tool_use", "", -7080, { toolName: "Read", toolArgs: { file_path: "/brand_context/positioning.md" } }],
-      ["tool_result", "positioning.md - 48 lines", -7078],
+      ["tool_result", "positioning.md — 48 lines", -7078],
       ["text", `Here's the first pass at tier copy:
 
-**Starter** - For solo operators. $0.
-**Team** - For teams getting work out the door. $49/seat.
-**Scale** - For orgs running multiple clients. Custom.
+**Starter** — For solo operators. $0.
+**Team** — For teams getting work out the door. $49/seat.
+**Scale** — For orgs running multiple clients. Custom.
 
 The comparison table has 14 rows grouped under: *Core workflow*, *Collaboration*, *Scale & compliance*. Want me to paste the full table?`, -3000],
       ["user_reply", "Yes, paste the full table.", -2800],
-      ["question", "Quick check before I lock the row order - should 'Brand context memory' live under *Core workflow* or under *Scale & compliance*?", -180],
+      ["question", "Quick check before I lock the row order — should 'Brand context memory' live under *Core workflow* or under *Scale & compliance*?", -180],
     ],
   },
   {
@@ -227,7 +227,7 @@ The comparison table has 14 rows grouped under: *Core workflow*, *Collaboration*
     logs: [
       ["text", "Waiting on final tier names from the copy subtask before I lock the grid.", -6000],
       ["tool_use", "", -1200, { toolName: "Read", toolArgs: { file_path: "/brand_context/voice-profile.md" } }],
-      ["tool_result", "voice-profile.md - 64 lines", -1198],
+      ["tool_result", "voice-profile.md — 64 lines", -1198],
       ["text", "Building out the 3-column comparison table component now.", -900],
     ],
   },
@@ -287,7 +287,7 @@ for (const sub of L2_SUBS) {
 }
 
 // --------------------------------------------------------------------------
-// Level 3 - GSD project with phases
+// Level 3 — GSD project with phases
 // --------------------------------------------------------------------------
 
 const L3_SLUG = "mock-cc-rebuild";
@@ -338,14 +338,14 @@ insertTask.run(
   "execute"
 );
 
-pushLog(L3_PARENT_ID, "text", `Phase 1 (audit) landed yesterday. Phase 2 is in execute - I'm building the unified modal now. Phase 3 will validate against the L1/L2/L3 mocks we just seeded.
+pushLog(L3_PARENT_ID, "text", `Phase 1 (audit) landed yesterday. Phase 2 is in execute — I'm building the unified modal now. Phase 3 will validate against the L1/L2/L3 mocks we just seeded.
 
 I'll flag any phase that needs your review on the subtask rows above.`, -3600);
 
 const L3_PHASES = [
   {
     id: "mock-l3-cc-phase-1",
-    title: "Phase 1 - Audit current modal surfaces",
+    title: "Phase 1 — Audit current modal surfaces",
     status: "done",
     phaseNumber: 1,
     gsdStep: "verify",
@@ -360,7 +360,7 @@ const L3_PHASES = [
   },
   {
     id: "mock-l3-cc-phase-2",
-    title: "Phase 2 - Design new unified modal spec",
+    title: "Phase 2 — Design new unified modal spec",
     status: "running",
     phaseNumber: 2,
     gsdStep: "execute",
@@ -377,12 +377,12 @@ const L3_PHASES = [
         },
       }],
       ["tool_result", "File created successfully", -59998],
-      ["question", "Before I lock the unified modal spec - should the project chat default to collapsed or expanded when the dashboard opens?", -300],
+      ["question", "Before I lock the unified modal spec — should the project chat default to collapsed or expanded when the dashboard opens?", -300],
     ],
   },
   {
     id: "mock-l3-cc-phase-3",
-    title: "Phase 3 - Implement + validate against mocks",
+    title: "Phase 3 — Implement + validate against mocks",
     status: "backlog",
     phaseNumber: 3,
     gsdStep: "plan",

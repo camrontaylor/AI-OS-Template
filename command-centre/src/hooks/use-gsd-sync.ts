@@ -12,7 +12,7 @@ export function useGsdSync() {
     hasSynced.current = true;
 
     fetch("/api/gsd/ensure-task", { method: "POST" }).catch(() => {
-      // Silent - sync is best-effort
+      // Silent — sync is best-effort
     });
   }, []);
 }

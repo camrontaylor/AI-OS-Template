@@ -4,11 +4,11 @@ description: "Audit cloud infrastructure (AWS, GCP, Azure) for misconfigurations
 allowed-tools: Bash, Read, Write, Grep, Glob, WebSearch
 ---
 
-# Cloud Audit - Cloud Infrastructure Security Review
+# Cloud Audit — Cloud Infrastructure Security Review
 
 Audit cloud infrastructure configurations for misconfigurations, excessive permissions, public exposure, and compliance gaps. Covers AWS, GCP, and Azure.
 
-Cross-references: `iam-audit` for the consultant-style IAM deep-dive (design / audit / migrate across identity providers and federation patterns) - this skill includes an IAM section but stays at the cloud-posture level; for role design, JIT access, workload identity federation, and migration plans, invoke `iam-audit`. `container-audit` for Kubernetes-specific posture sitting on top of cloud. `secrets-audit` for secrets-manager hygiene and rotation.
+Cross-references: `iam-audit` for the consultant-style IAM deep-dive (design / audit / migrate across identity providers and federation patterns) — this skill includes an IAM section but stays at the cloud-posture level; for role design, JIT access, workload identity federation, and migration plans, invoke `iam-audit`. `container-audit` for Kubernetes-specific posture sitting on top of cloud. `secrets-audit` for secrets-manager hygiene and rotation.
 
 Findings should use the three-disposition rule (Fixed / Deferred / Accepted Risk) per `owasp-audit`'s Report Format.
 
@@ -67,7 +67,7 @@ aws s3api get-bucket-encryption --bucket <name>
 ```
 Check for: public buckets, missing encryption, no versioning, no lifecycle policies, overly permissive bucket policies.
 
-**GCP/Azure:** Equivalent checks for Cloud Storage and Blob Storage - look for `allUsers`/`allAuthenticatedUsers` access or anonymous blob access.
+**GCP/Azure:** Equivalent checks for Cloud Storage and Blob Storage — look for `allUsers`/`allAuthenticatedUsers` access or anonymous blob access.
 
 ### Compute
 
@@ -121,10 +121,10 @@ Check for: public buckets, missing encryption, no versioning, no lifecycle polic
 ---
 
 ### Prioritized Action Plan
-1. [Critical - immediate]
-2. [High - this week]
-3. [Medium - this month]
-4. [Low - next quarter]
+1. [Critical — immediate]
+2. [High — this week]
+3. [Medium — this month]
+4. [Low — next quarter]
 ```
 
 ## Boundaries

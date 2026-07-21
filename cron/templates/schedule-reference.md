@@ -40,17 +40,17 @@ Hour intervals (runs on the hour, every N hours):
 === DAYS OPTIONS ===
 
   days: "daily"               # Every day
-  days: "weekdays"            # Monday-Friday
-  days: "weekends"            # Saturday-Sunday
+  days: "weekdays"            # Monday–Friday
+  days: "weekends"            # Saturday–Sunday
   days: "mon"                 # Specific day
   days: "mon,wed,fri"         # Multiple specific days
   days: "tue,thu"             # Tuesday and Thursday
 
 === MODEL OPTIONS ===
 
-  model: "haiku"              # Fast + cheap ($0.01-0.05/run)
-  model: "sonnet"             # Balanced ($0.05-0.25/run) - default
-  model: "opus"               # Most capable ($0.25-2.00/run)
+  model: "haiku"              # Fast + cheap ($0.01–0.05/run)
+  model: "sonnet"             # Balanced ($0.05–0.25/run) — default
+  model: "opus"               # Most capable ($0.25–2.00/run)
 
 === ACTIVE ===
 

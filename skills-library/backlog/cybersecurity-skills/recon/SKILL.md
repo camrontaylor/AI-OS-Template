@@ -4,11 +4,11 @@ description: "Perform structured reconnaissance and attack surface enumeration f
 allowed-tools: Bash, Read, Write, WebSearch, WebFetch
 ---
 
-# Recon - Penetration Testing Reconnaissance
+# Recon — Penetration Testing Reconnaissance
 
 Perform structured reconnaissance against an authorized target, organizing findings into an actionable attack surface map.
 
-Cross-references: `osint-recon` for the deeper open-source-intelligence pass (people, organizations, historical data) - this skill is the active/passive target-mapping side, osint-recon is the broader investigative side; they pair naturally. `web-pentest` for the next stage once recon has produced an attack surface map and an authorized target list. `owasp-audit` for source-code review when you have access to the target's code.
+Cross-references: `osint-recon` for the deeper open-source-intelligence pass (people, organizations, historical data) — this skill is the active/passive target-mapping side, osint-recon is the broader investigative side; they pair naturally. `web-pentest` for the next stage once recon has produced an attack surface map and an authorized target list. `owasp-audit` for source-code review when you have access to the target's code.
 
 ## Authorization Check
 
@@ -34,7 +34,7 @@ Gather information without touching the target directly.
 
 **WHOIS and registration:** Run `whois $ARGUMENTS` for registrant, nameserver, and creation date info.
 
-**Search engine dorking:** Use targeted queries - `site:`, `inurl:`, `filetype:`, `intitle:` - to find exposed pages, documents, and admin panels.
+**Search engine dorking:** Use targeted queries — `site:`, `inurl:`, `filetype:`, `intitle:` — to find exposed pages, documents, and admin panels.
 
 **Technology fingerprinting:** Identify frameworks, CMS, server software, and JavaScript libraries from public-facing pages.
 
@@ -99,7 +99,7 @@ Produce a structured recon report:
 
 ## Boundaries
 
-- Stay within the defined scope - never scan adjacent or out-of-scope systems
+- Stay within the defined scope — never scan adjacent or out-of-scope systems
 - Rate-limit aggressive scans to avoid disruption
 - Log all commands run for the engagement record
 - If you discover evidence of active compromise by a third party, alert the user immediately

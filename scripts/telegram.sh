@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # =============================================================================
-# AI-OS - Telegram Channel Launcher
+# AI-OS — Telegram Channel Launcher
 # =============================================================================
 # Starts Claude Code with the Telegram channels plugin so you can chat with
 # AI-OS from Telegram.
@@ -59,7 +59,7 @@ done
 # ---------- Alias installer ----------
 if [[ "$INSTALL_ALIAS" -eq 1 ]]; then
     ALIAS_LINE="alias telegram='bash \"$SCRIPT_DIR/telegram.sh\"'"
-    ALIAS_MARKER="# AI-OS - telegram channel launcher"
+    ALIAS_MARKER="# Agentic OS — telegram channel launcher"
     USER_SHELL_NAME="$(basename "${SHELL:-bash}")"
 
     install_alias_into() {
@@ -93,7 +93,7 @@ if [[ "$INSTALL_ALIAS" -eq 1 ]]; then
                 success "Added 'telegram' alias to config.fish"
             fi
             ;;
-        *) warn "Unrecognised shell - add manually: $ALIAS_LINE" ;;
+        *) warn "Unrecognised shell — add manually: $ALIAS_LINE" ;;
     esac
     echo ""
     warn "Open a new terminal to activate the alias."
@@ -120,7 +120,7 @@ echo ""
 printf "${CYAN}${BOLD}"
 cat << 'BANNER'
     ╔══════════════════════════════════════════════╗
-    ║                  A I - O S                   ║
+    ║          A G E N T I C   O S                 ║
     ║           Telegram Channel                   ║
     ╚══════════════════════════════════════════════╝
 BANNER
@@ -157,12 +157,11 @@ fi
 
 # Bot token
 printf "  bot token ..... "
-telegram_bot_token="${TELEGRAM_BOT_TOKEN:-}"
 if [[ -f "$REPO_ROOT/.env" ]]; then
-    loaded_telegram_bot_token="$(grep -E '^TELEGRAM_BOT_TOKEN=' "$REPO_ROOT/.env" 2>/dev/null | cut -d= -f2- | tr -d '[:space:]"'"'" || true)"
-    [[ -n "$loaded_telegram_bot_token" ]] && telegram_bot_token="$loaded_telegram_bot_token"
+    TELEGRAM_BOT_TOKEN="$(grep -E '^TELEGRAM_BOT_TOKEN=' "$REPO_ROOT/.env" 2>/dev/null | cut -d= -f2- | tr -d '[:space:]"'"'" || true)"
 fi
-if [[ -n "${telegram_bot_token:-}" ]]; then
+TELEGRAM_BOT_TOKEN="${TELEGRAM_BOT_TOKEN:-${TELEGRAM_BOT_TOKEN:-}}"
+if [[ -n "${TELEGRAM_BOT_TOKEN:-}" ]]; then
     printf "${GREEN}configured${NC}\n"
 else
     printf "${RED}missing${NC}\n"
@@ -172,18 +171,20 @@ fi
 
 # Allowed users (access control)
 printf "  access control  "
-telegram_allowed_users="${TELEGRAM_ALLOWED_USERS:-}"
 if [[ -f "$REPO_ROOT/.env" ]]; then
-    loaded_telegram_allowed_users="$(grep -E '^TELEGRAM_ALLOWED_USERS=' "$REPO_ROOT/.env" 2>/dev/null | cut -d= -f2- | tr -d '[:space:]"'"'" || true)"
-    [[ -n "$loaded_telegram_allowed_users" ]] && telegram_allowed_users="$loaded_telegram_allowed_users"
+    TELEGRAM_ALLOWED_USERS="$(grep -E '^TELEGRAM_ALLOWED_USERS=' "$REPO_ROOT/.env" 2>/dev/null | cut -d= -f2- | tr -d '[:space:]"'"'" || true)"
 fi
-if [[ -n "${telegram_allowed_users:-}" ]]; then
-    USER_COUNT=$(echo "$telegram_allowed_users" | tr ',' '\n' | wc -l | tr -d ' ')
+TELEGRAM_ALLOWED_USERS="${TELEGRAM_ALLOWED_USERS:-${TELEGRAM_ALLOWED_USERS:-}}"
+if [[ -n "${TELEGRAM_ALLOWED_USERS:-}" ]]; then
+    USER_COUNT=$(echo "$TELEGRAM_ALLOWED_USERS" | tr ',' '\n' | wc -l | tr -d ' ')
     printf "${GREEN}${USER_COUNT} user(s) allowlisted${NC}\n"
 else
-    printf "${YELLOW}open (no allowlist)${NC}\n"
-    warn "Set TELEGRAM_ALLOWED_USERS in .env to restrict access"
-    warn "Use your Telegram user ID (get it from @userinfobot)"
+    # Fail CLOSED: a remote-command channel with no allowlist means anyone who
+    # finds the bot can drive this machine. Refuse to start instead of warning.
+    printf "${RED}blocked (no allowlist)${NC}\n"
+    fail "TELEGRAM_ALLOWED_USERS is empty. The bot will NOT start without an allowlist."
+    fail "Set TELEGRAM_ALLOWED_USERS in .env to your Telegram user ID (get it from @userinfobot)."
+    PREFLIGHT_FAIL=1
 fi
 
 echo ""
@@ -205,18 +206,18 @@ CHANNEL_ARGS=(
 )
 
 # Pass config via environment
-export TELEGRAM_BOT_TOKEN="$telegram_bot_token"
-if [[ -n "${telegram_allowed_users:-}" ]]; then
-    export TELEGRAM_ALLOWED_USERS="$telegram_allowed_users"
+export TELEGRAM_BOT_TOKEN
+if [[ -n "${TELEGRAM_ALLOWED_USERS:-}" ]]; then
+    export TELEGRAM_ALLOWED_USERS
 fi
 
 # =============================================================================
 # Launch
 # =============================================================================
 info "Starting Claude Code with Telegram channel..."
-printf "${DIM}  Bot token: configured${NC}\n"
-if [[ -n "${telegram_allowed_users:-}" ]]; then
-    printf "${DIM}  Allowed users: configured${NC}\n"
+printf "${DIM}  Bot token: ${TELEGRAM_BOT_TOKEN:0:8}...${NC}\n"
+if [[ -n "${TELEGRAM_ALLOWED_USERS:-}" ]]; then
+    printf "${DIM}  Allowed users: ${TELEGRAM_ALLOWED_USERS}${NC}\n"
 fi
 echo ""
 info "Send a message to your bot on Telegram to start chatting."

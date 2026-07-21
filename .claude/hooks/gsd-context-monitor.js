@@ -142,12 +142,12 @@ process.stdin.on('end', () => {
     const isGsdActive = !!(planningDir && fs.existsSync(path.join(planningDir, 'STATE.md')));
 
     // Build advisory warning message (never use imperative commands that
-    // override user preferences - see #884)
+    // override user preferences — see #884)
     let message;
     if (isCritical) {
       message = isGsdActive
         ? `CONTEXT CRITICAL: Usage at ${usedPct}%. Remaining: ${remaining}%. ` +
-          'Context is nearly exhausted. Do NOT start new complex work or write handoff files - ' +
+          'Context is nearly exhausted. Do NOT start new complex work or write handoff files — ' +
           'GSD state is already tracked in STATE.md. Inform the user so they can run ' +
           '/gsd-pause-work at the next natural stopping point.'
         : `CONTEXT CRITICAL: Usage at ${usedPct}%. Remaining: ${remaining}%. ` +

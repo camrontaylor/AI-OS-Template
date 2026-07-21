@@ -1,35 +1,4 @@
-const fs = require("fs");
-const path = require("path");
-
-const workspaceMarkers = ["AGENTS.md", "CLAUDE.md"];
-
-function hasWorkspaceMarker(targetPath) {
-  return workspaceMarkers.some((marker) => fs.existsSync(path.join(targetPath, marker)));
-}
-
-function findWorkspaceRoot(startPath) {
-  let currentDir = path.resolve(startPath);
-
-  for (let depth = 0; depth < 10; depth += 1) {
-    if (hasWorkspaceMarker(currentDir)) {
-      return currentDir;
-    }
-
-    const parentDir = path.dirname(currentDir);
-    if (parentDir === currentDir) {
-      break;
-    }
-
-    currentDir = parentDir;
-  }
-
-  throw new Error(
-    `Unable to locate the AI-OS workspace root from ${startPath}. Expected one of: ${workspaceMarkers.join(", ")}`
-  );
-}
-
-module.exports = {
-  findWorkspaceRoot,
-  hasWorkspaceMarker,
-  workspaceMarkers,
-};
+// Shim. The canonical module lives at scripts/cron/workspace-root.cjs at the
+// AI-OS workspace root, where the standalone cron daemon needs it (see AGENTS.md,
+// "Command Centre Boundary"). This shim keeps Command Centre scripts working unchanged.
+module.exports = require("../../scripts/cron/workspace-root.cjs");

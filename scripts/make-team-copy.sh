@@ -13,7 +13,8 @@
 # Usage:
 #   bash scripts/make-team-copy.sh [destination] [team-repo-url]
 #
-#   destination    where to build the clean copy (default ../AI-OS-team-starter)
+#   destination    where to build the clean copy
+#                  (default .backup/exports/AI-OS-team-starter-YYYYMMDD-HHMMSS)
 #   team-repo-url  the private repo your team will use; when given, the copy is
 #                  stamped so teammates' updates follow that repo automatically
 #
@@ -25,7 +26,8 @@ set -euo pipefail
 SRC="$(cd "$(dirname "$0")/.." && pwd)"
 source "$SRC/scripts/lib/team.sh"
 
-DEST="${1:-$SRC/../AI-OS-team-starter}"
+STAMP="$(date +%Y%m%d-%H%M%S)"
+DEST="${1:-$SRC/.backup/exports/AI-OS-team-starter-$STAMP}"
 TEAM_URL="${2:-}"
 TEAM_SLUG=""
 [[ -n "$TEAM_URL" ]] && TEAM_SLUG="$(team_slug_from_url "$TEAM_URL")"
@@ -43,14 +45,9 @@ if [ -e "$DEST" ]; then
 fi
 mkdir -p "$DEST"
 
-# Only git-tracked files, minus the personal ones, copied with structure intact.
-( cd "$SRC" && git ls-files -z \
-    | grep -zEv "$STRIP" \
-    | rsync -a --from0 --files-from=- ./ "$DEST"/ )
-
-# Folders that should exist but start empty for a new operator.
-mkdir -p "$DEST/projects" "$DEST/brand_context"
-touch "$DEST/projects/.gitkeep"
+# One export path, shared with team-publish.sh, so a first copy and a later
+# publish can never disagree about what counts as shareable.
+team_copy_shared_tree "$SRC" "$DEST"
 
 # Stamp the team upstream so teammates' normal update follows the team repo.
 if [[ -n "$TEAM_SLUG" ]]; then

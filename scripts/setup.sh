@@ -129,7 +129,9 @@ if [[ "$OS" == "mac" ]]; then
     if installed brew; then
         ok "brew found"
     else
-        warn "brew not found - optional, but recommended for installing media tools"
+        fail "brew not found - install from https://brew.sh"
+        record_missing "brew"
+        ERRORS=$((ERRORS + 1))
     fi
 elif [[ "$OS" == "windows" ]]; then
     say "Checking package manager..."
@@ -163,15 +165,16 @@ if installed uv; then
 else
     warn "uv missing"
     if [[ "$OS" == "mac" ]] && installed brew; then
-        run_install "uv" brew install uv || true
+        run_install "uv" brew install uv || ERRORS=$((ERRORS + 1))
     elif [[ "$OS" == "windows" ]] && [[ "$WIN_PKG" == "winget" ]]; then
-        run_install "uv" winget install --id astral-sh.uv -e --silent || true
+        run_install "uv" winget install --id astral-sh.uv -e --silent || ERRORS=$((ERRORS + 1))
     elif [[ "$OS" == "windows" ]] && [[ "$WIN_PKG" == "choco" ]]; then
-        run_install "uv" choco install uv -y || true
+        run_install "uv" choco install uv -y || ERRORS=$((ERRORS + 1))
     elif installed curl; then
-        run_install "uv" bash -lc "curl -LsSf https://astral.sh/uv/install.sh | sh" || true
+        run_install "uv" bash -lc "curl -LsSf https://astral.sh/uv/install.sh | sh" || ERRORS=$((ERRORS + 1))
     else
         record_missing "uv"
+        ERRORS=$((ERRORS + 1))
     fi
 fi
 
@@ -181,13 +184,14 @@ if installed yt-dlp; then
 else
     warn "yt-dlp missing"
     if [[ "$OS" == "mac" ]] && installed brew; then
-        run_install "yt-dlp" brew install yt-dlp || true
+        run_install "yt-dlp" brew install yt-dlp || ERRORS=$((ERRORS + 1))
     elif [[ "$OS" == "windows" ]] && [[ "$WIN_PKG" == "winget" ]]; then
-        run_install "yt-dlp" winget install --id yt-dlp.yt-dlp -e --silent || true
+        run_install "yt-dlp" winget install --id yt-dlp.yt-dlp -e --silent || ERRORS=$((ERRORS + 1))
     elif resolve_python_cmd; then
-        run_install "yt-dlp" "${PYTHON_CMD[@]}" -m pip install yt-dlp || true
+        run_install "yt-dlp" "${PYTHON_CMD[@]}" -m pip install yt-dlp || ERRORS=$((ERRORS + 1))
     else
         record_missing "yt-dlp"
+        ERRORS=$((ERRORS + 1))
     fi
 fi
 
@@ -197,13 +201,14 @@ if installed ffmpeg; then
 else
     warn "ffmpeg missing"
     if [[ "$OS" == "mac" ]] && installed brew; then
-        run_install "ffmpeg" brew install ffmpeg || true
+        run_install "ffmpeg" brew install ffmpeg || ERRORS=$((ERRORS + 1))
     elif [[ "$OS" == "windows" ]] && [[ "$WIN_PKG" == "winget" ]]; then
-        run_install "ffmpeg" winget install --id Gyan.FFmpeg -e --silent || true
+        run_install "ffmpeg" winget install --id Gyan.FFmpeg -e --silent || ERRORS=$((ERRORS + 1))
     elif [[ "$OS" == "windows" ]] && [[ "$WIN_PKG" == "choco" ]]; then
-        run_install "ffmpeg" choco install ffmpeg -y || true
+        run_install "ffmpeg" choco install ffmpeg -y || ERRORS=$((ERRORS + 1))
     else
         record_missing "ffmpeg"
+        ERRORS=$((ERRORS + 1))
     fi
 fi
 

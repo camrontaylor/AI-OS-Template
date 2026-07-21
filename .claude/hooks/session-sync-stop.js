@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// Stop hook - logs Claude's response and marks task as "review" (waiting for user input).
-// Status is NOT auto-advanced to "done" - user marks done explicitly via the UI.
+// Stop hook — logs Claude's response and marks task as "review" (waiting for user input).
+// Status is NOT auto-advanced to "done" — user marks done explicitly via the UI.
 //
 // Stop fires after EVERY turn with `last_assistant_message`.
 // The UserPromptSubmit hook flips status back to "running" when the user replies.
@@ -104,7 +104,7 @@ process.stdin.on("end", () => {
       }
 
       // Wait 3s then clean up the tmp session file if Claude has exited.
-      // Status is NOT patched to done - the UI or backend reaper handles that.
+      // Status is NOT patched to done — the UI or backend reaper handles that.
       const storedPid = ${claudePid === null ? "null" : claudePid};
       if (storedPid !== null) {
         await new Promise((r) => setTimeout(r, 3000));

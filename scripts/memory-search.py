@@ -3,7 +3,7 @@
 
 This is the deterministic fallback below MemSearch. It reads the authoritative
 markdown sources directly, so it needs no Milvus lock file, no loopback port,
-and no Codex escalation.
+and no external service.
 """
 
 from __future__ import annotations
@@ -12,6 +12,7 @@ import argparse
 import hashlib
 import json
 import math
+import os
 import re
 import sys
 from dataclasses import dataclass
@@ -33,16 +34,23 @@ MEMORY_SOURCE_FILES = [
 
 MEMORY_SOURCE_DIRS = [
     "context/memory",
+    "context/wiki",
 ]
 
 CLIENT_REFERENCE_DIRS = [
     "brand_context",
 ]
 
+# Cron-generated maintenance reports that live inside memory folders but are
+# not memory. Kept out of recall so boilerplate never competes with real facts.
+GENERATED_REPORT_RE = re.compile(r"_(gap-analysis|memory-health)\.md$")
+
+MAX_MARKDOWN_FILE_BYTES = int(os.environ.get("AI_OS_MEMORY_SEARCH_MAX_FILE_BYTES", "600000"))
+MACOS_DATALESS_FLAG = 0x40000000
+
 SYSTEM_RECALL_TERMS = {
     "ai-os",
     "aios",
-    "codex",
     "fallback",
     "lock",
     "memory",
@@ -195,6 +203,10 @@ def candidate_files(root: Path, source_root: Path) -> list[Path]:
             if directory.is_dir():
                 files.extend(sorted(directory.rglob("*.md")))
 
+    # Generated maintenance reports inside memory folders are machine
+    # boilerplate, not memory (2026-07-16 audit) - keep them out of recall.
+    files = [p for p in files if not GENERATED_REPORT_RE.search(p.name)]
+
     seen: set[Path] = set()
     unique: list[Path] = []
     for path in files:
@@ -214,6 +226,11 @@ def rel_path(root: Path, path: Path) -> str:
 
 def split_sections(root: Path, path: Path) -> list[Section]:
     try:
+        stat_result = path.stat()
+        if stat_result.st_size > MAX_MARKDOWN_FILE_BYTES:
+            return []
+        if getattr(stat_result, "st_flags", 0) & MACOS_DATALESS_FLAG:
+            return []
         text = path.read_text(encoding="utf-8", errors="replace")
     except OSError:
         return []

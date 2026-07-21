@@ -8,10 +8,19 @@ Scans:
 
 Run: python3 scripts/gen-skills-catalog.py
 """
+import argparse
 import os, re, glob, datetime, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUT = ROOT / "docs" / "skills-catalog.md"
+
+parser = argparse.ArgumentParser(description="Generate or verify the live AI-OS skills catalog.")
+parser.add_argument(
+    "--check",
+    action="store_true",
+    help="Exit non-zero when docs/skills-catalog.md is stale; do not write it.",
+)
+args = parser.parse_args()
 
 
 def parse_frontmatter(path):
@@ -82,7 +91,7 @@ lines.append("")
 lib_backlog = ROOT / "skills-library" / "backlog"
 lines.append("## Skills library (staging, review-only, not invocable)")
 lines.append("")
-lines.append("These live under `skills-library/backlog/<pack>/<name>/`. To make one live: move it through `triage/` then `review/`, rename to the `{category}-{name}` convention, and register it in `.claude/skills/` and `AGENTS.md`. See `skills-library/README.md`.")
+lines.append("These live under `skills-library/backlog/<pack>/<name>/`. To make one live: move it through `triage/` then `review/`, rename to the `{category}-{name}` convention, add it to `.claude/skills/`, add its learnings section, and regenerate this catalog. See `skills-library/README.md`.")
 lines.append("")
 
 total_lib = 0
@@ -109,7 +118,112 @@ lines.append(f"Totals: {len(live)} live skills, {total_lib} library skills.")
 lines.append("")
 
 text = "\n".join(lines)
-text = text.replace("\u2014", "-").replace("\u2013", "-")  # no em/en dashes
-OUT.parent.mkdir(parents=True, exist_ok=True)
-OUT.write_text(text, encoding="utf-8")
-print(f"wrote {OUT} ({len(live)} live, {total_lib} library)")
+text = text.replace("—", "-").replace("–", "-")  # no em/en dashes
+
+
+# --- Trigger-collision lint -------------------------------------------------
+# Two live skills claiming the same trigger phrase makes routing a coin flip
+# (the 2026-07-16 audit found 'look into'/'find out' double-claimed). Report
+# every phrase that appears in 2+ frontmatter descriptions as a quoted trigger.
+def lint_trigger_collisions():
+    import collections
+    claims = collections.defaultdict(set)
+    for d in sorted(live_dir.iterdir()):
+        sk = d / "SKILL.md"
+        if not d.is_dir() or d.name.startswith("_") or not sk.exists():
+            continue
+        _, desc = parse_frontmatter(sk)
+        # Quoted phrases anywhere in the description act as routing triggers;
+        # stop at the negative-trigger marker so "does NOT trigger for" phrases
+        # are not counted as claims.
+        neg = re.search(r"[Dd]oes NOT trigger|[Dd]o not use for|[Nn]ot for\b", desc)
+        positive = desc[: neg.start()] if neg else desc
+        for phrase in re.findall(r'"([^"]{3,40})"', positive):
+            claims[phrase.strip().lower().rstrip("?!.")].add(d.name)
+    collisions = {p: sorted(s) for p, s in claims.items() if len(s) > 1}
+    for phrase, owners in sorted(collisions.items()):
+        print(f"trigger collision: '{phrase}' claimed by {', '.join(owners)}")
+    return collisions
+
+
+# --- Sync catalog.json + installed.json from disk ----------------------------
+# catalog.json powers the add-skill/remove-skill built-ins; a live skill
+# missing from it hard-errors those operations (2026-07-16 audit: 16 missing).
+CATEGORY_BY_PREFIX = {
+    "mkt": "marketing", "str": "strategy", "ops": "operations", "viz": "visual",
+    "acc": "accounting", "comms": "communication", "q": "inquiry",
+    "meta": "system", "tool": "utility", "eng": "engineering",
+}
+
+
+def sync_machine_catalogs(live_entries, check_only):
+    import json
+    catalog_path = live_dir / "_catalog" / "catalog.json"
+    installed_path = live_dir / "_catalog" / "installed.json"
+    changed = []
+    try:
+        catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+    except Exception:
+        return changed
+    known = set(catalog.get("core_skills", [])) | set(catalog.get("skills", {}).keys())
+    live_names = [folder for _, folder, _ in live_entries]
+    for invoke, folder, desc in live_entries:
+        if folder in known:
+            continue
+        prefix = folder.split("-", 1)[0]
+        catalog.setdefault("skills", {})[folder] = {
+            "category": CATEGORY_BY_PREFIX.get(prefix, "utility"),
+            "version": "1.0.0",
+            "description": desc[:160],
+            "story": {"text": "", "video": ""},
+            "changelog": [{"version": "1.0.0", "summary": "Backfilled from disk by gen-skills-catalog.py"}],
+            "requires_services": [],
+            "dependencies": [],
+            "mcp_servers": [],
+        }
+        changed.append(f"catalog.json += {folder}")
+    stale = sorted(known - set(live_names))
+    for name in stale:
+        print(f"note: catalog.json entry '{name}' has no live skill folder (left in place; may be optional/uninstalled)")
+
+    try:
+        installed = json.loads(installed_path.read_text(encoding="utf-8"))
+    except Exception:
+        installed = {"version": catalog.get("version", "1.0.0")}
+    if sorted(installed.get("installed_skills", [])) != sorted(live_names):
+        installed["installed_skills"] = sorted(live_names)
+        installed["installed_at"] = datetime.date.today().isoformat()
+        changed.append("installed.json refreshed from disk")
+        installed_dirty = True
+    else:
+        installed_dirty = False
+
+    if check_only:
+        if changed:
+            print("stale machine catalogs: " + "; ".join(changed))
+        return changed
+    if changed:
+        if any(c.startswith("catalog.json") for c in changed):
+            catalog_path.write_text(json.dumps(catalog, indent=2) + "\n", encoding="utf-8")
+        if installed_dirty:
+            installed_path.write_text(json.dumps(installed, indent=2) + "\n", encoding="utf-8")
+        for c in changed:
+            print(c)
+    return changed
+
+
+collisions = lint_trigger_collisions()
+catalog_changes = sync_machine_catalogs(live, args.check)
+
+if args.check:
+    current = OUT.read_text(encoding="utf-8") if OUT.exists() else ""
+    stale_md = current != text
+    if stale_md:
+        print(f"stale: {OUT}; run python3 scripts/gen-skills-catalog.py")
+    if stale_md or catalog_changes:
+        raise SystemExit(1)
+    print(f"current: {OUT} ({len(live)} live, {total_lib} library)")
+else:
+    OUT.parent.mkdir(parents=True, exist_ok=True)
+    OUT.write_text(text, encoding="utf-8")
+    print(f"wrote {OUT} ({len(live)} live, {total_lib} library)")

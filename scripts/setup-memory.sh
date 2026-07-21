@@ -6,7 +6,7 @@ set -euo pipefail
 # Usage:
 #   bash scripts/setup-memory.sh
 #   bash scripts/setup-memory.sh --check
-#   bash scripts/setup-memory.sh --target claude|codex|both|none
+#   bash scripts/setup-memory.sh --target claude|none
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(dirname "$SCRIPT_DIR")"
@@ -38,11 +38,11 @@ AI-OS searchable memory setup
 Usage:
   bash scripts/setup-memory.sh
   bash scripts/setup-memory.sh --check
-  bash scripts/setup-memory.sh --target claude|codex|both|none
+  bash scripts/setup-memory.sh --target claude|none
 
 Options:
   --check             Only report status. Does not install, configure, or index.
-  --target <target>   Configure Claude Code, Codex, both, or none.
+  --target <target>   Configure Claude Code or none.
   -h, --help          Show this help.
 EOF
 }
@@ -73,7 +73,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 case "$TARGET" in
-    ""|claude|codex|both|none) ;;
+    ""|claude|none) ;;
     *)
         printf "Unknown target: %s\n" "$TARGET" >&2
         exit 1
@@ -103,10 +103,6 @@ read_env_value() {
                 value = substr($0, length(prefix) + 1)
                 gsub(/^"|"$/, "", value)
                 gsub(/^'\''|'\''$/, "", value)
-                # Un-escape the \" and \\ that write_env_value adds inside a
-                # double-quoted value, so the round-trip returns the original.
-                gsub(/\\"/, "\"", value)
-                gsub(/\\\\/, "\\", value)
                 print value
                 exit
             }
@@ -122,29 +118,8 @@ write_env_value() {
 
     [[ -f "$env_file" ]] || printf "# Add your API keys here.\n" > "$env_file"
 
-    # Quote the value so spaces and special characters cannot corrupt .env.
-    # Simple values (letters, digits, and a few safe symbols) stay bare to match
-    # the .env.example house style. Anything else gets double-quoted with backslash
-    # and double-quote escaped, which read_env_value strips back off on read.
-    local safe_value
-    if [[ "$value" =~ ^[A-Za-z0-9._:/@+=-]*$ ]]; then
-        safe_value="$value"
-    else
-        local escaped="$value"
-        escaped="${escaped//\\/\\\\}"
-        escaped="${escaped//\"/\\\"}"
-        safe_value="\"${escaped}\""
-    fi
-
-    # Pass key and value through the environment, not awk -v. awk -v re-processes
-    # backslash escapes, which would silently strip our escaping; ENVIRON[] does not.
-    AWK_ENV_KEY="$key" AWK_ENV_VALUE="$safe_value" awk '
-        BEGIN {
-            key = ENVIRON["AWK_ENV_KEY"]
-            value = ENVIRON["AWK_ENV_VALUE"]
-            prefix = key "="
-            found = 0
-        }
+    awk -v key="$key" -v value="$value" '
+        BEGIN { prefix = key "="; found = 0 }
         index($0, prefix) == 1 {
             print key "=" value
             found = 1
@@ -181,10 +156,6 @@ claude_available() {
     command -v claude >/dev/null 2>&1
 }
 
-codex_available() {
-    command -v codex >/dev/null 2>&1
-}
-
 claude_memsearch_installed() {
     # Current Claude Code CLIs (2.x) have no `claude plugin list` subcommand, so
     # detect the plugin by reading the plugin registry directly. installed_plugins.json
@@ -201,9 +172,6 @@ claude_memsearch_installed() {
 }
 
 claude_memsearch_disabled() {
-    # Returns 0 if the plugin is INSTALLED but explicitly DISABLED.
-    # Checks settings.json for an explicit "memsearch@memsearch-plugins": false,
-    # then falls back to `claude plugin list` output for older CLIs.
     local settings_file="$HOME/.claude/settings.json"
     if [[ -f "$settings_file" ]] \
         && grep -qiE '"memsearch@memsearch-plugins"[[:space:]]*:[[:space:]]*false' "$settings_file"; then
@@ -225,22 +193,6 @@ claude_memsearch_disabled() {
 claude_memsearch_enabled() {
     claude_memsearch_installed || return 1
     ! claude_memsearch_disabled
-}
-
-codex_memsearch_installed() {
-    if codex_available && codex plugin list 2>/dev/null | grep -qiE '(^|[[:space:]>])memsearch(@|[[:space:]]|$)'; then
-        return 0
-    fi
-
-    if [[ -f "$HOME/.codex/hooks.json" ]] && grep -qi 'memsearch' "$HOME/.codex/hooks.json"; then
-        return 0
-    fi
-
-    if [[ -d "$HOME/.agents/skills/memory-recall" ]]; then
-        return 0
-    fi
-
-    return 1
 }
 
 zilliz_configured() {
@@ -285,7 +237,7 @@ memory_ready() {
     memsearch_installed || return 1
     zilliz_configured || return 1
     windows_watch_disabled || return 1
-    claude_memsearch_enabled || codex_memsearch_installed
+    claude_memsearch_enabled
 }
 
 print_status() {
@@ -317,16 +269,6 @@ print_status() {
         fi
     else
         warn "Claude Code CLI not found"
-    fi
-
-    if codex_available; then
-        if codex_memsearch_installed; then
-            ok "Codex MemSearch setup detected"
-        else
-            warn "Codex found, but MemSearch setup was not detected"
-        fi
-    else
-        warn "Codex CLI not found"
     fi
 
     if is_windows_shell; then
@@ -379,21 +321,19 @@ choose_target() {
     fi
 
     if [[ ! -t 0 ]]; then
-        warn "No interactive terminal detected. Re-run with --target claude, codex, both, or none."
+        warn "No interactive terminal detected. Re-run with --target claude or none."
         exit 1
     fi
 
     echo ""
     printf "${CYAN}${BOLD}Searchable Memory${NC}\n"
-    echo "  MemSearch lets Claude Code or Codex search older sessions,"
+    echo "  MemSearch lets Claude Code search older sessions,"
     echo "  pinned memory, and learnings. AI-OS keeps markdown as the source"
     echo "  of truth; MemSearch is only a rebuildable search index."
     echo ""
     echo "  Choose where to enable it:"
     echo "    1. Claude Code only (recommended)"
-    echo "    2. Codex only"
-    echo "    3. Claude Code + Codex"
-    echo "    4. Skip for now"
+    echo "    2. Skip for now"
     echo ""
     printf "  Selection [1]: "
 
@@ -403,9 +343,7 @@ choose_target() {
 
     case "$reply" in
         1) TARGET="claude" ;;
-        2) TARGET="codex" ;;
-        3) TARGET="both" ;;
-        4) TARGET="none" ;;
+        2) TARGET="none" ;;
         *)
             warn "Unknown selection: $reply"
             TARGET="none"
@@ -432,8 +370,6 @@ confirm_setup() {
     echo "  - Index only AI-OS memory files, not the full repo."
     case "$TARGET" in
         claude) echo "  - Configure the Claude Code MemSearch plugin." ;;
-        codex) echo "  - Configure MemSearch for Codex with the official installer." ;;
-        both) echo "  - Configure both Claude Code and Codex." ;;
     esac
     echo ""
 
@@ -466,7 +402,7 @@ disable_windows_watch() {
     fi
 
     ok "Disabled real-time MemSearch watch on Windows (MEMSEARCH_NO_WATCH=1)"
-    warn "Restart Claude Code, Codex, and any open terminals for this to take effect."
+    warn "Restart Claude Code and any open terminals for this to take effect."
     info "Automatic memory refresh uses Command Centre or the managed cron daemon."
     info "Daemon command: powershell -NoProfile -ExecutionPolicy Bypass -File scripts\\start-crons.ps1"
 }
@@ -690,52 +626,6 @@ install_claude_plugin() {
     warn "Restart Claude Code to activate the plugin."
 }
 
-install_codex_plugin() {
-    if ! codex_available; then
-        warn "Codex CLI not found. Install Codex, then run this script again."
-        return 1
-    fi
-
-    if codex_memsearch_installed; then
-        ok "Codex MemSearch setup already detected"
-        return 0
-    fi
-
-    if ! command -v git >/dev/null 2>&1; then
-        fail "git is required to fetch the official MemSearch Codex installer."
-        return 1
-    fi
-
-    local cache_dir="${AGENTIC_OS_MEMSEARCH_CACHE:-${XDG_CACHE_HOME:-$HOME/.cache}/agentic-os/memsearch}"
-    local installer="$cache_dir/plugins/codex/scripts/install.sh"
-
-    info "Fetching official MemSearch Codex installer..."
-    if [[ -d "$cache_dir/.git" ]]; then
-        # A failed pull (diverged cache, offline) must not abort setup under
-        # set -e. Fall back to the existing cached copy, which the installer
-        # existence check below still validates.
-        if ! git -C "$cache_dir" pull --ff-only >/dev/null 2>&1; then
-            warn "Could not update the cached MemSearch installer; using the existing copy."
-        fi
-    elif [[ -e "$cache_dir" ]]; then
-        fail "MemSearch cache path exists but is not a git repo: $cache_dir"
-        return 1
-    else
-        mkdir -p "$(dirname "$cache_dir")"
-        git clone https://github.com/zilliztech/memsearch.git "$cache_dir"
-    fi
-
-    if [[ ! -f "$installer" ]]; then
-        fail "Codex installer not found at $installer"
-        echo "  Native setup may be blocked. Use WSL/Linux or follow:"
-        echo "  https://zilliztech.github.io/memsearch/platforms/codex/installation/"
-        return 1
-    fi
-
-    bash "$installer"
-    ok "Codex MemSearch setup finished"
-}
-
 choose_target
 
 if [[ "$TARGET" == "none" ]]; then
@@ -762,13 +652,6 @@ fi
 case "$TARGET" in
     claude)
         install_claude_plugin || ERRORS=$((ERRORS + 1))
-        ;;
-    codex)
-        install_codex_plugin || ERRORS=$((ERRORS + 1))
-        ;;
-    both)
-        install_claude_plugin || ERRORS=$((ERRORS + 1))
-        install_codex_plugin || ERRORS=$((ERRORS + 1))
         ;;
 esac
 

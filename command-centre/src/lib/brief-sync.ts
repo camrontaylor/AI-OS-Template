@@ -81,7 +81,7 @@ export function toggleDeliverableCheckbox(
           if (/^\s*[-*]\s+\[ \]/.test(lines[i])) {
             lines[i] = lines[i].replace("[ ]", "[x]");
           } else if (!/^\s*[-*]\s+\[x\]/i.test(lines[i])) {
-            // No checkbox at all - add one
+            // No checkbox at all — add one
             lines[i] = lines[i].replace(/^(\s*[-*]\s+)/, "$1[x] ");
           }
         } else {
@@ -121,7 +121,7 @@ export function appendDeliverable(content: string, newDeliverable: string): stri
     // Insert after the last deliverable bullet
     lines.splice(lastDeliverableIdx + 1, 0, `- ${newDeliverable}`);
   } else {
-    // No deliverables section found - append one
+    // No deliverables section found — append one
     lines.push("", "## Deliverables", `- ${newDeliverable}`);
   }
 

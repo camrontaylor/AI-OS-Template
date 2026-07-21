@@ -105,7 +105,7 @@ if ($Verify) {
     $waitingJobLine = Get-BodyLine -Preview $waitingPreview -Index 2
 
     $checks = @(
-        @{ Name = "Card title"; Pass = ($completePreview.title -eq "AI-OS"); Actual = $completePreview.title }
+        @{ Name = "Card title"; Pass = ($completePreview.title -eq "Agentic OS"); Actual = $completePreview.title }
         @{ Name = "Complete emoji suffix"; Pass = ($completePreview.status_line.StartsWith("Task complete") -and -not $completePreview.status_line.StartsWith("✅")); Actual = $completePreview.status_line }
         @{ Name = "Waiting emoji suffix"; Pass = ($waitingPreview.status_line.StartsWith("Needs input") -and -not $waitingPreview.status_line.StartsWith("💡")); Actual = $waitingPreview.status_line }
         @{ Name = "Attribution removed"; Pass = ([string]::IsNullOrWhiteSpace([string]$completePreview.attribution)); Actual = $completePreview.attribution }

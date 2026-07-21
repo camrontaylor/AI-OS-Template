@@ -6,6 +6,7 @@ import {
   getMissedFixedRuns,
   hasActiveCronJobs,
   listAllCronJobs,
+  matchesCronDays,
   matchesCronTime,
   refreshCronHeartbeat,
   releaseCronLeadership,
@@ -111,7 +112,7 @@ function tickScheduler(): void {
         const queued = enqueueCronJob(job, {
           trigger: "scheduled",
           dedupeByMinute: true,
-          activityLabel: "Queued - catch-up",
+          activityLabel: "Queued — catch-up",
           scheduledFor: missedAt.toISOString(),
         });
 
@@ -125,11 +126,17 @@ function tickScheduler(): void {
       if (!matchesCronTime(now, job.time)) {
         continue;
       }
+      // The catch-up path above honours job.days via getMissedFixedRuns, but the
+      // live tick must too, or weekly/monthly jobs fire every day the machine is
+      // awake at the scheduled minute (observed Jun 25 - Jul 15 2026).
+      if (!matchesCronDays(now, job.days)) {
+        continue;
+      }
 
       const queued = enqueueCronJob(job, {
         trigger: "scheduled",
         dedupeByMinute: true,
-        activityLabel: "Queued - scheduled",
+        activityLabel: "Queued — scheduled",
         scheduledFor: toCronMinuteIso(now),
       });
 

@@ -129,7 +129,7 @@ export class ClaudeOutputParser {
       // Fallback: prose question detection
       const questionText = detectQuestion(visibleText);
       if (questionText) {
-        // Check if this is a permission/approval prompt - synthesize interactive options
+        // Check if this is a permission/approval prompt — synthesize interactive options
         const permissionSpec = detectPermissionPrompt(visibleText, questionText);
         if (permissionSpec && this.callbacks.onStructuredQuestion) {
           this.callbacks.onStructuredQuestion(permissionSpec);
@@ -358,7 +358,7 @@ function detectQuestion(text: string): string | null {
 function detectPermissionPrompt(fullText: string, questionText: string): QuestionSpec[] | null {
   const lower = fullText.toLowerCase();
 
-  // Permission patterns - phrases that indicate Claude is asking for approval
+  // Permission patterns — phrases that indicate Claude is asking for approval
   // to run a command or take an action
   const permissionPatterns = [
     /once you (approve|confirm|allow|authorize)/i,

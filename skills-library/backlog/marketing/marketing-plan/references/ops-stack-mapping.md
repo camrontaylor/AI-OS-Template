@@ -1,12 +1,12 @@
-# Marketing Operations Stack - Skills + MCPs per AARRR Stage
+# Marketing Operations Stack — Skills + MCPs per AARRR Stage
 
 This doc maps every marketing-skill and every relevant MCP/API integration to the AARRR stage(s) it primarily serves. It's the source for Section 11 of every plan.
 
-> **Note on scope.** Skills below live in this `marketingskills` repo. A few references point to optional tools from adjacent Claude Code marketplaces (e.g., `vercel:agent-browser`, `compound-engineering:diagram-maker`) - substitute equivalents if not installed. When a plan references a skill or tool that isn't available, fall back to the underlying tactic and call it out in Section 13's open decisions.
+> **Note on scope.** Skills below live in this `marketingskills` repo. A few references point to optional tools from adjacent Claude Code marketplaces (e.g., `vercel:agent-browser`, `compound-engineering:diagram-maker`) — substitute equivalents if not installed. When a plan references a skill or tool that isn't available, fall back to the underlying tactic and call it out in Section 13's open decisions.
 
 ## The thesis
 
-A small team + fCMO + agentic tooling = output of a 15-20-person traditional marketing org. The skills + MCPs encode workflows that previously required dedicated headcount per channel.
+A small team + fCMO + agentic tooling = output of a 15–20-person traditional marketing org. The skills + MCPs encode workflows that previously required dedicated headcount per channel.
 
 The plan's Section 11 makes this thesis explicit by:
 1. Mapping skills to stages so the founder sees which skills execute which work
@@ -34,7 +34,7 @@ The plan's Section 11 makes this thesis explicit by:
 | `analytics` | Set up tracking, GA4, conversion events | Funnel instrumentation |
 | `free-tools` | Plan engineering-as-marketing free tools | Build tools that generate links + leads |
 | `marketing-website-design` | Design marketing sites with intention | Pillar/landing page design |
-| `launch` | Plan and execute launches (Product Hunt, GA, feature launches) | GTM moments - strategy + tactical execution |
+| `launch` | Plan and execute launches (Product Hunt, GA, feature launches) | GTM moments — strategy + tactical execution |
 
 ### Activation skills
 
@@ -59,7 +59,7 @@ The plan's Section 11 makes this thesis explicit by:
 | `emails` | Design email sequences | Customer.io / Mailchimp / Resend flow building |
 | `churn-prevention` | Build cancellation flows, save offers, win-back | Reduce churn, recover failed payments |
 | `copywriting` / `copy-editing` | Email copy production | Lifecycle email content |
-| `paywalls` | (cross-cuts) - upgrade prompts in retention emails | Upsell within lifecycle |
+| `paywalls` | (cross-cuts) — upgrade prompts in retention emails | Upsell within lifecycle |
 | `ab-testing` | Test email variants | Subject line, CTA, timing tests |
 
 ### Referral skills
@@ -86,7 +86,7 @@ The plan's Section 11 makes this thesis explicit by:
 
 | Skill | What it does | Primary use |
 |---|---|---|
-| `product-marketing` | Set up the `.agents/product-marketing.md` context file (positioning, ICP, voice) | Foundational - run first; every section of the plan references this |
+| `product-marketing` | Set up the `.agents/product-marketing.md` context file (positioning, ICP, voice) | Foundational — run first; every section of the plan references this |
 | `customer-research` | Conduct customer interviews + surveys | Section 2 + Section 3 (Current state) |
 | `marketing-psychology` | Apply behavioral science | Cross-cuts copy, CRO, paywalls |
 | `marketing-ideas` | The 139-idea library | Section 12 of plan (Idea bank) |
@@ -124,7 +124,7 @@ The plan's Section 11 makes this thesis explicit by:
 
 | Tool | What it provides |
 |---|---|
-| **Customer.io MCP** | The retention infrastructure - flow building, segmentation, sending |
+| **Customer.io MCP** | The retention infrastructure — flow building, segmentation, sending |
 | **Shopify** | Hardware buyer events as lifecycle triggers |
 | **Stripe MCP** | Subscription state, churn cohorts, plan changes |
 | **GA4 MCP** | Session events, retention curves |
@@ -168,9 +168,9 @@ The plan's Section 11 must include this table (or equivalent), specific to the c
 | Stage | Headcount | Tooling | Channels live |
 |---|---|---|---|
 | **Pre-seed / bootstrapped** | fCMO + founder team | All current tooling + marketing-skills library + MCP layer | Organic only (SEO, content, App Store, founder-led social, events, WOM, ambassador) |
-| **Seed close** | + first marketing hire (lifecycle/content owner) | + paid ad accounts (Apple Search Ads, Meta, LinkedIn) + `ads` skill activated | + paid acquisition pilot ($5-15K/mo - see `funding-stage-unlocks.md` for canonical tiers) |
-| **Seed deployment** | + designer (potentially fractional) | + analytics expansion (Mixpanel / Amplitude if needed) | + paid scaling ($20-50K/mo) + first launches (PH, GA) |
-| **Series A** | + performance marketing lead + content lead | + dedicated tooling spend ($2-5K/mo software) + sponsored event budget | + paid scaling ($50-150K/mo) + international consideration + B2B vertical expansion |
+| **Seed close** | + first marketing hire (lifecycle/content owner) | + paid ad accounts (Apple Search Ads, Meta, LinkedIn) + `ads` skill activated | + paid acquisition pilot ($5–15K/mo — see `funding-stage-unlocks.md` for canonical tiers) |
+| **Seed deployment** | + designer (potentially fractional) | + analytics expansion (Mixpanel / Amplitude if needed) | + paid scaling ($20–50K/mo) + first launches (PH, GA) |
+| **Series A** | + performance marketing lead + content lead | + dedicated tooling spend ($2–5K/mo software) + sponsored event budget | + paid scaling ($50–150K/mo) + international consideration + B2B vertical expansion |
 | **Series B+** | Full-stack marketing org (10+ people) | + agency partnerships + PR firm | + brand campaigns + acquisitions + sponsorships at category level |
 
 ## The concrete-example test
@@ -182,10 +182,10 @@ Section 11 of the plan must include at least one concrete operational example th
 
 Examples from real engagements:
 - *"On the kickoff call, Alex drafted a working Customer.io abandoned-cart flow live, using Customer.io's Claude MCP. Validated that a non-technical founder can ship lifecycle work using the skill pattern independently."*
-- *"In two weeks, the team scaled from 0 to 14 ranking keywords using `programmatic-seo` against the Ahrefs API + GitHub MCP - no dedicated SEO hire required."*
+- *"In two weeks, the team scaled from 0 to 14 ranking keywords using `programmatic-seo` against the Ahrefs API + GitHub MCP — no dedicated SEO hire required."*
 - *"The first email campaign generated a 24% reply rate after `cold-email` skill + GA4 MCP + Stripe MCP gave the team a verified target list of users with high LTV but no recent activity."*
 
-If the client has no such moment in their history yet, frame the example as the *first move* - "Here's the demonstration the team will run in week one to validate the stack:"
+If the client has no such moment in their history yet, frame the example as the *first move* — "Here's the demonstration the team will run in week one to validate the stack:"
 
 ## When the stack doesn't apply (yet)
 

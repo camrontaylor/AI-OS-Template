@@ -1,6 +1,6 @@
 # SMS Platform Reference
 
-Deep-dive on the major SMS marketing platforms - features, pricing, A2P 10DLC support, and integration paths.
+Deep-dive on the major SMS marketing platforms — features, pricing, A2P 10DLC support, and integration paths.
 
 > Pricing is approximate and changes regularly. Always confirm at the vendor's site before committing.
 
@@ -19,7 +19,7 @@ Deep-dive on the major SMS marketing platforms - features, pricing, A2P 10DLC su
 
 ### Pricing
 - Bundled with Klaviyo plans, billed per SMS credit
-- US: ~$0.0075-$0.015 per SMS; MMS ~$0.04
+- US: ~$0.0075–$0.015 per SMS; MMS ~$0.04
 - Free tier: 150 SMS credits/month on lower email tiers
 
 ### Integration paths
@@ -80,7 +80,7 @@ Deep-dive on the major SMS marketing platforms - features, pricing, A2P 10DLC su
 - Identity resolution (matching anon site visitors to phone numbers)
 
 ### Pricing
-- Custom contracts; typically $1K-$10K+/mo + per-send fees
+- Custom contracts; typically $1K–$10K+/mo + per-send fees
 - Annual contracts standard
 - Pricing rarely makes sense for <50K SMS subscribers
 
@@ -120,7 +120,7 @@ Deep-dive on the major SMS marketing platforms - features, pricing, A2P 10DLC su
 
 ### Integration paths
 - API-first (REST + SDKs in Node, Python, Ruby, Go, etc.)
-- No native ecom integrations - you build them
+- No native ecom integrations — you build them
 
 ### Compliance
 - A2P 10DLC registration in-platform but you do the work
@@ -128,7 +128,7 @@ Deep-dive on the major SMS marketing platforms - features, pricing, A2P 10DLC su
 - Quiet hours and STOP/HELP handling must be implemented by you
 
 ### Watch out for
-- You're responsible for compliance - no hand-holding
+- You're responsible for compliance — no hand-holding
 - No native segmentation, deliverability dashboards, or marketing UI
 - Best paired with Customer.io, Segment, or a custom orchestration layer
 
@@ -148,7 +148,7 @@ Deep-dive on the major SMS marketing platforms - features, pricing, A2P 10DLC su
 ### Pricing
 - Free tier: 300 emails/day; SMS pay-per-send
 - US SMS: ~$0.015 per message
-- EU SMS: varies by country, ~€0.04-€0.07
+- EU SMS: varies by country, ~€0.04–€0.07
 
 ### Integration paths
 - Direct integrations: Shopify, WooCommerce, WordPress, Magento
@@ -205,18 +205,18 @@ Deep-dive on the major SMS marketing platforms - features, pricing, A2P 10DLC su
 - SDKs for major languages
 
 ### Pricing
-- US 10DLC SMS: ~$0.0055/msg (typically 20-30% under Twilio)
+- US 10DLC SMS: ~$0.0055/msg (typically 20–30% under Twilio)
 - US short code SMS: similar + monthly lease
 - MMS: ~$0.02
 - Phone number rental: ~$0.80/mo local, ~$1/mo toll-free
 
 ### Integration paths
 - API-first (REST + SDKs)
-- No native ecom integrations - you build them
+- No native ecom integrations — you build them
 
 ### Compliance
 - A2P 10DLC managed in-platform
-- Compliance plumbing (STOP/HELP, quiet hours) is your responsibility - same model as Twilio
+- Compliance plumbing (STOP/HELP, quiet hours) is your responsibility — same model as Twilio
 
 ### Watch out for
 - Smaller ecosystem than Twilio (fewer ancillary products, integrations, community resources)
@@ -228,7 +228,7 @@ Deep-dive on the major SMS marketing platforms - features, pricing, A2P 10DLC su
 
 **Best for**: DTC brands wanting AI-forward creative tooling or on-pack QR opt-in as a primary acquisition channel.
 
-> Newer platform - verify current capabilities, pricing, and API surface before committing.
+> Newer platform — verify current capabilities, pricing, and API surface before committing.
 
 ### Key features
 - SMS + email on one platform (similar combined model to Klaviyo)
@@ -249,11 +249,11 @@ Deep-dive on the major SMS marketing platforms - features, pricing, A2P 10DLC su
 
 ### Compliance
 - A2P 10DLC handled in-platform
-- TCPA tooling - verify enterprise-scale depth before committing for large lists
+- TCPA tooling — verify enterprise-scale depth before committing for large lists
 
 ### Watch out for
-- Newer entrant - fewer reference customers, less battle-tested at high volume than incumbents
-- Some features rolled out recently - confirm what's GA vs beta before relying on them
+- Newer entrant — fewer reference customers, less battle-tested at high volume than incumbents
+- Some features rolled out recently — confirm what's GA vs beta before relying on them
 
 ---
 
@@ -293,7 +293,7 @@ Deep-dive on the major SMS marketing platforms - features, pricing, A2P 10DLC su
 | Shopify ecom, SMS-first focus | **Postscript** | Deepest Shopify + SMS-specific features |
 | Mid-market ecom, want concierge support | **Attentive** | Full-service team + tooling |
 | Custom platform, B2B SaaS, transactional | **Twilio** | API-first, full control |
-| Custom build, cost-sensitive | **Plivo** | ~20-30% cheaper than Twilio per send |
+| Custom build, cost-sensitive | **Plivo** | ~20–30% cheaper than Twilio per send |
 | DTC wanting AI creative or on-pack QR opt-in | **AudienceTap** | AI-forward; insert-card opt-in is unique |
 | EU-based SMB | **Brevo** | GDPR-native, EU-friendly pricing |
 | Local services SMB, simple campaigns | **SimpleTexting** | Easy UI, low overhead |

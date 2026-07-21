@@ -1,16 +1,16 @@
 {
   "app": {
-    "id": "AIOS.Notifications",
-    "displayName": "AI-OS",
-    "shortcutName": "AI-OS",
+    "id": "AgenticOS.Notifications",
+    "displayName": "Agentic OS",
+    "shortcutName": "Agentic OS",
     "assetVersion": "v4",
     "attribution": "",
     "defaultDuration": "short",
     "defaultLayout": "compact"
   },
   "assets": {
-    "logoPath": "",
-    "shortcutIconPath": "",
+    "logoPath": "assets/windows-notify/scrapes_logo.jpg",
+    "shortcutIconPath": "assets/windows-notify/scrapes_logo.ico",
     "heroPaths": {
       "success": "",
       "info": "",
@@ -18,7 +18,7 @@
       "error": ""
     },
     "generatedLogo": {
-      "badgeText": "AI",
+      "badgeText": "AO",
       "startColor": "#0F172A",
       "endColor": "#1D4ED8",
       "overlayColor": "#FFFFFF",

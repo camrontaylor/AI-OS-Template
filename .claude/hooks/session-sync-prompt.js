@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// UserPromptSubmit hook - updates task title from first prompt, logs user messages,
+// UserPromptSubmit hook — updates task title from first prompt, logs user messages,
 // and sets status back to "running" (user is actively engaging)
 // Fire-and-forget: spawns background process so it doesn't block input
 
@@ -29,7 +29,7 @@ process.stdin.on("end", () => {
   try {
     mapping = JSON.parse(fs.readFileSync(tmpFile, "utf8"));
   } catch {
-    return; // No mapping file - command centre wasn't running at session start
+    return; // No mapping file — command centre wasn't running at session start
   }
 
   const { taskId, port, titleSet, syncMode = "managed" } = mapping;

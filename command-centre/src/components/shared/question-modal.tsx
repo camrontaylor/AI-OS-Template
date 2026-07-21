@@ -12,7 +12,7 @@ import {
  * Reusable structured-question form.
  *
  * When the component manages its own footer (uncontrolled, hideFooter=false)
- * and there are multiple questions, it renders a **stepped wizard** - one
+ * and there are multiple questions, it renders a **stepped wizard** — one
  * question at a time with keyboard navigation (arrow-up/down for options,
  * left/right or prev/next buttons between questions).
  *
@@ -25,7 +25,7 @@ import {
 
 interface QuestionModalProps {
   questions: QuestionSpec[];
-  /** Controlled answer map (optional - component manages internal state if absent) */
+  /** Controlled answer map (optional — component manages internal state if absent) */
   value?: QuestionAnswers;
   onChange?: (answers: QuestionAnswers) => void;
   /** Only meaningful for overlay variant */
@@ -129,7 +129,7 @@ export function QuestionModal({
   // Stepped mode: multiple questions, self-managed footer, not controlled
   const useStepper = !controlled && !hideFooter && questions.length > 1;
 
-  // Re-seed on question list change - compare by content (JSON key) to avoid
+  // Re-seed on question list change — compare by content (JSON key) to avoid
   // resetting state when the parent creates a new array with identical contents.
   const questionsKey = useMemo(
     () => JSON.stringify(questions.map((q) => q.id)),
@@ -177,7 +177,7 @@ export function QuestionModal({
     [questions, answers, notes],
   );
 
-  // In stepper mode, always allow submit - unanswered questions serialize as "(no answer)".
+  // In stepper mode, always allow submit — unanswered questions serialize as "(no answer)".
   // In all-at-once mode, require all required fields.
   const canSubmit = useStepper ? !submitting : areAnswersComplete(questions, mergedAnswers) && !submitting;
 
@@ -241,7 +241,7 @@ export function QuestionModal({
     return (
       <div>
         {body}
-        {/* Footer - only shown in non-stepped mode (stepper has its own nav) */}
+        {/* Footer — only shown in non-stepped mode (stepper has its own nav) */}
         {!hideFooter && onSubmit && !useStepper && (
           <div
             style={{
@@ -331,7 +331,7 @@ export function QuestionModal({
           {body}
         </div>
 
-        {/* Footer - only in non-stepped overlay */}
+        {/* Footer — only in non-stepped overlay */}
         {!hideFooter && !useStepper && (
           <div
             style={{
@@ -456,7 +456,7 @@ function SteppedBody({
       const isInput =
         target.tagName === "INPUT" || target.tagName === "TEXTAREA";
 
-      // Left/Right for question navigation - only when not typing in an input
+      // Left/Right for question navigation — only when not typing in an input
       if (!isInput) {
         if (e.key === "ArrowRight" && !isLast) {
           e.preventDefault();
@@ -830,7 +830,7 @@ function SteppedQuestionField({
   return (
     <div style={containerStyle}>
       {label}
-      {/* Options list - keyboard navigable */}
+      {/* Options list — keyboard navigable */}
       <div
         role="listbox"
         tabIndex={0}
@@ -913,13 +913,13 @@ function SteppedQuestionField({
         })}
       </div>
 
-      {/* Notes - always visible */}
+      {/* Notes — always visible */}
       {onNoteChange && (
         <div style={{ marginTop: 8 }}>
           <textarea
             value={noteValue}
             onChange={(e) => onNoteChange(e.target.value)}
-            placeholder="Notes (optional) - add context or type your own answer..."
+            placeholder="Notes (optional) — add context or type your own answer..."
             rows={2}
             style={{
               ...inputBaseStyle,

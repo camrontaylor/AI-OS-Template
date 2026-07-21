@@ -303,7 +303,7 @@ export async function POST(request: NextRequest) {
         conversationId,
         taskId: task.id,
         role: "orchestrator",
-        content: `Queued "${task.title}" - it'll start executing shortly.`,
+        content: `Queued "${task.title}" — it'll start executing shortly.`,
         metadata: null,
         parentMessageId: userMessage.id,
         createdAt: new Date().toISOString(),

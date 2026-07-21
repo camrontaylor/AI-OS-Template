@@ -1,5 +1,5 @@
 # =============================================================================
-# AI-OS - Test install-centre-alias.ps1
+# Agentic OS - Test install-centre-alias.ps1
 # =============================================================================
 
 [CmdletBinding()]
@@ -11,8 +11,8 @@ Set-StrictMode -Version Latest
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $Installer = Join-Path $ScriptDir "install-centre-alias.ps1"
 $CentreScript = Join-Path $ScriptDir "centre.ps1"
-$BlockStart = "# >>> AI-OS - command centre launcher >>>"
-$BlockEnd = "# <<< AI-OS - command centre launcher <<<"
+$BlockStart = "# >>> Agentic OS - command centre launcher >>>"
+$BlockEnd = "# <<< Agentic OS - command centre launcher <<<"
 $LegacyMarker = "# Agentic OS - command centre launcher"
 
 function Assert-True {

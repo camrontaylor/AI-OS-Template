@@ -64,22 +64,23 @@ assert_empty() {
   [[ -z "$value" ]] || fail "Expected empty hook output, got: $value"
 }
 
-test_single_client_prompt_gets_guard() {
+test_single_client_prompt_gets_scope_declaration() {
   make_fake_repo
   out="$(run_hook "$TEST_ROOT/repo" "Update the Acme homepage copy")"
 
-  assert_contains "$out" "client routing hard stop"
+  assert_contains "$out" "client routing (Agency Discipline)"
+  assert_contains "$out" "Do not stop to ask"
   assert_contains "$out" "clients/acme"
-  ok "single client prompt from root gets routing guard"
+  ok "single client prompt from root gets a proceed-by-default scope declaration"
 }
 
 test_many_clients_are_discovered_generically() {
   make_many_client_repo
   out="$(run_hook "$TEST_ROOT/repo" "Update Client 27 onboarding notes")"
 
-  assert_contains "$out" "client routing hard stop"
+  assert_contains "$out" "client routing (Agency Discipline)"
   assert_contains "$out" "clients/client-27"
-  ok "routing guard discovers many client folders generically"
+  ok "scope declaration discovers many client folders generically"
 }
 
 test_all_client_prompt_is_root_work() {
@@ -115,7 +116,7 @@ test_explicit_client_path_does_not_guard() {
 }
 
 info "Running client routing guard tests..."
-test_single_client_prompt_gets_guard
+test_single_client_prompt_gets_scope_declaration
 test_many_clients_are_discovered_generically
 test_all_client_prompt_is_root_work
 test_client_cwd_does_not_guard

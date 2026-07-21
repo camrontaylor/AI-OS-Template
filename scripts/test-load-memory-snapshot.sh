@@ -39,6 +39,9 @@ EOF
   cat > "$TEST_ROOT/repo/context/MEMORY.md" <<'EOF'
 ROOT MEMORY MARKER
 EOF
+  cat > "$TEST_ROOT/repo/context/current-state.md" <<'EOF'
+ROOT CURRENT STATE MARKER
+EOF
   cat > "$TEST_ROOT/repo/context/memory/$TODAY.md" <<'EOF'
 ROOT DAILY MARKER
 EOF
@@ -48,6 +51,9 @@ EOF
 EOF
   cat > "$TEST_ROOT/repo/clients/acme/context/MEMORY.md" <<'EOF'
 CLIENT MEMORY MARKER
+EOF
+  cat > "$TEST_ROOT/repo/clients/acme/context/current-state.md" <<'EOF'
+CLIENT CURRENT STATE MARKER
 EOF
   cat > "$TEST_ROOT/repo/clients/acme/context/memory/$TODAY.md" <<'EOF'
 CLIENT DAILY MARKER
@@ -80,6 +86,8 @@ test_root_loads_root_context() {
   assert_contains "$TEST_ROOT/out.txt" "ROOT USER MARKER"
   assert_contains "$TEST_ROOT/out.txt" "ROOT MEMORY MARKER"
   assert_contains "$TEST_ROOT/out.txt" "ROOT DAILY MARKER"
+  assert_not_contains "$TEST_ROOT/out.txt" "ROOT CURRENT STATE MARKER"
+  assert_not_contains "$TEST_ROOT/out.txt" "CLIENT CURRENT STATE MARKER"
   ok "root startup loads root context"
 }
 
@@ -89,8 +97,10 @@ test_client_inherits_root_identity_and_client_memory() {
   assert_contains "$TEST_ROOT/out.txt" "ROOT SOUL MARKER"
   assert_contains "$TEST_ROOT/out.txt" "ROOT USER MARKER"
   assert_contains "$TEST_ROOT/out.txt" "CLIENT MEMORY MARKER"
+  assert_contains "$TEST_ROOT/out.txt" "CLIENT CURRENT STATE MARKER"
   assert_contains "$TEST_ROOT/out.txt" "CLIENT DAILY MARKER"
   assert_not_contains "$TEST_ROOT/out.txt" "ROOT MEMORY MARKER"
+  assert_not_contains "$TEST_ROOT/out.txt" "ROOT CURRENT STATE MARKER"
   assert_not_contains "$TEST_ROOT/out.txt" "ROOT DAILY MARKER"
   ok "client startup inherits root identity and client memory"
 }
@@ -101,6 +111,7 @@ test_nested_client_project_uses_client_memory() {
   assert_contains "$TEST_ROOT/out.txt" "ROOT SOUL MARKER"
   assert_contains "$TEST_ROOT/out.txt" "ROOT USER MARKER"
   assert_contains "$TEST_ROOT/out.txt" "CLIENT MEMORY MARKER"
+  assert_contains "$TEST_ROOT/out.txt" "CLIENT CURRENT STATE MARKER"
   assert_not_contains "$TEST_ROOT/out.txt" "ROOT MEMORY MARKER"
   ok "nested client project startup uses client memory"
 }

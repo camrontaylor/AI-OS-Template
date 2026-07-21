@@ -1,8 +1,11 @@
 {
   "name": "ai-os",
   "version": "1.0.0",
-  "description": "Command Centre for the AI-OS agent workspace.",
+  "description": "Turn Claude Code into your AI Operating System.",
   "private": true,
+  "engines": {
+    "node": ">=18.18"
+  },
   "scripts": {
     "predev": "node scripts/predev.cjs",
     "dev": "node scripts/next-run.cjs dev",
@@ -15,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/camrontaylor/ai-os-template.git"
+    "url": "git+https://github.com/camrontaylor/AI-OS.git"
   },
   "license": "ISC",
   "dependencies": {

@@ -1,24 +1,24 @@
-# Directory List - Full Reference
+# Directory List — Full Reference
 
-Canonical list of directories organized by tier. DR values are approximate and drift over time - verify via Ahrefs or Moz before building a plan around them.
+Canonical list of directories organized by tier. DR values are approximate and drift over time — verify via Ahrefs or Moz before building a plan around them.
 
 **Column legend:**
-- **DR** - Domain Rating (Ahrefs). Higher = more link equity passed.
-- **Dofollow** - Whether the backlink passes SEO value. Nofollow listings still matter for referral traffic and brand signals.
-- **Cost** - Free unless noted.
+- **DR** — Domain Rating (Ahrefs). Higher = more link equity passed.
+- **Dofollow** — Whether the backlink passes SEO value. Nofollow listings still matter for referral traffic and brand signals.
+- **Cost** — Free unless noted.
 
 ---
 
-## Tier 1 - Flagship Launch Platforms
+## Tier 1 — Flagship Launch Platforms
 
 Submit only during launch week. These are time-sensitive with limited re-submission windows.
 
 | Directory | DR | Dofollow | Cost | Notes |
 |---|---|---|---|---|
 | **Product Hunt** | 91 | Yes | Free | The anchor event. Requires 3-week warm-up. 2026 algorithm weights comment quality over upvotes. Launch Tue/Wed/Thu at 12:01 AM PT. |
-| **Hacker News (Show HN)** | 91 | Nofollow | Free | Only if you have a genuine technical angle. Post title format: "Show HN: [Product] - [hook]". Moderator death penalty for hype. |
-| **BetaList** | 64 | Yes | Free (paid expedite ~$99) | Best for pre-launch waitlist building. Submission → 2-4 week queue unless expedited. |
-| **Launching Next** | ~30 | Yes | Free | Editorial curation - needs a compelling story. |
+| **Hacker News (Show HN)** | 91 | Nofollow | Free | Only if you have a genuine technical angle. Post title format: "Show HN: [Product] — [hook]". Moderator death penalty for hype. |
+| **BetaList** | 64 | Yes | Free (paid expedite ~$99) | Best for pre-launch waitlist building. Submission → 2–4 week queue unless expedited. |
+| **Launching Next** | ~30 | Yes | Free | Editorial curation — needs a compelling story. |
 | **Fazier** | ~30 | Yes | Free | Daily ranking with much lower competition than PH. Achievable #1. |
 | **Uneed** | ~40 | Yes | Free | Curated, smaller audience, quality backlink. |
 | **Microlaunch** | ~30 | Yes | Free | Month-long visibility vs one-day spike. |
@@ -35,7 +35,7 @@ Submit only during launch week. These are time-sensitive with limited re-submiss
 
 ---
 
-## Tier 2 - Startup / SaaS / Software Directories
+## Tier 2 — Startup / SaaS / Software Directories
 
 Submit during launch week and continue rolling submissions thereafter.
 
@@ -96,11 +96,11 @@ Submit during launch week and continue rolling submissions thereafter.
 
 ---
 
-## Tier 3 - AI Tool Directories
+## Tier 3 — AI Tool Directories
 
-Relevant only for AI-native products. Submit during weeks 1-3.
+Relevant only for AI-native products. Submit during weeks 1–3.
 
-### Tier 3A - Flagship AI directories
+### Tier 3A — Flagship AI directories
 
 | Directory | DR | Monthly Traffic | Notes |
 |---|---|---|---|
@@ -112,7 +112,7 @@ Relevant only for AI-native products. Submit during weeks 1-3.
 | **Good AI Tools** | 66 | n/a | Curated, quality over quantity. |
 | **NewTools.site** | 51 | n/a | Dofollow backlink for every approved submission. |
 
-### Tier 3B - Mid-tier AI directories
+### Tier 3B — Mid-tier AI directories
 
 | Directory | Est. DR | Notes |
 |---|---|---|
@@ -135,7 +135,7 @@ Relevant only for AI-native products. Submit during weeks 1-3.
 | **AIBacklinkList** | ~25 | Aggregated list of 2500+ AI backlink opportunities. |
 | **AI Scout** | ~25 | Emerging, less competition. |
 | **AiMatchPro** | ~20 | Use-case search. |
-| **GPTForge** | ~30 | Domain created 2025 - DR 88 from source list is implausible. Verify via Ahrefs. |
+| **GPTForge** | ~30 | Domain created 2025 — DR 88 from source list is implausible. Verify via Ahrefs. |
 | **AI Tools Guide** | 77 | Curated AI tools directory. |
 | **AIToolly** | 69 | AI tool discovery. |
 | **All The AI Tools** | 66 | Comprehensive AI tool listing. |
@@ -152,14 +152,14 @@ Relevant only for AI-native products. Submit during weeks 1-3.
 
 ---
 
-## Tier 4 - AI Agent & MCP Server Registries
+## Tier 4 — AI Agent & MCP Server Registries
 
-Relevant only if the product exposes agent capabilities or MCP servers. These are a real moat for AI-native tools - traditional SaaS products cannot list here.
+Relevant only if the product exposes agent capabilities or MCP servers. These are a real moat for AI-native tools — traditional SaaS products cannot list here.
 
 | Directory | Category | Notes |
 |---|---|---|
 | **AI Agents List (aiagentslist.com)** | Agents | Hosts the 593+ MCP server directory. |
-| **Glama.ai MCP servers** | MCP | 20K+ security-graded MCP servers. A/B/C/F grades matter - optimize for a good grade. |
+| **Glama.ai MCP servers** | MCP | 20K+ security-graded MCP servers. A/B/C/F grades matter — optimize for a good grade. |
 | **APITracker MCP directory** | MCP | 110+ servers, 90 official integrations. |
 | **Linux Foundation MCP Registry** | MCP | Canonical registry (PR-based submission, low volume but high signal). Anthropic donated MCP to LF in Dec 2025. |
 | **AI Agent Store** | Agents | Compare agents, platforms, frameworks. |
@@ -173,7 +173,7 @@ Relevant only if the product exposes agent capabilities or MCP servers. These ar
 
 ---
 
-## Tier 5 - No-Code Directories
+## Tier 5 — No-Code Directories
 
 Relevant for no-code platforms and builder tools.
 
@@ -182,17 +182,17 @@ Relevant for no-code platforms and builder tools.
 | **NoCodeFinder** | ~45 | Accepts submissions. |
 | **No Code MBA Tools Directory** | ~55 | Categorized by project type. |
 | **We Are No Code Tools Repository** | ~40 | Curated. |
-| **NoCodeList** | ~30 | - |
-| **NoCodeDevs** | ~25 | - |
-| **NoCode.Tech** | ~35 | - |
+| **NoCodeList** | ~30 | — |
+| **NoCodeDevs** | ~25 | — |
+| **NoCode.Tech** | ~35 | — |
 | **MakerPad / Zapier** | ~62 | Now owned by Zapier. No-code tool directory. |
 | **NoCodeFounders** | ~45 | No-code community + forum. |
 
 ---
 
-## Tier 6 - "Best of" Listicles (Editorial Outreach)
+## Tier 6 — "Best of" Listicles (Editorial Outreach)
 
-Not directories per se - these are blog posts on high-DR domains that you get included in via cold outreach. Often more valuable than directories because they combine a dofollow backlink with editorial trust + in-market buyer traffic + AI citation weight.
+Not directories per se — these are blog posts on high-DR domains that you get included in via cold outreach. Often more valuable than directories because they combine a dofollow backlink with editorial trust + in-market buyer traffic + AI citation weight.
 
 **Search patterns to find opportunities:**
 - `"best [category] tools" 2026`
@@ -201,15 +201,15 @@ Not directories per se - these are blog posts on high-DR domains that you get in
 - `"[category] tools review"`
 
 **Outreach template (short):**
-> Hey [name], saw your post on [best X tools]. We launched [product] recently - thought it might be worth a mention. Happy to give you a free account + credits for readers. Here's a 60s demo: [link]. No worries if not a fit.
+> Hey [name], saw your post on [best X tools]. We launched [product] recently — thought it might be worth a mention. Happy to give you a free account + credits for readers. Here's a 60s demo: [link]. No worries if not a fit.
 
-**Target:** 10 inclusions in 30 days. Each = dofollow backlink from DR 40-70 + referral traffic + AI citation fuel.
+**Target:** 10 inclusions in 30 days. Each = dofollow backlink from DR 40–70 + referral traffic + AI citation fuel.
 
 ---
 
-## Tier 7 - Integration Marketplaces
+## Tier 7 — Integration Marketplaces
 
-Only relevant once the product has integrations. These are the highest-DR backlinks available - worth engineering effort just to land them.
+Only relevant once the product has integrations. These are the highest-DR backlinks available — worth engineering effort just to land them.
 
 | Directory | DR | Notes |
 |---|---|---|
@@ -223,9 +223,9 @@ Only relevant once the product has integrations. These are the highest-DR backli
 
 ---
 
-## Tier 8 - Profile & Content Platforms
+## Tier 8 — Profile & Content Platforms
 
-Create a profile or publish content on these high-DR platforms to earn a dofollow backlink. These are not traditional directories - they're content and identity platforms where your profile or published content links back to your site. Highest DR backlinks available without building integrations.
+Create a profile or publish content on these high-DR platforms to earn a dofollow backlink. These are not traditional directories — they're content and identity platforms where your profile or published content links back to your site. Highest DR backlinks available without building integrations.
 
 | Platform | DR | Category | Type | Notes |
 |---|---|---|---|---|
@@ -233,13 +233,13 @@ Create a profile or publish content on these high-DR platforms to earn a dofollo
 | **Blogger** | 100 | Any | Blog | Google property. Free blog with dofollow links. |
 | **Tumblr** | 99 | Design | Blog | Highest DR blog platform. Project blog or microblog. |
 | **GitHub** | 98 | Tech | Code host | Profile + repo README links. Every software product should have this. |
-| **SoundCloud** | 96 | Music | Profile | Niche - relevant for audio/music products. |
+| **SoundCloud** | 96 | Music | Profile | Niche — relevant for audio/music products. |
 | **Weebly** | 95 | Any | Blog | Free site builder with dofollow profile link. |
 | **SlideShare** | 95 | Any | Content | Upload pitch decks, guides, presentations. |
 | **Flickr** | 95 | Photography | Profile | Product screenshot galleries with profile link. |
 | **GitLab** | 94 | Tech | Code host | Profile link. Mirror repos if open source. |
-| **eBay Stores** | 94 | E-commerce | Profile | Niche - relevant for physical/digital goods. |
-| **Etsy** | 93 | E-commerce | Profile | Niche - templates, digital downloads. |
+| **eBay Stores** | 94 | E-commerce | Profile | Niche — relevant for physical/digital goods. |
+| **Etsy** | 93 | E-commerce | Profile | Niche — templates, digital downloads. |
 | **Substack** | 93 | Tech | Newsletter | Publish product updates, thought leadership. High-intent readers. |
 | **Bitbucket** | 93 | Tech | Code host | Profile link. Atlassian property. |
 | **Scribd** | 93 | Any | Content | Upload whitepapers, guides, case studies. |
@@ -254,9 +254,9 @@ Create a profile or publish content on these high-DR platforms to earn a dofollo
 | **Issuu** | 92 | Any | Content | Upload marketing PDFs, brochures, reports. |
 | **CodePen** | 92 | Tech | Profile | Front-end demos and profile link. |
 | **Kaggle** | 92 | AI | Profile | AI/data science community. Notebooks with links. |
-| **Houzz** | 92 | Home | Profile | Niche - home/interior products. |
+| **Houzz** | 92 | Home | Profile | Niche — home/interior products. |
 | **LiveJournal** | 91 | Any | Blog | Legacy but high DR. Blog with dofollow links. |
-| **Bandcamp** | 91 | Music | Profile | Niche - audio products. |
+| **Bandcamp** | 91 | Music | Profile | Niche — audio products. |
 | **Dev.to** | 90 | Tech | Blog | Technical articles with dofollow links. Cross-post with canonical URL. |
 | **Gravatar** | 90 | Professional | Profile | Profile with website link. Quick setup. |
 | **Replit** | 90 | Tech | Code host | Profile link. Interactive demos. |
@@ -270,20 +270,20 @@ Create a profile or publish content on these high-DR platforms to earn a dofollo
 | **Strikingly** | 87 | Any | Blog | Free one-page site with backlink. |
 | **Hashnode** | 85 | Tech | Blog | Dev blogging. Custom domain support. Dofollow links. |
 | **About.me** | 85 | Professional | Profile | One-page profile. Quick dofollow backlink. |
-| **Mixcloud** | 85 | Music | Profile | Niche - audio/podcast products. |
+| **Mixcloud** | 85 | Music | Profile | Niche — audio/podcast products. |
 | **4Shared** | 85 | Any | Content | File sharing with profile link. |
 | **HubPages** | 84 | Any | Blog | Article publishing platform. |
 | **AppSumo** | 84 | E-commerce | Marketplace | SaaS deals marketplace. Great for launch visibility + backlink. |
-| **TeachersPayTeachers** | 84 | Education | Profile | Niche - education products. |
+| **TeachersPayTeachers** | 84 | Education | Profile | Niche — education products. |
 | **AuthorStream** | 70 | Any | Content | Presentation sharing. |
-| **Model Mayhem** | 72 | Design | Profile | Niche - creative industry. |
+| **Model Mayhem** | 72 | Design | Profile | Niche — creative industry. |
 | **Penzu** | 60 | Any | Blog | Online journal with profile link. |
 | **Crevado** | 50 | Design | Profile | Portfolio platform. |
 | **MyFolio** | 55 | Design | Profile | Portfolio platform. |
 
 ---
 
-## Tier 9 - Local Business & General Directories
+## Tier 9 — Local Business & General Directories
 
 Relevant for products with a physical presence, local customer base, or business address. Also useful for any product wanting pure DR-building backlinks from established directories.
 
@@ -313,28 +313,28 @@ Relevant for products with a physical presence, local customer base, or business
 
 ---
 
-## Tier 10 - Forums & Communities
+## Tier 10 — Forums & Communities
 
 Create a profile and participate in relevant communities. Most give dofollow profile links. Value comes from both the backlink and referral traffic from genuine participation. Follow the 90/10 rule: 90% helpful, 10% promotional.
 
 | Forum | DR | Category | Notes |
 |---|---|---|---|
-| **Strava Clubs** | 90 | Fitness | Niche - fitness/health products only. |
+| **Strava Clubs** | 90 | Fitness | Niche — fitness/health products only. |
 | **Foursquare** | 90 | Hospitality | Business listing with dofollow link. |
 | **SitePoint Forums** | 89 | Tech | Web dev community. Genuine participation required. |
-| **Mumsnet Forums** | 85 | Family | Niche - family/parenting products. Large UK audience. |
+| **Mumsnet Forums** | 85 | Family | Niche — family/parenting products. Large UK audience. |
 | **Digital Point** | 82 | Marketing | SEO/marketing forum. |
 | **WebmasterWorld** | 77 | Marketing | SEO/webmaster community. High editorial standards. |
 | **BlackHatWorld** | 77 | Marketing | SEO/marketing forum. Despite the name, has legitimate discussions. |
 | **GrowthHackers** | 76 | Marketing | Growth marketing community. Dofollow articles + profile. |
 | **Warrior Forum** | 73 | Marketing | Internet marketing community. |
 | **Apsense** | 72 | Marketing | Business networking + marketing forum. |
-| **ActiveRain** | 70 | Real estate | Niche - real estate industry. |
+| **ActiveRain** | 70 | Real estate | Niche — real estate industry. |
 | **Quibblo** | 55 | General | Quiz/poll community with profile links. |
 
 ---
 
-## Tier 11 - Press Release, Article & Blog Directory Sites
+## Tier 11 — Press Release, Article & Blog Directory Sites
 
 Publish articles or press releases to earn dofollow backlinks. Best for product launches, funding announcements, major feature releases. Some accept any topic, others are PR-specific.
 
@@ -380,7 +380,7 @@ Publish articles or press releases to earn dofollow backlinks. Best for product 
 
 ---
 
-## Tier 12 - Social Bookmarking & Curation
+## Tier 12 — Social Bookmarking & Curation
 
 Bookmark or curate content with dofollow links. Lower effort than publishing full articles. Most useful for building diverse backlink profile.
 
@@ -394,9 +394,9 @@ Bookmark or curate content with dofollow links. Lower effort than publishing ful
 
 ---
 
-## Tier 13 - Niche Vertical Directories
+## Tier 13 — Niche Vertical Directories
 
-Industry-specific directories. Only submit if your product genuinely fits the vertical - forced listings get rejected and waste time.
+Industry-specific directories. Only submit if your product genuinely fits the vertical — forced listings get rejected and waste time.
 
 ### Legal
 
@@ -462,7 +462,7 @@ Industry-specific directories. Only submit if your product genuinely fits the ve
 
 | Directory | DR | Notes |
 |---|---|---|
-| *(TeachersPayTeachers listed in Tier 8 - Profile Platforms)* | | |
+| *(TeachersPayTeachers listed in Tier 8 — Profile Platforms)* | | |
 
 ---
 
@@ -474,4 +474,4 @@ After any submission goes live, verify the backlink exists and is dofollow. You 
 2. **curl:** `curl -sIL https://directory.com/your-listing | grep -i link`
 3. **SEO tools:** Ahrefs Site Explorer → Backlinks → filter by this directory's domain.
 
-**Re-verify quarterly.** Directories sometimes change all outbound links to nofollow without warning - if DR stops moving, check whether your biggest inbound links have silently flipped.
+**Re-verify quarterly.** Directories sometimes change all outbound links to nofollow without warning — if DR stops moving, check whether your biggest inbound links have silently flipped.

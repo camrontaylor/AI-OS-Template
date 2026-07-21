@@ -143,7 +143,7 @@ export async function PATCH(request: NextRequest) {
       }
     } catch (dbError) {
       console.error("PATCH /api/gsd/phase-status db sync error:", dbError);
-      // Don't fail the whole request - the roadmap was already updated.
+      // Don't fail the whole request — the roadmap was already updated.
     }
 
     return NextResponse.json({ success: true, phaseNumber, status, updatedTaskCount });

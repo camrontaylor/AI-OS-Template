@@ -118,7 +118,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
           console.log(`[task-store] fetchTasks: PROTECTED ${st.id.slice(0,8)} from server status=${st.status}, keeping done`);
           return { ...st, status: "done" as const, needsInput: false };
         }
-        // Server confirms done - clear the protection
+        // Server confirms done — clear the protection
         if (isUserDone(st.id) && st.status === "done") {
           _userDoneIds.delete(st.id);
         }
@@ -215,7 +215,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
           (t) => t.id === realTask.id
         );
         if (sseAlreadyAdded) {
-          // Just remove the temp - SSE already has the real task in state
+          // Just remove the temp — SSE already has the real task in state
           return { tasks: state.tasks.filter((t) => t.id !== tempId) };
         }
         // Normal: replace temp with real
@@ -242,7 +242,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
       console.log(`[task-store] updateTask(${shortId}): marking done, setting protection`);
       markUserDone(id);
     } else if (updates.status) {
-      // User explicitly moved task OUT of done - clear protection
+      // User explicitly moved task OUT of done — clear protection
       _userDoneIds.delete(id);
     }
     // Optimistic: apply updates immediately so the UI responds instantly
@@ -434,7 +434,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
           break;
         }
         set((state) => {
-          // Already exists - skip
+          // Already exists — skip
           if (state.tasks.some((t) => t.id === event.task.id)) return state;
 
           // Check if this matches a pending optimistic create (SSE arrived before API response)
@@ -486,7 +486,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
             const preserveTitle =
               event.type !== "task:updated" ||
               (event.task.title.length > t.title.length * 3 && event.task.title.length > 80);
-            // Progress events must never downgrade needsInput from true to false  - 
+            // Progress events must never downgrade needsInput from true to false —
             // they fire before question detection and carry stale needsInput state.
             const preserveNeedsInput =
               event.type === "task:progress" && t.needsInput && !event.task.needsInput;
@@ -522,7 +522,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
           tasks: state.tasks.map((t) => {
             if (t.id !== event.task.id) return t;
             if ((t.status === "done" || isUserDone(t.id)) && event.task.status !== "done") return t;
-            // Never let a log event downgrade needsInput from true to false  - 
+            // Never let a log event downgrade needsInput from true to false —
             // log events fire before question detection and carry stale state.
             const newNeedsInput = (t.needsInput && !event.task.needsInput) ? true : event.task.needsInput;
             return { ...t, needsInput: newNeedsInput, activityLabel: event.task.activityLabel };
@@ -621,7 +621,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
         await get().fetchTasks();
       }
     } catch {
-      // Non-critical - silently fail
+      // Non-critical — silently fail
     }
   },
 

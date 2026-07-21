@@ -40,10 +40,6 @@ interface UsageNumbers {
   context_window_tokens?: number;
 }
 
-function runtimeJoin(first: string, ...rest: string[]): string {
-  return path.join(/*turbopackIgnore: true*/ first, ...rest);
-}
-
 function isSafeSessionId(sessionId: string): boolean {
   return /^[A-Za-z0-9._-]+$/.test(sessionId);
 }
@@ -138,7 +134,7 @@ function buildAvailableStatus(input: {
 
 function readFreshBridge(sessionId: string, options: ContextStatusOptions): ContextStatus | null {
   const tempDir = options.tempDir ?? os.tmpdir();
-  const bridgePath = runtimeJoin(tempDir, `claude-ctx-${sessionId}.json`);
+  const bridgePath = path.join(tempDir, `claude-ctx-${sessionId}.json`);
   if (!fs.existsSync(bridgePath)) return null;
 
   const stat = fs.statSync(bridgePath);
@@ -206,13 +202,13 @@ function readFreshBridge(sessionId: string, options: ContextStatusOptions): Cont
 }
 
 function findTranscriptPath(sessionId: string, options: ContextStatusOptions): string | null {
-  const projectsDir = runtimeJoin(options.homeDir ?? os.homedir(), ".claude", "projects");
+  const projectsDir = path.join(options.homeDir ?? os.homedir(), ".claude", "projects");
   if (!fs.existsSync(projectsDir)) return null;
 
   let latest: { filePath: string; mtimeMs: number } | null = null;
   for (const entry of fs.readdirSync(projectsDir, { withFileTypes: true })) {
     if (!entry.isDirectory()) continue;
-    const candidate = runtimeJoin(projectsDir, entry.name, `${sessionId}.jsonl`);
+    const candidate = path.join(projectsDir, entry.name, `${sessionId}.jsonl`);
     if (!fs.existsSync(candidate)) continue;
     const stat = fs.statSync(candidate);
     if (!latest || stat.mtimeMs > latest.mtimeMs) {

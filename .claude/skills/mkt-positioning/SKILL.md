@@ -1,21 +1,12 @@
 ---
 name: mkt-positioning
-description: >
-  Find the angle that makes something sell. Use when launching a product,
-  writing a landing page, crafting an offer, or when marketing feels flat.
-  Searches competitor messaging to map the landscape, loads brand context,
-  then generates 3-5 distinct positioning angles with a recommended pick.
-  Writes chosen angle to brand_context/positioning.md. Optionally seeds
-  an ad testing matrix. Triggers on: "find angles for", "how should I
-  position", "what's the hook", "why isn't this selling", "make this stand
-  out", "differentiate", "USP", "positioning". Foundation skill - run
-  before execution skills that need an angle to write from.
-  Does NOT trigger for voice extraction, audience research, or content writing.
+description: "Find the angle that makes something sell: maps competitor messaging, then generates 3-5 positioning angles with a recommended pick. Not for voice, audience, or content writing."
+when_to_use: 'Invoke when the request sounds like: "find angles for", "how should I position", "what''s the hook", "why isn''t this selling", "make this stand out", "differentiate", "USP", "positioning". Foundation skill'
 ---
 
 # Positioning
 
-The same product can sell dramatically better with a different angle. Not a different product - just a different way of framing what it already does. This skill finds those angles.
+The same product can sell dramatically better with a different angle. Not a different product — just a different way of framing what it already does. This skill finds those angles.
 
 ## Outcome
 
@@ -57,7 +48,7 @@ A fitness program sells "fit into your old jeans." A SaaS tool sells "close your
 
 ## Step 2: Map Alternatives
 
-What would customers do if this didn't exist? Not just competitors - all alternatives:
+What would customers do if this didn't exist? Not just competitors — all alternatives:
 - Do nothing (live with the problem)
 - DIY (cobble together a solution)
 - Hire someone (consultant, freelancer, agency)
@@ -91,10 +82,10 @@ The market stage determines which angle type will work. A new category needs sim
 Run the product through multiple angle frameworks. Read `references/angle-frameworks.md` for the full set (Contrarian, Unique Mechanism, Transformation, Enemy, Speed/Ease, Specificity, Social Proof, Risk Reversal).
 
 Generate 3-5 distinct options. For each:
-- **Statement** - one sentence positioning
-- **Psychology** - why this works with this audience at this market stage
-- **Headline direction** - how it would sound in copy
-- **Best for** - market conditions and audience segments
+- **Statement** — one sentence positioning
+- **Psychology** — why this works with this audience at this market stage
+- **Headline direction** — how it would sound in copy
+- **Best for** — market conditions and audience segments
 
 Mark one with a recommendation and explain why it's the strongest fit given their competitive white space and market stage.
 
@@ -106,7 +97,7 @@ Ask: "Which angle resonates? Pick a number, or tell me to combine elements from 
 
 For each angle, verify:
 1. Is it specific? ("Better results" fails. "20 lbs in 6 weeks" converts.)
-2. Is it differentiated? Cross-reference the competitive landscape - if a competitor already claims it, sharpen further.
+2. Is it differentiated? Cross-reference the competitive landscape — if a competitor already claims it, sharpen further.
 3. Is it believable? Does the mechanism or proof support it?
 4. Is it relevant to THIS audience? If icp.md is loaded, verify alignment.
 5. Does it lead somewhere? Can you picture the headline, the landing page, the ad?
@@ -139,13 +130,13 @@ Log feedback to `context/learnings.md` under `## mkt-positioning` with date and 
 
 ## Self-Update
 
-If the user flags an issue with the output - wrong angle, bad framing, missed competitive signal, incorrect assumption - update the `## Rules` section in this SKILL.md immediately with the correction and today's date. Don't just log it to learnings; fix the skill so it doesn't repeat the mistake.
+If the user flags an issue with the output — wrong angle, bad framing, missed competitive signal, incorrect assumption — update the `## Rules` section in this SKILL.md immediately with the correction and today's date. Don't just log it to learnings; fix the skill so it doesn't repeat the mistake.
 
 ---
 
 ## Troubleshooting
 
-**User can't articulate the transformation:** Ask what their best customers say about the product - the transformation is in their words, not the founder's.
+**User can't articulate the transformation:** Ask what their best customers say about the product — the transformation is in their words, not the founder's.
 **No competitors found:** The product may be category-creating (Stage 1). Lead with simple announcement angles.
 **All angles feel similar:** The mechanism isn't clear enough. Go back to Step 1 and dig deeper on what makes their approach different.
-**Positioning exists but feels stale:** Run a fresh competitive search and compare - the market may have moved.
+**Positioning exists but feels stale:** Run a fresh competitive search and compare — the market may have moved.

@@ -381,7 +381,7 @@ export function SlashCommandMenu({
     };
 
     if (!isDeepFilter) {
-      // Category folder view - show expandable folders
+      // Category folder view — show expandable folders
       return (
         <div ref={menuRef} style={menuStyle}>
           {TAG_CATEGORY_ORDER.filter((cat) => categories.has(cat)).map((cat) => (
@@ -396,7 +396,7 @@ export function SlashCommandMenu({
       );
     }
 
-    // Deep filter - flat list of matching items
+    // Deep filter — flat list of matching items
     let flatIdx = 0;
     return (
       <div ref={menuRef} style={menuStyle}>
@@ -471,7 +471,7 @@ export function SlashCommandMenu({
     padding: "4px 0",
   };
 
-  // No query - show collapsible category folders
+  // No query — show collapsible category folders
   if (!isDeepFilter) {
     const categories = new Map<string, SlashCommand[]>();
     for (const cmd of filtered) {
@@ -494,7 +494,7 @@ export function SlashCommandMenu({
     );
   }
 
-  // Typing a query - flat filtered list with highlighted selection
+  // Typing a query — flat filtered list with highlighted selection
   return (
     <div ref={menuRef} style={menuStyle}>
       {filtered.map((cmd, i) => (

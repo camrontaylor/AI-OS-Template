@@ -28,7 +28,7 @@ db.prepare("DELETE FROM task_logs WHERE taskId = ?").run(TASK_ID);
 db.prepare("DELETE FROM task_outputs WHERE taskId = ?").run(TASK_ID);
 db.prepare("DELETE FROM tasks WHERE id = ?").run(TASK_ID);
 
-// Insert the task - running + needsInput so the form shows
+// Insert the task — running + needsInput so the form shows
 db.prepare(
   `INSERT INTO tasks (id, title, description, status, level, columnOrder, createdAt, updatedAt, startedAt, needsInput, activityLabel)
    VALUES (?, ?, ?, 'running', 'task', 0, ?, ?, ?, 1, ?)`
@@ -54,7 +54,7 @@ insertLog.run(
   null, null, null, 0, null, null,
 );
 
-// 2. Tool use - reading existing context
+// 2. Tool use — reading existing context
 insertLog.run(
   crypto.randomUUID(), TASK_ID, "tool_use", iso(-100),
   "Read", "Read",
@@ -76,7 +76,7 @@ insertLog.run(
   null, null, null, 0, null, null,
 );
 
-// 5. Structured question - this is the key entry
+// 5. Structured question — this is the key entry
 const questionSpecs = JSON.stringify([
   {
     id: "tone",
@@ -103,7 +103,7 @@ const questionSpecs = JSON.stringify([
     id: "examples",
     prompt: "Which of these writing styles resonate with you? (pick all that apply)",
     type: "multiselect",
-    options: ["Apple - minimal, decisive", "Stripe - technical but warm", "Mailchimp - fun, irreverent", "Notion - clean, understated", "Basecamp - opinionated, direct"],
+    options: ["Apple — minimal, decisive", "Stripe — technical but warm", "Mailchimp — fun, irreverent", "Notion — clean, understated", "Basecamp — opinionated, direct"],
     required: false,
   },
 ]);
@@ -112,7 +112,7 @@ insertLog.run(
   crypto.randomUUID(), TASK_ID, "structured_question", iso(-85),
   "I have a few questions to shape your voice profile.",
   null, null, null, 0,
-  questionSpecs, null, // no answers yet - form should show
+  questionSpecs, null, // no answers yet — form should show
 );
 
 console.log(`✓ Seeded demo task: "${TASK_ID}"`);

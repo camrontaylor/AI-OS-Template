@@ -1,14 +1,7 @@
 ---
 name: ops-cron
-description: >
-  Schedule recurring tasks with AI-OS's managed cron runtime. Jobs live in
-  cron/jobs/ and are executed by the same scheduling core in two hosts: the
-  Command Centre server while it is running, or a manual CLI daemon started
-  with start-crons. Triggers on: "schedule a job", "cron job", "run this every
-  morning", "automate daily", "recurring task", "scheduled job", "check
-  scheduled jobs", "list jobs", "run job manually", "start crons", "stop
-  crons", "cron status", "cron logs". Does NOT trigger for one-off tasks or
-  in-session reminders.
+description: "Schedule recurring tasks with AI-OS's managed cron runtime (jobs live in cron/jobs/). Not for one-off tasks or in-session reminders."
+when_to_use: 'Invoke when the request sounds like: "schedule a job", "cron job", "run this every morning", "automate daily", "recurring task", "check scheduled jobs", "list jobs", "start crons", "stop crons", "cron status", "cron logs"'
 ---
 
 # Scheduled Jobs
@@ -99,7 +92,7 @@ Give the user the right runtime model:
 - **CLI user:** start the daemon manually with `start-crons`; stop it with `stop-crons`
 - **Both together:** only one host becomes leader; the other stays passive
 
-Scheduled jobs run with `--dangerously-skip-permissions` so they can execute unattended without approval prompts. This is intentional - cron jobs must complete autonomously.
+Scheduled jobs run with `--dangerously-skip-permissions` so they can execute unattended without approval prompts. This is intentional — cron jobs must complete autonomously.
 
 Never suggest Task Scheduler, launchd, or crontab.
 
@@ -171,11 +164,33 @@ At session start:
 
 ---
 
+## Eval
+
+Run this eval before changing job format, daemon commands, or scheduling rules:
+
+```bash
+bash scripts/test-notion-resource-health.sh
+npm run test:cron --prefix command-centre
+bash scripts/status-crons.sh
+```
+
+The eval passes when job files keep valid YAML frontmatter, schedule parsing
+matches `cron/templates/schedule-reference.md`, daemon status/log commands stay
+non-destructive, Notion resource health exits non-zero when blocked, explicit
+cron text like `Status: BLOCKED` records a failed run, and external writes
+inside jobs remain approval-gated by their own job prompts. It fails if a job
+can run without a clear prompt, if stopping the daemon deletes job files, if a
+blocked cron run is recorded as success, or if fixed-time catch-up behavior is
+broken.
+
+---
+
 ## Rules
 
 *Updated automatically when the user flags issues. Read before every run.*
 
 - 2026-06-22: Laptop unattended runs use the nightly wake batch. Schedule jobs at or before the pmset wake time (default 23:35) so one nightly wake runs them all; keep the Mac plugged in; give order-dependent jobs distinct increasing times. See "Unattended Scheduling on a Laptop (nightly wake batch)".
+- 2026-06-30: Cron jobs that explicitly output `Status: BLOCKED` or `Status: FAILED` must be recorded as failed even when the Claude process exits 0. The cron wrapper must load `AI_KEYS_ENV_FILE` before the Claude OAuth fast path so headless Claude receives integration keys such as `NOTION_API_KEY`.
 
 ---
 

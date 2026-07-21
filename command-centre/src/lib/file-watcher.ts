@@ -111,7 +111,7 @@ class FileWatcher {
       const fileName = path.basename(filePath);
       const extension = path.extname(filePath).replace(".", "").toLowerCase();
 
-      // Skip source code, config, and extensionless files - track everything else as deliverables.
+      // Skip source code, config, and extensionless files — track everything else as deliverables.
       // Blocklist approach: any extension NOT in this set is considered a deliverable output.
       const skipExtensions = new Set([
         // Source code

@@ -81,7 +81,8 @@ function backfillOutputsFromLogs(taskId: string, db: ReturnType<typeof getDb>): 
 
   if (found) return;
 
-  // Strategy 2: Scan text entries for absolute file paths under the configured AI-OS root.
+  // Strategy 2: Scan text entries for absolute file paths in Claude's output.
+  // Matches paths like /Users/.../projects/... or /home/.../projects/...
   const textEntries = db.prepare(
     `SELECT content FROM task_logs
      WHERE taskId = ? AND type = 'text' AND content IS NOT NULL

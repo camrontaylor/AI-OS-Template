@@ -4,15 +4,6 @@ import fs from "fs";
 import { spawn } from "child_process";
 import { getConfig } from "@/lib/config";
 
-function runtimeResolve(first: string, ...rest: string[]): string {
-  return path.resolve(/*turbopackIgnore: true*/ first, ...rest);
-}
-
-function isWithinDir(targetPath: string, rootDir: string): boolean {
-  const relative = path.relative(rootDir, targetPath);
-  return relative === "" || (!!relative && !relative.startsWith("..") && !path.isAbsolute(relative));
-}
-
 // Opens the given path (file or folder) in the host OS file explorer.
 export async function GET(request: NextRequest): Promise<NextResponse> {
   const targetPath = request.nextUrl.searchParams.get("path");
@@ -25,8 +16,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   }
 
   const config = getConfig();
-  const resolvedPath = runtimeResolve(config.agenticOsDir, targetPath);
-  if (!isWithinDir(resolvedPath, config.agenticOsDir)) {
+  const resolvedPath = path.resolve(config.agenticOsDir, targetPath);
+  if (!resolvedPath.startsWith(config.agenticOsDir)) {
     return NextResponse.json({ error: "Path traversal not allowed" }, { status: 403 });
   }
   if (!fs.existsSync(resolvedPath)) {

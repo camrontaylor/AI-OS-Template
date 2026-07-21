@@ -4,11 +4,11 @@ description: "Audit applications for AI prompt injection, agent security, and LL
 allowed-tools: Read, Grep, Glob, Bash, Write, WebSearch
 ---
 
-# Prompt Injection - AI/LLM Security Audit
+# Prompt Injection — AI/LLM Security Audit
 
 Audit applications that use AI features, LLM integrations, or AI agents for prompt injection, privilege escalation, and authorization bypass vulnerabilities.
 
-Cross-references: `threat-modeling` for design-time AI risk modeling on new AI features (before this skill applies); `owasp-audit` for the XSS / output-rendering patterns that overlap when LLM output reaches the browser (sanitize on render, JSON-LD breakout); `api-audit` for the API surface that LLM tools and MCP servers expose; `ai-risk-management` for the broader governance frame this skill sits within - prompt injection is the security slice of AI risk; AI RMF covers the rest (fairness, robustness, transparency, drift, lifecycle).
+Cross-references: `threat-modeling` for design-time AI risk modeling on new AI features (before this skill applies); `owasp-audit` for the XSS / output-rendering patterns that overlap when LLM output reaches the browser (sanitize on render, JSON-LD breakout); `api-audit` for the API surface that LLM tools and MCP servers expose; `ai-risk-management` for the broader governance frame this skill sits within — prompt injection is the security slice of AI risk; AI RMF covers the rest (fairness, robustness, transparency, drift, lifecycle).
 
 ## Background
 
@@ -55,16 +55,16 @@ Check how prompts are assembled. Look for:
 
 **Unsanitized interpolation:**
 ```python
-# VULNERABLE - user input directly in prompt
+# VULNERABLE — user input directly in prompt
 prompt = f"Summarize this: {user_input}"
 
-# VULNERABLE - external data injected without marking
+# VULNERABLE — external data injected without marking
 prompt = f"Answer based on this context: {rag_results}"
 ```
 
 **Missing input/output boundaries:**
 ```python
-# BETTER - clear delimiters separating instructions from data
+# BETTER — clear delimiters separating instructions from data
 prompt = f"""Summarize the text between the <document> tags.
 <document>
 {user_input}
@@ -73,7 +73,7 @@ prompt = f"""Summarize the text between the <document> tags.
 
 **Secrets in system prompts:**
 ```python
-# VULNERABLE - API keys, database credentials, or internal URLs in system prompt
+# VULNERABLE — API keys, database credentials, or internal URLs in system prompt
 system = f"You are a helper. Use API key {API_KEY} to call..."
 ```
 
@@ -90,7 +90,7 @@ Check what happens with LLM responses:
 
 **Rendered as HTML (XSS via LLM):**
 ```jsx
-// VULNERABLE - LLM output rendered as raw HTML
+// VULNERABLE — LLM output rendered as raw HTML
 <div dangerouslySetInnerHTML={{ __html: llmResponse }} />
 ```
 
@@ -98,13 +98,13 @@ If the LLM can be tricked into outputting `<script>` tags or event handlers, and
 
 **Executed as code:**
 ```python
-# VULNERABLE - LLM output passed to eval/exec
+# VULNERABLE — LLM output passed to eval/exec
 exec(llm_response)
 ```
 
 **Used in database queries:**
 ```python
-# VULNERABLE - LLM output used in raw SQL
+# VULNERABLE — LLM output used in raw SQL
 cursor.execute(f"SELECT * FROM {llm_response}")
 ```
 
@@ -122,10 +122,10 @@ If the LLM has access to tools, function calls, or operates as an autonomous age
 4. **Is there human-in-the-loop for high-risk actions?**
 
 ```python
-# VULNERABLE - LLM can call any tool without validation
+# VULNERABLE — LLM can call any tool without validation
 result = execute_tool(tool_name=llm_choice, args=llm_args)
 
-# BETTER - allowlist + argument validation + confirmation for destructive actions
+# BETTER — allowlist + argument validation + confirmation for destructive actions
 if tool_name not in ALLOWED_TOOLS:
     raise ValueError("Tool not permitted")
 validated_args = validate_tool_args(tool_name, llm_args)
@@ -166,15 +166,15 @@ Check if the application:
 
 This is critical for apps with role-based access, multi-tenant data, or tiered permissions.
 
-**Confused deputy - does the AI inherit the right permissions?**
+**Confused deputy — does the AI inherit the right permissions?**
 - What identity does the AI use when accessing data or calling APIs? Its own service account? The requesting user's session token?
 - If the AI uses a service account with broad permissions, any user can potentially access data beyond their role through the AI layer.
 
 ```python
-# VULNERABLE - AI queries database with admin-level service account
+# VULNERABLE — AI queries database with admin-level service account
 results = db.query(ai_generated_sql)  # Bypasses row-level security
 
-# BETTER - AI queries execute under the requesting user's permissions
+# BETTER — AI queries execute under the requesting user's permissions
 results = db.query(ai_generated_sql, user_context=request.user)
 ```
 
@@ -257,11 +257,11 @@ Check what defenses are in place and whether they're sufficient:
 |--------------|--------|----------------|
 
 ### Prioritized Remediation
-1. [Critical - permission bypass, privilege escalation, or multi-tenant data leakage through AI]
-2. [Critical - exploitable injection paths with tool/agent access]
-3. [High - unsanitized user input in prompts, agent memory poisoning]
-4. [Medium - missing output validation, unbounded agent loops]
-5. [Low - defense-in-depth improvements, monitoring gaps]
+1. [Critical — permission bypass, privilege escalation, or multi-tenant data leakage through AI]
+2. [Critical — exploitable injection paths with tool/agent access]
+3. [High — unsanitized user input in prompts, agent memory poisoning]
+4. [Medium — missing output validation, unbounded agent loops]
+5. [Low — defense-in-depth improvements, monitoring gaps]
 ```
 
 ## Boundaries

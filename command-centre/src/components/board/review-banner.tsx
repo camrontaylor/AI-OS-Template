@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 interface ReviewBannerProps {
   task: Task;
   onIterate: (prefill: string) => void;
-  /** Called after Approve succeeds - parent should close the detail view. */
+  /** Called after Approve succeeds — parent should close the detail view. */
   onApprove?: () => void;
 }
 

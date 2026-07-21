@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       .get(sessionId) as Task | undefined;
 
     if (existing) {
-      // Resume - update status back to running
+      // Resume — update status back to running
       db.prepare(
         "UPDATE tasks SET status = 'running', updatedAt = ?, startedAt = COALESCE(startedAt, ?), claudePid = COALESCE(?, claudePid) WHERE id = ?"
       ).run(now, now, claudePid ?? null, existing.id);

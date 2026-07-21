@@ -25,15 +25,6 @@ const MIME_TYPES: Record<string, string> = {
   htm: "text/html; charset=utf-8",
 };
 
-function runtimeResolve(first: string, ...rest: string[]): string {
-  return path.resolve(/*turbopackIgnore: true*/ first, ...rest);
-}
-
-function isWithinDir(targetPath: string, rootDir: string): boolean {
-  const relative = path.relative(rootDir, targetPath);
-  return relative === "" || (!!relative && !relative.startsWith("..") && !path.isAbsolute(relative));
-}
-
 function isChatComposerSurface(value: string | null): value is ChatComposerSurface {
   return value === "conversation" || value === "task" || value === "question";
 }
@@ -85,10 +76,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   }
 
   const baseDir = getBaseDir(request, filePath);
-  const resolvedPath = runtimeResolve(baseDir, filePath);
+  const resolvedPath = path.resolve(baseDir, filePath);
 
   // Path traversal protection: ensure resolved path is within the active workspace
-  if (!isWithinDir(resolvedPath, baseDir)) {
+  if (!resolvedPath.startsWith(baseDir)) {
     return NextResponse.json({ error: "Path traversal not allowed" }, { status: 403 });
   }
 
@@ -116,7 +107,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   // Non-previewable binary formats
   if (BINARY_EXTENSIONS.has(ext)) {
     return NextResponse.json(
-      { error: `Binary file (.${ext}) - use download instead` },
+      { error: `Binary file (.${ext}) — use download instead` },
       { status: 400 }
     );
   }

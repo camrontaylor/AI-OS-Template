@@ -72,7 +72,7 @@ push("tool_use", "", {
   toolName: "Read",
   toolArgs: { file_path: path.join(repoRoot, "docs/command-centre/legacy/brief.md") },
 });
-push("tool_result", "brief.md - 142 lines");
+push("tool_result", "brief.md — 142 lines");
 push("tool_use", "", {
   toolName: "Grep",
   toolArgs: { pattern: "Level 1|Level 2|GSD", path: "docs/command-centre/legacy" },
@@ -91,7 +91,7 @@ push(
  I'll turn that into a concise UI spec you can hand to implementation: screens, components, states, and the exact copy/CTAs for Level 1 vs Level 2 vs GSD (including Auto routing). Then I'll save it in the \`command-centre\` docs so it stays with the product history.`
 );
 
-// 4. Write tool_use - the spec file (this should render as a "Created" FileOutputCard)
+// 4. Write tool_use — the spec file (this should render as a "Created" FileOutputCard)
 // Read the real file content so the preview pane shows actual markdown.
 import fs from "fs";
 const specPath = path.join(repoRoot, "docs/command-centre/legacy/2026-04-10_ui-levels-routing-ui-spec.md");
@@ -109,7 +109,7 @@ push("tool_result", "File created successfully");
 // 5. Short confirmation text
 push("text", "UI spec saved. The card above should show the breadcrumb + line count and expand to preview the file inline.");
 
-// 6. Edit tool_use - a small edit to chat-entry.tsx (renders as "Edited" card)
+// 6. Edit tool_use — a small edit to chat-entry.tsx (renders as "Edited" card)
 push("tool_use", "", {
   toolName: "Edit",
   toolArgs: {
@@ -123,7 +123,7 @@ push("tool_result", "File edited successfully");
 // 7. Wrap-up text
 push(
   "text",
-  "Added a tiny comment to anchor the FileOutputCard component. Ready for your review - the two cards above should both expand to show breadcrumb + preview."
+  "Added a tiny comment to anchor the FileOutputCard component. Ready for your review — the two cards above should both expand to show breadcrumb + preview."
 );
 
 // Insert log entries

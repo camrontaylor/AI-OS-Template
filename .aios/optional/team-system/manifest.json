@@ -1,0 +1,25 @@
+{
+  "name": "team-system",
+  "description": "Safe two-repo sharing for the AI-OS system itself.",
+  "status": "available",
+  "default": false,
+  "loads_at_startup": false,
+  "activation": "descriptor-only",
+  "template_root": "templates/root",
+  "creates": [],
+  "writes": [
+    ".aios-team.json in clean team exports"
+  ],
+  "commands": [
+    "bash scripts/make-team-copy.sh [destination] [team-repo-url]",
+    "bash scripts/team-status.sh",
+    "bash scripts/team-publish.sh [team-repo-url]",
+    "bash scripts/team-join.sh <team-repo-url>"
+  ],
+  "services": [
+    "git remote access for the private team repo"
+  ],
+  "permissions": "system-only export, no clients, no personal memory, no secrets",
+  "docs": ".aios/optional/team-system/CAPABILITY.md",
+  "rollback": "No live runtime state is created by default. Remove .aios/enabled/team-system.json if enabled."
+}

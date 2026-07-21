@@ -1,5 +1,5 @@
 # =============================================================================
-# AI-OS - Install 'centre' PowerShell profiles
+# Agentic OS - Install 'centre' PowerShell profiles
 # =============================================================================
 # Installs or repairs the `centre` function in both supported Windows profile
 # files:
@@ -22,8 +22,8 @@ $ErrorActionPreference = "Stop"
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $CentreScript = Join-Path $ScriptDir "centre.ps1"
-$BlockStart = "# >>> AI-OS - command centre launcher >>>"
-$BlockEnd = "# <<< AI-OS - command centre launcher <<<"
+$BlockStart = "# >>> Agentic OS - command centre launcher >>>"
+$BlockEnd = "# <<< Agentic OS - command centre launcher <<<"
 $LegacyMarker = "# Agentic OS - command centre launcher"
 $LegacyMarkerAlt = "# Agentic OS $([char]0x2014) command centre launcher"
 

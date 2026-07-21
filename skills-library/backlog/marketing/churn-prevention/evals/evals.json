@@ -66,7 +66,7 @@
     {
       "id": 5,
       "prompt": "Our exit survey shows that 40% of cancellations say 'too expensive' as the reason. What save offers should we try?",
-      "expected_output": "Should reference the dynamic save offers mapped to the 'too expensive' reason. Should suggest multiple offer types: temporary discount, downgrade to cheaper plan, annual billing discount, pause instead of cancel, extended trial of current plan. Should recommend testing different offers to find what works best. Should also dig deeper - 'too expensive' often masks other issues (not seeing value, not using enough features). Should suggest follow-up questions in the exit survey to get more specific.",
+      "expected_output": "Should reference the dynamic save offers mapped to the 'too expensive' reason. Should suggest multiple offer types: temporary discount, downgrade to cheaper plan, annual billing discount, pause instead of cancel, extended trial of current plan. Should recommend testing different offers to find what works best. Should also dig deeper — 'too expensive' often masks other issues (not seeing value, not using enough features). Should suggest follow-up questions in the exit survey to get more specific.",
       "assertions": [
         "References save offers for 'too expensive' reason",
         "Suggests multiple offer types (discount, downgrade, pause)",

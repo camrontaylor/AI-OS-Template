@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# grant-access.sh - Add GitHub collaborator(s) with read (pull) access
+# grant-access.sh — Add GitHub collaborator(s) with read (pull) access
 # Usage:
 #   bash scripts/admin/grant-access.sh <github-username>
 #   bash scripts/admin/grant-access.sh --file users.txt
@@ -70,7 +70,7 @@ invite_user() {
   if [[ $STATUS -eq 0 ]]; then
     ok "Invited ${username} to ${REPO} with read access"
   else
-    warn "Failed to invite ${username} - ${HTTP_CODE}"
+    warn "Failed to invite ${username} — ${HTTP_CODE}"
   fi
 }
 

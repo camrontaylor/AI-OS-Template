@@ -8,19 +8,6 @@ import {
 } from "@/lib/chat-attachment-policy";
 import { getConfig } from "@/lib/config";
 
-function runtimeResolve(first: string, ...rest: string[]): string {
-  return path.resolve(/*turbopackIgnore: true*/ first, ...rest);
-}
-
-function runtimeJoin(first: string, ...rest: string[]): string {
-  return path.join(/*turbopackIgnore: true*/ first, ...rest);
-}
-
-function isWithinDir(targetPath: string, rootDir: string): boolean {
-  const relative = path.relative(rootDir, targetPath);
-  return relative === "" || (!!relative && !relative.startsWith("..") && !path.isAbsolute(relative));
-}
-
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const formData = await request.formData();
@@ -53,9 +40,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     const config = getConfig();
-    const resolvedDir = runtimeResolve(config.agenticOsDir, dir);
+    const resolvedDir = path.resolve(config.agenticOsDir, dir);
 
-    if (!isWithinDir(resolvedDir, config.agenticOsDir)) {
+    if (!resolvedDir.startsWith(config.agenticOsDir)) {
       return NextResponse.json({ error: "Path traversal not allowed" }, { status: 403 });
     }
 
@@ -64,7 +51,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     // Sanitize filename: keep only safe chars
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-    const resolvedPath = runtimeJoin(resolvedDir, safeName);
+    const resolvedPath = path.join(resolvedDir, safeName);
 
     // Write file
     const buffer = Buffer.from(await file.arrayBuffer());

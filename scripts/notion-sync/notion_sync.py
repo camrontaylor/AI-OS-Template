@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-notion_sync.py - credit-free Notion to markdown sync for AI-OS.
+notion_sync.py — credit-free Notion to markdown sync for AI-OS.
 
 This script talks to the Notion REST API directly. It does NOT use the Claude
 model or any MCP server, so a scheduled run costs zero model credits.
 
-What it does, per configured database (Stack, Resources, Notes, and any others
-sharing the Global Tags taxonomy):
+What it does, per configured database (Stack and Resources; the Notes database
+is intentionally excluded - see DATABASES below):
   - pages through every row via the Notion REST API
   - resolves the Global Tags relation IDs to readable tag names (one fetch of
     the Global Tags database, cached as an ID to name map)
@@ -32,9 +32,9 @@ pruned locally; run with --full periodically if you want to reconcile removals.
 
 Auth: reads NOTION_API_KEY from the environment, or from the repo .env if the
 environment variable is not set. Create a Notion internal integration and share
-the four databases with it. See README.md for setup.
+the Stack and Resources databases with it. See README.md for setup.
 
-Standard library only - no pip install required.
+Standard library only — no pip install required.
 """
 
 import json
@@ -49,21 +49,23 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 # ---------------------------------------------------------------------------
-# Configuration - database IDs are REST API database IDs (32 hex chars).
+# Configuration — database IDs are REST API database IDs (32 hex chars).
 # Add or remove entries here as databases join or leave the Global Tags
 # taxonomy. The key becomes the {db} folder name under context/notion/items/.
 # ---------------------------------------------------------------------------
 
+# Only the two databases the catalog is built from. The Notes database
+# (19ec6192c26680139071c6f3071a89f8) is deliberately NOT synced: it holds client
+# and personal material and does not belong in this catalog pipeline.
 DATABASES = {
-    "stack": "YOUR_STACK_DB_ID",
-    "resources": "YOUR_RESOURCES_DB_ID",
-    "notes": "YOUR_NOTES_DB_ID",
+    "stack": "188c6192c266805c8c77d6ff2ce28728",
+    "resources": "17ec6192c2668099b853c9074f1c5abb",
     # Add further databases that share the Global Tags relation here, e.g.:
     # "people": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 }
 
-# The Global Tags database - fetched once to build an ID to name map.
-GLOBAL_TAGS_DB = "YOUR_GLOBAL_TAGS_DB_ID"
+# The Global Tags database — fetched once to build an ID to name map.
+GLOBAL_TAGS_DB = "19ec6192c26680acae31ed9eed5c89c1"
 
 # Notion API
 NOTION_VERSION = "2022-06-28"
@@ -156,7 +158,7 @@ def _request(method, path, api_key, body=None):
                 )
                 time.sleep(wait)
                 continue
-            # Non-retryable (400/401/403/404) - surface the body for debugging.
+            # Non-retryable (400/401/403/404) — surface the body for debugging.
             detail = exc.read().decode("utf-8", errors="replace")
             raise RuntimeError(f"Notion API {status} on {method} {url}: {detail}") from exc
         except (urllib.error.URLError, TimeoutError) as exc:
@@ -323,7 +325,7 @@ def block_to_text(block):
     """
     Convert a single Notion block to a markdown line, or None to skip it.
 
-    Images, files, embeds, and other binary/media blocks are skipped - we keep
+    Images, files, embeds, and other binary/media blocks are skipped — we keep
     text only. Headings, lists, quotes, and code are preserved.
     """
     btype = block.get("type")

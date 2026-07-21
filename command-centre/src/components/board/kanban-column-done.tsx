@@ -112,7 +112,7 @@ export function KanbanColumnDone({
   const visibleItems = useMemo(() => new Set(allItems.slice(0, showCount).map((t) => t.id)), [allItems, showCount]);
   const hasMore = allItems.length > showCount;
 
-  // Collapsed state - vertical strip
+  // Collapsed state — vertical strip
   if (collapsed) {
     const collapsedBorder = dragOver
       ? "2px solid var(--muted-foreground)"

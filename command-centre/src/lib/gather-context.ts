@@ -8,8 +8,8 @@ import type { Task } from "@/types/task";
  * Context-gathering for the scoping wizard.
  *
  * Before asking the user clarifying questions we sweep two sources:
- *   1. brand_context/*.md   - voice, positioning, ICP
- *   2. URLs in the goal     - fetched and stripped to plain text
+ *   1. brand_context/*.md   — voice, positioning, ICP
+ *   2. URLs in the goal     — fetched and stripped to plain text
  *
  * The output is a compact summary the LLM can ground questions in
  * (e.g. "Is this for your existing audience?" instead of "Who is your
@@ -222,10 +222,10 @@ export function buildSiblingContextBlock(task: Task): string | null {
     const row = lastTextStmt.get(s.id) as { content: string } | undefined;
     const raw = row?.content || s.activityLabel || "(no summary)";
     const summary = raw.replace(/\s+/g, " ").trim().slice(0, 200);
-    lines.push(`- [done] **${s.title}** - ${summary}`);
+    lines.push(`- [done] **${s.title}** — ${summary}`);
   }
   for (const s of inFlight) {
-    const label = s.activityLabel ? ` - ${s.activityLabel}` : "";
+    const label = s.activityLabel ? ` — ${s.activityLabel}` : "";
     lines.push(`- [${s.status}] **${s.title}**${label}`);
   }
 
@@ -233,7 +233,7 @@ export function buildSiblingContextBlock(task: Task): string | null {
     lines.push("");
     lines.push(
       `All siblings share the project directory \`projects/briefs/${task.projectSlug}/\`. ` +
-        `Read any files there that are relevant before starting - they are the source of ` +
+        `Read any files there that are relevant before starting — they are the source of ` +
         `truth, not this summary. Write your own outputs into the same directory with a ` +
         `clear filename so later siblings can pick them up.`,
     );
@@ -243,7 +243,7 @@ export function buildSiblingContextBlock(task: Task): string | null {
 }
 
 /**
- * Gather brand and URL context for a goal. Best-effort, never throws  - 
+ * Gather brand and URL context for a goal. Best-effort, never throws —
  * any failure just produces an empty list for that source.
  */
 export async function gatherContext(

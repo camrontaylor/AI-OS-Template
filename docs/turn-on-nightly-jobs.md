@@ -16,7 +16,7 @@ Open the Terminal app. Type this exact line and press return:
 /usr/local/bin/claude setup-token
 ```
 
-(The full path matters. It skips your 1Password alias, so you will NOT get a 1Password popup. This command only does a login, it does not touch your API keys.)
+(The full path matters so you run the real binary directly. This command only does a login, it does not touch your API keys.)
 
 What happens next:
 - It will either open your web browser, or print a link for you to open.
@@ -25,14 +25,14 @@ What happens next:
 
 Select and copy that whole token string.
 
-If instead it says something about needing a subscription and you are sure you have one, tell me and I will switch you to the backup 1Password path.
+If instead it says something about needing a subscription and you are sure you have one, tell me and we will sort out the login another way.
 
 ## Step 2: hand the token to the script
 
 In the Terminal, go to the AI-OS folder and run the helper with your token pasted in:
 
 ```
-cd <your-ai-os-folder>
+cd ~/AI-OS
 bash scripts/enable-cron.sh PASTE_YOUR_TOKEN_HERE
 ```
 

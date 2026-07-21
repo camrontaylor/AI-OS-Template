@@ -163,7 +163,7 @@ We offer [migration support details]:
 ### What customers say about switching
 
 > "[Quote from customer who switched]"
-> - [Name], [Role] at [Company]
+> — [Name], [Role] at [Company]
 ```
 
 ---
@@ -178,10 +178,10 @@ Focus on switchers:
 ### Switched from [Competitor]
 
 > "[Specific quote about why they switched and outcome]"
-> - [Name], [Role] at [Company]
+> — [Name], [Role] at [Company]
 
 > "[Another quote]"
-> - [Name], [Role] at [Company]
+> — [Name], [Role] at [Company]
 
 ### Results after switching
 - [Company] saw [specific result]

@@ -98,7 +98,7 @@ export function getDb(): Database.Database {
     db.exec("ALTER TABLE tasks ADD COLUMN claudeSessionId TEXT");
   }
 
-  // Migration: add contextSources column - JSON of what context was loaded at task start
+  // Migration: add contextSources column — JSON of what context was loaded at task start
   const ctxCol = db.prepare("PRAGMA table_info(tasks)").all() as Array<{ name: string }>;
   if (!ctxCol.some((c) => c.name === "contextSources")) {
     db.exec("ALTER TABLE tasks ADD COLUMN contextSources TEXT");
@@ -205,7 +205,7 @@ export function getDb(): Database.Database {
     db.exec("ALTER TABLE tasks ADD COLUMN coordinationLevel TEXT");
   }
 
-  // Migration: add lastReplyAt column - tracks when the user last interacted
+  // Migration: add lastReplyAt column — tracks when the user last interacted
   const replyAtCol = db.prepare("PRAGMA table_info(tasks)").all() as Array<{ name: string }>;
   if (!replyAtCol.some((c) => c.name === "lastReplyAt")) {
     db.exec("ALTER TABLE tasks ADD COLUMN lastReplyAt TEXT");
@@ -271,7 +271,7 @@ export function getDb(): Database.Database {
           questionAnswers TEXT,
           FOREIGN KEY (taskId) REFERENCES tasks(id) ON DELETE CASCADE
         )`);
-        // Copy data - use only columns known to exist in both tables
+        // Copy data — use only columns known to exist in both tables
         const oldCols = db.prepare("PRAGMA table_info(task_logs)").all() as Array<{ name: string }>;
         const colNames = oldCols.map((c) => c.name);
         const shared = [
@@ -294,7 +294,7 @@ export function getDb(): Database.Database {
     console.error("[db] Failed to migrate task_logs CHECK constraint:", err);
   }
 
-  // Migration: add permissionMode column to task_logs - records which mode was active per user reply
+  // Migration: add permissionMode column to task_logs — records which mode was active per user reply
   try {
     db.exec("ALTER TABLE task_logs ADD COLUMN permissionMode TEXT");
   } catch (err) {
@@ -302,11 +302,11 @@ export function getDb(): Database.Database {
     if (!/duplicate column/i.test(msg)) throw err;
   }
 
-  // Migration: add dependsOnTaskIds column - JSON array of task IDs this task depends on
+  // Migration: add dependsOnTaskIds column — JSON array of task IDs this task depends on
   try {
     db.exec("ALTER TABLE tasks ADD COLUMN dependsOnTaskIds TEXT");
   } catch (err) {
-    // SQLite doesn't support IF NOT EXISTS on ADD COLUMN - swallow duplicate column error
+    // SQLite doesn't support IF NOT EXISTS on ADD COLUMN — swallow duplicate column error
     const msg = err instanceof Error ? err.message : String(err);
     if (!/duplicate column/i.test(msg)) throw err;
   }

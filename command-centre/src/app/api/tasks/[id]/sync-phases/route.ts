@@ -36,7 +36,7 @@ export async function POST(
       );
     }
 
-    // Read ROADMAP.md - prefer the parent task's projectSlug
+    // Read ROADMAP.md — prefer the parent task's projectSlug
     const resolved = resolvePlanningDir({ overrideSlug: parent.projectSlug });
     if (!resolved) {
       return NextResponse.json(
@@ -125,7 +125,7 @@ export async function POST(
           status = "backlog";
         }
 
-        const title = `Phase ${phase.number}: ${STEP_TITLES[step]} - ${phase.name}`;
+        const title = `Phase ${phase.number}: ${STEP_TITLES[step]} — ${phase.name}`;
         const columnOrder = phase.number * 100 + stepIdx;
 
         const inheritedPermissionMode = getActivePermissionMode(

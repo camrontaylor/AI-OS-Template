@@ -13,7 +13,7 @@ import {
 } from "@/types/question-spec";
 
 /**
- * Screen C - L2 Planned Project scoping wizard.
+ * Screen C — L2 Planned Project scoping wizard.
  *
  * A modal that walks the user through three steps:
  *   1. Review routing decision + edit project name
@@ -63,7 +63,7 @@ function slugifyName(name: string): string {
 
 // Strip common request-filler prefixes so "help me connect up to the telegram
 // channel" doesn't end up titled "Help Me Connect Up To". This is a fallback
-// only - the scoping LLM produces a better title via scope.projectTitle.
+// only — the scoping LLM produces a better title via scope.projectTitle.
 function deriveProjectName(goal: string, scopeTitle?: string | null): string {
   if (scopeTitle && scopeTitle.trim().length > 0) {
     return scopeTitle.trim();
@@ -137,7 +137,7 @@ function savePersistedState(goal: string, state: PersistedWizardState): void {
       JSON.stringify(state),
     );
   } catch {
-    /* quota exceeded or blocked - silent */
+    /* quota exceeded or blocked — silent */
   }
 }
 
@@ -161,7 +161,7 @@ export interface ScopingWizardInlineProps {
 }
 
 /**
- * Inline version of the scoping wizard - renders wizard content directly
+ * Inline version of the scoping wizard — renders wizard content directly
  * without a modal overlay. Designed to be embedded inside the DetailPanel
  * after a goal is routed to "project" level.
  */
@@ -273,7 +273,7 @@ function ScopingWizardCore({
 
   // Reset transient state whenever the modal is (re)opened.
   // If a persisted draft exists for this goal, hydrate from it instead of
-  // seeding from scratch - this preserves progress when the user
+  // seeding from scratch — this preserves progress when the user
   // accidentally dismisses the modal.
   useEffect(() => {
     if (!open) {
@@ -454,11 +454,11 @@ function ScopingWizardCore({
             return next;
           });
           setPlanNote(
-            `Claude needs a bit more info before breaking this down - ${fresh.length} more question${fresh.length === 1 ? "" : "s"} below.`
+            `Claude needs a bit more info before breaking this down — ${fresh.length} more question${fresh.length === 1 ? "" : "s"} below.`
           );
           return { kind: "followup" };
         }
-        // Fall through - Sonnet only repeated known questions
+        // Fall through — Sonnet only repeated known questions
       }
 
       const planned = data.suggestedSubtasks ?? [];
@@ -619,7 +619,7 @@ function ScopingWizardCore({
     <>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
 
-      {/* Header - only shown in modal variant; inline uses DetailPanel header */}
+      {/* Header — only shown in modal variant; inline uses DetailPanel header */}
       {variant === "modal" && (
         <div
           style={{
@@ -684,7 +684,7 @@ function ScopingWizardCore({
         </div>
       )}
 
-      {/* Inline header - compact step title for panel mode */}
+      {/* Inline header — compact step title for panel mode */}
       {variant === "inline" && (
         <div
           style={{
@@ -751,7 +751,7 @@ function ScopingWizardCore({
           ))}
         </div>
 
-        {/* Sticky project name bar - visible and editable across all steps.
+        {/* Sticky project name bar — visible and editable across all steps.
             Lifted out of Step 1 so the name is front and centre the moment
             the modal opens, and can be refined later without scrolling back. */}
         <div
@@ -929,7 +929,7 @@ function ScopingWizardCore({
           {step < 3 ? (() => {
             const requiredAnswered = areAnswersComplete(questionSpecs, clarificationAnswers);
             const step1Ok = Boolean(projectName.trim()) && requiredAnswered && !planning;
-            // Step 2 no longer forces subtasks - empty is allowed (user can
+            // Step 2 no longer forces subtasks — empty is allowed (user can
             // create the project and queue work later). We just gate on not
             // being mid-generation.
             const step2Ok = !planning;
@@ -945,7 +945,7 @@ function ScopingWizardCore({
                   if (!canAdvance) return;
                   if (step === 1 && !hasAutoPlanned) {
                     const result = await autoPlanFromAnswers();
-                    // If Sonnet asked for more info, stay on Step 1  - 
+                    // If Sonnet asked for more info, stay on Step 1 —
                     // the new questions are now merged into questionSpecs.
                     if (result.kind !== "subtasks") return;
                   }
@@ -1038,7 +1038,7 @@ function ScopingWizardCore({
   // ── Modal: wrap in overlay + centered dialog ──
   return (
     <>
-      {/* Overlay - intentionally NOT click-to-close */}
+      {/* Overlay — intentionally NOT click-to-close */}
       <div
         style={{
           position: "fixed",
@@ -1124,7 +1124,7 @@ function Step1Review({
           {planNote}
         </div>
       )}
-      {/* Clarifying questions - typed form, top of the step */}
+      {/* Clarifying questions — typed form, top of the step */}
       {questions.length > 0 && (
         <section>
           <SectionLabel>Answer these to shape the plan</SectionLabel>
@@ -1137,7 +1137,7 @@ function Step1Review({
               lineHeight: 1.5,
             }}
           >
-            Claude needs a bit more context before breaking this into subtasks. Answer what you can - blanks get sensible defaults.
+            Claude needs a bit more context before breaking this into subtasks. Answer what you can — blanks get sensible defaults.
           </div>
           <QuestionModal
             variant="inline"
@@ -1324,7 +1324,7 @@ function Step2Subtasks({
           }}
         >
           Here&apos;s a first-pass breakdown based on your answers. Edit,
-          reorder, or add more before creating the project - or just hit
+          reorder, or add more before creating the project — or just hit
           Next to go with this plan.
         </div>
       )}
@@ -1342,7 +1342,7 @@ function Step2Subtasks({
           }}
         >
           {planNote ??
-            "Planner was unavailable - showing a generic scaffold. Edit or replace these before creating the project."}
+            "Planner was unavailable — showing a generic scaffold. Edit or replace these before creating the project."}
         </div>
       )}
       {rows.length === 0 && (
@@ -1584,7 +1584,7 @@ function Step3Confirm({
             containing your goal and every clarification you just answered.
             Because there&apos;s no predefined breakdown, the first time you
             run work against this project Claude will read the brief and plan
-            the subtasks itself - you can start that from the project page
+            the subtasks itself — you can start that from the project page
             any time.
           </>
         ) : (
@@ -1653,7 +1653,7 @@ function LoadedContextCard({
               lineHeight: 1.5,
             }}
           >
-            Read {summaryParts.join(" + ")} before drafting questions - answers will reflect what we already know.
+            Read {summaryParts.join(" + ")} before drafting questions — answers will reflect what we already know.
           </div>
         </div>
         <button

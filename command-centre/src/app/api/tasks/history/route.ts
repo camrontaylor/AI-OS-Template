@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
 
     // Status filter
     if (status === "done") {
-      // Override the IN clause - only done
+      // Override the IN clause — only done
       conditions[0] = "status = 'done'";
     } else if (status === "review") {
       conditions[0] = "status = 'review'";

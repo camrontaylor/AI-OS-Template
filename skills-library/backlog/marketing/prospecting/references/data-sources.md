@@ -12,7 +12,7 @@ Tool selection guide for prospecting across all three branches.
 | **Decision-maker mapping** | LinkedIn Sales Navigator (manual), Apollo, ZoomInfo | Sales Nav is the gold standard. Never bulk scrape it. |
 | **Tech stack qualification (SaaS)** | BuiltWith, Wappalyzer | BuiltWith has wider coverage + paid plans for bulk; Wappalyzer is lighter + free for small use |
 | **Funding signals (SaaS)** | Crunchbase, Pitchbook | Crunchbase free tier sufficient for early signals; Pitchbook for deeper investor data |
-| **Email pattern discovery** | Hunter, Snov, Apollo | Pattern guessing - followed by verification |
+| **Email pattern discovery** | Hunter, Snov, Apollo | Pattern guessing — followed by verification |
 | **Email deliverability verification** | Truelist, Hunter, NeverBounce, ZeroBounce | Always verify before adding to outreach lists |
 | **Visitor identification (warm intent)** | RB2B, Clearbit Reveal | Anonymous traffic → company identification |
 | **Intent data** | ZoomInfo Intent, 6sense, Bombora | Pre-warmed signals; mid-market+ pricing |
@@ -32,8 +32,8 @@ Tool selection guide for prospecting across all three branches.
 - Pay-as-you-go and tiered plans
 
 **Watch out for**:
-- Data freshness varies - re-verify before scoring as "Hot"
-- Email accuracy ~60-80% - always validate
+- Data freshness varies — re-verify before scoring as "Hot"
+- Email accuracy ~60–80% — always validate
 - Bulk export limits apply
 
 **Integration**: see [apollo.md](../../../tools/integrations/apollo.md)
@@ -53,7 +53,7 @@ Tool selection guide for prospecting across all three branches.
 
 **Watch out for**:
 - Per-credit pricing can spike on large lists
-- Complexity overhead - easy to over-engineer workflows
+- Complexity overhead — easy to over-engineer workflows
 
 **Integration**: see [clay.md](../../../tools/integrations/clay.md)
 
@@ -89,7 +89,7 @@ Tool selection guide for prospecting across all three branches.
 - API-first
 
 **Watch out for**:
-- HubSpot acquisition (2023) - bundled into HubSpot Breeze Intelligence now
+- HubSpot acquisition (2023) — bundled into HubSpot Breeze Intelligence now
 - Standalone API still available but pricing/access depends on tier
 
 **Integration**: see [clearbit.md](../../../tools/integrations/clearbit.md)
@@ -111,7 +111,7 @@ Tool selection guide for prospecting across all three branches.
 - Cheaper than Hunter at scale
 
 **Watch out for**:
-- Both are pattern-guessing tools - accuracy depends on the target company's email pattern being inferable
+- Both are pattern-guessing tools — accuracy depends on the target company's email pattern being inferable
 - Always run results through a dedicated validator (Truelist or similar) before outreach
 
 **Integrations**: see [hunter.md](../../../tools/integrations/hunter.md), [snov.md](../../../tools/integrations/snov.md)
@@ -131,7 +131,7 @@ Tool selection guide for prospecting across all three branches.
 - Native integrations with Mailchimp, Klaviyo, HubSpot, Zapier, Make, n8n, Clay, Salesforce, more
 - Pay-per-email pricing
 
-**Why this matters**: Cold email reputation craters when bounce rates exceed 2%. Validating before sending is non-negotiable. Apollo/ZoomInfo/Hunter data is often 60-80% accurate - Truelist catches the rest.
+**Why this matters**: Cold email reputation craters when bounce rates exceed 2%. Validating before sending is non-negotiable. Apollo/ZoomInfo/Hunter data is often 60–80% accurate — Truelist catches the rest.
 
 **Integration**: see [truelist.md](../../../tools/integrations/truelist.md)
 
@@ -149,8 +149,8 @@ Tool selection guide for prospecting across all three branches.
 
 **Hard rules**:
 - **Never bulk scrape**. LinkedIn aggressively bans scrapers. Account ban risk is real and permanent.
-- Use Sales Nav as a research interface - open profiles, read, take notes, capture key data manually.
-- Apollo and other tools claim LinkedIn data via partnerships / public mirroring - verify the source legitimacy before assuming compliance.
+- Use Sales Nav as a research interface — open profiles, read, take notes, capture key data manually.
+- Apollo and other tools claim LinkedIn data via partnerships / public mirroring — verify the source legitimacy before assuming compliance.
 
 **Integration**: no MCP or API access at consumer level. Manual research only.
 
@@ -185,13 +185,13 @@ Cross-reference both for high-confidence tech stack signals.
 
 **Watch out for**:
 - Coverage is best for VC-backed companies; bootstrapped + small businesses underrepresented
-- Self-reported data - verify funding amounts independently
+- Self-reported data — verify funding amounts independently
 
 ---
 
 ## GitHub (stargazers / forks / watchers)
 
-**Use for**: Developer-intent prospecting. Especially powerful for dev-tool SaaS - stargazers of competitor or category-defining repos are in-market signal.
+**Use for**: Developer-intent prospecting. Especially powerful for dev-tool SaaS — stargazers of competitor or category-defining repos are in-market signal.
 
 **Strengths**:
 - Public API, no scraping concerns
@@ -201,9 +201,9 @@ Cross-reference both for high-confidence tech stack signals.
 - Free with 5,000 req/hr authenticated rate limit
 
 **Watch out for**:
-- Only ~5-20% of users publish email - pair with Apollo/Clay/Hunter for enrichment
-- Very-popular repos (100K+ stars) are mostly noise; smaller targeted repos (5K-25K) give better signal density
-- Most prospects are individuals, not company contacts directly - need to figure out their company from `company` field or LinkedIn
+- Only ~5–20% of users publish email — pair with Apollo/Clay/Hunter for enrichment
+- Very-popular repos (100K+ stars) are mostly noise; smaller targeted repos (5K–25K) give better signal density
+- Most prospects are individuals, not company contacts directly — need to figure out their company from `company` field or LinkedIn
 
 **Integration**: see [github.md](../../../tools/integrations/github.md)
 
@@ -215,13 +215,13 @@ Cross-reference both for high-confidence tech stack signals.
 
 ### Firecrawl
 
-- **Best for**: "Just give me the page as markdown" - Local SMB website status checks, B2B company about/team page extraction, structured field extraction
+- **Best for**: "Just give me the page as markdown" — Local SMB website status checks, B2B company about/team page extraction, structured field extraction
 - **Strengths**: Low overhead, returns clean LLM-ready markdown, handles most JS-rendered sites, has an MCP server
 - **API + MCP + SDKs**: Node, Python, Go, Rust
 
 ### Browserbase
 
-- **Best for**: When you need real Chromium - JS-heavy pages, cookie consent dialogs, form submission to reach a contact page, session state
+- **Best for**: When you need real Chromium — JS-heavy pages, cookie consent dialogs, form submission to reach a contact page, session state
 - **Strengths**: Full browser control via Playwright/Puppeteer; Stagehand provides AI-friendly natural-language extraction; session recordings for debugging
 - **API + MCP (Stagehand) + SDKs**: Node, Python
 
@@ -248,7 +248,7 @@ Discovery happens on platforms (manual browser-assisted research). Extraction ha
 - Slack / email alerts on key visits
 
 **Watch out for**:
-- Privacy/GDPR considerations - verify your privacy policy disclosures
+- Privacy/GDPR considerations — verify your privacy policy disclosures
 - Person-level identification raises higher concerns than company-level
 
 **Integration**: see [rb2b.md](../../../tools/integrations/rb2b.md)
@@ -259,14 +259,14 @@ Discovery happens on platforms (manual browser-assisted research). Extraction ha
 
 When the user has no paid tools, lean on:
 
-- **Google Search** - exact business name + city + role searches
-- **LinkedIn** (manual, no scraping) - company pages, employee lookups
-- **Crunchbase free tier** - funding events
-- **Wappalyzer browser extension** - tech stack at a glance
-- **Hunter.io free tier** - 25 lookups/month
-- **Google Maps** - for Local SMB discovery
-- **Business websites + About pages** - primary source for any claim
-- **News sites + press releases** - trigger event monitoring via Google Alerts
+- **Google Search** — exact business name + city + role searches
+- **LinkedIn** (manual, no scraping) — company pages, employee lookups
+- **Crunchbase free tier** — funding events
+- **Wappalyzer browser extension** — tech stack at a glance
+- **Hunter.io free tier** — 25 lookups/month
+- **Google Maps** — for Local SMB discovery
+- **Business websites + About pages** — primary source for any claim
+- **News sites + press releases** — trigger event monitoring via Google Alerts
 
 Slower than tooled-up workflows, but produces high-quality smaller lists if the user is willing to do the work.
 

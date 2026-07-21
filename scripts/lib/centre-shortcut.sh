@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-AGENTIC_OS_CENTRE_BLOCK_START="# >>> AI-OS - command centre launcher >>>"
-AGENTIC_OS_CENTRE_BLOCK_END="# <<< AI-OS - command centre launcher <<<"
+AGENTIC_OS_CENTRE_BLOCK_START="# >>> Agentic OS - command centre launcher >>>"
+AGENTIC_OS_CENTRE_BLOCK_END="# <<< Agentic OS - command centre launcher <<<"
 AGENTIC_OS_CENTRE_LEGACY_MARKER="# Agentic OS - command centre launcher"
 
 AGENTIC_OS_CENTRE_SCAN_COUNT=0
@@ -132,10 +132,10 @@ agentic_os_centre_extract_unix_path() {
 
     case "$target_type" in
         fish)
-            sed -n "s#^[[:space:]]*alias[[:space:]][[:space:]]*centre[[:space:]][[:space:]]*'bash \"\\([^\"]*\\)\"'[[:space:]]*\$#\\1#p" "$rc_path" | tail -n 1
+            sed -n "s#^[[:space:]]*alias[[:space:]]\\+centre[[:space:]]\\+'bash \"\\([^\"]*\\)\"'[[:space:]]*\$#\\1#p" "$rc_path" | tail -n 1
             ;;
         *)
-            sed -n "s#^[[:space:]]*alias[[:space:]][[:space:]]*centre='bash \"\\([^\"]*\\)\"'[[:space:]]*\$#\\1#p" "$rc_path" | tail -n 1
+            sed -n "s#^[[:space:]]*alias[[:space:]]\\+centre='bash \"\\([^\"]*\\)\"'[[:space:]]*\$#\\1#p" "$rc_path" | tail -n 1
             ;;
     esac
 }

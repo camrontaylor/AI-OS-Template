@@ -112,7 +112,7 @@ function Show-Banner {
     Clear-Host
     Write-Host ""
     Write-Host "    ==============================================" -ForegroundColor Cyan
-    Write-Host "                  A I - O S" -ForegroundColor Cyan
+    Write-Host "             A G E N T I C   O S" -ForegroundColor Cyan
     Write-Host "            Guided First-Time Install" -ForegroundColor Cyan
     Write-Host "    ==============================================" -ForegroundColor Cyan
     if ($AgenticOsVersion -eq "unknown") {
@@ -230,9 +230,7 @@ function Setup-SearchableMemory {
 
     Write-Host "  Choose where to enable searchable memory:"
     Write-Host "    1. Claude Code only (recommended)"
-    Write-Host "    2. Codex only"
-    Write-Host "    3. Claude Code + Codex"
-    Write-Host "    4. Skip for now"
+    Write-Host "    2. Skip for now"
     Write-Host ""
     $reply = Read-Host "  Selection [1]"
     if ([string]::IsNullOrWhiteSpace($reply)) {
@@ -242,9 +240,7 @@ function Setup-SearchableMemory {
     $target = ""
     switch ($reply) {
         "1" { $target = "claude" }
-        "2" { $target = "codex" }
-        "3" { $target = "both" }
-        "4" {
+        "2" {
             Warn "Skipped searchable memory setup."
             Write-Host "  Semantic recall, older memory search,"
             Write-Host "  expanded search, and stronger citations will be unavailable until enabled."
@@ -281,7 +277,7 @@ function Setup-GitHubRepo {
     $script:GitHubDecision = "unknown"
 
     $upstreamOwner = "camrontaylor"
-    $upstreamRepo = "ai-os-template"
+    $upstreamRepo = "AI-OS-Template"
     $originUrl = ""
     $isUpstream = $false
 
@@ -355,7 +351,7 @@ function Setup-GitHubRepo {
 
     # If origin still points at the canonical repo, move it to `upstream` BEFORE
     # creating the fork. Otherwise `gh repo create --remote=origin` collides with
-    # the existing origin remote and silently fails - leaving the user with no
+    # the existing origin remote and silently fails — leaving the user with no
     # remote pointing at the canonical repo, which breaks update.sh.
     if ($isUpstream) {
         & git -C $RepoRoot remote get-url upstream *> $null
@@ -386,7 +382,7 @@ function Setup-GitHubRepo {
 
     Warn "Automatic repo creation failed."
     if ($isUpstream) {
-        Warn "Canonical repo is now at the 'upstream' remote - updates will still work."
+        Warn "Canonical repo is now at the 'upstream' remote — updates will still work."
     }
     $script:GitHubDecision = "failed"
 }

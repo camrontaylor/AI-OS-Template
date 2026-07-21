@@ -3,7 +3,7 @@
 #
 # Creates a git worktree on its own branch (branched from main so it starts clean),
 # then links the shared brain (memory, secrets, runtime state) into it. Open the
-# printed folder in Claude, Codex, or Cursor: it can never collide with your other
+# printed folder in Claude or Cursor: it can never collide with your other
 # sessions, and it shares the same memory as every other session.
 #
 # Usage:  bash scripts/worktree-new.sh <name>     (e.g. worktree-new.sh redesign)
@@ -18,7 +18,7 @@ fi
 ROOT="$(cd "$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)/.." 2>/dev/null && pwd)"
 [[ -z "${ROOT:-}" ]] && { echo "not inside a git repo." >&2; exit 1; }
 REPO="$(basename "$ROOT")"
-DIR="$HOME/Desktop/Worktrees/$REPO/$NAME"
+DIR="$ROOT/.worktrees/$NAME"
 BRANCH="work/$NAME"
 
 # Base the worktree on main so it starts clean; fall back to current branch.
@@ -31,7 +31,7 @@ if git -C "$ROOT" worktree add -b "$BRANCH" "$DIR" "$BASEREF" 2>/dev/null; then
   echo "Isolated session ready (branch $BRANCH, based on $BASEREF):"
   echo "  $DIR"
   echo ""
-  echo "Open THAT folder in Claude / Codex / Cursor. It shares your memory but cannot collide."
+  echo "Open THAT folder in Claude or Cursor. It shares your memory but cannot collide."
   echo "When finished:  bash scripts/worktree-done.sh $NAME"
 else
   echo "Could not create it - branch '$BRANCH' or folder '$DIR' may already exist. Try another name." >&2

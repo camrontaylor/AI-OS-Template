@@ -1,8 +1,8 @@
 ---
 name: pricing
-description: "When the user wants help with pricing decisions, packaging, or monetization strategy. Also use when the user mentions 'pricing,' 'pricing tiers,' 'freemium,' 'free trial,' 'packaging,' 'price increase,' 'value metric,' 'Van Westendorp,' 'willingness to pay,' 'monetization,' 'how much should I charge,' 'my pricing is wrong,' 'pricing page,' 'annual vs monthly,' 'per seat pricing,' or 'should I offer a free plan.' Use this whenever someone is figuring out what to charge or how to structure their plans. For in-app upgrade screens, see paywalls."
+description: "When the user wants help with pricing decisions, packaging, or monetization strategy. Also use when the user mentions 'pricing,' 'pricing tiers,' 'freemium,' 'free trial,' 'packaging,' 'price increase,' 'value metric,' 'Van Westendorp,' 'willingness to pay,' 'monetization,' 'how much should I charge,' 'my pricing is wrong,' 'pricing page,' 'annual vs monthly,' 'per seat pricing,' or 'should I offer a free plan.' Use this whenever someone is figuring out what to charge or how to structure their plans. For in-app upgrade screens, see paywalls. For offer construction (bonuses, guarantees, value framing, naming) on services/courses/coaching/high-ticket B2B, see offers."
 metadata:
-  version: 2.0.0
+  version: 2.0.1
 ---
 
 # Pricing Strategy
@@ -42,15 +42,15 @@ Gather this context (ask if not provided):
 
 ### The Three Pricing Axes
 
-**1. Packaging** - What's included at each tier?
+**1. Packaging** — What's included at each tier?
 - Features, limits, support level
 - How tiers differ from each other
 
-**2. Pricing Metric** - What do you charge for?
+**2. Pricing Metric** — What do you charge for?
 - Per user, per usage, flat fee
 - How price scales with value
 
-**3. Price Point** - How much do you charge?
+**3. Price Point** — How much do you charge?
 - The actual dollar amounts
 - Perceived value vs. cost
 
@@ -58,10 +58,10 @@ Gather this context (ask if not provided):
 
 Price should be based on value delivered, not cost to serve:
 
-- **Customer's perceived value** - The ceiling
-- **Your price** - Between alternatives and perceived value
-- **Next best alternative** - The floor for differentiation
-- **Your cost to serve** - Only a baseline, not the basis
+- **Customer's perceived value** — The ceiling
+- **Your price** — Between alternatives and perceived value
+- **Next best alternative** — The floor for differentiation
+- **Your cost to serve** — Only a baseline, not the basis
 
 **Key insight:** Price between the next best alternative and perceived value.
 
@@ -71,7 +71,7 @@ Price should be based on value delivered, not cost to serve:
 
 ### What is a Value Metric?
 
-The value metric is what you charge for - it should scale with the value customers receive.
+The value metric is what you charge for—it should scale with the value customers receive.
 
 **Good value metrics:**
 - Align price with value delivered
@@ -108,10 +108,10 @@ Ask: "As a customer uses more of [metric], do they get more value?"
 
 ### Tier Differentiation
 
-- **Feature gating** - Basic vs. advanced features
-- **Usage limits** - Same features, different limits
-- **Support level** - Email → Priority → Dedicated
-- **Access** - API, SSO, custom branding
+- **Feature gating** — Basic vs. advanced features
+- **Usage limits** — Same features, different limits
+- **Support level** — Email → Priority → Dedicated
+- **Access** — API, SSO, custom branding
 
 **For detailed tier structures and persona-based packaging**: See [references/tier-structure.md](references/tier-structure.md)
 
@@ -160,10 +160,10 @@ Identifies which features customers value most:
 
 ### Price Increase Strategies
 
-1. **Grandfather existing** - New price for new customers only
-2. **Delayed increase** - Announce 3-6 months out
-3. **Tied to value** - Raise price but add features
-4. **Plan restructure** - Change plans entirely
+1. **Grandfather existing** — New price for new customers only
+2. **Delayed increase** — Announce 3-6 months out
+3. **Tied to value** — Raise price but add features
+4. **Plan restructure** — Change plans entirely
 
 ---
 

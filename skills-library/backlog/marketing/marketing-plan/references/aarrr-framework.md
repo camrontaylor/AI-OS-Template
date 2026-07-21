@@ -1,4 +1,4 @@
-# AARRR Framework - Primer for Plan Sequencing
+# AARRR Framework — Primer for Plan Sequencing
 
 AARRR (Dave McClure's "pirate metrics") is the spine of every plan produced by this skill. This doc is the primer + the decision rules for when each stage gets prioritized.
 
@@ -24,16 +24,16 @@ Three reasons.
 
 **3. The Revenue / Referral conversation is honest.** Most marketing plans bury monetization under "growth" and treat referral as wishful thinking. AARRR forces explicit treatment of both.
 
-## Brand and content - not a stage, cross-cutting
+## Brand and content — not a stage, cross-cutting
 
-A common mistake: making "Brand" or "Content" the sixth bucket. They're not - they serve every stage.
+A common mistake: making "Brand" or "Content" the sixth bucket. They're not — they serve every stage.
 
 - **Brand voice** governs every piece of copy across every stage
 - **Content** feeds Acquisition (SEO, social), Activation (onboarding copy), Retention (email lifecycle), Referral (ambassador talking points), Revenue (pricing pages, sales material)
 
-In the plan, brand/content shows up as the strategic frame (Section 2) and cross-cutting in Section 11's ops stack - never as its own AARRR section.
+In the plan, brand/content shows up as the strategic frame (Section 2) and cross-cutting in Section 11's ops stack — never as its own AARRR section.
 
-## Diagnosing the binding constraint - which AARRR stage is highest leverage?
+## Diagnosing the binding constraint — which AARRR stage is highest leverage?
 
 For every client, one or two AARRR stages will be the binding constraint. The plan sequences moves there first.
 
@@ -53,7 +53,7 @@ For every client, one or two AARRR stages will be the binding constraint. The pl
 
 ### If activation works but users churn → start with Retention
 - Month 1 retention is below category norms
-- Activated users stop using within 7-14 days
+- Activated users stop using within 7–14 days
 - LTV is short
 - Leverage = lifecycle, deepening engagement, churn prevention
 
@@ -129,7 +129,7 @@ For every client, one or two AARRR stages will be the binding constraint. The pl
 - Gifting flows (consumer / hardware)
 - Two-sided referrals (reward both referrer and referred)
 
-**Sequencing principle:** Lead with whoever is already raising their hand. If there are 5 inbound ambassadors, launch with those 5 - don't wait for a "complete program." Iterate based on what they tell you.
+**Sequencing principle:** Lead with whoever is already raising their hand. If there are 5 inbound ambassadors, launch with those 5 — don't wait for a "complete program." Iterate based on what they tell you.
 
 ### Revenue
 
@@ -141,9 +141,9 @@ For every client, one or two AARRR stages will be the binding constraint. The pl
 - Hardware → software bundling formalization
 - Storefront / commerce page optimization
 - B2B case studies + sales material
-- Long-term value pool flags (data, expansion, enterprise) - flagged not executed
+- Long-term value pool flags (data, expansion, enterprise) — flagged not executed
 
-**Sequencing principle:** Run the pricing audit before testing changes. Surprisingly often, the "implied" pricing on the dashboard doesn't match the listed price - discounts, trials, or plan mix distorts the read. Surface the ground truth first.
+**Sequencing principle:** Run the pricing audit before testing changes. Surprisingly often, the "implied" pricing on the dashboard doesn't match the listed price — discounts, trials, or plan mix distorts the read. Surface the ground truth first.
 
 ## How to assign a move to a stage
 
@@ -152,16 +152,16 @@ Some moves clearly belong to one stage. Others span. The rule:
 **Assign to the stage where the move's primary measurable impact lands.**
 
 Examples:
-- "Rewrite App Store listing in voice" - spans Acquisition (organic discovery) and Activation (threshold to trial). Primary impact = Activation (trial conversion rate). Assign to Activation, mention crossover.
-- "Eye mask Shopify page rewrite" - spans Acquisition (organic search for sleep mask) and Revenue (sale conversion). Primary impact = Revenue (transaction). Assign to Revenue, mention crossover.
-- "Alex's LinkedIn cadence" - Acquisition (top of funnel for D2C subscribers).
-- "Customer.io Flow 6 (eye mask post-purchase)" - Retention (deepens hardware buyer engagement) with crossover to Activation (hardware → app premium activation path).
+- "Rewrite App Store listing in voice" — spans Acquisition (organic discovery) and Activation (threshold to trial). Primary impact = Activation (trial conversion rate). Assign to Activation, mention crossover.
+- "Eye mask Shopify page rewrite" — spans Acquisition (organic search for sleep mask) and Revenue (sale conversion). Primary impact = Revenue (transaction). Assign to Revenue, mention crossover.
+- "Alex's LinkedIn cadence" — Acquisition (top of funnel for D2C subscribers).
+- "Customer.io Flow 6 (eye mask post-purchase)" — Retention (deepens hardware buyer engagement) with crossover to Activation (hardware → app premium activation path).
 
 When in doubt: where would removing this move hurt the most? Assign there.
 
 ## When the AARRR breakdown isn't equal
 
-For most clients, the plan won't have equal volume across stages. That's fine - and worth surfacing as a diagnostic.
+For most clients, the plan won't have equal volume across stages. That's fine — and worth surfacing as a diagnostic.
 
 - **Heavy Acquisition section** = client has product-market fit but top-of-funnel is the bottleneck. Common for early-stage with strong retention metrics.
 - **Heavy Activation section** = client has traffic but conversion is broken. Often beta-stage products.
@@ -169,7 +169,7 @@ For most clients, the plan won't have equal volume across stages. That's fine - 
 - **Heavy Referral section** = client has loyalty but no WOM mechanics. Often consumer products with passionate users.
 - **Heavy Revenue section** = client is underpricing or missing monetization layers. Common for tools transitioning from free to paid.
 
-If a plan ends up evenly distributed across all five stages, the diagnostic was probably weak - re-examine the funnel state intake to find where the binding constraint is.
+If a plan ends up evenly distributed across all five stages, the diagnostic was probably weak — re-examine the funnel state intake to find where the binding constraint is.
 
 ## A note on the order of presentation
 
@@ -177,4 +177,4 @@ Always present AARRR in order (Acquisition → Activation → Retention → Refe
 
 This is for the reader's mental model. Founders expect the funnel to flow top-to-bottom. If Retention is the most-leveraged stage but you lead with Retention, the reader has to context-switch.
 
-To signal priority, use the executive summary (Section 1) - name the biggest bets there. The AARRR breakdown then walks the funnel in order, with the most leverage-positive section being the longest and most-detailed.
+To signal priority, use the executive summary (Section 1) — name the biggest bets there. The AARRR breakdown then walks the funnel in order, with the most leverage-positive section being the longest and most-detailed.

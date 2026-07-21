@@ -106,7 +106,7 @@ migration_from:
 
 ## Your Product Data
 
-Same structure for yourself - be honest:
+Same structure for yourself—be honest:
 
 ```yaml
 name: [Your Product]
@@ -168,9 +168,9 @@ Each page pulls from centralized data:
 
 Looking to switch? See how [Your Product] compares to the tools you're evaluating:
 
-- **[Notion Alternative](/alternatives/notion)** - Better for teams who need [X]
-- **[Airtable Alternative](/alternatives/airtable)** - Better for teams who need [Y]
-- **[Monday Alternative](/alternatives/monday)** - Better for teams who need [Z]
+- **[Notion Alternative](/alternatives/notion)** — Better for teams who need [X]
+- **[Airtable Alternative](/alternatives/airtable)** — Better for teams who need [Y]
+- **[Monday Alternative](/alternatives/monday)** — Better for teams who need [Z]
 ```
 
 ---
@@ -183,8 +183,8 @@ Looking to switch? See how [Your Product] compares to the tools you're evaluatin
 
 **Page structure**:
 1. Headline: "Compare [Your Product]"
-2. Section: "[Your Product] vs Competitors" - list of direct comparisons
-3. Section: "Head-to-Head Comparisons" - list of [A] vs [B] pages
+2. Section: "[Your Product] vs Competitors" — list of direct comparisons
+3. Section: "Head-to-Head Comparisons" — list of [A] vs [B] pages
 4. Brief methodology note
 5. CTA
 
@@ -266,6 +266,6 @@ Footer
 ### Implementation Notes
 
 - Update footer when adding new high-priority comparison pages
-- Keep footer clean - don't list every comparison, just the top ones
+- Keep footer clean—don't list every comparison, just the top ones
 - Match column headers to your URL structure (e.g., "vs" column → `/vs/` URLs)
 - Consider mobile: columns may stack, so order by priority

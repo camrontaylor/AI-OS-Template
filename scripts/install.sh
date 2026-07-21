@@ -115,7 +115,7 @@ print_banner() {
     cat <<'BANNER'
     ╔══════════════════════════════════════════════╗
     ║                                              ║
-    ║                 A I - O S                    ║
+    ║            A G E N T I C   O S               ║
     ║                                              ║
     ║          Guided First-Time Install           ║
     ║                                              ║
@@ -155,14 +155,7 @@ check_prerequisites() {
     if command -v node &>/dev/null; then
         [[ "$MODE" == "guided" ]] && success "node $(node --version 2>&1)"
     else
-        # Node is NOT a hard blocker. Skills and memory work without it.
-        # Only the Command Centre dashboard needs Node, so make that loud and clear
-        # instead of failing the whole install. centre.sh gives the same actionable
-        # message and exits cleanly if Node is still missing when you open it.
-        warn "Node.js not found."
-        echo "      The rest of AI-OS works fine without Node - skills and memory do not need it."
-        echo "      But the Command Centre dashboard will NOT run until Node is installed."
-        echo "      Install Node.js from https://nodejs.org, then run 'centre' to open the dashboard."
+        warn "Node.js not found - the command centre will not run until Node is installed."
     fi
 
     if resolve_python_cmd; then
@@ -170,21 +163,6 @@ check_prerequisites() {
         if is_windows_shell && [[ $PYTHON3_DIAGNOSTIC_BROKEN -eq 1 ]]; then
             warn "Windows exposes a broken python3 at ${PYTHON3_DIAGNOSTIC_PATH}."
             warn "AI-OS will use '${PYTHON_LABEL}' instead."
-        fi
-        # tool-youtube needs Python 3.10 or newer.
-        # The core system is fine on any Python 3, so this is a notice, not a blocker.
-        if [[ -n "${PYTHON_VERSION:-}" ]]; then
-            local py_major py_minor
-            py_major="$(printf '%s' "$PYTHON_VERSION" | cut -d. -f1)"
-            py_minor="$(printf '%s' "$PYTHON_VERSION" | cut -d. -f2)"
-            if [[ "$py_major" =~ ^[0-9]+$ && "$py_minor" =~ ^[0-9]+$ ]]; then
-                if [[ "$py_major" -lt 3 || ( "$py_major" -eq 3 && "$py_minor" -lt 10 ) ]]; then
-                    warn "Python ${PYTHON_VERSION} is older than 3.10."
-                    echo "      The core system is fine. tool-youtube needs Python 3.10 or newer."
-                    echo "      The easiest fix is 'uv', which fetches a"
-                    echo "      newer Python automatically (https://docs.astral.sh/uv/)."
-                fi
-            fi
         fi
     else
         fail "Python 3 not found - install from https://www.python.org/downloads/"
@@ -256,23 +234,19 @@ setup_searchable_memory() {
 
     echo "  Choose where to enable searchable memory:"
     echo "    1. Claude Code only (recommended)"
-    echo "    2. Codex only"
-    echo "    3. Claude Code + Codex"
-    echo "    4. Skip for now"
+    echo "    2. Skip for now"
     echo ""
     printf "  Selection ${DIM}[1]${NC} "
 
     local reply target
     if ! read -r reply; then
-        reply="4"
+        reply="2"
     fi
     reply="${reply:-1}"
 
     case "$reply" in
         1) target="claude" ;;
-        2) target="codex" ;;
-        3) target="both" ;;
-        4)
+        2)
             warn "Skipped searchable memory setup."
             echo "  Semantic recall, older memory search,"
             echo "  expanded search, and stronger citations will be unavailable until enabled."
@@ -312,7 +286,7 @@ setup_searchable_memory() {
 
 setup_github_repo() {
     local upstream_owner="camrontaylor"
-    local upstream_repo="ai-os-template"
+    local upstream_repo="AI-OS-Template"
     local origin_url=""
     local is_upstream=0
 
@@ -321,10 +295,36 @@ setup_github_repo() {
         is_upstream=1
     fi
 
-    if [[ -n "$origin_url" ]] && [[ $is_upstream -eq 0 ]]; then
+    # Team checkout: origin points at the SHARED team repo (per .aios-team.json).
+    # Do not treat that as the teammate's private backup - help them make their own.
+    local is_team=0
+    local team_remote_slug=""
+    if [[ -f "$REPO_ROOT/.aios-team.json" ]]; then
+        team_remote_slug="$(sed -n 's/.*"team_slug"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$REPO_ROOT/.aios-team.json" 2>/dev/null | head -n1)"
+        if [[ -n "$team_remote_slug" ]] && [[ -n "$origin_url" ]] && [[ "$origin_url" == *"$team_remote_slug"* ]]; then
+            is_team=1
+        fi
+    fi
+
+    # The remote name the canonical/team update repo should live under once the
+    # teammate's own backup takes over `origin`.
+    local canonical_remote="upstream"
+    [[ $is_team -eq 1 ]] && canonical_remote="team"
+    local has_canonical=0
+    [[ $is_upstream -eq 1 || $is_team -eq 1 ]] && has_canonical=1
+
+    if [[ -n "$origin_url" ]] && [[ $has_canonical -eq 0 ]]; then
         success "GitHub backup already configured: $origin_url"
         GITHUB_DECISION="configured"
         return 0
+    fi
+
+    if [[ $is_team -eq 1 ]]; then
+        echo ""
+        printf "${CYAN}${BOLD}Team checkout detected${NC}\n"
+        echo "  This copy is your team's SHARED AI-OS (origin points at the team repo)."
+        echo "  Let's set up your OWN private backup so your memory and client work"
+        echo "  back up privately, separate from the team."
     fi
 
     echo ""
@@ -380,7 +380,7 @@ setup_github_repo() {
 
     # If origin still points at the canonical repo, move it to `upstream` BEFORE
     # creating the fork. Otherwise `gh repo create --remote=origin` collides with
-    # the existing origin remote and silently fails - leaving the user with no
+    # the existing origin remote and silently fails — leaving the user with no
     # remote pointing at the canonical repo, which breaks update.sh.
     if [[ $is_upstream -eq 1 ]]; then
         if git -C "$REPO_ROOT" remote get-url upstream >/dev/null 2>&1; then
@@ -405,7 +405,7 @@ setup_github_repo() {
 
     warn "Automatic repo creation failed."
     if [[ $is_upstream -eq 1 ]]; then
-        warn "Canonical repo is now at the 'upstream' remote - updates will still work."
+        warn "Canonical repo is now at the 'upstream' remote — updates will still work."
     fi
     GITHUB_DECISION="failed"
     return 0

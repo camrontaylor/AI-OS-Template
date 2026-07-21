@@ -48,11 +48,11 @@ Here's why:
 ```
 [X things I learned about [topic] after [credibility builder]:
 
-1. [Point] - [Brief explanation]
+1. [Point] — [Brief explanation]
 
-2. [Point] - [Brief explanation]
+2. [Point] — [Brief explanation]
 
-3. [Point] - [Brief explanation]
+3. [Point] — [Brief explanation]
 
 [Wrap-up insight]
 
@@ -133,6 +133,8 @@ Tweet 7: [Your key takeaway]
 Caption: [Expand on the topic, add context, include CTA]
 ```
 
+This is the generic shape. For five full slide-by-slide narrative architectures (Value-Stack, Problem-Proof, Hack List, Rant Callout, Demo Walkthrough) with selection guidance and per-slide copy slots, see [carousel-frameworks.md](carousel-frameworks.md).
+
 ### The Reel Script
 ```
 Hook (0-2 sec): [Pattern interrupt or bold claim]
@@ -150,7 +152,7 @@ The first line determines whether anyone reads the rest.
 ### Curiosity Hooks
 - "I was wrong about [common belief]."
 - "The real reason [outcome] happens isn't what you think."
-- "[Impressive result] - and it only took [surprisingly short time]."
+- "[Impressive result] — and it only took [surprisingly short time]."
 - "Nobody talks about [insider knowledge]."
 
 ### Story Hooks

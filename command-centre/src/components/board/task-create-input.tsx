@@ -14,14 +14,14 @@ import type { SlashCommand } from "@/lib/slash-commands";
 import { GoalChips, recordTagUsage } from "./goal-chips";
 import { CHAT_ATTACHMENT_ACCEPT_ATTR } from "@/lib/chat-attachment-policy";
 
-// Minimal fallback questions - mirrors server-side fallbackQuestions but
+// Minimal fallback questions — mirrors server-side fallbackQuestions but
 // kept local so the client can synthesise a scope result when scope-goal
 // is unreachable or keyword-routing skips the round-trip entirely.
 function clientFallbackQuestions(level: "project" | "gsd"): QuestionSpec[] {
   if (level === "project") {
     return [
       { id: "audience", prompt: "Who is the primary audience or user for this?", type: "text", required: true },
-      { id: "success", prompt: "What does success look like - how will you know it's done well?", type: "multiline" },
+      { id: "success", prompt: "What does success look like — how will you know it's done well?", type: "multiline" },
       { id: "constraints", prompt: "Are there existing assets, tools, or constraints we should work within?", type: "multiline" },
       { id: "deadline", prompt: "Is there a deadline or timeline we need to hit?", type: "text" },
     ];
@@ -69,7 +69,7 @@ import { LEVEL_LABELS, LEVEL_HINTS } from "@/lib/levels";
 
 // Command Centre always launches tasks in bypassPermissions ("yolo") mode.
 // The picker UI was removed so there is no longer a default vs. full-auto
-// choice - every task runs with --dangerously-skip-permissions.
+// choice — every task runs with --dangerously-skip-permissions.
 const FIXED_PERMISSION_MODE: PermissionMode = "bypassPermissions";
 
 interface GsdStatus {
@@ -204,7 +204,7 @@ export function TaskCreateInput({
       setAttachments((prev) => [...prev, result]);
       setIsExpanded(true);
     } catch {
-      // Silently fail - user can retry
+      // Silently fail — user can retry
     } finally {
       setIsUploading(false);
     }
@@ -243,7 +243,7 @@ export function TaskCreateInput({
           const gsdData = await gsdRes.json();
           if (gsdData?.exists) {
             setGsdStatus(gsdData);
-            return; // Block - show conflict
+            return; // Block — show conflict
           }
         } catch { /* proceed */ }
       }
@@ -263,18 +263,18 @@ export function TaskCreateInput({
       } catch { /* non-critical */ }
     }
 
-    // Plan-first only applies to single tasks - projects and GSD have their
+    // Plan-first only applies to single tasks — projects and GSD have their
     // own planning built in, so we ignore the toggle for them.
     const effectivePermissionMode: PermissionMode =
       level === "task" && planFirst ? "plan" : FIXED_PERMISSION_MODE;
 
-    // Create task as "queued" - goes straight to Claude's Turn
+    // Create task as "queued" — goes straight to Claude's Turn
     await createTask(fallbackTitle, fullDescription, level, taskProjectSlug, undefined, effectivePermissionMode);
 
     // Remember last routing decision for next time
     try { localStorage.setItem("cc.last-route", level); } catch { /* ignore */ }
 
-    // Plan-first is per-launch - reset so the next task defaults to full-auto
+    // Plan-first is per-launch — reset so the next task defaults to full-auto
     setPlanFirst(false);
   }, [createTask, planFirst, projectSlug]);
 
@@ -285,7 +285,7 @@ export function TaskCreateInput({
 
     setScopingState({ phase: "idle" });
     setIsExpanded(false);
-    setConfirmationBadge(`Queued - ${LEVEL_LABELS[level]}`);
+    setConfirmationBadge(`Queued — ${LEVEL_LABELS[level]}`);
     setIsSubmitting(true);
     await createWithLevel(desc, level);
     setIsSubmitting(false);
@@ -319,21 +319,21 @@ export function TaskCreateInput({
       fullDescription = fullDescription + attachmentBlock;
     }
 
-    // Task - fast path, no scoping needed
+    // Task — fast path, no scoping needed
     if (levelOverride === "task") {
       setDescription("");
       setAttachments([]);
       setIsExpanded(false);
       setLevelOverride("task");
       setShowLevelOverride(false);
-      setConfirmationBadge(`Queued - ${LEVEL_LABELS.task}`);
+      setConfirmationBadge(`Queued — ${LEVEL_LABELS.task}`);
       setIsSubmitting(true);
       await createWithLevel(fullDescription, "task");
       setIsSubmitting(false);
       return;
     }
 
-    // Project / GSD - call scope-goal for the wizard / guardrail
+    // Project / GSD — call scope-goal for the wizard / guardrail
     setRoutingPending(true);
     try {
       const currentClientId = useClientStore.getState().selectedClientId;
@@ -414,7 +414,7 @@ export function TaskCreateInput({
       setShowSlashMenu(false);
       setSlashQuery("");
     }
-    // Detect @tag trigger - look for @ followed by partial word at cursor position
+    // Detect @tag trigger — look for @ followed by partial word at cursor position
     const el = descRef.current;
     if (el) {
       const cursor = el.selectionStart ?? value.length;
@@ -544,7 +544,7 @@ export function TaskCreateInput({
         )}
       </div>
 
-      {/* Quick-start buttons - visible when collapsed */}
+      {/* Quick-start buttons — visible when collapsed */}
       {!shouldExpand && (
         <div style={{ display: "flex", gap: 8, padding: "8px 16px 12px" }}>
           <button
@@ -600,7 +600,7 @@ export function TaskCreateInput({
         </div>
       )}
 
-      {/* Goal chips - prompt tag shortcuts below the textarea */}
+      {/* Goal chips — prompt tag shortcuts below the textarea */}
       {shouldExpand && (
         <GoalChips onInsert={(text) => {
           setDescription((prev) => text + prev);
@@ -745,9 +745,9 @@ export function TaskCreateInput({
           >
             {/* Left: yolo badge + attach + level override */}
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              {/* YOLO mode indicator - permissions picker removed; tasks always run with --dangerously-skip-permissions */}
+              {/* YOLO mode indicator — permissions picker removed; tasks always run with --dangerously-skip-permissions */}
               <div
-                title="All tasks run in yolo mode - permissions are skipped"
+                title="All tasks run in yolo mode — permissions are skipped"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -905,7 +905,7 @@ export function TaskCreateInput({
                 )}
               </div>
 
-              {/* Plan-first checkbox - only applies to single tasks.
+              {/* Plan-first checkbox — only applies to single tasks.
                   Projects and GSD projects have their own planning built in.
                   Sits in the left cluster so it's left-aligned. */}
               {levelOverride === "task" && (
@@ -1060,7 +1060,7 @@ export function TaskCreateInput({
                 level: "project" as TaskLevel,
                 icon: ClipboardList,
                 title: "Planned project",
-                desc: "I'll scope it first - goal, deliverables, what 'done' looks like. Best for multi-deliverable work.",
+                desc: "I'll scope it first — goal, deliverables, what 'done' looks like. Best for multi-deliverable work.",
                 key: "2",
               },
               {

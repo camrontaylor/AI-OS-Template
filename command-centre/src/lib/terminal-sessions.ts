@@ -45,7 +45,7 @@ export function createSession(id: string, cwd?: string): TerminalSession {
 
   const broadcast = (event: string, data: string) => {
     if (session.listeners.size === 0) {
-      // No listeners yet - buffer it
+      // No listeners yet — buffer it
       session.earlyBuffer.push({ event, data });
     } else {
       for (const listener of session.listeners) {
@@ -92,7 +92,7 @@ export function sendInput(id: string, input: string): boolean {
   return true;
 }
 
-/** Subscribe to session output - replays any buffered early output immediately */
+/** Subscribe to session output — replays any buffered early output immediately */
 export function subscribe(
   id: string,
   listener: (event: string, data: string) => void,

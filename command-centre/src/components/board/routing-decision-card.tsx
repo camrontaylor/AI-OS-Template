@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
 /**
- * Screen B - Auto-routing decision card.
+ * Screen B — Auto-routing decision card.
  *
  * Rendered after the user submits a goal in "Auto" mode. Shows the routing
  * decision (level + confidence), reasoning, overlaps with existing work, and

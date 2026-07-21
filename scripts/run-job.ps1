@@ -5,6 +5,6 @@ param(
 )
 
 $RepoRoot = Split-Path -Parent $PSScriptRoot
-$ScriptPath = Join-Path $RepoRoot "command-centre\scripts\cron-daemon.cjs"
+$ScriptPath = Join-Path $RepoRoot "scripts\cron\cron-daemon.cjs"
 
 node $ScriptPath run-job @Arguments

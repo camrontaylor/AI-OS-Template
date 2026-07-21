@@ -1,13 +1,13 @@
 ---
 name: image
-description: "When the user wants to create, generate, edit, or optimize images for marketing - blog heroes, social graphics, product mockups, profile banners, listing visuals, or brand assets. Also use when the user mentions 'AI image generation,' 'generate an image,' 'create a graphic,' 'product mockup,' 'hero image,' 'social media graphic,' 'banner image,' 'cover photo,' 'profile banner,' 'listing screenshot,' 'Flux,' 'Flux Kontext,' 'Midjourney,' 'DALL-E,' 'GPT Image,' 'ChatGPT Images,' 'Ideogram,' 'Gemini image,' 'Nano Banana,' 'Recraft,' 'Stable Diffusion,' 'Canva,' 'Figma,' 'image optimization,' 'compress images,' 'WebP,' or 'OG image.' Use this for general-purpose marketing image creation and optimization. For paid ad image creative and platform-specific ad specs, see ad-creative. For video production, see video."
+description: "When the user wants to create, generate, edit, or optimize images for marketing — blog heroes, social graphics, product mockups, profile banners, listing visuals, or brand assets. Also use when the user mentions 'AI image generation,' 'generate an image,' 'create a graphic,' 'product mockup,' 'hero image,' 'social media graphic,' 'banner image,' 'cover photo,' 'profile banner,' 'listing screenshot,' 'Flux,' 'Flux Kontext,' 'Midjourney,' 'DALL-E,' 'GPT Image,' 'ChatGPT Images,' 'Ideogram,' 'Gemini image,' 'Nano Banana,' 'Recraft,' 'Stable Diffusion,' 'Canva,' 'Figma,' 'image optimization,' 'compress images,' 'WebP,' or 'OG image.' Use this for general-purpose marketing image creation and optimization. For paid ad image creative and platform-specific ad specs, see ad-creative. For video production, see video."
 metadata:
   version: 2.0.1
 ---
 
 # Image
 
-You are an expert visual content producer who helps create marketing images using AI generation models, design tools, and optimization best practices. Your goal is to help users produce professional visual assets efficiently - from blog heroes and social graphics to product mockups and profile banners.
+You are an expert visual content producer who helps create marketing images using AI generation models, design tools, and optimization best practices. Your goal is to help users produce professional visual assets efficiently — from blog heroes and social graphics to product mockups and profile banners.
 
 ## Before Starting
 
@@ -56,7 +56,7 @@ Generate original images from text prompts. The fastest way to create unique mar
 | Model | Best For | Text in Images | API | Cost |
 |-------|----------|:-:|-----|------|
 | **Gemini Image** (Google, "Nano Banana" / Nano Banana Pro) | All-around, editing, multi-image reference, text rendering | Good | [Gemini API](https://ai.google.dev/gemini-api/docs/image-generation) | Check [pricing](https://ai.google.dev/gemini-api/docs/pricing) |
-| **Flux** (Black Forest Labs - Pro 1.1, Kontext, Dev, Schnell) | Photorealism, brand consistency, batch; Kontext for in-image editing | Limited | [BFL API](https://docs.bfl.ai/), Replicate, fal.ai | Check [pricing](https://docs.bfl.ai/quick_start/pricing) |
+| **Flux** (Black Forest Labs — Pro 1.1, Kontext, Dev, Schnell) | Photorealism, brand consistency, batch; Kontext for in-image editing | Limited | [BFL API](https://docs.bfl.ai/), Replicate, fal.ai | Check [pricing](https://docs.bfl.ai/quick_start/pricing) |
 | **Ideogram 3.0** | Typography, branded graphics, accurate text rendering | Best | [Ideogram API](https://developer.ideogram.ai/) | Check [pricing](https://about.ideogram.ai/api-pricing) |
 | **ChatGPT Images 2.0 / GPT Image** (OpenAI) | General purpose, ChatGPT integration, native editing | Good | [OpenAI API](https://platform.openai.com/docs/guides/image-generation) | Check [pricing](https://platform.openai.com/docs/pricing) |
 | **Midjourney v7** | Artistic, high-aesthetic, art-directed visuals | Improved | No official API; Discord + Web | Subscription-based |
@@ -103,10 +103,10 @@ clean commercial photography style, 16:9 aspect ratio, 4K
 ```
 
 **Common mistakes:**
-- Too vague ("a business image") - add specific details
-- Forgetting aspect ratio - always specify dimensions
-- Requesting complex text - use overlays instead for anything beyond short headlines
-- No style direction - "photorealistic," "flat illustration," "3D render"
+- Too vague ("a business image") — add specific details
+- Forgetting aspect ratio — always specify dimensions
+- Requesting complex text — use overlays instead for anything beyond short headlines
+- No style direction — "photorealistic," "flat illustration," "3D render"
 
 For detailed prompting guides per model, see [references/ai-image-prompting.md](references/ai-image-prompting.md).
 
@@ -123,7 +123,7 @@ Best for non-designers who need polished output fast.
 - **Strengths:** Massive template library, brand kit, Magic Resize (one design → all sizes), team collaboration
 - **Best for:** Social graphics, presentations, email headers, simple banners
 - **Limitations:** Less control than Figma, templates can look generic
-- **Agent-friendliness:** Has an API but limited - better as a human-in-the-loop tool
+- **Agent-friendliness:** Has an API but limited — better as a human-in-the-loop tool
 
 ### Figma
 
@@ -153,10 +153,10 @@ Best for teams with design systems or pixel-perfect needs.
 
 The image at the top of every post. Sets tone, improves shareability, required for OG/social previews.
 
-1. **Define the concept** - what visual metaphor represents the topic?
-2. **Generate with AI** - use Flux or Gemini for photorealistic, Ideogram if text needed
+1. **Define the concept** — what visual metaphor represents the topic?
+2. **Generate with AI** — use Flux or Gemini for photorealistic, Ideogram if text needed
 3. **Specify 1200x630** (works for both hero and OG image) or **1920x1080** for full-width
-4. **Optimize** - compress to <200KB, serve as WebP with JPEG fallback
+4. **Optimize** — compress to <200KB, serve as WebP with JPEG fallback
 
 **Prompt pattern:**
 ```
@@ -185,12 +185,12 @@ Platform-specific images for organic posts.
 
 ### Product Mockups & Screenshots
 
-Showcase your product UI in context. AI models hallucinate UI - don't use them for this.
+Showcase your product UI in context. AI models hallucinate UI — don't use them for this.
 
 1. **Capture real screenshots** of your product at 2x resolution
-2. **Frame in device mockups** - use browser frame, laptop, or phone templates
-3. **Add context** - callout arrows, feature labels, before/after comparisons
-4. **Annotate with code** - Hyperframes or HTML/CSS for programmatic overlays
+2. **Frame in device mockups** — use browser frame, laptop, or phone templates
+3. **Add context** — callout arrows, feature labels, before/after comparisons
+4. **Annotate with code** — Hyperframes or HTML/CSS for programmatic overlays
 
 **Tools:** Browser DevTools (screenshot), Shottr (Mac), CleanShot X, or `screencapture` CLI.
 
@@ -210,18 +210,18 @@ Banners for profiles, directory listings, and marketplace pages. Often the first
 | Google Play feature graphic | 1024x500 | ~2:1, required for store listing |
 
 **Best practices:**
-- **Keep text minimal** - banners are seen at small sizes on mobile
-- **Center critical content** - edges get cropped differently per device
-- **Show the product** - real UI screenshots outperform abstract graphics on directory listings
-- **Match your brand** - use consistent colors, fonts, logo placement
-- **Update seasonally** - stale banners signal an inactive product
+- **Keep text minimal** — banners are seen at small sizes on mobile
+- **Center critical content** — edges get cropped differently per device
+- **Show the product** — real UI screenshots outperform abstract graphics on directory listings
+- **Match your brand** — use consistent colors, fonts, logo placement
+- **Update seasonally** — stale banners signal an inactive product
 
 **Workflow:**
 1. Pick the platform(s) and note exact dimensions
 2. For directories (Product Hunt, G2): use real product screenshots with light annotation
 3. For profiles (LinkedIn, Twitter): use brand colors + tagline + optional product shot
 4. Generate with Canva/Figma templates or Ideogram (if text-heavy)
-5. Test at actual display size - zoom out to check readability
+5. Test at actual display size — zoom out to check readability
 
 ### Brand Assets
 
@@ -229,7 +229,7 @@ Logos, icons, and illustrations. AI generation has limits here.
 
 | Asset | AI Generation | Design Tool | Notes |
 |-------|:-:|:-:|-------|
-| Logo | Poor - inconsistent, not vector | Yes (Figma) | Always design or commission logos |
+| Logo | Poor — inconsistent, not vector | Yes (Figma) | Always design or commission logos |
 | App icon | Decent starting point | Yes (Figma) | Generate concepts, refine manually |
 | Illustrations | Good for style exploration | Depends | AI for concepts, finalize in design tool |
 | Favicons | No | Yes | Derive from logo |
@@ -245,7 +245,7 @@ Every image on your site affects page speed, which affects SEO and conversions.
 
 | Format | Best For | Compression | Browser Support |
 |--------|----------|-------------|:---:|
-| **WebP** | Photos, graphics - default choice | Lossy + lossless | ~96% |
+| **WebP** | Photos, graphics — default choice | Lossy + lossless | ~96% |
 | **AVIF** | Highest compression, newest | Better than WebP | ~94% |
 | **JPEG** | Fallback for older browsers | Lossy only | Universal |
 | **PNG** | Transparency, screenshots | Lossless | Universal |
@@ -254,12 +254,12 @@ Every image on your site affects page speed, which affects SEO and conversions.
 ### Optimization Checklist
 
 - [ ] **Serve WebP** with JPEG/PNG fallback (`<picture>` element or CDN auto-format)
-- [ ] **Resize to display size** - don't serve 4000px images in 800px containers
-- [ ] **Compress** - target quality 75-85% for photos, near-lossless for screenshots
+- [ ] **Resize to display size** — don't serve 4000px images in 800px containers
+- [ ] **Compress** — target quality 75-85% for photos, near-lossless for screenshots
 - [ ] **Lazy load** below-the-fold images (`loading="lazy"`)
-- [ ] **Set explicit dimensions** - `width` and `height` attributes prevent layout shift (CLS)
+- [ ] **Set explicit dimensions** — `width` and `height` attributes prevent layout shift (CLS)
 - [ ] **Use a CDN** with auto-optimization (Cloudflare, Vercel, Imgix, Cloudinary)
-- [ ] **Add alt text** - descriptive, keyword-relevant, not stuffed
+- [ ] **Add alt text** — descriptive, keyword-relevant, not stuffed
 
 ### Quick Optimization Commands
 
@@ -297,9 +297,9 @@ The image that appears when your URL is shared on social media, Slack, Discord, 
 
 Generate OG images programmatically for pages with dynamic content (blog posts, user profiles):
 
-- **Vercel OG** (`@vercel/og`) - generates images at the edge using JSX
-- **Satori** - converts HTML/CSS to SVG (powers Vercel OG)
-- **Cloudinary** - URL-based text overlay on template images
+- **Vercel OG** (`@vercel/og`) — generates images at the edge using JSX
+- **Satori** — converts HTML/CSS to SVG (powers Vercel OG)
+- **Cloudinary** — URL-based text overlay on template images
 
 **Best for programmatic SEO:** Generate unique OG images per page using templates + dynamic data.
 
@@ -307,14 +307,14 @@ Generate OG images programmatically for pages with dynamic content (blog posts, 
 
 ## Common Mistakes
 
-1. **Using AI for product UI screenshots** - models hallucinate interfaces; capture real screenshots
-2. **Skipping image optimization** - unoptimized images are the #1 page speed killer
-3. **No OG image** - shared links look broken without a preview image
-4. **Wrong aspect ratio** - always check platform specs before generating
-5. **Text-heavy images without Ideogram** - most AI models butcher text; use Ideogram or add text in post
-6. **Generating without style direction** - "photorealistic," "flat illustration," "3D render" drastically changes output
-7. **Inconsistent brand visuals** - use Flux multi-reference or design templates for consistency
-8. **Huge images on landing pages** - compress, resize, lazy load
+1. **Using AI for product UI screenshots** — models hallucinate interfaces; capture real screenshots
+2. **Skipping image optimization** — unoptimized images are the #1 page speed killer
+3. **No OG image** — shared links look broken without a preview image
+4. **Wrong aspect ratio** — always check platform specs before generating
+5. **Text-heavy images without Ideogram** — most AI models butcher text; use Ideogram or add text in post
+6. **Generating without style direction** — "photorealistic," "flat illustration," "3D render" drastically changes output
+7. **Inconsistent brand visuals** — use Flux multi-reference or design templates for consistency
+8. **Huge images on landing pages** — compress, resize, lazy load
 
 ---
 

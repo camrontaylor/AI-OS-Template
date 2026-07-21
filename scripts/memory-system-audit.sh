@@ -6,6 +6,22 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 WARN=0
 FAIL=0
+STRICT=0
+
+for arg in "$@"; do
+  case "$arg" in
+    --strict) STRICT=1 ;;
+    -h|--help)
+      echo "Usage: bash scripts/memory-system-audit.sh [--strict]"
+      echo "  --strict  exit non-zero when warnings or failures are found"
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $arg" >&2
+      exit 64
+      ;;
+  esac
+done
 
 ok() { printf 'OK: %s\n' "$1"; }
 warn() { WARN=$((WARN + 1)); printf 'WARN: %s\n' "$1"; }
@@ -48,17 +64,66 @@ if [[ -d "$ROOT/clients" ]]; then
     if [[ ! -d "$client_dir/context/memory" ]]; then
       fail "Client $slug missing context/memory/"
     fi
+    if [[ -f "$client_dir/context/MEMORY.md" ]]; then
+      chars="$(wc -c < "$client_dir/context/MEMORY.md" | tr -d ' ')"
+      if [[ "$chars" -gt 2500 ]]; then
+        latest_health="$(find "$client_dir/context/memory" -maxdepth 1 -type f -name '????-??-??_memory-health.md' 2>/dev/null | sort | tail -1)"
+        if [[ -n "$latest_health" ]]; then
+          ok "Client $slug has a memory health report: ${latest_health#"$ROOT/"}"
+        else
+          warn "Client $slug has no memory health report for its over-budget MEMORY.md. Run: bash scripts/client-memory-maintenance.sh --mode evaluate --client $slug"
+        fi
+      fi
+    fi
   done
   shopt -u nullglob
 else
   warn "No clients directory found."
 fi
 
+printf '\nChecking runtime hook contract...\n'
+for rel in \
+  .codex/config.toml \
+  .codex/hooks.json \
+  scripts/codex-hook.sh \
+  .claude/settings.json \
+  .claude/hooks/session-memory-finalizer.js \
+  .claude/hooks/skills-parity-check.js \
+  scripts/lib/skills-parity-check.sh \
+  scripts/test-session-memory-finalizer.sh
+do
+  if [[ -f "$ROOT/$rel" ]]; then
+    ok "Runtime file present: $rel"
+  else
+    fail "Runtime file missing: $rel"
+  fi
+done
+
+if node -e "JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8'))" "$ROOT/.codex/hooks.json" >/dev/null 2>&1; then
+  ok "Codex hooks JSON is valid."
+else
+  fail "Codex hooks JSON is invalid: .codex/hooks.json"
+fi
+
+if grep -q 'session-memory-finalizer.js' "$ROOT/.codex/hooks.json" \
+  && grep -q 'skills-parity-check.js' "$ROOT/.codex/hooks.json"; then
+  ok "Codex hooks include memory finalizer and parity check."
+else
+  fail "Codex hooks missing memory finalizer or parity check."
+fi
+
+if grep -q 'session-memory-finalizer.js' "$ROOT/.claude/settings.json" \
+  && grep -q 'skills-parity-check.js' "$ROOT/.claude/settings.json"; then
+  ok "Claude settings include memory finalizer and parity check."
+else
+  fail "Claude settings missing memory finalizer or parity check."
+fi
+
 printf '\nChecking shared skill sync...\n'
 if bash "$ROOT/scripts/client-sync-audit.sh" --strict >/tmp/aios-client-sync-audit.out 2>&1; then
-  ok "Client shared skills match root, excluding local overrides."
+  ok "Client shared runtime files match root, excluding local overrides and client-only skills."
 else
-  warn "Client shared skill drift detected. Run: bash scripts/client-sync-audit.sh"
+  warn "Client shared runtime drift detected. Run: bash scripts/client-sync-audit.sh"
   sed 's/^/  /' /tmp/aios-client-sync-audit.out
 fi
 rm -f /tmp/aios-client-sync-audit.out
@@ -93,13 +158,34 @@ else
 fi
 
 printf '\nChecking memory maintenance jobs...\n'
-for job in client-memory-distill client-memory-gaps client-memory-curator nightly-memsearch-index nightly-memory-backup; do
+for job in \
+  client-memory-distill \
+  client-memory-gaps \
+  client-memory-evaluator \
+  client-memory-curator \
+  semantic-memory-health \
+  meta-doc-drift \
+  skill-eval-coverage \
+  notion-docs-coverage \
+  workspace-health-steward \
+  notion-resource-health \
+  nightly-memsearch-index \
+  nightly-memory-backup
+do
   if [[ -f "$ROOT/cron/jobs/$job.md" ]]; then
     ok "Cron job present: $job"
   else
     fail "Cron job missing: $job"
   fi
 done
+
+if [[ -x "$ROOT/scripts/notion-resource-health.sh" ]] \
+  && grep -q '^runner: shell$' "$ROOT/cron/jobs/notion-resource-health.md" \
+  && grep -q '^command: bash scripts/notion-resource-health.sh$' "$ROOT/cron/jobs/notion-resource-health.md"; then
+  ok "Notion resource health uses a shell preflight that can fail cron when blocked."
+else
+  fail "Notion resource health is not wired to the shell preflight. Run: bash scripts/test-notion-resource-health.sh"
+fi
 
 printf '\nChecking memsearch source contract...\n'
 if grep -q 'for client_dir in clients/\*/' "$ROOT/scripts/memsearch-reindex.sh" \
@@ -147,7 +233,23 @@ else
   ok "Root MEMORY.md has no obvious client placement drift markers."
 fi
 
+printf '\nChecking daily-log hygiene...\n'
+pollution_pattern='mentioned in assistant response|^- Assistant response:|Awaiting next user input; run meta-wrap-up for full session finalization\.|^You are running as a scheduled (cron )?job for AI-OS\.'
+polluted_logs=()
+while IFS= read -r file; do
+  [[ -n "$file" ]] && polluted_logs+=("${file#"$ROOT/"}")
+done < <(
+  grep -RIlE --include='*.md' "$pollution_pattern" \
+    "$ROOT/context/memory" "$ROOT"/clients/*/context/memory 2>/dev/null | sort -u
+)
+
+if [[ "${#polluted_logs[@]}" -gt 0 ]]; then
+  warn "${#polluted_logs[@]} daily memory log(s) contain known auto-finalizer noise. Repair with: node .claude/hooks/session-memory-finalizer.js --repair context/memory/*.md clients/*/context/memory/*.md"
+else
+  ok "Daily memory logs contain no known auto-finalizer pollution."
+fi
+
 printf '\nSummary: %s failure(s), %s warning(s).\n' "$FAIL" "$WARN"
-if [[ "$FAIL" -gt 0 ]]; then
+if [[ "$FAIL" -gt 0 || ( "$STRICT" -eq 1 && "$WARN" -gt 0 ) ]]; then
   exit 1
 fi

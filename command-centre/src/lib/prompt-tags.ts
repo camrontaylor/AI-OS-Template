@@ -12,7 +12,7 @@ export interface PromptTag {
   description: string;
 }
 
-/** Parse `context/prompt-tags.md` - `## tag-name` headings, optional `starter: true` line right under. */
+/** Parse `context/prompt-tags.md` — `## tag-name` headings, optional `starter: true` line right under. */
 export function parsePromptTags(markdown: string): PromptTag[] {
   const lines = markdown.split("\n");
   const tags: PromptTag[] = [];

@@ -108,7 +108,7 @@ export async function POST(request: Request) {
       const task: Task = {
         id: crypto.randomUUID(),
         title: projectName,
-        description: `Deep build project - ${phases.length} phases. Managed via /gsd commands.`,
+        description: `Deep build project — ${phases.length} phases. Managed via /gsd commands.`,
         status: parentStatus as Task["status"],
         level: "gsd",
         parentId: null,
@@ -160,7 +160,7 @@ export async function POST(request: Request) {
         phaseNumber: currentPhase?.number ?? parentTask.phaseNumber,
       };
 
-      // Respect user-initiated done/review states - never resurrect a task
+      // Respect user-initiated done/review states — never resurrect a task
       // the user has manually completed. Only update status for active tasks.
       const userSettled = parentTask.status === "done" || parentTask.status === "review";
       if (!userSettled && parentTask.status !== "running" && !allComplete) {
@@ -235,7 +235,7 @@ export async function POST(request: Request) {
         }
 
         // Create new subtask
-        const title = `Phase ${phase.number}: ${STEP_TITLES[step]} - ${phase.name}`;
+        const title = `Phase ${phase.number}: ${STEP_TITLES[step]} — ${phase.name}`;
         const columnOrder = phase.number * 100 + stepIdx;
 
         const inheritedPermissionMode = getActivePermissionMode(

@@ -31,6 +31,16 @@ function isGreetingOnly(prompt) {
   return false;
 }
 
+// Headless cron runs have no rename field and no human reader; injecting the
+// title reminder there is pure token waste (same detector as
+// session-memory-block.js).
+function isScheduledAutomation(prompt) {
+  const cleaned = String(prompt || "")
+    .replace(/<environment_context[\s\S]*?<\/environment_context>/gi, " ")
+    .trim();
+  return /^you are running as a scheduled (?:cron )?job for ai-?os\b/i.test(cleaned);
+}
+
 let input = "";
 process.stdin.setEncoding("utf8");
 process.stdin.on("data", (chunk) => (input += chunk));
@@ -48,6 +58,15 @@ process.stdin.on("end", () => {
 
     // Greeting-only opener → wait for the real task prompt; do not fire or mark.
     if (isGreetingOnly(prompt)) return;
+
+    // Scheduled cron run → no human, no rename field; mark done so the hook
+    // stays silent for the whole headless session.
+    if (isScheduledAutomation(prompt)) {
+      try {
+        fs.writeFileSync(marker, String(Date.now()));
+      } catch {}
+      return;
+    }
 
     // First real prompt of the session: fire the reminder and mark as done.
     try {

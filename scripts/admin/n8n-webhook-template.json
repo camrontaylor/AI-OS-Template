@@ -1,0 +1,242 @@
+{
+  "name": "Community → GitHub Collaborator Access",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "community-grant-access",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook: Receive Community Event",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 300],
+      "webhookId": "community-grant-access"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-username",
+              "leftValue": "={{ $json.body.github_username }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "isNotEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-username-present",
+      "name": "IF: Username Present?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://api.github.com/repos/OWNER/REPO/collaborators/{{ $json.body.github_username }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/vnd.github+json"
+            },
+            {
+              "name": "X-GitHub-Api-Version",
+              "value": "2022-11-28"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"permission\": \"pull\"\n}",
+        "options": {
+          "fullResponse": true,
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "github-add-collaborator",
+      "name": "GitHub: Add Collaborator",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [700, 220],
+      "notes": "CONFIGURE THIS NODE:\n1. Replace OWNER/REPO in the URL with your GitHub org/repo name\n2. Create an 'Header Auth' credential with:\n   - Name: Authorization\n   - Value: Bearer <your-github-pat>\n   The PAT needs 'repo' scope for private repos or 'public_repo' for public repos"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-status-created",
+              "leftValue": "={{ $json.statusCode }}",
+              "rightValue": 204,
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-success",
+      "name": "IF: Success (201/204)?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [940, 220]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"success\": true,\n  \"message\": \"Invited {{ $('Webhook: Receive Community Event').item.json.body.github_username }} as collaborator\",\n  \"status_code\": {{ $('GitHub: Add Collaborator').item.json.statusCode }},\n  \"detail\": \"{{ $('GitHub: Add Collaborator').item.json.statusCode == 201 ? 'New invitation sent' : 'Already a collaborator' }}\"\n}",
+        "options": {}
+      },
+      "id": "respond-success",
+      "name": "Respond: Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1180, 140]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"success\": false,\n  \"message\": \"GitHub API error for user {{ $('Webhook: Receive Community Event').item.json.body.github_username }}\",\n  \"status_code\": {{ $('GitHub: Add Collaborator').item.json.statusCode }}\n}",
+        "options": {
+          "responseCode": 502
+        }
+      },
+      "id": "respond-github-error",
+      "name": "Respond: GitHub Error",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1180, 320]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": false,\n  \"message\": \"Missing required field: github_username\"\n}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "id": "respond-missing-username",
+      "name": "Respond: Missing Username",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [700, 420]
+    },
+    {
+      "parameters": {
+        "content": "## Community → GitHub Access Automation\n\n### Setup Instructions\n\n1. **GitHub PAT**: Create a Personal Access Token at github.com/settings/tokens with `repo` scope. Add it as an n8n Header Auth credential (Name: `Authorization`, Value: `Bearer ghp_your_token_here`).\n\n2. **Repository**: Edit the \"GitHub: Add Collaborator\" node URL — replace `OWNER/REPO` with your actual GitHub owner/repo.\n\n3. **Webhook URL**: After activating, copy the webhook URL and connect it to your payment trigger via Zapier, Make, or a direct webhook.\n\n4. **Payload format**: POST JSON to the webhook:\n```json\n{\n  \"github_username\": \"octocat\",\n  \"email\": \"user@example.com\",\n  \"community_name\": \"John Doe\"\n}\n```\n\n5. **Test**: Use the \"Test workflow\" button in n8n, then send a test POST with curl:\n```\ncurl -X POST <webhook-url> \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"github_username\":\"test-user\",\"email\":\"test@test.com\",\"community_name\":\"Test\"}'\n```",
+        "height": 520,
+        "width": 420,
+        "color": 5
+      },
+      "id": "sticky-note-setup",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-180, 100]
+    }
+  ],
+  "connections": {
+    "Webhook: Receive Community Event": {
+      "main": [
+        [
+          {
+            "node": "IF: Username Present?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF: Username Present?": {
+      "main": [
+        [
+          {
+            "node": "GitHub: Add Collaborator",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond: Missing Username",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub: Add Collaborator": {
+      "main": [
+        [
+          {
+            "node": "IF: Success (201/204)?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF: Success (201/204)?": {
+      "main": [
+        [
+          {
+            "node": "Respond: Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond: GitHub Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "access-control"
+    },
+    {
+      "name": "community"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-03-12T00:00:00.000Z",
+  "versionId": "1"
+}

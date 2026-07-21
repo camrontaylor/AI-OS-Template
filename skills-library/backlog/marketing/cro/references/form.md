@@ -66,7 +66,7 @@ For each field, ask:
 - Proper mobile keyboard
 
 ### Name Fields
-- Single "Name" vs. First/Last - test this
+- Single "Name" vs. First/Last — test this
 - Single field reduces friction
 - Split needed only if personalization requires it
 
@@ -113,7 +113,7 @@ For each field, ask:
 4. Logical grouping if many fields
 
 ### Labels and Placeholders
-- Labels: Keep visible (not just placeholder) - placeholders disappear when typing, leaving users unsure what they're filling in
+- Labels: Keep visible (not just placeholder) — placeholders disappear when typing, leaving users unsure what they're filling in
 - Placeholders: Examples, not labels
 - Help text: Only when genuinely helpful
 

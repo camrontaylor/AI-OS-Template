@@ -22,13 +22,13 @@ export interface ScopeResult {
   confidence: number;
   overlaps: { slug: string; name: string; reason: string }[];
   /**
-   * Short, human-readable project title distilled from the goal - 3-6 words,
+   * Short, human-readable project title distilled from the goal — 3-6 words,
    * Title Case, no filler like "Help me…" or "I want to…". Used as the
    * default project name in the scoping wizard so the feed shows meaningful
    * titles instead of the raw first few words of the goal.
    */
   projectTitle?: string;
-  /** Typed clarifying questions - rendered by QuestionModal */
+  /** Typed clarifying questions — rendered by QuestionModal */
   questions: QuestionSpec[];
   suggestedSubtasks: {
     title: string;
@@ -56,7 +56,7 @@ function fallbackQuestions(level: "project" | "gsd"): QuestionSpec[] {
       },
       {
         id: "success",
-        prompt: "What does success look like - how will you know it's done well?",
+        prompt: "What does success look like — how will you know it's done well?",
         type: "multiline",
       },
       {
@@ -147,7 +147,7 @@ export async function POST(request: NextRequest) {
 
     const projectContext =
       activeProjects.length > 0
-        ? `\n\nActive projects:\n${activeProjects.map((p) => `- ${p.slug}: ${p.name}${p.goal ? ` - ${p.goal}` : ""}`).join("\n")}`
+        ? `\n\nActive projects:\n${activeProjects.map((p) => `- ${p.slug}: ${p.name}${p.goal ? ` — ${p.goal}` : ""}`).join("\n")}`
         : "";
 
     const taskContext =
@@ -157,13 +157,13 @@ export async function POST(request: NextRequest) {
 
     const prompt = `You are a goal routing and breakdown assistant. Classify and decompose this goal.
 
-CRITICAL: For levels "project" and "gsd", the "questions" array MUST contain at least 2 QuestionSpec objects. An empty questions array for these levels is a bug. Ask questions even if you think you can guess - the user WANTS to answer them.
+CRITICAL: For levels "project" and "gsd", the "questions" array MUST contain at least 2 QuestionSpec objects. An empty questions array for these levels is a bug. Ask questions even if you think you can guess — the user WANTS to answer them.
 
 ## How to classify
 
-There are exactly three levels. Pick the most ambitious level that fits - **do not default to "task" when uncertain**. When torn between two levels, pick the larger one.
+There are exactly three levels. Pick the most ambitious level that fits — **do not default to "task" when uncertain**. When torn between two levels, pick the larger one.
 
-### "task" - a single deliverable, one sitting
+### "task" — a single deliverable, one sitting
 Exactly one concrete output. No subtasks. A junior could finish it in under an hour with no planning.
 Examples:
 - "Write a cold email to intro our new pricing"
@@ -173,7 +173,7 @@ Examples:
 - "Generate three headline options for the homepage"
 - "Rename the 'projects' column to 'initiatives' in the dashboard"
 
-### "project" - 2-8 related deliverables, a campaign or launch
+### "project" — 2–8 related deliverables, a campaign or launch
 Multiple related outputs that ship together. Usually a campaign, launch, content bundle, or small piece of software with a clear surface area. Needs a brief and subtasks but not a full architectural phase plan. A landing page counts as project when it has copy + design + CTA logic + launch plan; counts as task if the user literally just wants HTML drafted.
 Examples:
 - "Launch the Q2 newsletter: landing page, 3 emails, social posts, ad creative"
@@ -184,7 +184,7 @@ Examples:
 - "Set up a lead magnet funnel: ebook, landing page, email sequence"
 - "Redesign the pricing page with 3 tier variants and A/B test plan"
 
-### "gsd" - multi-phase, architectural, spans weeks
+### "gsd" — multi-phase, architectural, spans weeks
 A whole app, a platform, a major system migration, or anything that needs research + roadmap + multiple execution phases with verification between them. Requires the GSD methodology (discuss → plan → execute → verify per phase).
 Examples:
 - "Build me out an app for tracking client feedback across channels"
@@ -215,9 +215,9 @@ Verify completeness: if every subtask's acceptance criteria are met, is the orig
 
 ## Overlap Detection
 
-Check if the goal overlaps with any active project or task. Only flag genuine overlaps - not vague similarity.${projectContext}${taskContext}${
+Check if the goal overlaps with any active project or task. Only flag genuine overlaps — not vague similarity.${projectContext}${taskContext}${
       gathered.summary
-        ? `\n\n## Known context (already loaded - DO NOT ask the user about anything we already know)\n\n${gathered.summary}\n\nWhen you ask questions, ground them in this context. For example, instead of asking "Who is your audience?" when an ICP is loaded, ask "Is this for your existing audience (per the loaded ICP) or a new segment?" as a select with Yes/No options. Whenever the loaded context already answers a topic, either skip that question entirely OR convert it into a confirmation question (select with Yes/No).`
+        ? `\n\n## Known context (already loaded — DO NOT ask the user about anything we already know)\n\n${gathered.summary}\n\nWhen you ask questions, ground them in this context. For example, instead of asking "Who is your audience?" when an ICP is loaded, ask "Is this for your existing audience (per the loaded ICP) or a new segment?" as a select with Yes/No options. Whenever the loaded context already answers a topic, either skip that question entirely OR convert it into a confirmation question (select with Yes/No).`
         : ""
     }
 
@@ -226,10 +226,10 @@ Check if the goal overlaps with any active project or task. Only flag genuine ov
 Questions are the most important part of your output for "project" and "gsd" levels. They're shown to the user as an interactive quiz before any tasks are queued.
 
 Each question is a typed object (QuestionSpec). Pick the widget type that will make the user's answer cleanest:
-- "text" - a one-line answer (names, deadlines, short phrases)
-- "multiline" - a paragraph answer (success criteria, constraints, flows)
-- "select" - exactly one choice from a small enumerable set. Provide "options". Prefer this over free-text whenever you can enumerate 2-6 likely answers.
-- "multiselect" - multiple choices from an enumerable set. Provide "options".
+- "text" — a one-line answer (names, deadlines, short phrases)
+- "multiline" — a paragraph answer (success criteria, constraints, flows)
+- "select" — exactly one choice from a small enumerable set. Provide "options". Prefer this over free-text whenever you can enumerate 2–6 likely answers.
+- "multiselect" — multiple choices from an enumerable set. Provide "options".
 
 PREFER SELECT/MULTISELECT whenever the space of reasonable answers is small (tone, audience type, channel, format, etc.).
 
@@ -242,8 +242,8 @@ Each question must include:
 
 Rules by level:
 - **"task"**: usually no questions. Only ask if the goal is literally unreadable.
-- **"project"**: 2-4 questions covering scope boundaries, target audience or channel, success criteria, constraints, existing assets, tone or format preferences.
-- **"gsd"**: 3-5 questions covering core user flows, non-negotiable constraints, integrations, data model, success metrics, deployment context.
+- **"project"**: 2–4 questions covering scope boundaries, target audience or channel, success criteria, constraints, existing assets, tone or format preferences.
+- **"gsd"**: 3–5 questions covering core user flows, non-negotiable constraints, integrations, data model, success metrics, deployment context.
 
 Never ask more than 5 questions. Never ask trivia you could assume.
 

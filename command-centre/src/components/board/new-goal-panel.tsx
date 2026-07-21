@@ -71,8 +71,8 @@ const STATIC_SUGGESTIONS = [
 ];
 
 const FLAG_OPTIONS: { flag: string; label: string; hint: string; level: TaskLevel }[] = [
-  { flag: "--project", label: "--project", hint: "Planned project - multi-deliverable", level: "project" },
-  { flag: "--gsd", label: "--gsd", hint: "GSD project - complex multi-phase", level: "gsd" },
+  { flag: "--project", label: "--project", hint: "Planned project — multi-deliverable", level: "project" },
+  { flag: "--gsd", label: "--gsd", hint: "GSD project — complex multi-phase", level: "gsd" },
 ];
 
 interface NewGoalPanelProps {
@@ -831,7 +831,7 @@ export function NewGoalPanel({
           }}
         />
 
-        {/* Grey input container - matches reply-input style */}
+        {/* Grey input container — matches reply-input style */}
         <div
           onDragEnter={handleDragEnter}
           onDragOver={handleDragOver}
@@ -1082,7 +1082,7 @@ export function NewGoalPanel({
         <PermissionPicker value={permissionMode} onChange={setPermissionMode} />
         <TagPicker value={selectedTag} onChange={setSelectedTag} />
 
-        {/* Level pill - in toolbar */}
+        {/* Level pill — in toolbar */}
         <div ref={levelMenuRef} style={{ position: "relative" }}>
           <button
             onClick={() => setShowLevelMenu(!showLevelMenu)}
@@ -1158,7 +1158,7 @@ export function NewGoalPanel({
           )}
         </div>
 
-        {/* Client picker - only show when clients exist */}
+        {/* Client picker — only show when clients exist */}
         {clients.length > 0 && (
           <div ref={clientMenuRef} style={{ position: "relative" }}>
             <button

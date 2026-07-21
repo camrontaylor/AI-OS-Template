@@ -797,7 +797,7 @@ export default function HistoryPage() {
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "var(--card)" }}>
-      {/* Top bar - same as main page */}
+      {/* Top bar — same as main page */}
       <header className="px-4 sm:px-6" style={{
         display: "flex",
         alignItems: "center",

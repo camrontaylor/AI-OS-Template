@@ -104,10 +104,20 @@ test_display_name_alias_routes_generically() {
   ok "client display-name alias routes without hard-coded client paths"
 }
 
+test_scheduled_prompt_does_not_create_human_memory() {
+  make_fake_repo
+  run_hook "route-cron-$$" "$TEST_ROOT/repo" "You are running as a scheduled cron job for AI-OS. Task: Check if any skills have been updated. Steps: scan the catalog and write a report."
+
+  local memory_file="$TEST_ROOT/repo/context/memory/$TODAY.md"
+  assert_file_missing "$memory_file"
+  ok "scheduled automation does not create a human memory session"
+}
+
 info "Running session memory block tests..."
 test_single_client_prompt_routes_from_root
 test_all_clients_prompt_stays_root
 test_client_cwd_stays_client_local
 test_all_clients_prompt_from_client_stays_root
 test_display_name_alias_routes_generically
+test_scheduled_prompt_does_not_create_human_memory
 ok "session memory block tests passed"

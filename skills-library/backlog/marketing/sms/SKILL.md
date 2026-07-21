@@ -1,6 +1,6 @@
 ---
 name: sms
-description: When the user wants to plan, build, or optimize SMS or MMS marketing - including welcome flows, abandoned cart texts, post-purchase, win-back, promotional sends, or transactional/auth SMS. Also use when the user mentions "SMS marketing," "text message campaigns," "SMS sequence," "SMS automation," "abandoned cart text," "post-purchase SMS," "Klaviyo SMS," "Postscript," "Attentive," "Twilio," "A2P 10DLC," "TCPA," "SMS compliance," "short code," "toll-free SMS," "MMS campaign," "should I do SMS," or "SMS vs email." For email sequences, see emails. For SMS copy framing, see copywriting. For opt-in popups that capture phone numbers, see popups.
+description: When the user wants to plan, build, or optimize SMS or MMS marketing — including welcome flows, abandoned cart texts, post-purchase, win-back, promotional sends, or transactional/auth SMS. Also use when the user mentions "SMS marketing," "text message campaigns," "SMS sequence," "SMS automation," "abandoned cart text," "post-purchase SMS," "Klaviyo SMS," "Postscript," "Attentive," "Twilio," "A2P 10DLC," "TCPA," "SMS compliance," "short code," "toll-free SMS," "MMS campaign," "should I do SMS," or "SMS vs email." For email sequences, see emails. For SMS copy framing, see copywriting. For opt-in popups that capture phone numbers, see popups.
 metadata:
   version: 1.0.0
 ---
@@ -19,7 +19,7 @@ Gather this context (ask if not provided):
 ### 1. Business Type
 - B2C ecom / DTC, B2B SaaS, mobile app, services, fintech
 - Order volume or list size (SMS economics depend on scale)
-- Geographic mix (US, EU, both - compliance differs dramatically)
+- Geographic mix (US, EU, both — compliance differs dramatically)
 
 ### 2. Current State
 - Existing SMS program (platform, list size, opt-in rate, opt-out rate, revenue/send)
@@ -27,7 +27,7 @@ Gather this context (ask if not provided):
 - Phone number type: short code, toll-free, long code (10DLC)
 
 ### 3. Compliance Posture
-- US: A2P 10DLC registration complete? (Required since 2022 - without it, your messages get filtered)
+- US: A2P 10DLC registration complete? (Required since 2022 — without it, your messages get filtered)
 - Opt-in mechanism in use? (Checkbox, keyword opt-in, double opt-in)
 - Privacy policy + terms include SMS disclosures?
 
@@ -58,20 +58,20 @@ SMS is not "another email." Use it where the channel's properties win:
 
 ---
 
-## Compliance - Read First
+## Compliance — Read First
 
-**Compliance is the foundation, not an afterthought.** A single TCPA class-action settlement runs $5M-$40M. The basics:
+**Compliance is the foundation, not an afterthought.** A single TCPA class-action settlement runs $5M–$40M. The basics:
 
-### US - TCPA (Telephone Consumer Protection Act)
+### US — TCPA (Telephone Consumer Protection Act)
 
 1. **Express written consent** required for marketing SMS. Implied consent doesn't count.
 2. **Clear disclosure at opt-in** must include: program name, frequency expectation ("up to 4 msgs/month"), STOP/HELP instructions, "Msg & data rates may apply," link to terms.
 3. **Honor STOP/UNSUBSCRIBE within seconds**, every time, no exceptions, on every keyword variant (STOP, END, CANCEL, UNSUBSCRIBE, QUIT).
 4. **Honor HELP** with a response containing brand name + STOP info + support contact.
-5. **Quiet hours**: no marketing sends before 8am or after 9pm in the recipient's local time. Carrier rules and state laws (e.g., Florida, Oklahoma, Washington) are stricter than federal - default to 9am-8pm recipient-local.
+5. **Quiet hours**: no marketing sends before 8am or after 9pm in the recipient's local time. Carrier rules and state laws (e.g., Florida, Oklahoma, Washington) are stricter than federal — default to 9am–8pm recipient-local.
 6. **Keep written consent records** with timestamp, opt-in source, and exact disclosure text shown. Auditable.
 
-### US - A2P 10DLC Registration (required since 2022)
+### US — A2P 10DLC Registration (required since 2022)
 
 Application-to-Person 10-digit long codes must be registered through The Campaign Registry (TCR) via your SMS platform. Without registration:
 - Throughput is throttled (or zero)
@@ -80,14 +80,14 @@ Application-to-Person 10-digit long codes must be registered through The Campaig
 
 **Registration covers**: brand identity verification, campaign use case (marketing, account notification, OTP, etc.), sample messages, opt-in mechanism, opt-out language. Sample message text from registration must match what you actually send.
 
-### EU/UK - GDPR-derived consent
+### EU/UK — GDPR-derived consent
 
 - Explicit opt-in required (no pre-checked boxes)
 - Right to withdraw consent must be as easy as giving it
 - Data subject access requests apply to SMS records
 - ePrivacy Directive layered on top of GDPR
 
-### Canada - CASL
+### Canada — CASL
 
 - Express consent + sender identification + unsubscribe in every message
 - Implied consent allowed for existing business relationships within 24 months
@@ -101,21 +101,21 @@ Application-to-Person 10-digit long codes must be registered through The Campaig
 
 | Type | Throughput | Cost | Use Case | Trust |
 |------|-----------|------|----------|-------|
-| **Short code (5-6 digit)** | 100+ msg/sec | $500-$1,000/mo + setup | High-volume marketing | Highest (carrier-vetted) |
-| **Toll-free (1-8XX)** | ~3 msg/sec | $10-$30/mo | Mid-volume, B2C support | Medium-high (carrier-verified) |
-| **10DLC (regular long code)** | 1-250 msg/sec | $2-$10/mo | SMB, conversational, transactional | Medium (requires A2P 10DLC reg) |
+| **Short code (5-6 digit)** | 100+ msg/sec | $500–$1,000/mo + setup | High-volume marketing | Highest (carrier-vetted) |
+| **Toll-free (1-8XX)** | ~3 msg/sec | $10–$30/mo | Mid-volume, B2C support | Medium-high (carrier-verified) |
+| **10DLC (regular long code)** | 1–250 msg/sec | $2–$10/mo | SMB, conversational, transactional | Medium (requires A2P 10DLC reg) |
 
-**Rule of thumb**: list <10K = 10DLC. List 10K-100K = toll-free. List 100K+ = short code.
+**Rule of thumb**: list <10K = 10DLC. List 10K–100K = toll-free. List 100K+ = short code.
 
 ---
 
 ## Core Principles
 
 ### 1. Every send has a real cost
-SMS isn't free. At $0.0075-$0.04 per send + carrier fees, a 100K send costs $750-$4,000. This forces relevance - you can't "blast." Segment hard.
+SMS isn't free. At $0.0075–$0.04 per send + carrier fees, a 100K send costs $750–$4,000. This forces relevance — you can't "blast." Segment hard.
 
 ### 2. Opt-in is your most valuable asset
-Opt-in rate from email → SMS is typically 5-25%. A high-quality SMS list of 10K beats a low-quality list of 100K. Optimize opt-in quality, not volume.
+Opt-in rate from email → SMS is typically 5–25%. A high-quality SMS list of 10K beats a low-quality list of 100K. Optimize opt-in quality, not volume.
 
 ### 3. Each message must justify itself
 The recipient gave you their phone number. Every send should pass: "would I be glad I got this text?" If no, don't send.
@@ -127,7 +127,7 @@ The recipient gave you their phone number. Every send should pass: "would I be g
 Short links are mandatory (`klvy.co`, `txt.attn.tv`, branded short domain). Track UTM params on every link.
 
 ### 6. Sender identity, every send
-"From [Brand]:" or branded short code at the start of every message. Even on automated flows. Recipients can't see "from" address - they need it inline.
+"From [Brand]:" or branded short code at the start of every message. Even on automated flows. Recipients can't see "from" address — they need it inline.
 
 ---
 
@@ -159,14 +159,14 @@ Optional Send 2 (24h later): Reminder + best-seller showcase
 
 ### Win-Back (lapsed)
 
-- Send 1 (60-90 days after last purchase): "We miss you" + curated picks
+- Send 1 (60–90 days after last purchase): "We miss you" + curated picks
 - Send 2 (14 days later): Discount offer
 - Send 3 (final, 14 days later): Opt-out warning + last chance
 
 ### Promotional / Campaign Sends
 
 - Flash sales, drops, launches, BFCM
-- 1-2 sends max per campaign
+- 1–2 sends max per campaign
 - Stack against email send schedule to avoid same-day double-tap
 
 ### Transactional (separate compliance bucket)
@@ -182,22 +182,22 @@ Optional Send 2 (24h later): Reminder + best-seller showcase
 ## SMS Copy Guidelines
 
 ### Structure
-1. **Sender ID** ("From Acme:" or brand short code) - required
-2. **Hook** - first 5 words decide if they read on
-3. **Value** - what's in it for them, specifically
-4. **CTA + short link** - single action, single URL
-5. **Compliance footer** - "Reply STOP to opt out" (required on opt-in confirmation and at least quarterly thereafter; carrier-recommended on every promotional message)
+1. **Sender ID** ("From Acme:" or brand short code) — required
+2. **Hook** — first 5 words decide if they read on
+3. **Value** — what's in it for them, specifically
+4. **CTA + short link** — single action, single URL
+5. **Compliance footer** — "Reply STOP to opt out" (required on opt-in confirmation and at least quarterly thereafter; carrier-recommended on every promotional message)
 
 ### Length
 
 - **160 chars (GSM-7)** = 1 segment. Aim here.
-- **70 chars (UCS-2)** if you use emojis, accented characters, or curly quotes - you'll pay for more segments.
-- **161-306 chars** = 2 segments (concatenated SMS). Acceptable for richer messages, but you're paying double per send.
-- **MMS** (image + up to 1,600 chars) = 3-5× the SMS cost. Use sparingly for high-impact moments.
+- **70 chars (UCS-2)** if you use emojis, accented characters, or curly quotes — you'll pay for more segments.
+- **161–306 chars** = 2 segments (concatenated SMS). Acceptable for richer messages, but you're paying double per send.
+- **MMS** (image + up to 1,600 chars) = 3–5× the SMS cost. Use sparingly for high-impact moments.
 
 ### Voice
 
-- Conversational, not corporate. SMS feels personal - write like you're texting a friend.
+- Conversational, not corporate. SMS feels personal — write like you're texting a friend.
 - No subject line, no formatting, no marketing-speak.
 - Emojis are fine in moderation (one per message, situationally).
 - ALL CAPS reads as shouting. Avoid except for explicit codes (e.g., "Use ACME10").
@@ -207,7 +207,7 @@ Optional Send 2 (24h later): Reminder + best-seller showcase
 - First name token if available (boosts CTR ~20%)
 - Recent product/category browse-based
 - Location-based offers (where applicable)
-- Don't fake intimacy ("Hey friend!") - it backfires
+- Don't fake intimacy ("Hey friend!") — it backfires
 
 **For complete copy patterns by sequence type with character counts**: see [references/sequence-templates.md](references/sequence-templates.md).
 
@@ -241,19 +241,19 @@ Optional Send 2 (24h later): Reminder + best-seller showcase
 
 | Metric | What it tells you | Healthy range (ecom DTC) |
 |--------|-------------------|--------------------------|
-| **Opt-in rate** | Top of funnel health | 5-25% of email subscribers |
-| **CTR** | Message relevance | 8-15% (vs ~3% email) |
-| **Conversion rate (per send)** | Revenue impact | 1-5% per promotional send |
-| **Revenue per send (RPS)** | Channel economics | $0.20-$2.00 |
+| **Opt-in rate** | Top of funnel health | 5–25% of email subscribers |
+| **CTR** | Message relevance | 8–15% (vs ~3% email) |
+| **Conversion rate (per send)** | Revenue impact | 1–5% per promotional send |
+| **Revenue per send (RPS)** | Channel economics | $0.20–$2.00 |
 | **Opt-out rate per send** | Audience fatigue | <2% per send, <0.5% for promotional |
-| **Cost per send** | Channel cost discipline | $0.0075-$0.04 |
-| **List growth rate** | Audience momentum | 5-15%/month early, 1-3% steady-state |
+| **Cost per send** | Channel cost discipline | $0.0075–$0.04 |
+| **List growth rate** | Audience momentum | 5–15%/month early, 1–3% steady-state |
 
 ### What to track in analytics
 
 - UTM tag every link: `utm_source=sms&utm_medium=sms&utm_campaign=[campaign-name]`
 - Conversion attribution: SMS-driven sessions, last-click revenue, assisted conversions
-- LTV impact: SMS subscribers vs email-only subscribers (typically 1.5-3× LTV for SMS opt-ins)
+- LTV impact: SMS subscribers vs email-only subscribers (typically 1.5–3× LTV for SMS opt-ins)
 
 ### What to A/B test
 
@@ -278,7 +278,7 @@ When the user asks for an SMS plan, return:
 5. **Measurement plan**: KPIs, benchmarks, A/B test queue.
 6. **Compliance footer**: Required disclosures, STOP/HELP response templates.
 
-Keep recommendations specific. Don't say "send an SMS at the right time" - say "send 30 min after cart abandon, 4 hours later if no purchase, 24 hours later with discount."
+Keep recommendations specific. Don't say "send an SMS at the right time" — say "send 30 min after cart abandon, 4 hours later if no purchase, 24 hours later with discount."
 
 ---
 
@@ -296,16 +296,16 @@ Keep recommendations specific. Don't say "send an SMS at the right time" - say "
 
 ## Common Mistakes
 
-1. **Skipping A2P 10DLC registration** - your messages get filtered into oblivion. Register first, send second.
-2. **Treating SMS like email** - sending daily promotional blasts. Opt-out rates spike, list dies.
-3. **Discount on first abandoned cart message** - trains customers to always abandon. Reserve for second or third send.
-4. **Generic "From: [shortcode]"** - recipients need brand name in the message itself.
-5. **Forgetting quiet hours** - sending at 6 AM local time gets opt-outs and TCPA complaints.
-6. **No STOP/HELP handling** - non-negotiable. Every platform handles this; verify yours does.
-7. **Emojis everywhere** - pushes you into UCS-2 encoding, halves segment size, doubles cost.
-8. **Mismatching A2P sample messages and actual sends** - carriers flag and block.
-9. **Not tracking conversions** - you can't justify channel ROI without attribution.
-10. **No throttling on bulk sends** - burst sends trigger carrier filtering. Use platform throttling.
+1. **Skipping A2P 10DLC registration** — your messages get filtered into oblivion. Register first, send second.
+2. **Treating SMS like email** — sending daily promotional blasts. Opt-out rates spike, list dies.
+3. **Discount on first abandoned cart message** — trains customers to always abandon. Reserve for second or third send.
+4. **Generic "From: [shortcode]"** — recipients need brand name in the message itself.
+5. **Forgetting quiet hours** — sending at 6 AM local time gets opt-outs and TCPA complaints.
+6. **No STOP/HELP handling** — non-negotiable. Every platform handles this; verify yours does.
+7. **Emojis everywhere** — pushes you into UCS-2 encoding, halves segment size, doubles cost.
+8. **Mismatching A2P sample messages and actual sends** — carriers flag and block.
+9. **Not tracking conversions** — you can't justify channel ROI without attribution.
+10. **No throttling on bulk sends** — burst sends trigger carrier filtering. Use platform throttling.
 
 ---
 
@@ -328,7 +328,7 @@ For implementation, see the [tools registry](../../tools/REGISTRY.md). Key SMS t
 
 ## Related Skills
 
-- **emails**: Sister channel - almost always run together. Email carries the long-form content; SMS carries the urgent nudges.
+- **emails**: Sister channel — almost always run together. Email carries the long-form content; SMS carries the urgent nudges.
 - **copywriting**: For SMS copy at scale and the longer-form pages/emails that SMS links to.
 - **popups**: For phone number capture popups on-site.
 - **churn-prevention**: For win-back flows that combine SMS + email.

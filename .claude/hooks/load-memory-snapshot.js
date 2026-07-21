@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // SessionStart hook - loads the curated memory snapshot per AIOS-75 (Phase 1).
-// Reads context/SOUL.md, context/USER.md, context/MEMORY.md, and today's
-// daily log (or yesterday's as fallback). Injects them as additionalContext
+// Reads context/SOUL.md, context/USER.md, context/MEMORY.md, an active client
+// current-state brief when present, and today's daily log (or yesterday's as fallback).
+// Injects them as additionalContext
 // so Claude has them available at session start without needing the user
 // to prompt "what did you read?". This is the runtime implementation of
 // the "Returning Mode" silent startup steps documented in CLAUDE.md.
@@ -102,6 +103,13 @@ process.stdin.on('end', () => {
     resolved: resolveFrom(activeRoot, 'context/MEMORY.md', 'active'),
     label: 'MEMORY - curated working scratchpad (frozen snapshot; mid-session writes only take effect next session)',
   });
+
+  if (activeRoot !== workspaceRoot) {
+    targets.push({
+      resolved: resolveFrom(activeRoot, 'context/current-state.md', 'client'),
+      label: 'Client current-state brief - generated active work context',
+    });
+  }
 
   // Daily log: today first, yesterday as fallback if today has no session yet
   const todayLog = resolveFrom(activeRoot, `context/memory/${today}.md`, 'active');

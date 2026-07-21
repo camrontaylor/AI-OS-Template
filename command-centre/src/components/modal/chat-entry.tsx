@@ -357,7 +357,7 @@ function CompactRow({
 
 /**
  * Render a group of consecutive Claude text entries.
- * Vibe-Kanban style: plain prose, no bubble, no background - the assistant's
+ * Vibe-Kanban style: plain prose, no bubble, no background — the assistant's
  * voice is the "default" voice of the stream. User messages are the only
  * thing that gets a box.
  */
@@ -948,7 +948,7 @@ function toolDetail(entry: LogEntry): string | null {
 }
 
 /** A compact single-line row for a tool_use entry (used inside expanded
- *  tool summary blocks - intentionally small/muted). */
+ *  tool summary blocks — intentionally small/muted). */
 function ToolRow({ entry }: { entry: LogEntry }) {
   const visual = toolVisual(entry.toolName || "");
   const detail = toolDetail(entry);
@@ -1025,7 +1025,7 @@ export function SkillInvocationCard({ entry }: { entry: LogEntry }) {
 }
 
 /** Renders a group of consecutive tool_use / tool_result entries as a
- *  collapsible summary. Collapsed by default - shows "Used N tools" with
+ *  collapsible summary. Collapsed by default — shows "Used N tools" with
  *  a short preview of tool names. Expand to see the full list. */
 export function ToolSummaryBlock({ entries }: { entries: LogEntry[] }) {
   const [expanded, setExpanded] = useState(false);
@@ -1169,7 +1169,7 @@ function StructuredQuestionEntry({
     }
   };
 
-  const summary = `${count} question${count === 1 ? "" : "s"} - waiting for your reply`;
+  const summary = `${count} question${count === 1 ? "" : "s"} — waiting for your reply`;
 
   return (
     <div style={{ width: "100%" }}>
@@ -1387,7 +1387,7 @@ function SystemEntry({ entry }: { entry: LogEntry }) {
 
 /* ─────────────────────────────── dispatch ─────────────────────────────── */
 
-/** Single entry renderer - used for non-grouped entries. */
+/** Single entry renderer — used for non-grouped entries. */
 export function ChatEntry({
   entry,
   permissionMode,
@@ -1407,7 +1407,7 @@ export function ChatEntry({
       // Handled by ToolSummaryBlock in grouped rendering
       return null;
     case "question":
-      // Prose-detected questions render as normal text - they're usually
+      // Prose-detected questions render as normal text — they're usually
       // rhetorical (Claude kept going). Only structured_question gets
       // interactive treatment.
       return <TextGroup entries={[entry]} />;

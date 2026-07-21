@@ -363,6 +363,82 @@ test("executeCronTask keeps a prose cron question as one assistant message and m
   }
 });
 
+test("executeCronTask treats explicit blocked status text as a failed cron run", async () => {
+  const workspaceDir = makeTempWorkspace();
+  const scheduledFor = new Date().toISOString();
+  const originalClaudeBin = process.env.AI_OS_CLAUDE_BIN;
+
+  try {
+    fs.writeFileSync(path.join(workspaceDir, "AGENTS.md"), "# test workspace\n", "utf-8");
+    writeCronJob(
+      workspaceDir,
+      null,
+      "blocked-status-job",
+      "Report a blocked state without a process error."
+    );
+
+    const wrapperPath = createFakeClaudeCommand(
+      workspaceDir,
+      "fake-claude-blocked-status",
+      process.platform === "win32"
+        ? [
+            "@echo off",
+            "setlocal",
+            "echo {\"type\":\"assistant\",\"message\":{\"content\":[{\"type\":\"text\",\"text\":\"I could not query Notion.\\n\\nStatus: BLOCKED - Notion connector not callable in this headless cron run.\"}]}}",
+            "echo {\"type\":\"result\",\"cost_usd\":0.11}",
+            "exit /b 0",
+            "",
+          ]
+        : [
+            "set -e",
+            "printf '%s\\n' '{\"type\":\"assistant\",\"message\":{\"content\":[{\"type\":\"text\",\"text\":\"I could not query Notion.\\n\\nStatus: BLOCKED - Notion connector not callable in this headless cron run.\"}]}}'",
+            "printf '%s\\n' '{\"type\":\"result\",\"cost_usd\":0.11}'",
+            "exit 0",
+          ]
+    );
+
+    process.env.AI_OS_CLAUDE_BIN = wrapperPath;
+
+    const job = cronRuntime.getCronJob(workspaceDir, "blocked-status-job", null);
+    const queued = cronRuntime.enqueueCronJob(workspaceDir, job, {
+      trigger: "scheduled",
+      scheduledFor,
+    });
+
+    const result = await cronRuntime.executeCronTask(workspaceDir, queued.task.id);
+    const db = cronRuntime.getDb(workspaceDir);
+    const taskRow = db
+      .prepare("SELECT status, needsInput, errorMessage, activityLabel FROM tasks WHERE id = ?")
+      .get(queued.task.id);
+    const cronRun = db
+      .prepare("SELECT result, completionReason, exitCode, costUsd FROM cron_runs WHERE taskId = ?")
+      .get(queued.task.id);
+    const statusFile = JSON.parse(
+      fs.readFileSync(path.join(workspaceDir, "cron", "status", "blocked-status-job.json"), "utf-8")
+    );
+
+    assert.equal(result.result, "failure");
+    assert.equal(result.exitCode, 1);
+    assert.equal(taskRow.status, "review");
+    assert.equal(taskRow.needsInput, 0);
+    assert.equal(taskRow.errorMessage, "Status: BLOCKED");
+    assert.equal(taskRow.activityLabel, "Status: BLOCKED");
+    assert.equal(cronRun.result, "failure");
+    assert.equal(cronRun.completionReason, "explicit_blocked_status");
+    assert.equal(cronRun.exitCode, 1);
+    assert.equal(cronRun.costUsd, 0.11);
+    assert.equal(statusFile.result, "failure");
+    assert.equal(statusFile.fail_count, 1);
+  } finally {
+    if (originalClaudeBin === undefined) {
+      delete process.env.AI_OS_CLAUDE_BIN;
+    } else {
+      process.env.AI_OS_CLAUDE_BIN = originalClaudeBin;
+    }
+    cleanupTempWorkspace(workspaceDir);
+  }
+});
+
 test("scheduled retry attempts are capped at exactly twice even when retry is higher", async () => {
   const workspaceDir = makeTempWorkspace();
   const jobsDir = path.join(workspaceDir, "cron", "jobs");
@@ -440,6 +516,84 @@ test("scheduled retry attempts are capped at exactly twice even when retry is hi
     } else {
       process.env.AI_OS_CLAUDE_BIN = originalClaudeBin;
     }
+    cleanupTempWorkspace(workspaceDir);
+  }
+});
+
+test("shell cron timeout terminates spawned child processes", async (t) => {
+  if (process.platform === "win32") {
+    t.skip("POSIX process-group timeout behavior is covered on Unix-like systems");
+    return;
+  }
+
+  const workspaceDir = makeTempWorkspace();
+  const jobsDir = path.join(workspaceDir, "cron", "jobs");
+  const scriptsDir = path.join(workspaceDir, "scripts");
+  const survivedPath = path.join(workspaceDir, "child-survived.txt");
+  const scheduledFor = new Date().toISOString();
+
+  try {
+    fs.writeFileSync(path.join(workspaceDir, "AGENTS.md"), "# test workspace\n", "utf-8");
+    fs.mkdirSync(jobsDir, { recursive: true });
+    fs.mkdirSync(scriptsDir, { recursive: true });
+    fs.writeFileSync(
+      path.join(scriptsDir, "shell-timeout-parent.sh"),
+      [
+        "#!/usr/bin/env bash",
+        "set -euo pipefail",
+        "bash scripts/shell-timeout-child.sh &",
+        "wait",
+        "",
+      ].join("\n"),
+      "utf-8"
+    );
+    fs.writeFileSync(
+      path.join(scriptsDir, "shell-timeout-child.sh"),
+      [
+        "#!/usr/bin/env bash",
+        "sleep 2",
+        "printf survived > child-survived.txt",
+        "",
+      ].join("\n"),
+      "utf-8"
+    );
+    fs.chmodSync(path.join(scriptsDir, "shell-timeout-parent.sh"), 0o755);
+    fs.chmodSync(path.join(scriptsDir, "shell-timeout-child.sh"), 0o755);
+    fs.writeFileSync(
+      path.join(jobsDir, "shell-timeout-job.md"),
+      [
+        "---",
+        "name: Shell Timeout Job",
+        "time: 00:00",
+        "days: daily",
+        "active: true",
+        "model: sonnet",
+        "timeout: 1s",
+        "retry: 0",
+        "runner: shell",
+        "command: bash scripts/shell-timeout-parent.sh",
+        "---",
+        "",
+      ].join("\n"),
+      "utf-8"
+    );
+
+    const job = cronRuntime.getCronJob(workspaceDir, "shell-timeout-job", null);
+    const queued = cronRuntime.enqueueCronJob(workspaceDir, job, {
+      trigger: "scheduled",
+      scheduledFor,
+    });
+
+    const startedAt = Date.now();
+    const result = await cronRuntime.executeCronTask(workspaceDir, queued.task.id);
+    const elapsedMs = Date.now() - startedAt;
+    await new Promise((resolve) => setTimeout(resolve, 2300));
+
+    assert.equal(result.result, "timeout");
+    assert.equal(result.exitCode, 124);
+    assert.ok(elapsedMs < 1900, `expected prompt timeout finalization, got ${elapsedMs}ms`);
+    assert.equal(fs.existsSync(survivedPath), false);
+  } finally {
     cleanupTempWorkspace(workspaceDir);
   }
 });

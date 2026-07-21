@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# revoke-access.sh - Remove a GitHub collaborator
+# revoke-access.sh — Remove a GitHub collaborator
 # Usage:
 #   bash scripts/admin/revoke-access.sh <github-username>
 #   bash scripts/admin/revoke-access.sh <github-username> --yes

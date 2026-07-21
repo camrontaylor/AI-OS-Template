@@ -89,7 +89,7 @@ function getClaudeUsage(stats: StatsCache | null) {
     }))
     .sort((a, b) => b.tokens - a.tokens);
 
-  // Daily token budget from env - only show percentage when explicitly configured
+  // Daily token budget from env — only show percentage when explicitly configured
   const budgetEnv = process.env.CLAUDE_DAILY_TOKEN_BUDGET;
   const dailyTokenBudget = budgetEnv ? parseInt(budgetEnv, 10) : 0;
 

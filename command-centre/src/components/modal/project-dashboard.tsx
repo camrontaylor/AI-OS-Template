@@ -73,7 +73,7 @@ interface ProjectDashboardProps {
   briefDescription: string | null;
   /** Ref to the ReplyInput textarea for command insertion from chips */
   replyInputRef?: React.RefObject<{ insertText: (text: string) => void } | null>;
-  /** Open panes - used to show which chat a subtask is in */
+  /** Open panes — used to show which chat a subtask is in */
   openPanes?: PaneItem[];
   /** Open a new chat pane for a subtask */
   onOpenSubtaskPane?: (taskId: string, label: string) => void;
@@ -124,7 +124,7 @@ export function ProjectDashboard({
     [childTasks],
   );
 
-  // Merged timeline for the chat - parent logs + child logs with phase dividers
+  // Merged timeline for the chat — parent logs + child logs with phase dividers
   const mergedConversation = useMemo(() => {
     const merged: LogEntry[] = [...logEntries];
     for (const child of childTasks) {
@@ -141,7 +141,7 @@ export function ProjectDashboard({
 
   const handleRun = useCallback(
     async (child: Task) => {
-      // "Add to existing chat" - just execute; logs merge into main conversation via SSE.
+      // "Add to existing chat" — just execute; logs merge into main conversation via SSE.
       // Inherit parent's permission mode so the subtask runs with the same permissions.
       await updateTask(child.id, {
         status: "running",
@@ -242,7 +242,7 @@ export function ProjectDashboard({
       const child = childTasks.find((c) => c.id === subtaskId);
       if (!child) return;
       if (paneId === MAIN_PANE_ID) {
-        // "Main chat" selected - just execute, logs merge into main conversation via SSE
+        // "Main chat" selected — just execute, logs merge into main conversation via SSE
         // (no side pane created)
       } else {
         // Assign subtask to the selected existing pane
@@ -263,7 +263,7 @@ export function ProjectDashboard({
     [childTasks, onAssignSubtaskToPane, onFocusPane, fetchLogEntries, updateTask, task.executionPermissionMode, task.permissionMode, task.status],
   );
 
-  /** Handle clicking a subtask row - navigate to its chat */
+  /** Handle clicking a subtask row — navigate to its chat */
   const handleSubtaskClick = useCallback(
     (child: Task) => {
       if (!hasBeenRun(child)) return; // Not clickable
@@ -922,7 +922,7 @@ export function ProjectDashboard({
         </div>
       )}
 
-      {/* Main chat area - full width, single column */}
+      {/* Main chat area — full width, single column */}
       <ModalChat
         taskId={task.id}
         logEntries={mergedConversation}
@@ -948,7 +948,7 @@ export function ProjectDashboard({
         onRefresh={() => fetchLogEntries(task.id)}
       />
 
-      {/* Next action chips - between chat and reply input */}
+      {/* Next action chips — between chat and reply input */}
       <NextActionChips
         task={task}
         childTasks={childTasks}

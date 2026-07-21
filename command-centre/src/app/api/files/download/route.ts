@@ -3,15 +3,6 @@ import path from "path";
 import fs from "fs";
 import { getClientAiOsDir } from "@/lib/config";
 
-function runtimeResolve(first: string, ...rest: string[]): string {
-  return path.resolve(/*turbopackIgnore: true*/ first, ...rest);
-}
-
-function isWithinDir(targetPath: string, rootDir: string): boolean {
-  const relative = path.relative(rootDir, targetPath);
-  return relative === "" || (!!relative && !relative.startsWith("..") && !path.isAbsolute(relative));
-}
-
 export async function GET(request: NextRequest): Promise<NextResponse> {
   const filePath = request.nextUrl.searchParams.get("path");
   const clientId = request.nextUrl.searchParams.get("clientId");
@@ -26,10 +17,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   }
 
   const baseDir = getClientAiOsDir(clientId);
-  const resolvedPath = runtimeResolve(baseDir, filePath);
+  const resolvedPath = path.resolve(baseDir, filePath);
 
   // Path traversal protection: ensure resolved path is within the active workspace
-  if (!isWithinDir(resolvedPath, baseDir)) {
+  if (!resolvedPath.startsWith(baseDir)) {
     return NextResponse.json({ error: "Path traversal not allowed" }, { status: 403 });
   }
 

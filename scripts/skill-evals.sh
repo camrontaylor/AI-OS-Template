@@ -14,7 +14,7 @@ fail() { printf "${RED}FAIL %s${NC}\n" "$1" >&2; exit 1; }
 
 usage() {
   cat <<'EOF'
-Usage: bash scripts/skill-evals.sh [memory-recall] [meta-memory-write] [memory-boundaries] [ops-versioning]
+Usage: bash scripts/skill-evals.sh [memory-recall] [meta-memory-write] [memory-boundaries] [ops-cron] [ops-versioning]
 
 With no arguments, runs all current skill evals.
 EOF
@@ -31,6 +31,10 @@ run_memory_recall() {
   bash "$ROOT/scripts/test-memory-search.sh"
   bash "$ROOT/scripts/test-memsearch-search.sh"
   bash "$ROOT/scripts/test-memsearch-reindex.sh"
+  bash "$ROOT/scripts/test-memsearch-health.sh"
+  bash "$ROOT/scripts/test-memsearch-maintain.sh"
+  bash "$ROOT/scripts/test-recall-fusion.sh"
+  bash "$ROOT/scripts/test-recall-golden.sh"
   ok "memory-recall eval passed"
 }
 
@@ -54,10 +58,20 @@ run_memory_boundaries() {
   bash "$ROOT/scripts/test-memory-target-resolver.sh"
   bash "$ROOT/scripts/test-load-memory-snapshot.sh"
   bash "$ROOT/scripts/test-session-memory-block.sh"
+  bash "$ROOT/scripts/test-session-memory-finalizer.sh"
   bash "$ROOT/scripts/test-client-routing-guard.sh"
   bash "$ROOT/scripts/test-client-sync.sh"
+  bash "$ROOT/scripts/test-memory-system-audit.sh"
   bash "$ROOT/scripts/test-client-memory-maintenance.sh"
+  bash "$ROOT/scripts/test-memory-backup.sh"
   ok "memory-boundaries eval passed"
+}
+
+run_ops_cron() {
+  info "Running ops-cron eval..."
+  bash "$ROOT/scripts/test-notion-resource-health.sh"
+  npm run test:cron --prefix "$ROOT/command-centre"
+  ok "ops-cron eval passed"
 }
 
 run_ops_versioning() {
@@ -87,7 +101,7 @@ run_ops_versioning() {
 }
 
 if [ "$#" -eq 0 ]; then
-  set -- memory-recall meta-memory-write memory-boundaries ops-versioning
+  set -- memory-recall meta-memory-write memory-boundaries ops-cron ops-versioning
 fi
 
 for target in "$@"; do
@@ -100,6 +114,9 @@ for target in "$@"; do
       ;;
     memory-boundaries)
       run_memory_boundaries
+      ;;
+    ops-cron)
+      run_ops_cron
       ;;
     ops-versioning)
       run_ops_versioning

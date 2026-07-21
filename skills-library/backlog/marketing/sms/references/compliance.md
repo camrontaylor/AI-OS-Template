@@ -6,11 +6,11 @@ Comprehensive compliance reference for SMS marketing across major jurisdictions,
 
 ---
 
-## United States - TCPA
+## United States — TCPA
 
 ### What it is
 
-The Telephone Consumer Protection Act (1991, amended) regulates marketing calls and texts. The FCC enforces it; private plaintiffs sue under it. Statutory damages: $500-$1,500 **per message**. Class actions easily reach 7-8 figures.
+The Telephone Consumer Protection Act (1991, amended) regulates marketing calls and texts. The FCC enforces it; private plaintiffs sue under it. Statutory damages: $500–$1,500 **per message**. Class actions easily reach 7–8 figures.
 
 ### Consent tiers
 
@@ -43,10 +43,10 @@ Place this **directly adjacent** to the phone number field and submit button. Do
 
 ### Quiet hours
 
-- **Federal**: 8am-9pm in the recipient's local time zone
-- **Stricter states**: Florida (8am-8pm), Oklahoma (8am-8pm), Washington (8am-8pm)
-- **Carrier-recommended**: 9am-8pm recipient-local
-- **Practical default**: 9am-8pm recipient-local for safety
+- **Federal**: 8am–9pm in the recipient's local time zone
+- **Stricter states**: Florida (8am–8pm), Oklahoma (8am–8pm), Washington (8am–8pm)
+- **Carrier-recommended**: 9am–8pm recipient-local
+- **Practical default**: 9am–8pm recipient-local for safety
 
 Time zone is determined by area code, but area codes lie (people move). Major platforms (Klaviyo, Postscript, Attentive) handle this automatically; verify yours does.
 
@@ -74,13 +74,13 @@ You're unsubscribed from [Brand] alerts. No more messages will be sent. Reply HE
 
 ### Sample TCPA-compliant footer language by sequence type
 
-- **Opt-in confirmation**: "Reply HELP for help, STOP to cancel. Msg & data rates may apply." - required
-- **Recurring promotional**: "Reply STOP to opt out" - required quarterly minimum; carrier-recommended every send
+- **Opt-in confirmation**: "Reply HELP for help, STOP to cancel. Msg & data rates may apply." — required
+- **Recurring promotional**: "Reply STOP to opt out" — required quarterly minimum; carrier-recommended every send
 - **Transactional**: Not required by TCPA but carriers expect it; include for safety
 
 ---
 
-## United States - A2P 10DLC
+## United States — A2P 10DLC
 
 ### What it is
 
@@ -107,8 +107,8 @@ Application-to-Person 10-Digit Long Code registration, run by The Campaign Regis
 
 | Trust score + use case | Throughput |
 |------------------------|-----------|
-| Verified brand, marketing | 75-100+ msg/sec |
-| Standard brand, marketing | 4-10 msg/sec |
+| Verified brand, marketing | 75–100+ msg/sec |
+| Standard brand, marketing | 4–10 msg/sec |
 | Unregistered | 0.1 msg/sec or blocked |
 
 ### Common rejections
@@ -118,11 +118,11 @@ Application-to-Person 10-Digit Long Code registration, run by The Campaign Regis
 - "SHAFT" content (Sex, Hate, Alcohol, Firearms, Tobacco) without explicit use case
 - Generic or vague campaign descriptions
 
-**Process time**: 1-7 business days. Plan for this in launch timelines.
+**Process time**: 1–7 business days. Plan for this in launch timelines.
 
 ---
 
-## EU / UK - GDPR + ePrivacy Directive
+## EU / UK — GDPR + ePrivacy Directive
 
 ### Consent requirements
 
@@ -145,12 +145,12 @@ GDPR fines up to €20M or 4% of global revenue, whichever is higher.
 
 ---
 
-## Canada - CASL
+## Canada — CASL
 
 ### Consent
 
 - **Express consent**: explicit opt-in (same standard as US TCPA express written consent)
-- **Implied consent**: existing business relationship within 24 months - limited use, expires
+- **Implied consent**: existing business relationship within 24 months — limited use, expires
 
 ### Every message must include
 
@@ -165,7 +165,7 @@ Up to CAD $10M per violation. Enforced by the CRTC.
 
 ---
 
-## Australia - Spam Act 2003
+## Australia — Spam Act 2003
 
 - Express or inferred consent (inferred has narrow application)
 - Sender ID required
@@ -180,7 +180,7 @@ If you send across US + EU + Canada simultaneously:
 
 - Default to the **strictest** standard across all jurisdictions (US TCPA express written consent + GDPR explicit opt-in)
 - Track consent jurisdiction per subscriber
-- Default quiet hours to recipient-local 9am-8pm
+- Default quiet hours to recipient-local 9am–8pm
 - Include all required identifiers in every message
 
 ---

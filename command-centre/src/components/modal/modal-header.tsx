@@ -204,13 +204,13 @@ export function ModalHeader({
               onClick={() => {
                 updateTask(task.id, { status: "queued" });
               }}
-              title="Reopen - moves back to Claude's Turn"
+              title="Reopen — moves back to Claude's Turn"
               className="mr-1 h-auto px-3 py-1 text-[11px] font-semibold"
             >
               Reopen
             </Button>
           )}
-          {/* Resume button removed - individual pane resume buttons are sufficient */}
+          {/* Resume button removed — individual pane resume buttons are sufficient */}
           <Button
             variant="ghost"
             size="icon"

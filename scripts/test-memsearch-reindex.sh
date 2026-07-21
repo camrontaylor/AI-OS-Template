@@ -126,6 +126,32 @@ test_reindex_lists_root_and_all_client_memory_sources() {
   ok "reindex lists root plus all discovered client memory sources"
 }
 
+test_strict_mode_fails_when_another_index_owns_the_lock() {
+  make_fake_repo
+  mkdir -p "$TEST_ROOT/repo/.command-centre/memsearch-index.lock"
+  printf '%s\n' "$$" > "$TEST_ROOT/repo/.command-centre/memsearch-index.lock/pid"
+
+  (
+    cd "$TEST_ROOT/repo"
+    export PATH="$TEST_ROOT/bin:$PATH"
+    export MEMSEARCH_INDEX_LOG="$TEST_ROOT/index-args.txt"
+    bash scripts/memsearch-reindex.sh > "$TEST_ROOT/advisory-lock.txt"
+  )
+  assert_contains "$TEST_ROOT/advisory-lock.txt" "Another memsearch index job is already running"
+
+  if (
+    cd "$TEST_ROOT/repo"
+    export PATH="$TEST_ROOT/bin:$PATH"
+    export MEMSEARCH_INDEX_LOG="$TEST_ROOT/index-args.txt"
+    bash scripts/memsearch-reindex.sh --strict > "$TEST_ROOT/strict-lock.txt"
+  ); then
+    fail "strict reindex must fail when another index owns the lock"
+  fi
+  assert_contains "$TEST_ROOT/strict-lock.txt" "Another memsearch index job is already running"
+  ok "strict reindex fails instead of reporting a live-lock skip as success"
+}
+
 info "Running memsearch reindex tests..."
 test_reindex_lists_root_and_all_client_memory_sources
+test_strict_mode_fails_when_another_index_owns_the_lock
 ok "memsearch reindex tests passed"

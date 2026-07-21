@@ -87,7 +87,7 @@ export function parseRoadmap(
         if (planMatch) {
           const planId = planMatch[2];
           const completed = planMatch[1] === "x";
-          const description = planMatch[3].trim().replace(/\s* - .*$/, "");
+          const description = planMatch[3].trim().replace(/\s*—.*$/, "");
 
           const phaseSlug = findPhaseSlug(phasesDir, num);
           const hasPlanFile = phaseSlug

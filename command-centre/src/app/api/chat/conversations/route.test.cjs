@@ -43,11 +43,6 @@ test("chat conversations GET treats clientId=root as root-only scope", async () 
           };
         },
       },
-      "@/lib/clients": {
-        assertValidClientId(value) {
-          return value ?? null;
-        },
-      },
       "@/types/chat": {},
     },
   });

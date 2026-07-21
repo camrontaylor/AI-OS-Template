@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// PostToolUse hook - logs each tool use to the board task in real-time
+// PostToolUse hook — logs each tool use to the board task in real-time
 // Fire-and-forget: spawns background process so it doesn't block Claude
 
 const fs = require("fs");

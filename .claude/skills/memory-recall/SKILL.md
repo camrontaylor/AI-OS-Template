@@ -1,12 +1,7 @@
 ---
 name: memory-recall
 description: >
-  Search and recall prior AI-OS memory when the user's request could benefit
-  from past sessions, previous decisions, project context, debugging notes,
-  or "have we seen this before" history. Use this before answering from guesswork
-  when the question involves memory, continuity, past client/project work, or
-  prior reasoning. Does not trigger for purely current-code inspection where
-  grep/read is enough, or when the user explicitly asks to ignore memory.
+  Search and recall prior AI-OS memory: past sessions, decisions, project context, "have we seen this before". Use before answering from guesswork when the question involves memory, continuity, or past client/project work. Not for current-code inspection where grep or read is enough, or when asked to ignore memory.
 ---
 
 # Memory Recall
@@ -56,14 +51,14 @@ when needed:
 
 ```bash
 bash scripts/memsearch-search.sh "<query>" 10 --scope root
-bash scripts/memsearch-search.sh "<query>" 10 --scope client --client acme
+bash scripts/memsearch-search.sh "<query>" 10 --scope client --client {slug}
 bash scripts/memsearch-search.sh "<query>" 10 --scope all
 ```
 
 Do not run raw `memsearch search`, `memsearch expand`, `memsearch index`, or
-`memsearch stats` in Codex. The AI-OS authority guard blocks those commands so
-the recall path cannot bypass canonical collection resolution, markdown
-fallback, or Milvus lock handling.
+`memsearch stats` for routine AI-OS recall. Use the wrapper scripts so the
+recall path keeps canonical collection resolution, markdown fallback, and
+Milvus lock handling.
 
 Choose a query that captures the user's real question, not just their exact words.
 The wrapper resolves the AI-OS canonical collection and reranks results. If
@@ -77,14 +72,10 @@ context is available only through client-scoped markdown fallback. Root brand
 context and transcript archives are explicit deep-search/reference surfaces, not
 routine memory recall.
 
-For semantic recall in Codex, run the command with escalated permissions from
-the first attempt:
-
-- `sandbox_permissions`: `require_escalated`
-- justification: `MemSearch uses Milvus Lite, which needs its local LOCK file and a 127.0.0.1 port even for read-only semantic search.`
-
-If escalation is not available, run the same command normally anyway. It will
-return deterministic markdown results with `search_mode: "markdown_fallback"`.
+For semantic recall, run the command in a shell that can access Milvus Lite's
+local files and loopback port. If that access is blocked, run the same command
+normally anyway. It will return deterministic markdown results with
+`search_mode: "markdown_fallback"`.
 
 ## Step 3: Use Markdown Fallback When Needed
 
@@ -109,7 +100,7 @@ the same authoritative markdown sources.
 
 Use the returned source paths, dates, and line hints to read the most relevant
 source sections directly. If direct `memsearch expand <chunk_hash>` is useful,
-run it with the same Codex escalation rule as search.
+run it from the same shell that can access Milvus Lite.
 
 Prefer the original markdown source over quoting raw search snippets. Search is
 for finding; source files are for answering.
@@ -145,8 +136,9 @@ Keep it short unless the user asks for a full history.
 
 ## Rules
 
-- 2026-06-25: In Codex, every MemSearch semantic command needs escalated permissions from the first attempt because Milvus Lite needs both a local lock file and a loopback port, even for read-only search.
-- 2026-06-25: If MemSearch returns `Operation not permitted`, `Failed to bind to address`, `Open local milvus failed`, `DataDirLockedError`, or a `LOCK` error, treat it as tool availability. Retry escalated or use labelled degraded mode; never treat it as empty memory.
+- 2026-07-16: For vendor-question synthesis, treat prior question sets as historical leads rather than a reusable answer. Re-check the vendor's current offer, remove questions already answered by the documented product model, and separate missing client-specific facts from vendor capabilities before drafting new questions.
+- 2026-06-25: MemSearch semantic commands need local Milvus Lite access, including a local lock file and a loopback port, even for read-only search.
+- 2026-06-25: If MemSearch returns `Operation not permitted`, `Failed to bind to address`, `Open local milvus failed`, `DataDirLockedError`, or a `LOCK` error, treat it as tool availability. Retry from a shell with local access or use labelled degraded mode; never treat it as empty memory.
 - 2026-06-25: Use `scripts/memory-search.sh` as the Tier 1.5 fallback before manual degraded-mode reading. It is the sandbox-safe AI-OS recall layer.
 - 2026-06-25: Prefer AI-OS wrappers over raw MemSearch commands. Use `scripts/memsearch-search.sh` for recall and `scripts/memsearch-reindex.sh` for indexing.
 - 2026-06-25: `scripts/memsearch-search.sh` must use hybrid recall: semantic MemSearch plus exact markdown recall fused together, because semantic-only results can be too broad.
@@ -183,5 +175,5 @@ Do not only log it to learnings.
 ## Troubleshooting
 
 - `memsearch not installed`: use degraded mode and suggest `bash scripts/setup-memory.sh`.
-- `Operation not permitted` or `Failed to bind to address 127.0.0.1`: in Codex, rerun with escalated permissions.
+- `Operation not permitted` or `Failed to bind to address 127.0.0.1`: rerun from a shell with access to Milvus Lite.
 - `DataDirLockedError` or another process holds the lock: an index/search process is active. Do not start another index; use degraded mode and retry semantic search later.

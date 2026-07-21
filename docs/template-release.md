@@ -25,12 +25,6 @@ branch, and commit, scans tracked files for high-risk personal or client strings
 checks for generated artifacts, and runs the memory/routing guard tests. It is
 read-only and does not push.
 
-For maintainer-specific leakage checks, pass a comma-separated scan list:
-
-```bash
-AI_OS_TEMPLATE_PRIVATE_SCAN_TERMS="Client Name,/Users/yourname" bash scripts/template-release-check.sh
-```
-
 To inspect an existing local checkout without network:
 
 ```bash
@@ -57,3 +51,16 @@ gate and name:
 - Risk: what changes for future template users.
 
 Generic "continue" approval is not enough for a template publish.
+
+## Template Propagation Mechanics (canonical detail; AGENTS.md points here)
+
+`scripts/template-sync.sh` flows documented systemic changes from this install out to the template repo (`camrontaylor/AI-OS-Template`, the `upstream` remote) - the reverse direction of `scripts/update.sh`. Every safety property is enforced in the script, not left to the agent:
+
+- **Allowlist-scoped.** Only files matching `config/update-manifest.json` `ai_os_owned` propagate, minus anything matching `user_owned`. Client memory, brand context, projects, `.env`, and per-client folders can never move.
+- **Sanitizer-gated.** Every changed file is scanned for private strings (`scripts/lib/sanitize-strings.sh`), with client slugs and display names derived live from `clients/*` so a client added later is covered without editing a list. A file carrying a client name, display name, or the maintainer's home path is held back and reported, never silently rewritten - a missed rewrite would leak client data to a public repo. Clean files still propagate; held files surface for deliberate sanitizing.
+- **Branch, not main.** Changes land on a rolling `template-sync/main` branch with one open PR, force-updated each run. They reach the template's protected `main` only when that PR is merged.
+- **Disarmed by default.** The script and its hook ship in `ai_os_owned`, so every install gets them, but auto mode is a silent no-op unless the install ran `template-sync.sh --arm` (the arm flag lives in user-owned, gitignored `.command-centre/`). Only the maintainer's install is armed; a downstream install never pushes to the maintainer's template.
+
+Enforcement surfaces: the Claude Code SessionEnd hook `.claude/hooks/template-sync-notify.js` runs `template-sync.sh --auto` fire-and-forget after `base-autosave`; `meta-wrap-up` Step 3i runs the same script in every tool; manual control via `--dry-run` / `--arm` / `--disarm` / `--status`.
+
+Regression to avoid: do not turn this into a silent auto-rewriter that strips client names in flight (one missed string leaks), do not push straight to template `main`, do not widen the allowlist past `ai_os_owned`, and do not arm it by default for downstream installs.

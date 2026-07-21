@@ -5,7 +5,7 @@ export interface FileSnapshot {
   [relativePath: string]: { size: number; content?: string };
 }
 
-const MAX_CONTENT_SIZE = 256 * 1024; // 256KB - store content for text files under this limit
+const MAX_CONTENT_SIZE = 256 * 1024; // 256KB — store content for text files under this limit
 
 const TEXT_EXTS = new Set([
   ".md", ".mdx", ".txt", ".json", ".ts", ".tsx", ".js", ".jsx",
@@ -61,7 +61,7 @@ export function classifyFile(
   if (!snapshot) return "unchanged";
   const baseline = snapshot[relativeToProject];
   if (!baseline) return "added";
-  // If we have content, we'd need current content to compare - for now use size as proxy
+  // If we have content, we'd need current content to compare — for now use size as proxy
   return "unchanged";
 }
 
