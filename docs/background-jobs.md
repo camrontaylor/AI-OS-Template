@@ -177,7 +177,7 @@ Examples:
 | `daily-memory-distill` | Promotes useful daily session context into hot memory. |
 | `client-memory-distill` | Updates each client's hot memory from client session logs. |
 | `nightly-memsearch-index` | Re-indexes the complete AI-OS memory source set, then proves semantic health and stable top-three retrieval quality against that completed index. |
-| `weekly-memory-curator` | Tidies root hot memory. |
+| `daily-memory-curator` | Tidies root hot memory. |
 | `semantic-memory-health` | Retired time-based duplicate; the nightly index job owns the ordered health proof. |
 | `nightly-memory-backup` | Backs up gitignored live memory locally and mirrors it off-machine when a destination is configured. |
 

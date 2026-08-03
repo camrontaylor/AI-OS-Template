@@ -136,7 +136,7 @@ export function PanelOutputs({ taskId, clientId, projectSlug, taskLevel, onFileC
         <div className="flex flex-col gap-1 px-6">
           {outputFiles.map((file) => {
             const Icon = getFileIcon(file.extension);
-            const docsHref = `/?tab=docs&file=${encodeURIComponent(file.relativePath)}`;
+            const docsHref = `/docs?file=${encodeURIComponent(file.relativePath)}`;
             const previewUrl = appendClientId(`/api/files/preview?path=${encodeURIComponent(file.relativePath)}`, clientId ?? null);
             const downloadUrl = appendClientId(`/api/files/download?path=${encodeURIComponent(file.relativePath)}`, clientId ?? null);
             const isImage = IMAGE_EXTENSIONS.has(file.extension);

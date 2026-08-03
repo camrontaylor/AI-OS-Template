@@ -111,9 +111,11 @@ if [ "$MODE" = "client" ]; then
   echo "## Manifest: clients/$SLUG/brand_context/"
   manifest_dir "$CDIR/brand_context"
   echo
-  echo "## Taste calls learned so far"
-  emit_file "$CDIR/context/learnings.md" >/dev/null 2>&1 || true
-  grep -A20 '## Taste calls' "$CDIR/context/learnings.md" 2>/dev/null || echo "- none recorded yet"
+  echo "## Preferences and taste calls learned so far"
+  # The nightly distill writes taste to "## Preferences" (capture-correction.sh);
+  # "## Taste calls" was a dead heading that made this section print empty forever.
+  awk '/^## (Preferences|Taste calls)$/{on=1; next} /^#{1,2} /{on=0} on' \
+    "$CDIR/context/learnings.md" 2>/dev/null | grep -v '^\s*$' || echo "- none recorded yet"
 
 else
   # system mode
@@ -131,8 +133,9 @@ else
   echo "- Design source of truth for 'why is it built this way': docs/meta/"
   echo "- Standing rule: CLAUDE.local.md 2026-06-16 (ground before you assert)."
   echo
-  echo "## Taste / workflow calls learned so far (root)"
-  grep -A20 '## Taste calls' "$ROOT/context/learnings.md" 2>/dev/null || echo "- none recorded yet"
+  echo "## Preferences and taste calls learned so far (root)"
+  awk '/^## (Preferences|Taste calls)$/{on=1; next} /^#{1,2} /{on=0} on' \
+    "$ROOT/context/learnings.md" 2>/dev/null | grep -v '^\s*$' | tail -40 || echo "- none recorded yet"
 fi
 
 echo

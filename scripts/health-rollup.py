@@ -25,11 +25,15 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 import time
 from datetime import date, datetime, timedelta, timezone
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.environ.get(
+    "AI_OS_ROOT",
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+)
 STATE_DIR = os.path.join(ROOT, ".command-centre")
 LEDGER_PATH = os.path.join(STATE_DIR, "health-ledger.json")
 ROLLUP_PATH = os.path.join(STATE_DIR, "health-rollup.md")
@@ -99,6 +103,30 @@ def job_stale_allowance(slug, scope):
     return DEFAULT_STALE_DAYS
 
 
+def job_active_state(slug, scope):
+    """Return 'active', 'inactive', or 'missing' for a job's .md definition.
+
+    A status file with no job file is a dead leftover (a renamed or removed job);
+    a job file carrying active:'false' is intentionally retired. Both must be kept
+    out of the findings so a genuine failure is not buried under retired-job noise.
+    """
+    if scope == "root":
+        job_file = os.path.join(ROOT, "cron", "jobs", f"{slug}.md")
+    else:
+        job_file = os.path.join(ROOT, "clients", scope, "cron", "jobs", f"{slug}.md")
+    if not os.path.exists(job_file):
+        return "missing"
+    try:
+        with open(job_file, "r", encoding="utf-8") as fh:
+            for line in fh:
+                if line.startswith("active:"):
+                    value = line.split(":", 1)[1].strip().strip("'\"").lower()
+                    return "inactive" if value == "false" else "active"
+    except Exception:
+        return "active"  # unreadable frontmatter: assume active, never hide a job
+    return "active"
+
+
 def _job_age_days(last_run):
     """Days since last_run, or None if it cannot be parsed."""
     raw = str(last_run or "").strip()
@@ -133,6 +161,8 @@ def collect_cron_streaks():
             slug = os.path.splitext(os.path.basename(status_path))[0]
             rel = os.path.relpath(status_path, ROOT)
             scope = "root" if rel.startswith("cron/") else rel.split(os.sep)[1]
+            if job_active_state(slug, scope) != "active":
+                continue  # retired (active:false) or dead leftover status file
             raw_last = data.get("last_run")
             last_run = str(raw_last or "unknown")[:16].replace("T", " ")
             result = str(data.get("result") or "").strip().lower()
@@ -220,6 +250,34 @@ def collect_memsearch_freshness():
     return []
 
 
+def collect_memory_hygiene():
+    """Surface MEMORY.md drift the cron-status path does not catch on its own.
+
+    The curator gate writes this status every run. A hard over-cap breach also
+    fails the gate (caught by collect_cron_streaks); this adds the soft signal -
+    threads that have gone cold and want a review-or-archive pass.
+    """
+    status = load_json(os.path.join(STATE_DIR, "memory-hygiene.json"), {})
+    if not status:
+        return []
+    out = []
+    cap = status.get("cap", 2500)
+    if status.get("over_cap"):
+        out.append(finding(
+            "memory-over-cap",
+            f"MEMORY.md is over its {cap}-char cap ({status.get('size')}); the "
+            f"curator floor did not hold - check cron/logs/daily-memory-curator.log.",
+        ))
+    cold = status.get("cold_threads") or []
+    if len(cold) >= 3:
+        out.append(finding(
+            "memory-cold-threads",
+            f"{len(cold)} active memory threads have gone cold (>10 days, no "
+            f"recent mention); review or archive them.",
+        ))
+    return out
+
+
 def collect_template_sync():
     log_path = os.path.join(ROOT, ".backup", "template-sync", "last-run.log")
     armed = os.path.exists(os.path.join(STATE_DIR, "template-sync-armed"))
@@ -267,6 +325,11 @@ def collect_report_lines():
                 line = line.strip()
                 if not line or len(line) > 300:
                     continue
+                # Explanatory prose can mention historical failures without
+                # declaring a current finding. Only explicit report bullets
+                # enter the daily health ledger.
+                if not line.startswith(("- ", "* ")):
+                    continue
                 if line.startswith(("✓", "- ✓", "PASS", "OK", "[x]")):
                     continue  # pass-lines are not findings even when wordy
                 if not REPORT_SIGNAL.search(line) or REPORT_NOISE.search(line):
@@ -311,6 +374,7 @@ def main():
         collect_cron_streaks,
         collect_autosave,
         collect_memsearch_freshness,
+        collect_memory_hygiene,
         collect_template_sync,
         collect_report_lines,
     ):
@@ -365,6 +429,21 @@ def main():
         fh.write("\n".join(lines))
 
     print(f"health-rollup: {len(items)} open finding(s), {len(resolved)} resolved, {parked} parked. -> {os.path.relpath(ROLLUP_PATH, ROOT)}")
+
+    # Chain the out-of-band escalation arm so infra/loop-health findings reach the
+    # user by phone the same day, not only when they next open a session. Runs from
+    # whatever triggered the rollup (daily cron or the watchdog). Best-effort, and
+    # it self-deduplicates, so a second call in the same tick is a safe no-op.
+    escalate = os.path.join(ROOT, "scripts", "health-escalate.py")
+    if not os.environ.get("AI_OS_HEALTH_ESCALATE_DISABLE") and os.path.exists(escalate):
+        try:
+            subprocess.run(
+                [sys.executable, escalate],
+                timeout=30, check=False,
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            )
+        except Exception:
+            pass
     return 0
 
 

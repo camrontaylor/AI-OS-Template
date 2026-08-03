@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 # test-recall-golden-gate.sh - fast regression test for the two-tier recall gate.
 #
-# Guards the 2026-07-20 fix: a healthy ~90% index must NOT report FAILURE, while
-# a genuine collapse (below floor) or a dead semantic layer (paraphrase miss)
-# still must. Imports scripts/lib/recall_gate.py directly, so it runs in
+# Guards the 2026-07-20 two-tier fix and the 2026-07-23 paraphrase recalibration:
+# a healthy index (even with a paraphrase ranking wobble) must NOT report FAILURE,
+# while a genuine collapse (below floor) or a truly dead semantic layer (paraphrase
+# miss with no semantic results) still must. Imports scripts/lib/recall_gate.py
+# directly, so it runs in
 # milliseconds with no Milvus and no search - and can never drift from the real
 # gate because both use the same classify().
 set -uo pipefail
@@ -16,21 +18,27 @@ from recall_gate import classify
 
 FLOOR, TARGET, PARA = 0.80, 0.95, 1.0
 
-# (rate, para_rate) -> (want_verdict, want_exit)
+# (rate, para_rate, semantic_alive) -> (want_verdict, want_exit)
 cases = [
-    (0.90, 1.0, "WARN", 0),  # the real-world healthy-but-not-sharp state - must NOT fail
-    (0.95, 1.0, "PASS", 0),  # hits target
-    (1.00, 1.0, "PASS", 0),  # perfect
-    (0.80, 1.0, "WARN", 0),  # exactly at floor -> healthy warn
-    (0.79, 1.0, "FAIL", 1),  # just below floor -> real collapse
-    (0.50, 1.0, "FAIL", 1),  # decorative index
-    (0.90, 0.50, "FAIL", 1), # good overall but paraphrase collapsed -> hard fail
-    (1.00, 0.00, "FAIL", 1), # perfect literal, semantic layer dead -> hard fail
+    (0.90, 1.0, True, "WARN", 0),  # the real-world healthy-but-not-sharp state - must NOT fail
+    (0.95, 1.0, True, "PASS", 0),  # hits target
+    (1.00, 1.0, True, "PASS", 0),  # perfect
+    (0.80, 1.0, True, "WARN", 0),  # exactly at floor -> healthy warn
+    (0.79, 1.0, True, "FAIL", 1),  # just below floor -> real collapse
+    (0.50, 1.0, True, "FAIL", 1),  # decorative by overall rate -> real collapse
+    # Paraphrase recalibration (2026-07-23): a paraphrase miss only proves a dead
+    # layer when nothing semantic came back. While the layer is alive it is dull
+    # ranking, not death -> WARN, not a suite-reddening FAIL (the golden set's 2
+    # paraphrase cases flipped 0/2 -> 2/2 in an hour on a healthy index).
+    (0.90, 0.50, True,  "WARN", 0), # good overall, paraphrase dip, layer alive -> WARN
+    (0.90, 0.50, False, "FAIL", 1), # paraphrase dip AND no semantic results -> dead layer -> FAIL
+    (1.00, 0.00, False, "FAIL", 1), # perfect literal but semantic layer truly dead -> FAIL
+    (1.00, 0.00, True,  "WARN", 0), # perfect literal, layer alive, paraphrases outside top-k -> WARN
 ]
 
 fails = 0
-for rate, para, want_v, want_e in cases:
-    v, e, msg = classify(rate, para, FLOOR, TARGET, PARA)
+for rate, para, alive, want_v, want_e in cases:
+    v, e, msg = classify(rate, para, FLOOR, TARGET, PARA, alive)
     ok = (v == want_v and e == want_e)
     if not ok:
         fails += 1

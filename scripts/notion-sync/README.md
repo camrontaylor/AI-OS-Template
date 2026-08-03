@@ -120,11 +120,11 @@ nightly memsearch index (23:30), which then picks up the freshly synced folder.
 
 ```bash
 # Copy the job into LaunchAgents
-cp "scripts/notion-sync/com.camron.notion-sync.plist" \
-   ~/Library/LaunchAgents/com.camron.notion-sync.plist
+cp "scripts/notion-sync/com.example.notion-sync.plist" \
+   ~/Library/LaunchAgents/com.example.notion-sync.plist
 
 # Load it
-launchctl load ~/Library/LaunchAgents/com.camron.notion-sync.plist
+launchctl load ~/Library/LaunchAgents/com.example.notion-sync.plist
 ```
 
 Verify it is registered:
@@ -136,7 +136,7 @@ launchctl list | grep notion-sync
 Run it immediately to test the loaded job (does not wait for Sunday):
 
 ```bash
-launchctl start com.camron.notion-sync
+launchctl start com.example.notion-sync
 ```
 
 Logs are written to `context/notion/sync.log` and `context/notion/sync.err.log`.
@@ -145,16 +145,16 @@ Logs are written to `context/notion/sync.log` and `context/notion/sync.err.log`.
 
 ```bash
 # Stop and unregister
-launchctl unload ~/Library/LaunchAgents/com.camron.notion-sync.plist
+launchctl unload ~/Library/LaunchAgents/com.example.notion-sync.plist
 
 # After editing the plist, unload then load again to pick up changes
-launchctl unload ~/Library/LaunchAgents/com.camron.notion-sync.plist
-launchctl load   ~/Library/LaunchAgents/com.camron.notion-sync.plist
+launchctl unload ~/Library/LaunchAgents/com.example.notion-sync.plist
+launchctl load   ~/Library/LaunchAgents/com.example.notion-sync.plist
 ```
 
 > On newer macOS you can also use the modern syntax:
-> `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.camron.notion-sync.plist`
-> and `launchctl bootout gui/$(id -u)/com.camron.notion-sync`. The
+> `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.example.notion-sync.plist`
+> and `launchctl bootout gui/$(id -u)/com.example.notion-sync`. The
 > `load`/`unload` form above works fine for a per-user agent.
 
 ## Notes

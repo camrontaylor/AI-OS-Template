@@ -196,6 +196,17 @@ else
   fail "Memsearch reindex source contract does not visibly include root and client memory."
 fi
 
+# Durable synthesis layer (2026-07-27): the top-level context/*.md files carry
+# the richest curated knowledge (relationship history, ops synthesis, Decision
+# Ledger). A source-contract that lists only MEMORY.md/learnings.md would look
+# healthy while leaving them invisible to recall, so verify the layer explicitly.
+if grep -q 'for f in context/\*.md; do' "$ROOT/scripts/memsearch-reindex.sh" \
+  && grep -q 'for f in "${client_dir}context"/\*.md; do add_source' "$ROOT/scripts/memsearch-reindex.sh"; then
+  ok "Memsearch reindex covers the durable top-level context/*.md synthesis layer."
+else
+  fail "Memsearch reindex no longer covers the durable context/*.md synthesis layer (relationship history, ops synthesis, decisions)."
+fi
+
 printf '\nChecking likely placement drift...\n'
 if [[ -f "$ROOT/context/MEMORY.md" && -d "$ROOT/clients" ]]; then
   drift_terms=()

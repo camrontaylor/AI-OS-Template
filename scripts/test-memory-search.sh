@@ -177,6 +177,26 @@ PY
   ok "client scope targets one client folder"
 }
 
+test_workspace_scope_is_client_plus_root() {
+  make_fake_repo
+  (
+    cd "$TEST_ROOT/repo"
+    bash scripts/memory-search.sh "gantry-pricing beta-routing recall marker" 8 --scope workspace --client acme > "$TEST_ROOT/workspace-scope.json"
+  )
+
+  python3 - "$TEST_ROOT/workspace-scope.json" <<'PY'
+import json, sys
+data = json.load(open(sys.argv[1]))
+assert data, "expected workspace results"
+sources = {item["source"] for item in data}
+# workspace = the one client plus the root layer, never other clients.
+assert any("/clients/acme/" in s for s in sources), sources
+assert any("/clients/" not in s for s in sources), sources
+assert not any("/clients/beta/" in s for s in sources), sources
+PY
+  ok "workspace scope returns one client plus root, never other clients"
+}
+
 test_root_scope_excludes_clients() {
   make_fake_repo
   (
@@ -227,6 +247,7 @@ test_no_match_returns_empty_array
 test_specific_terms_outrank_broad_context
 test_all_scope_searches_all_client_folders
 test_client_scope_targets_one_client
+test_workspace_scope_is_client_plus_root
 test_root_scope_excludes_clients
 test_root_scope_excludes_reference_archives
 test_client_scope_includes_client_brand_context

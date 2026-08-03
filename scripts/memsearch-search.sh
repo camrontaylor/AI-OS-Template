@@ -14,7 +14,7 @@ if [ -z "$ROOT" ]; then
 fi
 
 usage() {
-  echo "Usage: bash scripts/memsearch-search.sh \"query\" [top-k] [--scope root|client|clients|all] [--client slug]" >&2
+  echo "Usage: bash scripts/memsearch-search.sh \"query\" [top-k] [--scope root|client|clients|all|workspace] [--client slug]" >&2
 }
 
 if [ $# -lt 1 ] || [ -z "${1:-}" ]; then
@@ -62,7 +62,11 @@ DEFAULT_CLIENT="$(client_from_path "$PWD" 2>/dev/null || client_from_path "$SCRI
 if [ -n "${AI_OS_MEMORY_SCOPE:-}" ]; then
   SCOPE="$AI_OS_MEMORY_SCOPE"
 elif [ -n "$DEFAULT_CLIENT" ]; then
-  SCOPE="client"
+  # workspace = this client plus the root layer, never other clients. The old
+  # "client" default walled client sessions off from root learnings/MEMORY
+  # (2026-07-28 memory diagnosis), so cross-client voice rules and root facts
+  # were unreachable exactly where most client work happens.
+  SCOPE="workspace"
 else
   SCOPE="root"
 fi
@@ -86,7 +90,7 @@ while [ $# -gt 0 ]; do
       CLIENT="${1#*=}"
       shift
       ;;
-    root|client|clients|all)
+    root|client|clients|all|workspace)
       SCOPE="$1"
       shift
       ;;
@@ -102,14 +106,48 @@ if [ "$SCOPE" = "client" ] && [ -z "$CLIENT" ]; then
   exit 64
 fi
 
+# Retrieval observability (best-effort, invisible to callers). Tag who asked so the
+# usage readout can separate organic recall from eval/cron noise. See
+# projects/briefs/memory-observability/brief.md.
+if [ -n "${AI_OS_RECALL_CALLER:-}" ]; then
+  LOG_CALLER="$AI_OS_RECALL_CALLER"
+elif [ "${AI_OS_AUTONOMOUS:-}" = "1" ]; then
+  LOG_CALLER="cron"
+else
+  LOG_CALLER="manual"
+fi
+
+# emit: print the final JSON results to stdout, then best-effort log them. Logging
+# never changes stdout and runs in the BACKGROUND from its own copy, so a slow or
+# contended append can never eat the caller's timeout budget (auto-recall runs this
+# inside a 9s execFileSync), and the EXIT-trap cleanup of the shared temps cannot
+# race the logger.
+emit() {
+  cat "$1"
+  [ "${AI_OS_RECALL_LOG_DISABLE:-}" = "1" ] && return 0
+  [ -f "$ROOT/scripts/lib/recall-log.py" ] || return 0
+  command -v python3 >/dev/null 2>&1 || return 0
+  local logcopy
+  logcopy="$(mktemp "${TMPDIR:-/tmp}/aios-recall-log.XXXXXX" 2>/dev/null)" || return 0
+  cp "$1" "$logcopy" 2>/dev/null || { rm -f "$logcopy"; return 0; }
+  ( python3 "$ROOT/scripts/lib/recall-log.py" \
+      --query "$QUERY" --scope "$SCOPE" --caller "$LOG_CALLER" --results-file "$logcopy" \
+      >/dev/null 2>&1
+    rm -f "$logcopy" ) >/dev/null 2>&1 &
+}
+
 run_markdown_fallback() {
+  local tmp
+  tmp="$(mktemp "${TMPDIR:-/tmp}/aios-memsearch.md.XXXXXX")"
   if [ -x "$ROOT/scripts/memory-search.sh" ] || [ -f "$ROOT/scripts/memory-search.sh" ]; then
     args=("$QUERY" "$TOP_K" --scope "$SCOPE")
     [ -n "$CLIENT" ] && args+=(--client "$CLIENT")
-    bash "$ROOT/scripts/memory-search.sh" "${args[@]}"
-    return
+    bash "$ROOT/scripts/memory-search.sh" "${args[@]}" >"$tmp" || echo "[]" >"$tmp"
+  else
+    echo "[]" >"$tmp"
   fi
-  echo "[]"
+  emit "$tmp"
+  rm -f "$tmp"
 }
 
 if command -v memsearch >/dev/null 2>&1; then
@@ -128,8 +166,9 @@ ERR_OUT="$(mktemp "${TMPDIR:-/tmp}/aios-memsearch.err.XXXXXX")"
 SEMANTIC_OUT="$(mktemp "${TMPDIR:-/tmp}/aios-memsearch.semantic.XXXXXX")"
 FILTERED_SEMANTIC_OUT="$(mktemp "${TMPDIR:-/tmp}/aios-memsearch.semantic-filtered.XXXXXX")"
 MARKDOWN_OUT="$(mktemp "${TMPDIR:-/tmp}/aios-memsearch.markdown.XXXXXX")"
+MERGED_OUT="$(mktemp "${TMPDIR:-/tmp}/aios-memsearch.merged.XXXXXX")"
 cleanup() {
-  rm -f "$RAW_OUT" "$ERR_OUT" "$SEMANTIC_OUT" "$FILTERED_SEMANTIC_OUT" "$MARKDOWN_OUT"
+  rm -f "$RAW_OUT" "$ERR_OUT" "$SEMANTIC_OUT" "$FILTERED_SEMANTIC_OUT" "$MARKDOWN_OUT" "$MERGED_OUT"
 }
 trap cleanup EXIT
 
@@ -210,9 +249,10 @@ else
   printf '[]\n' >"$MARKDOWN_OUT"
 fi
 
-# Merge the filtered+reranked semantic set with markdown recall.
+# Merge the filtered+reranked semantic set with markdown recall, then emit + log.
 if [ -f "$ROOT/scripts/lib/merge-memory-results.py" ]; then
-  python3 "$ROOT/scripts/lib/merge-memory-results.py" "$SEMANTIC_OUT" "$MARKDOWN_OUT" "$TOP_K"
+  python3 "$ROOT/scripts/lib/merge-memory-results.py" "$SEMANTIC_OUT" "$MARKDOWN_OUT" "$TOP_K" >"$MERGED_OUT"
 else
-  cat "$SEMANTIC_OUT"
+  cp "$SEMANTIC_OUT" "$MERGED_OUT"
 fi
+emit "$MERGED_OUT"

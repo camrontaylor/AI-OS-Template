@@ -12,6 +12,7 @@ are deliberately NOT published) live in `skills-library/LICENSES.md`.
 |---|---|---|---|
 | `coreyhaines-marketing-*` | [coreyhaines31/marketingskills](https://github.com/coreyhaines31/marketingskills) | MIT | `skills-library/backlog/marketing/LICENSE` |
 | `coreyhaines-skills-*` | [coreyhaines31/makerskills](https://github.com/coreyhaines31/makerskills) | MIT | `skills-library/backlog/maker/LICENSE` |
+| `viz-make-interfaces-feel-better` | [jakubkrehel/make-interfaces-feel-better](https://github.com/jakubkrehel/make-interfaces-feel-better) | MIT | `skills-library/backlog/make-interfaces-feel-better/LICENSE` |
 
 The AI-OS copies are modified: kept under the author's own `coreyhaines-` namespace
 rather than an AI-OS category prefix, re-described for the skill picker, and given an

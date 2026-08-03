@@ -175,6 +175,7 @@ This step absorbs the checks deferred from startup to keep session start fast. R
 - **Stale brand_context flagging:** Scan `brand_context/` for files older than 30 days. Flag any that are stale.
 - **Active project scan:** Scan `projects/briefs/*/brief.md` for active projects. Report any that exist.
 - **Cron dispatcher status:** Check whether the cron dispatcher is installed. If so, read `cron/status/` and report anything relevant.
+- **Decision Ledger health:** Run `bash scripts/decision-ledger-check.sh`. Surface any chronic churn (a decision reopened 3 or more times, so the reopen gate is not holding) or malformed entries in the session summary. It is read-only and never edits a ledger.
 
 **Reconciliation** (from AGENTS.md's **Skill & MCP Reconciliation** section). This catches anything that changed during the session:
 
@@ -212,6 +213,11 @@ Promote durable facts from the session into `context/MEMORY.md` (the curated scr
    - PowerShell: `(Get-Item context/MEMORY.md).Length`
 5. If over **2,500 chars**, consolidate (merge similar lines, tighten verbose entries) before saving
 6. Skip silently if nothing durable surfaced this session — most planning/discussion sessions won't have anything to promote
+
+**Decision Ledger.** If the session made, changed, or reopened a directional decision (positioning, offer, pricing, naming, ICP, strategy), update `context/decisions.md` in the active scope (the client folder for client work, root otherwise):
+- New decision → append an entry: a `## Topic` heading, then `- Status:`, `- Decided:`, `- Call:`, `- Reopen gate:`, `- Gate met:`, `- Reopened: 0`, and optional `- Note:` / `- Source:`.
+- Reopened an existing decision → bump its `Reopened:` count, append the new `Call`, and note in `Note` whether the reopen was authorized (the user directed it, or the gate was met). Never overwrite the prior call; churn must stay visible.
+- Append-only, like the correction log. Leave `Retired` entries in place. The brief generator surfaces open, gated, and churned entries at the next session start.
 
 Report usage in the session summary under the **Memory** block: `MEMORY.md: {N}/2,500 chars ({pct}%)`.
 

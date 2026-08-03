@@ -7,7 +7,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 if [ $# -lt 1 ] || [ -z "${1:-}" ]; then
-  echo "Usage: bash scripts/memory-search.sh \"query\" [top-k] [--scope current|root|client|clients|all] [--client slug]" >&2
+  echo "Usage: bash scripts/memory-search.sh \"query\" [top-k] [--scope current|root|client|clients|all|workspace] [--client slug]" >&2
   exit 64
 fi
 
@@ -41,7 +41,7 @@ while [ $# -gt 0 ]; do
       CLIENT="${1#*=}"
       shift
       ;;
-    current|root|client|clients|all)
+    current|root|client|clients|all|workspace)
       SCOPE="$1"
       shift
       ;;
@@ -51,6 +51,19 @@ while [ $# -gt 0 ]; do
       ;;
   esac
 done
+
+# Derive the client from PWD when not given, mirroring memsearch-search.sh, so
+# "--scope workspace" (or client) from inside clients/<slug>/ keeps the client
+# layer instead of silently degrading to root-only (pass-1 review finding).
+if [ -z "$CLIENT" ]; then
+  case "$PWD" in
+    "$ROOT"/clients/*)
+      REST="${PWD#"$ROOT"/clients/}"
+      CANDIDATE="${REST%%/*}"
+      [ -d "$ROOT/clients/$CANDIDATE/context" ] && CLIENT="$CANDIDATE"
+      ;;
+  esac
+fi
 
 args=("$QUERY" "$TOP_K" --root "$ROOT" --scope "$SCOPE")
 if [ -n "$CLIENT" ]; then

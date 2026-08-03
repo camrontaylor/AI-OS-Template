@@ -87,9 +87,31 @@ The reindex script lists the complete canonical source set in one pass:
 - root `context/MEMORY.md`,
 - root `context/memory/`,
 - root `context/learnings.md`,
+- root top-level `context/*.md` (the durable synthesis + `decisions.md` Decision
+  Ledger + `SOUL.md`/`USER.md`), non-recursively; `learnings.shared.md` and
+  `prompt-tags.md` are skipped (git-tracked mirror of learnings, and prompt
+  config, not recall memory),
+- root `context/wiki/` and the generated `context/notion/CATALOG.md`,
+- curated root/client knowledge subfolders named by policy (currently
+  `myob-exo/` and `operator/`), with noisy machine indexes excluded,
+- `daily/`,
 - each client `context/MEMORY.md`,
 - each client `context/memory/`,
-- each client `context/learnings.md`.
+- each client `context/learnings.md`,
+- each client top-level `context/*.md` (overview, relationship-history, ops
+  synthesis, timeline, current-state, ...), non-recursively.
+
+The top-level `context/*.md` layer was added 2026-07-27: previously only
+`MEMORY.md`/`learnings.md` were indexed, so the richest curated knowledge (a
+client's relationship history, ops synthesis, and the Decision Ledger) was
+invisible to semantic recall. It is deliberately non-recursive, so
+deep-search-only subfolders (`agency/`, `meetings/`, `inbox/`, `intake/`,
+`transcripts/`, `directives/`, `docs/`, `reference/`, `notion/items/`) and
+`brand_context/` stay out per
+`config/memory-index-policy.json` - raw transcripts never enter routine recall,
+but the synthesis files that summarize them do. The markdown fallback
+(`scripts/memory-search.py`) covers the same set so recall does not lose
+surfaces when Milvus is locked.
 
 That complete list matters because MemSearch indexing can behave like a sync:
 if a source set is incomplete, old indexed sources can disappear.

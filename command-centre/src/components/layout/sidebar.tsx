@@ -3,7 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Home,
+  BarChart3,
+  Bot,
+  BookOpen,
+  CalendarDays,
+  ClipboardCheck,
+  Database,
+  FileStack,
+  FolderKanban,
   LayoutDashboard,
   Clock,
   Cpu,
@@ -12,6 +19,10 @@ import {
   ChevronLeft,
   ChevronRight,
   History,
+  Inbox,
+  Link2,
+  ShieldCheck,
+  Workflow,
   type LucideIcon,
 } from "lucide-react";
 import { ClientSwitcher } from "./client-switcher";
@@ -20,17 +31,49 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 type NavItem = { label: string; icon: LucideIcon; href: string };
+type NavSection = { label: string; items: NavItem[] };
 
-const mainNavItems: NavItem[] = [
-  { label: "Overview", icon: Home, href: "/" },
-  { label: "Board", icon: LayoutDashboard, href: "/board" },
-  { label: "Scheduled", icon: Clock, href: "/cron" },
-  { label: "History", icon: History, href: "/history" },
-  { label: "Skills", icon: Cpu, href: "/skills" },
-  { label: "Docs", icon: FileText, href: "/docs" },
+const navSections: NavSection[] = [
+  {
+    label: "Operate",
+    items: [
+      { label: "Overview", icon: LayoutDashboard, href: "/" },
+      { label: "Agent", icon: Bot, href: "/agent" },
+      { label: "Plan", icon: ClipboardCheck, href: "/plan" },
+      { label: "Analytics", icon: BarChart3, href: "/analytics" },
+    ],
+  },
+  {
+    label: "Loops",
+    items: [
+      { label: "Briefs", icon: Inbox, href: "/briefs" },
+      { label: "Calendar", icon: CalendarDays, href: "/calendar" },
+      { label: "Workflows", icon: Workflow, href: "/workflows" },
+      { label: "Scheduled", icon: Clock, href: "/cron" },
+    ],
+  },
+  {
+    label: "Workspace",
+    items: [
+      { label: "Projects", icon: FolderKanban, href: "/projects" },
+      { label: "Assets", icon: FileStack, href: "/assets" },
+      { label: "Docs", icon: FileText, href: "/docs" },
+      { label: "Memory", icon: Database, href: "/memory" },
+      { label: "Skills", icon: Cpu, href: "/skills" },
+    ],
+  },
+  {
+    label: "Control",
+    items: [
+      { label: "Integrations", icon: Link2, href: "/integrations" },
+      { label: "Permissions", icon: ShieldCheck, href: "/permissions" },
+      { label: "History", icon: History, href: "/history" },
+    ],
+  },
 ];
 
 const bottomNavItems: NavItem[] = [
+  { label: "Brief", icon: BookOpen, href: "/docs?file=projects/briefs/magister-command-centre/brief.md" },
   { label: "Settings", icon: Settings, href: "/settings" },
 ];
 
@@ -60,7 +103,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         title={collapsed ? item.label : undefined}
       >
         <Link href={item.href}>
-          <Icon className="size-4 shrink-0" />
+          <Icon className="shrink-0" />
           {!collapsed && <span className="truncate">{item.label}</span>}
         </Link>
       </Button>
@@ -113,10 +156,20 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       </div>
 
       {/* Navigation */}
-      <nav className="flex flex-1 flex-col gap-1">
-        {mainNavItems.map(renderItem)}
-        <div className="my-2 border-t border-sidebar-border" />
-        {bottomNavItems.map(renderItem)}
+      <nav className="flex flex-1 flex-col gap-4 overflow-y-auto">
+        {navSections.map((section) => (
+          <div key={section.label} className="flex flex-col gap-1">
+            {!collapsed && (
+              <div className="px-3 pb-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                {section.label}
+              </div>
+            )}
+            {section.items.map(renderItem)}
+          </div>
+        ))}
+        <div className="border-t border-sidebar-border pt-3">
+          {bottomNavItems.map(renderItem)}
+        </div>
       </nav>
 
       {/* Theme toggle */}

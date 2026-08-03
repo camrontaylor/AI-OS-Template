@@ -1,5 +1,5 @@
 {
-  "_comment": "Provenance for skills-library/backlog. Cloned 2026-06-16. SHAs are the upstream commits the vendored copies were taken from. License 'none' = all-rights-reserved; vendored for private personal use in this private repo only — do not republish.",
+  "_comment": "Provenance for skills-library/. Cloned 2026-06-16, resources/ lane added 2026-07-28. SHAs are the upstream commits the vendored copies were taken from. License 'none' = all-rights-reserved; vendored for private personal use in this private repo only - do not republish. Four arrays, one per physical concept: 'sources' = skill packs fully vendored (full source) under backlog/, promotable into .claude/skills/. 'resources' = non-skill external resources (apps, MCP servers, toolkits) fully evaluated via meta-skill-intake + meta-bake-it-in, recorded as a metadata-only RESOURCE.md under resources/<name>/ - never full-source-vendored, see skills-library/INDEX.md. 'candidates' = repos noted as maybe-interesting but not yet evaluated - nothing physical on disk for these. 'excluded' = looked at and rejected outright (not skills, sandbox/demo apps).",
   "sources": [
     {
       "repo": "briiirussell/cybersecurity-skills",
@@ -13,11 +13,11 @@
     {
       "repo": "coreyhaines31/marketingskills",
       "url": "https://github.com/coreyhaines31/marketingskills",
-      "commit": "67264763cb107d61749f418d081c56e5bcbc0209",
+      "commit": "7868cb9251fad80a73d26e488a5ad5f6c4a9f335",
       "license": "MIT",
       "vendored_to": "backlog/marketing",
-      "skills": 47,
-      "notes": "Re-synced 2026-07-21 from 6c60174 -> 6726476 (still 47 skills, no additions/removals - all changes are feature-adds inside existing skills). Prior: updated 2026-07-08 from 3bea48e -> 6c60174 (44 -> 47). ~40 are already live (flagged Active dup? in INDEX). Net-new skills at that point: marketing-plan, prospecting, public-relations, sms, marketing-council, marketing-loops, offers. 2026-07-21 delta = enhancements to LIVE-adjacent skills: ad-creative (iMessage/ChatGPT/AppleNotes/AirDrop reveal-video formats, motion-video ads, creative-review-page.html artifact, hook-system, Mode-4 creative-roadmap loop), ai-seo (citations-vs-recommendations AI-visibility ladder - feeds live str-ai-seo), social (carousel-frameworks: 5 slide narrative architectures), video (edit-anatomy: reverse-engineer a viral edit into a reusable spec), prospecting (demand-signals discovery branch), product-marketing (context-doc version history). No net-new skills this sync."
+      "skills": 49,
+      "notes": "Re-synced 2026-07-28 from 6726476 -> 7868cb9 (47 -> 49). Net-new promoted live: attribution (coreyhaines-marketing-attribution) and influencer-marketing (coreyhaines-marketing-influencer-marketing). Updated in place: analytics 2.0.0 -> 2.0.1 (attribution scope handed off to the new skill), pricing 2.0.1 -> 2.1.0 (Pricing Page Teardown + AI-agent-readiness lens + references/pricing-page-teardown.md). All four carry the standard AI-OS mods (tight description + when_to_use, Context Needs, tools/REGISTRY -> docs/connectors rewire, .agents/product-marketing -> brand_context rewire, namespaced cross-refs, em/en dashes stripped); backlog copies stay verbatim upstream. Prior: Re-synced 2026-07-21 from 6c60174 -> 6726476 (still 47 skills, no additions/removals - all changes are feature-adds inside existing skills). Prior: updated 2026-07-08 from 3bea48e -> 6c60174 (44 -> 47). ~40 are already live (flagged Active dup? in INDEX). Net-new skills at that point: marketing-plan, prospecting, public-relations, sms, marketing-council, marketing-loops, offers. 2026-07-21 delta = enhancements to LIVE-adjacent skills: ad-creative (iMessage/ChatGPT/AppleNotes/AirDrop reveal-video formats, motion-video ads, creative-review-page.html artifact, hook-system, Mode-4 creative-roadmap loop), ai-seo (citations-vs-recommendations AI-visibility ladder - feeds live str-ai-seo), social (carousel-frameworks: 5 slide narrative architectures), video (edit-anatomy: reverse-engineer a viral edit into a reusable spec), prospecting (demand-signals discovery branch), product-marketing (context-doc version history). No net-new skills this sync."
     },
     {
       "repo": "coreyhaines31/makerskills",
@@ -35,7 +35,7 @@
       "license": "none (all-rights-reserved)",
       "vendored_to": "backlog/cf-frameworks",
       "skills": 42,
-      "notes": "Took shared/skills MINUS the marketing skills it re-bundles from coreyhaines (deduped). DID NOT run install.sh — it overwrites ~/.claude/CLAUDE.md, settings.json and symlinks their skills over yours. Crown jewel: the 14-stage client-delivery methodology (client-intake, brand-strategy, creative-direction, logo-design, brand-style-guide, sitemap-workshop, website-copy, wireframes, website-build-*, client-handoff, growth-engine, audit, audit-marketing)."
+      "notes": "Took shared/skills MINUS the marketing skills it re-bundles from coreyhaines (deduped). DID NOT run install.sh \u2014 it overwrites ~/.claude/CLAUDE.md, settings.json and symlinks their skills over yours. Crown jewel: the 14-stage client-delivery methodology (client-intake, brand-strategy, creative-direction, logo-design, brand-style-guide, sitemap-workshop, website-copy, wireframes, website-build-*, client-handoff, growth-engine, audit, audit-marketing)."
     },
     {
       "repo": "conversionfactory/planner-skill",
@@ -44,7 +44,7 @@
       "license": "none (all-rights-reserved)",
       "vendored_to": "backlog/planner",
       "skills": 1,
-      "notes": "Notion + Google Calendar daily planner (v2.0.1). You have both MCPs. Recommended for triage — needs de-tailoring from the hardcoded 'Conversion Factory workspace' preflight."
+      "notes": "Notion + Google Calendar daily planner (v2.0.1). You have both MCPs. Recommended for triage \u2014 needs de-tailoring from the hardcoded 'Conversion Factory workspace' preflight."
     },
     {
       "repo": "conversionfactory/QA-skill",
@@ -53,7 +53,7 @@
       "license": "none (all-rights-reserved)",
       "vendored_to": "backlog/copy-qa",
       "skills": 1,
-      "notes": "Copy QA: Notion task -> Figma/Webflow comparison. You have Notion/Figma/Webflow MCPs. Built around a specific Notion schema (Task Type, '- Copy' related pages) — adapt to yours in triage."
+      "notes": "Copy QA: Notion task -> Figma/Webflow comparison. You have Notion/Figma/Webflow MCPs. Built around a specific Notion schema (Task Type, '- Copy' related pages) \u2014 adapt to yours in triage."
     },
     {
       "repo": "mattnowdev/thinking-partner",
@@ -108,6 +108,15 @@
       "vendored_to": "backlog/karpathy-coding-discipline",
       "skills": 0,
       "notes": "Registered retroactively 2026-07-16 - absorbed 2026-07-08 as the AGENTS.md Coding Discipline posture with a provenance-only README, but never recorded here. The four rules were re-expressed in AI-OS's own words; the source file was not copied in."
+    },
+    {
+      "repo": "petergyang/no-ai-slop",
+      "url": "https://github.com/petergyang/no-ai-slop",
+      "commit": "e81170dcaefa76b4cb2672532e13042f4e132b32",
+      "license": "MIT",
+      "vendored_to": "backlog/no-ai-slop",
+      "skills": 1,
+      "notes": "Single-skill pack. Human-editor skill: edits AI-slop patterns out of drafts while preserving voice, or detects patterns without rewriting. Ships an eval.md self-check. Overlaps AI-OS's tool-humanizer and the house voice rules - assess for merge-vs-standalone before promoting."
     }
   ],
   "candidates": [
@@ -136,20 +145,61 @@
       "skills": 26,
       "clone": "gh repo clone TheCraigHewitt/seomachine",
       "notes": "Claude Code workspace by Craig Hewitt (Castos) for producing long-form, SEO-optimized blog content end to end: research -> write -> optimize -> publish. Net-new value vs what is already here: 24 SEO slash commands (/research, /write, /optimize, /performance-review, plus the landing-* and research-* sets) + 11 SEO agents (seo-optimizer, meta-creator, internal-linker, keyword-mapper, cluster-strategist, content-analyzer, cro-analyst, headline-generator, editor, performance, landing-page-optimizer) + a Python data_sources layer (GA4, Search Console, DataForSEO, plus nltk/textstat scoring). Caveat: the 26 bundled skills largely DUPLICATE the coreyhaines marketing pack already in backlog/live (copywriting, content-strategy, email-sequence, seo-audit, schema-markup, programmatic-seo, pricing-strategy, social, paid-ads, marketing-ideas, marketing-psychology, etc.), so if vendored, take the commands + agents + data tooling and dedup the skills. To run: clone OUTSIDE the AI-OS repo, pip install data_sources/requirements.txt, and set GA4/GSC/DataForSEO + Anthropic keys (see its .env.example)."
+    },
+    {
+      "repo": "jakubkrehel/make-interfaces-feel-better",
+      "url": "https://github.com/jakubkrehel/make-interfaces-feel-better",
+      "commit": "5f3c3c26c512b3469e6dbcab8a0d73e8b575a566",
+      "license": "MIT",
+      "vendored_to": "backlog/make-interfaces-feel-better",
+      "skills": 1,
+      "notes": "Vendored + PROMOTED 2026-07-30 -> viz-make-interfaces-feel-better (author name dropped for the standard viz category prefix per user direction 2026-07-30; provenance retained in ATTRIBUTION.md + LICENSES.md, which is what MIT actually requires). Single documentation-only skill: an interface-polish reviewer (concentric radius, optical alignment, shadow-vs-border, interruptible/enter/exit animations, tabular nums, text wrap, image outlines, scale-on-press, hit areas, icon stroke weight, motion restraint) with quick/full modes and a Block/Needs-changes/Approve verdict. Directory intact (SKILL.md links relative refs typography/surfaces/animations/icons/performance.md + agents/openai.yaml). Zero deps (no MCP/env/service). Complementary to live impeccable (broad UX/IA) and eng-implement (build). Live copy carries AI-OS mods: name matched to folder, tightened description + when_to_use, ## Context Needs added, em/en dashes stripped (voice rule). Backlog copy stays verbatim upstream."
+    }
+  ],
+  "resources": [
+    {
+      "repo": "MadsLorentzen/ai-job-search",
+      "url": "https://github.com/MadsLorentzen/ai-job-search",
+      "commit": "HEAD as of 2026-07-23 (not pinned - reclone for a fresh SHA)",
+      "license": "MIT",
+      "vendored_to": "resources/ai-job-search",
+      "vendored": false,
+      "skills": 0,
+      "notes": "Claude Code job-application framework (/scrape, /apply, /interview, CV/cover-letter tailoring). Not a skill pack - a full application. Evaluated 2026-07-23, PARTIALLY-ABSORBED (2 patterns kept into AGENTS.md and meta-systems-check check 13b), capability parked. Full record: resources/ai-job-search/RESOURCE.md."
+    },
+    {
+      "repo": "DeusData/codebase-memory-mcp",
+      "url": "https://github.com/DeusData/codebase-memory-mcp",
+      "commit": "HEAD as of 2026-07-23 (not pinned - reclone for a fresh SHA)",
+      "license": "MIT",
+      "vendored_to": "resources/codebase-memory-mcp",
+      "vendored": false,
+      "skills": 0,
+      "notes": "Pure-C MCP server: tree-sitter knowledge graph, 15 MCP tools, 1944 files. Not a skill pack - a compiled server with an intrusive installer (writes ~/.claude/skills + settings.json hooks by default). Evaluated 2026-07-23, PARKED (safe path if revisited: install.sh --skip-config + project .mcp.json only, never the default installer). Full record: resources/codebase-memory-mcp/RESOURCE.md."
+    },
+    {
+      "repo": "Panniantong/Agent-Reach",
+      "url": "https://github.com/Panniantong/Agent-Reach",
+      "commit": "HEAD as of 2026-07-23 (not pinned - reclone for a fresh SHA)",
+      "license": "MIT",
+      "vendored_to": "resources/agent-reach",
+      "vendored": false,
+      "skills": 0,
+      "notes": "Python 'internet capabilities for agents' toolkit routing to ~7 third-party CLIs. Not a skill pack. Evaluated 2026-07-23, PARTIALLY-ABSORBED (1 fact kept into AGENTS.md; Groq-Whisper tool-youtube fallback held as a proposal), toolkit parked (scrapes the operator's own logged-in sessions - account-ban risk). Full record: resources/agent-reach/RESOURCE.md."
     }
   ],
   "excluded": [
     {
       "repo": "conversionfactory/skills-demo",
-      "reason": "Next.js demo app, not skills — a sandbox target."
+      "reason": "Next.js demo app, not skills \u2014 a sandbox target."
     },
     {
       "repo": "conversionfactory/horizontal-saas-test",
-      "reason": "Next.js test app, not skills — a sandbox target."
+      "reason": "Next.js test app, not skills \u2014 a sandbox target."
     },
     {
       "repo": "conversionfactory/vertical-saas-test",
-      "reason": "Next.js test app, not skills — a sandbox target."
+      "reason": "Next.js test app, not skills \u2014 a sandbox target."
     }
   ]
 }

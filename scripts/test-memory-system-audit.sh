@@ -67,6 +67,8 @@ EOF
 for client_dir in clients/*/; do
   echo context/MEMORY.md context/learnings.md
 done
+for f in context/*.md; do add_source "$f"; done
+for f in "${client_dir}context"/*.md; do add_source "$f"; done
 EOF
 }
 

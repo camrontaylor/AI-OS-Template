@@ -99,7 +99,9 @@ test_client_inherits_root_identity_and_client_memory() {
   assert_contains "$TEST_ROOT/out.txt" "CLIENT MEMORY MARKER"
   assert_contains "$TEST_ROOT/out.txt" "CLIENT CURRENT STATE MARKER"
   assert_contains "$TEST_ROOT/out.txt" "CLIENT DAILY MARKER"
-  assert_not_contains "$TEST_ROOT/out.txt" "ROOT MEMORY MARKER"
+  # Root MEMORY.md IS loaded in client sessions since the 2026-07-28 memory
+  # diagnosis (cross-workspace facts were unreachable from client sessions).
+  assert_contains "$TEST_ROOT/out.txt" "ROOT MEMORY MARKER"
   assert_not_contains "$TEST_ROOT/out.txt" "ROOT CURRENT STATE MARKER"
   assert_not_contains "$TEST_ROOT/out.txt" "ROOT DAILY MARKER"
   ok "client startup inherits root identity and client memory"
@@ -112,7 +114,7 @@ test_nested_client_project_uses_client_memory() {
   assert_contains "$TEST_ROOT/out.txt" "ROOT USER MARKER"
   assert_contains "$TEST_ROOT/out.txt" "CLIENT MEMORY MARKER"
   assert_contains "$TEST_ROOT/out.txt" "CLIENT CURRENT STATE MARKER"
-  assert_not_contains "$TEST_ROOT/out.txt" "ROOT MEMORY MARKER"
+  assert_contains "$TEST_ROOT/out.txt" "ROOT MEMORY MARKER"
   ok "nested client project startup uses client memory"
 }
 

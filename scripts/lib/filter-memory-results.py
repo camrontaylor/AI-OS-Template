@@ -34,6 +34,14 @@ def include(rel: str, scope: str, client: str) -> bool:
         return rel.startswith("clients/")
     if scope == "client":
         return bool(client) and rel.startswith(f"clients/{client}/")
+    if scope == "workspace":
+        # One client plus the root layer, never other clients. This is the
+        # default recall scope inside a client folder: client facts win, but
+        # root learnings/rules (voice, cross-client lessons) stay reachable.
+        # With no client it degrades to root-only.
+        if not rel.startswith("clients/"):
+            return True
+        return bool(client) and rel.startswith(f"clients/{client}/")
     return True
 
 

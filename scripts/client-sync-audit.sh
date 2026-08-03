@@ -150,7 +150,7 @@ for client_dir in "$CLIENTS_DIR"/*/; do
     for shared_info in "$ROOT"/.claude/hooks_info/*; do
       [[ -f "$shared_info" ]] || continue
       case "$(basename "$shared_info")" in
-        ccnotify.db|ccnotify.log*|footer-misses.log) continue ;;
+        ccnotify.db|ccnotify.log*|*-misses.log) continue ;;
       esac
       compare_file "$shared_info" "$client_dir/.claude/hooks_info/$(basename "$shared_info")" "  $client/.claude/hooks_info/$(basename "$shared_info")"
     done

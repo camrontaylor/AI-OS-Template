@@ -1,33 +1,24 @@
 "use client";
 
-import { Suspense, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import { AppShell } from "@/components/layout/app-shell";
+import { DocsWorkspace } from "@/components/docs/docs-workspace";
 
-/**
- * Legacy standalone /docs page. Docs now lives as a tab on the root
- * Command Centre (top-nav layout), so this just forwards any existing
- * links (old bookmarks, output-file clicks from older builds) to the
- * new URL while preserving ?file=.
- */
-function DocsRedirect() {
-  const router = useRouter();
+function DocsPageBody() {
   const searchParams = useSearchParams();
 
-  useEffect(() => {
-    const file = searchParams.get("file");
-    const target = file
-      ? `/?tab=docs&file=${encodeURIComponent(file)}`
-      : "/?tab=docs";
-    router.replace(target);
-  }, [router, searchParams]);
-
-  return null;
+  return (
+    <AppShell title="Docs">
+      <DocsWorkspace initialFile={searchParams.get("file")} />
+    </AppShell>
+  );
 }
 
 export default function DocsPage() {
   return (
     <Suspense>
-      <DocsRedirect />
+      <DocsPageBody />
     </Suspense>
   );
 }

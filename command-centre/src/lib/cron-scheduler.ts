@@ -157,6 +157,20 @@ function tickScheduler(): void {
 }
 
 export function initCronScheduler(): void {
+  // The durable launchd daemon (com.aios.cron-daemon) is the authoritative cron
+  // owner. With AIOS_CC_INPROCESS_CRON=off the Command Centre does NOT run its
+  // own in-process scheduler and never claims leadership - it is a read-only
+  // viewer, so there is exactly one cron owner instead of a boot race between
+  // the dev-server app and the daemon (which caused daemon restart churn and
+  // put a `next dev` process in charge of scheduling). Default (unset) keeps the
+  // in-process scheduler as before, so other installs are unaffected.
+  if (String(process.env.AIOS_CC_INPROCESS_CRON || "").toLowerCase() === "off") {
+    console.log(
+      "[cron-scheduler] In-process scheduler disabled (AIOS_CC_INPROCESS_CRON=off); the launchd daemon owns cron."
+    );
+    return;
+  }
+
   const state = getState();
   if (state.interval) {
     return;

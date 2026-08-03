@@ -154,6 +154,31 @@ def rerank(results: list, query: str, cfg: dict) -> list:
         })
 
     final.sort(key=lambda x: x["final_score"], reverse=True)
+
+    # Stage 3b — Source Diversity (default on)
+    # Without this, one file can occupy several of the top slots and crowd out
+    # the distinct source that actually answers the query. Example (2026-07-27):
+    # "orphaned worktree" put two 2026-07-09 log chunks in the top-3 and pushed
+    # the authoritative learnings.md lesson to rank 4; "MYOB rotation" put two
+    # learnings.md chunks up top and buried the expected dated log. This pulls
+    # the best-scoring chunk of each distinct source to the head (in score
+    # order), then appends the remaining same-source chunks. It only REORDERS -
+    # no chunk is dropped and k is preserved - and it can never remove a source
+    # that was already in the head, so it cannot regress recall; it can only add
+    # distinct sources to the top. Set reranker.source_diversity=false to disable.
+    if cfg.get("source_diversity", True):
+        seen: set = set()
+        head, tail = [], []
+        for item in final:
+            src = (item.get("source_path") or item.get("path") or item.get("source") or "").replace("\\", "/")
+            if src and src in seen:
+                tail.append(item)
+            else:
+                if src:
+                    seen.add(src)
+                head.append(item)
+        final = head + tail
+
     return final
 
 def main():

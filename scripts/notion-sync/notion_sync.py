@@ -54,14 +54,15 @@ from pathlib import Path
 # taxonomy. The key becomes the {db} folder name under context/notion/items/.
 # ---------------------------------------------------------------------------
 
-# Only the two databases the catalog is built from. The Notes database
-# (19ec6192c26680139071c6f3071a89f8) is deliberately NOT synced: it holds client
-# and personal material and does not belong in this catalog pipeline.
+# Databases mirrored into context/notion/items/<key>/. Stack and Resources feed
+# the public catalog - build_catalog.py reads only those two by its own fixed
+# list. The Notes database holds client and personal material: it is mirrored for
+# the daily-notes memory path (scripts/daily-note.py surfaces it as title + Notion
+# link only, never the body) and stays OUT of the catalog.
 DATABASES = {
     "stack": "188c6192c266805c8c77d6ff2ce28728",
     "resources": "17ec6192c2668099b853c9074f1c5abb",
-    # Add further databases that share the Global Tags relation here, e.g.:
-    # "people": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "notes": "19ec6192c26680139071c6f3071a89f8",
 }
 
 # The Global Tags database — fetched once to build an ID to name map.
