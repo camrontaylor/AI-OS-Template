@@ -195,6 +195,19 @@ date +%s > "$STAMP" 2>/dev/null || true
 # Prefer a dedicated "github" backup remote if the user has one, otherwise fall
 # back to "origin" (the normal GitHub remote). Earlier this only ever tried
 # "github", so installs without that remote silently never backed up off-machine.
+#
+# 2026-07-28: the push used to run synchronously right here, inside a script
+# that the hook wrapper (base-autosave.js) hard-kills at 18-21s. Measured on
+# this repo, a git push of the FULL multi-day backlog (200+ commits) takes
+# 1-3s - payload size was never the bottleneck. What actually kept losing the
+# race was zero-tolerance for any transient stall (a DNS blip, the Mac
+# sleeping mid-push, a slow keychain credential prompt): one hiccup and the
+# whole push got SIGTERM'd with no time left to even log why, which is why
+# autosave-push.log filled up with "no stderr (likely killed by hook
+# timeout)" guesses for days. The fix is not a bigger number - it is removing
+# the coupling entirely. The push now runs as a detached background job the
+# hook never waits on, with its own generous watchdog, so a slow network no
+# longer has 18 seconds to prove itself in.
 BACKUP_REMOTE=""
 if git remote get-url github >/dev/null 2>&1; then
   BACKUP_REMOTE="github"
@@ -203,15 +216,50 @@ elif git remote get-url origin >/dev/null 2>&1; then
 fi
 if [ -z "${AIOS_AUTOSAVE_NO_PUSH:-}" ] && [ ! -e "$LOGDIR/no-autopush" ] \
    && [ -n "$BACKUP_REMOTE" ]; then
-  if PUSH_ERR="$(git push -q "$BACKUP_REMOTE" "HEAD:refs/heads/autosave/$BRANCH" 2>&1 >/dev/null)"; then
-    printf '[%s] backed up %s to GitHub (%s autosave/%s)\n' "$TS" "$BRANCH" "$BACKUP_REMOTE" "$BRANCH" >> "$LOGDIR/autosave-push.log"
-  else
-    # Capture the real reason instead of swallowing it, so a deferral is never
-    # silent again (2026-07-20: 3 days of blind "deferred" hid the true cause).
-    REASON="$(printf '%s' "$PUSH_ERR" | tr '\n' ' ' | sed 's/  */ /g' | cut -c1-200)"
-    printf '[%s] GitHub backup deferred for %s (retries next session): %s\n' "$TS" "$BRANCH" "${REASON:-push exited non-zero with no stderr (likely killed by hook timeout)}" \
-      >> "$LOGDIR/autosave-push.log"
-  fi
+  PUSH_HEAD="$(git rev-parse HEAD 2>/dev/null || echo "$BRANCH")"
+  PUSHLOCK="$LOGDIR/autosave-push.lock"
+  PUSHLOG="$LOGDIR/autosave-push.log"
+  (
+    PNOW="$(date +%s)"
+    # ceiling: a push lock this stale (240s, double the 120s watchdog below)
+    # means the process that held it is gone, not just slow. Reclaim it so a
+    # crash can't wedge every future backup the way the Jul 1 stale-lock
+    # incident did to the commit lock.
+    if [ -d "$PUSHLOCK" ]; then
+      PLOCK_TS="$(stat -f %m "$PUSHLOCK" 2>/dev/null || stat -c %Y "$PUSHLOCK" 2>/dev/null || echo "$PNOW")"
+      if [ "$((PNOW - PLOCK_TS))" -gt 240 ]; then
+        rmdir "$PUSHLOCK" 2>/dev/null || true
+        printf '[%s] removed stale autosave-push.lock (age %ss)\n' "$(date '+%Y-%m-%d %H:%M')" "$((PNOW - PLOCK_TS))" >> "$PUSHLOG"
+      fi
+    fi
+    if mkdir "$PUSHLOCK" 2>/dev/null; then
+      trap 'rmdir "$PUSHLOCK" 2>/dev/null || true' EXIT INT TERM
+      # Portable watchdog (macOS has no GNU `timeout`): background the real
+      # push, background a sleep-then-kill alongside it, wait on the push,
+      # then reap whichever watchdog didn't fire. git's own stderr inherits
+      # this subshell's redirected fds, so a real failure is captured in
+      # full - no more guessing.
+      git push "$BACKUP_REMOTE" "$PUSH_HEAD:refs/heads/autosave/$BRANCH" &
+      GIT_PID=$!
+      ( sleep 120; kill -TERM "$GIT_PID" 2>/dev/null ) &
+      WATCHDOG_PID=$!
+      if wait "$GIT_PID" 2>/dev/null; then
+        printf '[%s] backed up %s to GitHub (%s autosave/%s)\n' "$(date '+%Y-%m-%d %H:%M')" "$BRANCH" "$BACKUP_REMOTE" "$BRANCH" >> "$PUSHLOG"
+      else
+        PUSH_STATUS=$?
+        if [ "$PUSH_STATUS" -eq 143 ]; then
+          printf '[%s] GitHub backup for %s TIMED OUT after 120s (network hang or stalled credential prompt) - retries next session\n' "$(date '+%Y-%m-%d %H:%M')" "$BRANCH" >> "$PUSHLOG"
+        else
+          printf '[%s] GitHub backup deferred for %s (git exit %s, see above for stderr) - retries next session\n' "$(date '+%Y-%m-%d %H:%M')" "$BRANCH" "$PUSH_STATUS" >> "$PUSHLOG"
+        fi
+      fi
+      kill "$WATCHDOG_PID" 2>/dev/null || true
+      wait "$WATCHDOG_PID" 2>/dev/null || true
+    else
+      printf '[%s] GitHub backup for %s skipped - another push already in flight\n' "$(date '+%Y-%m-%d %H:%M')" "$BRANCH" >> "$PUSHLOG"
+    fi
+  ) < /dev/null >>"$PUSHLOG" 2>&1 &
+  disown 2>/dev/null || true
 fi
 
 exit 0

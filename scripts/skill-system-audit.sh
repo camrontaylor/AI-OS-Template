@@ -167,6 +167,26 @@ unknown = sorted(selected - offered)
 if unknown:
     print("installer state references entries absent from its setup menu: " + ", ".join(unknown))
     raise SystemExit(1)
+
+# The setup menu must also match reality in BOTH directions. A dead entry offers a
+# skill that cannot be installed; a live skill missing from the menu cannot be
+# deselected at first run. Both shipped silently before this check existed.
+live = {p.parent.name for p in (root / ".claude/skills").glob("*/SKILL.md")}
+parked = {p.parent.name for p in (root / ".claude/skills/_archived").glob("*/SKILL.md")}
+dead = sorted(n for n in offered if n not in live and n not in parked)
+if dead:
+    print("setup menu offers skills that do not exist live or parked: " + ", ".join(dead))
+    raise SystemExit(1)
+# A never_publish skill is deliberately live here but absent from the shipped
+# setup menu, so exempt it rather than forcing an unpublishable entry into it.
+never = {
+    p.rstrip("/").split("/")[-1]
+    for p in json.loads((root / "config/update-manifest.json").read_text()).get("never_publish", [])
+}
+unlisted = sorted(n for n in live if n not in offered and n not in never)
+if unlisted:
+    print("live skills missing from the setup menu: " + ", ".join(unlisted))
+    raise SystemExit(1)
 PY
 then
   pass "Optional-skill installer state is internally consistent."

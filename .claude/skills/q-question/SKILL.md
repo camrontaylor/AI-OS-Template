@@ -17,6 +17,8 @@ Answer questions like an operator who has to live with the answer: clear bottom 
 
 ## Context Needs
 
+Client questions: run `bash scripts/agency-gather.sh <slug>` (from the AI-OS root) FIRST. It refreshes and inlines the curated brief, client MEMORY.md, and client learnings in one pass, then manifests the rest for targeted reads. The table below is what to load when gather is unavailable or the question is not client work.
+
 | File | Load level | Purpose |
 |------|------------|---------|
 | `context/learnings.md` | `## q-question` section | Apply prior feedback about question depth, source quality, and answer format. |
@@ -143,6 +145,9 @@ After saving, show the user the full absolute file path so they can click it dir
 After a substantial answer or saved brief, ask whether the depth, evidence, and format were useful. If the user corrects the process, update `## Rules` in this skill immediately and log broader feedback under `## q-question` in `context/learnings.md`.
 
 ## Rules
+
+- 2026-07-29: When the user supplies a prior analysis or critique to evaluate against an existing client-facing document, do not incorporate its conclusions first. Audit each material claim against the original client evidence and current primary vendor documentation, give the user the verdict, and only then revise the document.
+- 2026-07-29: For ERP/CRM feasibility where the connector operates at database level, research the published database schema and the connector's SQL model before treating public REST API coverage as the boundary. Classify read visibility, safe writes, configuration-dependent details, and custom builds separately before drafting a client-facing answer.
 
 - 2026-07-02: This is a broad question skill by design, but depth must scale. Do not turn stable one-line questions into research projects.
 - 2026-07-02: For "can we build/do this for a client?" questions, answer in two layers: what is natively supported, and what is possible with custom code, integrations, or external services.

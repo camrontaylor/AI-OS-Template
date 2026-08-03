@@ -49,7 +49,7 @@ export function SystemHealth({ system }: SystemHealthProps) {
         </Link>
 
         {/* Brand context */}
-        <Link href="/?tab=docs" className={linkRowClass}>
+        <Link href="/docs" className={linkRowClass}>
           <Palette size={14} color="var(--muted-foreground)" className="shrink-0" />
           <div className="flex-1">
             <div className="text-sm font-medium text-foreground">

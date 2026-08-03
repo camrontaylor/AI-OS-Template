@@ -25,6 +25,10 @@ make_fake_repo() {
   cp "$REAL_REPO/scripts/client-memory-maintenance.sh" "$TEST_ROOT/repo/scripts/client-memory-maintenance.sh"
   cp "$REAL_REPO/scripts/memory-search.sh" "$TEST_ROOT/repo/scripts/memory-search.sh"
   cp "$REAL_REPO/scripts/memory-search.py" "$TEST_ROOT/repo/scripts/memory-search.py"
+  # The brief mode adds scripts/lib to sys.path and imports decision_ledger; the
+  # fixture must carry that module or --mode brief dies with ModuleNotFoundError.
+  mkdir -p "$TEST_ROOT/repo/scripts/lib"
+  cp "$REAL_REPO/scripts/lib/decision_ledger.py" "$TEST_ROOT/repo/scripts/lib/decision_ledger.py"
   cat > "$TEST_ROOT/repo/context/MEMORY.md" <<'EOF'
 # Root Memory
 

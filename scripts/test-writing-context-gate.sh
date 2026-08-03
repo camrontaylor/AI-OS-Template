@@ -37,8 +37,15 @@ test_client_message_triggers() {
 
   assert_contains "$out" "AI-OS writing context gate"
   assert_contains "$out" "comms-message"
-  assert_contains "$out" "memory-recall"
+  assert_contains "$out" "agency-gather.sh"
   ok "client reply prompt triggers writing context gate"
+}
+
+test_cron_prompt_does_not_trigger() {
+  out="$(run_hook "You are running as a scheduled job for AI-OS. Draft and send the daily digest email.")"
+
+  assert_empty "$out"
+  ok "scheduled cron prompt stays silent"
 }
 
 test_marketing_copy_triggers() {
@@ -75,4 +82,5 @@ test_marketing_copy_triggers
 test_voice_prompt_triggers
 test_code_prompt_does_not_trigger
 test_status_prompt_does_not_trigger
+test_cron_prompt_does_not_trigger
 ok "writing context gate tests passed"

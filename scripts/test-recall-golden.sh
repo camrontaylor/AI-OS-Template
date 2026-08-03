@@ -17,6 +17,10 @@
 set -uo pipefail
 cd "$(dirname "$0")/.."
 
+# Tag these searches so the memory-observability usage log treats them as eval,
+# not organic recall.
+export AI_OS_RECALL_CALLER=eval
+
 SEARCH_CMD="bash scripts/memsearch-search.sh"
 if [ "${1:-}" = "--markdown-only" ]; then
   SEARCH_CMD="bash scripts/memory-search.sh"
@@ -43,8 +47,20 @@ target = float(golden.get("pass_threshold", 0.95))
 floor = float(golden.get("floor_threshold", 0.8))
 top_k = int(golden.get("top_k", 3))
 paraphrase_threshold = float(golden.get("semantic_paraphrase_threshold", 1.0))
+# Whether the semantic layer is even expected: only the default hybrid command
+# uses it. In --markdown-only mode cross-vocabulary recall is not on the table,
+# so the paraphrase gate is skipped rather than false-failing.
+expect_semantic = "memsearch-search" in os.environ["SEARCH_CMD"]
+
+
+def is_semantic(r):
+    return (r.get("search_mode") in {"semantic", "hybrid"}
+            or "semantic" in (r.get("search_modes") or [])
+            or "hybrid" in (r.get("search_modes") or []))
+
 
 hits, misses, para_hits, para_total = 0, [], 0, 0
+semantic_alive = False
 for case in golden["cases"]:
     query, expect = case["query"], case["expect_source"]
     is_para = bool(case.get("paraphrase"))
@@ -60,15 +76,12 @@ for case in golden["cases"]:
     except Exception:
         results = []
     sources = [str(r.get("source") or r.get("source_path") or "") for r in results]
+    if any(is_semantic(r) for r in results):
+        semantic_alive = True
     matching = [r for r, source in zip(results, sources) if re.search(expect, source)]
     if matching:
         hits += 1
-        semantic_match = any(
-            r.get("search_mode") in {"semantic", "hybrid"}
-            or "semantic" in r.get("search_modes", [])
-            for r in matching
-        )
-        if is_para and semantic_match:
+        if is_para and any(is_semantic(r) for r in matching):
             para_hits += 1
         print(f"  ✓ {query[:64]}")
     else:
@@ -82,7 +95,8 @@ for query, expect, top in misses:
     print(f"  MISS: '{query}' -> expected {expect}; top sources: {top}")
 
 para_rate = para_hits / para_total if para_total else 1.0
-verdict, exit_code, message = classify(rate, para_rate, floor, target, paraphrase_threshold)
+verdict, exit_code, message = classify(
+    rate, para_rate, floor, target, paraphrase_threshold, semantic_alive, expect_semantic)
 print(message)
 # meta-systems-check greps for the literal "golden recall eval passed" to confirm
 # the health floor was cleared. The PASS message already contains it; a WARN is

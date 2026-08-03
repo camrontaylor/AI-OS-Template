@@ -1,14 +1,44 @@
 #!/usr/bin/env node
-// UserPromptSubmit hook - just-in-time AI-OS writing context reminder.
+// UserPromptSubmit hook - just-in-time AI-OS writing context.
 //
-// This does not load files or block prompts. It only injects the canonical
-// Writing Context Gate from AGENTS.md when a normal user prompt looks like it
-// asks for drafting, rewriting, reviewing, or polishing text that may need
-// brand, client, memory, or relationship context.
+// v1 of this hook injected ~380 tokens of instructions telling the model to go
+// read the learnings files. The 2026-07-28 memory diagnosis showed that the
+// instruction-only approach loses to momentum: the July failure record is full
+// of client-facing drafts written while the exact rule they broke sat unread in
+// clients/<slug>/context/learnings.md (vendor-email register, tier-gating
+// verification, Nick message shape...). Proximity beats availability, so v2
+// injects the CONTENT of the load-bearing learnings sections at the moment a
+// writing-shaped prompt arrives: the matching skill section, the user's
+// Preferences, and the recent What-doesn't-work-well lessons.
+//
+// Guarantees:
+//   - Never blocks the prompt; any error exits silently.
+//   - Hard character budget (default 8000) so a large learnings file can never
+//     flood the context.
+//   - At most MAX_FIRES content injections per session with a cooldown; after
+//     that the standing rules carry it. A fire is only consumed when content
+//     is actually injected.
+//   - Silent on scheduled cron runs (no human reader).
+//
+// Prompt classification and the fire-budget contract are shared with
+// auto-recall.js via lib/writing-prompt.js so the two hooks never disagree.
 
 const fs = require("fs");
 const path = require("path");
-const os = require("os");
+const { spawn } = require("child_process");
+const shared = require(path.join(__dirname, "lib", "writing-prompt.js"));
+
+const PROJECT_DIR = process.env.CLAUDE_PROJECT_DIR || path.resolve(__dirname, "..", "..");
+
+const BUDGET = clampNum(process.env.AI_OS_WRITING_GATE_BUDGET, 8000, 2000, 20000);
+const MAX_FIRES = shared.GATE_MAX_FIRES;
+const COOLDOWN_MS = shared.GATE_COOLDOWN_MS;
+
+function clampNum(raw, def, lo, hi) {
+  const n = Number(raw);
+  if (!Number.isFinite(n)) return def;
+  return Math.min(hi, Math.max(lo, n));
+}
 
 function readInput() {
   try {
@@ -18,57 +48,182 @@ function readInput() {
   }
 }
 
-const WRITING_CONTEXT_HINT =
-  "AI-OS writing context gate: this prompt appears to involve drafting, rewriting, reviewing, or polishing text. Before producing the draft, classify the writing surface and invoke the matching installed skill without waiting for the user to name it: comms-message for one-to-one client/stakeholder messages; mkt-copywriting for sales/public copy; mkt-content-repurposing for repurposed content; mkt-ugc-scripts for spoken/video scripts; mkt-brand-voice for voice/tone work; or the matching specialist skill from the Skill Registry. Read that skill's SKILL.md, any SKILL.local.md, the Context Matrix files, and the relevant context/learnings.md section first. For client work, client-local memory, learnings, brand context, project notes, and synced notes outrank root context for facts, names, promises, scope, and relationship history. Invoke memory-recall when past decisions, client facts, deadlines, scope, money, approvals, delays, conflict, prior wording, or 'as discussed' context could change the writing. Keep quick low-risk wording checks light; use broad search only when facts or relationship risk matter. If no writing skill fits, say that briefly, load available context, and then answer. Agency Discipline: self-source client facts first - run `bash scripts/agency-gather.sh <slug>` and read clients/<slug>/context/ before drafting, and do not ask for what you can read; for an outward-facing deliverable, check the draft with a fresh subagent critic fed the grounded facts before showing it.";
-
-const WRITING_RE =
-  /\b(draft|write|rewrite|edit|polish|sharpen|improve|copyedit|review|critique|humanize|de-ai|clean up|make this sound|tone|voice|wording|phrasing|message|reply|respond|response|follow up|send|email|dm|slack|comment|client-facing|stakeholder|prospect|proposal|brief|post|caption|thread|newsletter|landing page|sales page|headline|cta|ad copy|email copy|social post|script)\b/i;
-
-const STRONG_WRITING_RE =
-  /\b(how should i reply|how do i reply|thoughts on this message|write this to|send .{0,40}\b(client|customer|lead|prospect|supplier|partner|stakeholder)|reply to|respond to|follow up with|make this sound like me|in my voice|brand voice|landing page copy|sales page|ad copy|email copy|social post|linkedin post|newsletter|client-facing)\b/i;
-
-const CODE_OR_SYSTEM_RE =
-  /\b(code|function|unit test|integration test|spec file|typescript|javascript|python|react|component|hooks?|api|sql|schema|migration|css|html|script\.sh|shell script|bash script|cli|command|regex|json|yaml|toml|config|settings|audit|cron|memory system|README|AGENTS\.md|SKILL\.md|\.md\b|\.sh\b|tests?)\b/i;
-
-const CODE_TASK_RE =
-  /\b(write|edit|review|update|create|generate|fix|implement|refactor|patch|improve|audit)\b[\s\S]{0,80}\b(code|function|unit test|integration test|typescript|javascript|python|react|component|api|sql|schema|migration|script\.sh|shell script|bash script|cli|hooks?|settings|json|config|cron|deploy script|error message|tests?)\b/i;
-
-function isLikelyWritingPrompt(prompt) {
-  const text = String(prompt || "").trim();
-  if (!text) return false;
-  if (STRONG_WRITING_RE.test(text)) return true;
-  if (!WRITING_RE.test(text)) return false;
-
-  // Avoid nagging on normal coding prompts. The AGENTS.md rule still applies
-  // if the coding work itself includes user-facing copy.
-  if (CODE_TASK_RE.test(text) && CODE_OR_SYSTEM_RE.test(text) && !/client-facing|public-facing|copy|message|email|post|voice|tone/i.test(text)) {
-    return false;
+// Which skill section of learnings.md matters for this prompt.
+function skillSectionFor(prompt) {
+  const text = String(prompt || "");
+  if (/\b(email|message|reply|respond|dm|slack|comment|follow up|send|whatsapp|client-facing|stakeholder|vendor)\b/i.test(text)) {
+    return "comms-message";
   }
+  if (/\b(landing page|sales page|headline|cta|ad copy|copy|caption|social post|newsletter|post)\b/i.test(text)) {
+    return "mkt-copywriting";
+  }
+  return null;
+}
 
-  return true;
+// Find the workspace (client folder if inside one, else the repo root) from cwd.
+function findWorkspace(cwd) {
+  let dir = cwd;
+  let client = null;
+  let root = null;
+  for (let i = 0; i < 12; i++) {
+    const base = path.basename(path.dirname(dir));
+    if (base === "clients" && fs.existsSync(path.join(dir, "context"))) client = dir;
+    if (
+      fs.existsSync(path.join(dir, "AGENTS.md")) &&
+      fs.existsSync(path.join(dir, ".claude")) &&
+      fs.existsSync(path.join(dir, "clients"))
+    ) {
+      root = dir;
+      break;
+    }
+    const parent = path.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  return { client, root };
+}
+
+// Extract one "## Heading" section body (to the next #/## heading). Returns "".
+function extractSection(content, heading) {
+  const lines = String(content || "").split("\n");
+  const start = lines.findIndex((l) => l.trim().toLowerCase() === `## ${heading}`.toLowerCase());
+  if (start < 0) return "";
+  const body = [];
+  for (let i = start + 1; i < lines.length; i++) {
+    if (/^#{1,2}\s/.test(lines[i])) break;
+    body.push(lines[i]);
+  }
+  return body.join("\n").trim();
+}
+
+// Keep the TAIL of a section within maxChars: entries are appended newest-last,
+// so the tail is the most recent lessons - the ones most likely still live.
+function tailClip(text, maxChars) {
+  const t = String(text || "").trim();
+  if (t.length <= maxChars) return t;
+  const clipped = t.slice(t.length - maxChars);
+  const firstBullet = clipped.indexOf("\n- ");
+  return (firstBullet >= 0 ? clipped.slice(firstBullet + 1) : clipped).trim();
+}
+
+function buildInjection(prompt, cwd) {
+  const { client, root } = findWorkspace(cwd);
+  const wsDir = client || root;
+  if (!wsDir) return null;
+  const learningsPath = path.join(wsDir, "context", "learnings.md");
+  let content = "";
+  try {
+    content = fs.readFileSync(learningsPath, "utf8");
+  } catch {
+    return null;
+  }
+  if (!content.trim()) return null;
+
+  const rel = client ? `clients/${path.basename(client)}/context/learnings.md` : "context/learnings.md";
+  const parts = [];
+  let spent = 0;
+
+  const push = (label, body, cap) => {
+    const clipped = tailClip(body, Math.min(cap, Math.max(0, BUDGET - spent)));
+    if (!clipped) return;
+    parts.push(`#### ${label}\n${clipped}`);
+    spent += clipped.length;
+  };
+
+  const skill = skillSectionFor(prompt);
+  const skillBody = skill ? extractSection(content, skill) : "";
+  if (skillBody) push(`Skill rules: ${skill}`, skillBody, 3500);
+  push("The user's standing preferences", extractSection(content, "Preferences"), 2500);
+  push("Recent confirmed mistakes - do not repeat these", extractSection(content, "What doesn't work well"), 3000);
+
+  if (parts.length === 0) return null;
+
+  // Framing scales with fit (2026-07-28 review pass 2): when the matched skill
+  // section exists, its rules genuinely target this surface - hard framing.
+  // When only the generic Preferences/mistakes tails are available, many
+  // entries were written for OTHER surfaces (vendor emails, tables, ops), so
+  // blind application would be wrong - scoped framing instead.
+  const framing = skillBody
+    ? `The sections below are the user's own standing record from \`${rel}\` - they are RULES for this draft, not suggestions. ` +
+      `Apply them directly; when one seems to conflict with the current ask, say so instead of silently dropping it.`
+    : `The sections below are the user's standing record from \`${rel}\`, captured across different surfaces. ` +
+      `Apply the entries whose stated scope fits THIS surface; entries scoped to other surfaces (e.g. vendor emails, tables, ops tooling) are context, not rules for this draft.`;
+
+  const message =
+    `AI-OS writing context gate: this prompt looks like drafting, rewriting, reviewing, or polishing text. ` +
+    framing +
+    `\n\n` +
+    parts.join("\n\n") +
+    `\n\nAlso: classify the writing surface and invoke the matching skill (comms-message for one-to-one client/stakeholder messages, ` +
+    `mkt-copywriting for sales/public copy, mkt-brand-voice for voice work) and follow its Context Needs table. ` +
+    `For client work, self-source facts first: run \`bash scripts/agency-gather.sh <slug>\` and read what the job needs - never ask for what you can read. ` +
+    `Client-local memory and learnings outrank root context for facts, names, promises, scope, and relationship history. ` +
+    `Any outside-world capability claim (vendor features, pricing, tiers, API surfaces) in a client-facing draft gets verified at the vendor's current live source first. ` +
+    `For an outward-facing deliverable, check the draft with a fresh subagent critic fed the grounded facts before showing it.`;
+
+  return { message, rel, labels: parts.map((p) => p.split("\n", 1)[0].replace(/^#### /, "")) };
+}
+
+// Atomic-ish state write: temp + rename, so a concurrent reader never sees a
+// torn file (review pass 2, F8).
+function writeState(file, state) {
+  try {
+    const tmp = file + "." + process.pid + ".tmp";
+    fs.writeFileSync(tmp, JSON.stringify(state));
+    fs.renameSync(tmp, file);
+  } catch {}
+}
+
+// Best-effort observability: log WHICH learnings sections were injected, so
+// recall-usage review can correlate injections with the corrections they were
+// built to prevent (review pass 3). Content never leaves the machine; the
+// logger keeps only source/heading/rank. Never blocks the prompt.
+function logInjected(prompt, rel, labels, cwd) {
+  try {
+    const logger = path.join(PROJECT_DIR, "scripts", "lib", "recall-log.py");
+    if (!fs.existsSync(logger) || labels.length === 0) return;
+    const items = labels.map((label) => ({ source: rel, heading: label }));
+    const child = spawn(
+      "python3",
+      [logger, "--kind", "surfaced", "--caller", "writing-gate", "--query", String(prompt || "").slice(0, 200), "--items-json", JSON.stringify(items)],
+      { cwd, detached: true, stdio: "ignore" }
+    );
+    child.on("error", () => {});
+    child.unref();
+  } catch {}
 }
 
 try {
   const input = readInput();
   const prompt = input.prompt || input.message || "";
-  if (!isLikelyWritingPrompt(prompt)) process.exit(0);
+  if (process.env.AI_OS_AUTONOMOUS === "1") process.exit(0);
+  if (shared.isScheduledAutomation(prompt)) process.exit(0);
+  if (!shared.isLikelyWritingPrompt(prompt)) process.exit(0);
 
-  // Once per session: the hint restates an AGENTS.md rule the model already
-  // has, so re-injecting ~380 tokens on every matching turn is pure tax
-  // (2026-07-16 audit). First matching prompt gets the nudge; after that the
-  // standing rule carries it.
   const sessionId = input.session_id || "";
+  const state = shared.readGateState(sessionId);
+  const now = Date.now();
+  const last = state.fires.length ? Math.max(...state.fires) : 0;
+  if (state.fires.length >= MAX_FIRES || now - last < COOLDOWN_MS) process.exit(0);
+
+  const cwd = input.cwd && fs.existsSync(input.cwd) ? input.cwd : process.cwd();
+  const built = buildInjection(prompt, cwd);
+  if (!built) process.exit(0);
+
+  // Consume the fire only now that content will actually be injected, so a
+  // client with no learnings never burns its budget on empty fires.
   if (sessionId) {
-    const marker = path.join(os.tmpdir(), `aios-writing-gate-${sessionId}.done`);
-    if (fs.existsSync(marker)) process.exit(0);
-    try { fs.writeFileSync(marker, String(Date.now())); } catch {}
+    state.fires.push(now);
+    writeState(shared.gateStatePath(sessionId), state);
   }
+
+  logInjected(prompt, built.rel, built.labels, cwd);
 
   process.stdout.write(
     JSON.stringify({
       hookSpecificOutput: {
         hookEventName: "UserPromptSubmit",
-        additionalContext: WRITING_CONTEXT_HINT,
+        additionalContext: built.message,
       },
     })
   );

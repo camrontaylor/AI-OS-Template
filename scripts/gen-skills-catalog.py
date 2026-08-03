@@ -9,7 +9,7 @@ Scans:
 Run: python3 scripts/gen-skills-catalog.py
 """
 import argparse
-import os, re, glob, datetime, pathlib
+import os, re, glob, json, datetime, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUT = ROOT / "docs" / "skills-catalog.md"
@@ -65,6 +65,18 @@ lines.append("")
 lines.append("Two tiers. LIVE skills are active and you invoke them by typing a forward slash plus the exact name (the slash name, the folder name, and the frontmatter name all match). LIBRARY skills are staging candidates in `skills-library/`; they are NOT invocable until promoted into `.claude/skills/`.")
 lines.append("")
 
+# Packs and skills listed under never_publish are proprietary or unverified-licence
+# and can never reach the public template (skills-library/LICENSES.md). This catalog
+# DOES ship, so listing them would advertise material a template user can never have.
+# Deliberately not wrapped in a bare try/except: if the manifest cannot be read, the
+# catalog would silently advertise unpublishable material. Fail loudly instead.
+_manifest_path = ROOT / "config" / "update-manifest.json"
+_never_raw = json.loads(_manifest_path.read_text()).get("never_publish", [])
+_never = [p.rstrip("/").split("/")[-1] for p in _never_raw]
+_never_skill_names = {
+    p.rstrip("/").split("/")[-1] for p in _never_raw if p.startswith(".claude/skills/")
+}
+
 # --- LIVE ---
 live_dir = ROOT / ".claude" / "skills"
 live = []
@@ -76,6 +88,8 @@ for d in sorted(live_dir.iterdir()):
         continue
     name, desc = parse_frontmatter(sk)
     invoke = name or d.name
+    if d.name in _never_skill_names:
+        continue
     live.append((invoke, d.name, first_sentence(desc)))
 
 lines.append(f"## Live skills ({len(live)}) - invoke with `/name`")
@@ -91,13 +105,15 @@ lines.append("")
 lib_backlog = ROOT / "skills-library" / "backlog"
 lines.append("## Skills library (staging, review-only, not invocable)")
 lines.append("")
-lines.append("These live under `skills-library/backlog/<pack>/<name>/`. To make one live: move it through `triage/` then `review/`, rename to the `{category}-{name}` convention, add it to `.claude/skills/`, add its learnings section, and regenerate this catalog. See `skills-library/README.md`.")
+lines.append("These live under `skills-library/backlog/<pack>/<name>/`. To make one live: assess it through `meta-skill-intake`, get an explicit promote decision, rename it to the `{category}-{name}` convention, satisfy the live registration bar, and regenerate this catalog. Parking keeps the source in backlog. See `skills-library/README.md`.")
 lines.append("")
 
 total_lib = 0
 if lib_backlog.is_dir():
     for pack in sorted(lib_backlog.iterdir()):
         if not pack.is_dir():
+            continue
+        if pack.name in _never:
             continue
         skills = sorted([s for s in pack.iterdir() if s.is_dir() and (s / "SKILL.md").exists()])
         if not skills:
@@ -166,9 +182,15 @@ def sync_machine_catalogs(live_entries, check_only):
     except Exception:
         return changed
     known = set(catalog.get("core_skills", [])) | set(catalog.get("skills", {}).keys())
-    live_names = [folder for _, folder, _ in live_entries]
+    # never_publish skills stay OUT of the setup menu. The menu ships; offering a
+    # skill the template never receives leaves a dead entry a user cannot install.
+    live_names = [folder for _, folder, _ in live_entries if folder not in _never_skill_names]
+    for name in sorted(_never_skill_names):
+        if name in catalog.get("skills", {}):
+            del catalog["skills"][name]
+            changed.append(f"catalog.json -= {name} (never_publish)")
     for invoke, folder, desc in live_entries:
-        if folder in known:
+        if folder in known or folder in _never_skill_names:
             continue
         prefix = folder.split("-", 1)[0]
         catalog.setdefault("skills", {})[folder] = {

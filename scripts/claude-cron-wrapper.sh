@@ -34,6 +34,20 @@ REAL_CLAUDE="${REAL_CLAUDE_BIN:-$(command -v claude 2>/dev/null || echo /usr/loc
 ENV_FILE="${AI_KEYS_ENV_FILE:-$HOME/.config/ai-keys.env}"
 OAUTH_TOKEN_FILE="${CLAUDE_OAUTH_TOKEN_FILE:-$HOME/.config/claude-code-oauth-token}"
 
+# Concurrency gate: serialize claude cron sessions so a catch-up replay cannot
+# storm the machine into a timeout cluster (see scripts/lib/cron-claude-lock.py).
+# launch_claude routes through the gate when it is available and falls open to a
+# direct exec otherwise, so a missing helper can never block a job.
+WRAPPER_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LOCK_HELPER="$WRAPPER_DIR/lib/cron-claude-lock.py"
+launch_claude() {
+  if [[ "${AIOS_CRON_CLAUDE_LOCK_DISABLE:-}" != "1" && -f "$LOCK_HELPER" ]] \
+     && command -v python3 >/dev/null 2>&1; then
+    exec python3 "$LOCK_HELPER" "$REAL_CLAUDE" "$@"
+  fi
+  exec "$REAL_CLAUDE" "$@"
+}
+
 load_env_file() {
   local file="$1"
   [[ -f "$file" ]] || return 0
@@ -75,8 +89,8 @@ if [[ -z "${CLAUDE_CODE_OAUTH_TOKEN:-}" && -f "$OAUTH_TOKEN_FILE" ]]; then
   export CLAUDE_CODE_OAUTH_TOKEN="$(tr -d '[:space:]' < "$OAUTH_TOKEN_FILE")"
 fi
 if [[ -n "${CLAUDE_CODE_OAUTH_TOKEN:-}" ]]; then
-  exec "$REAL_CLAUDE" "$@"
+  launch_claude "$@"
 fi
 
 # 2. Bare binary (works only if OAuth /login credentials exist).
-exec "$REAL_CLAUDE" "$@"
+launch_claude "$@"

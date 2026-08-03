@@ -630,6 +630,8 @@ import re
 import sys
 
 root = Path(sys.argv[1])
+sys.path.insert(0, str(root / "scripts" / "lib"))
+import decision_ledger
 client_dir = Path(sys.argv[2])
 brief_path = Path(sys.argv[3])
 today = sys.argv[4]
@@ -676,6 +678,10 @@ def section_bullets(lines: list[str], heading: str) -> list[str]:
 active = section_bullets(memory_lines, "## Active Threads")
 environment = section_bullets(memory_lines, "## Environment Notes")
 pending = section_bullets(memory_lines, "## Pending Decisions")
+
+# The Decision Ledger (context/decisions.md) is parsed by the shared lib so the
+# surfacer here and the decision-ledger-check guard never drift on format.
+decision_section = decision_ledger.open_decisions_section(context_dir / "decisions.md")
 
 daily_logs = sorted(memory_dir.glob("????-??-??.md"), reverse=True)[:5] if memory_dir.is_dir() else []
 offline_daily_logs = [path for path in daily_logs if is_dataless(path)]
@@ -779,9 +785,12 @@ out: list[str] = [
     f"Generated: {today}",
     f"Source: `{rel(memory_file)}` plus the latest {len(daily_logs)} dated session log(s).",
     "",
+]
+out.extend(decision_section)
+out.extend([
     "## Where We Are",
     "",
-]
+])
 out.extend(emit_bullets(active, "No active threads in hot memory."))
 out.extend([
     "",

@@ -22,20 +22,51 @@ from pathlib import Path
 
 SOURCE_RULES = [
     ("context/MEMORY.md", 2.0),
-    ("context/learnings.md", 1.5),
-    ("context/memory/", 1.0),
+    ("context/learnings.md", 1.8),
+    ("context/memory/", 0.95),
+    ("daily/", 0.9),
     ("brand_context/", 0.8),
+    # Wiki and Notion-catalog pages are broad reference material; at the default
+    # 1.0 they outranked learnings on the golden set (2026-07-28 review pass 1).
+    ("context/wiki/", 0.7),
+    ("context/notion/", 0.7),
 ]
 
 MEMORY_SOURCE_FILES = [
     "context/MEMORY.md",
     "context/learnings.md",
+    "context/notion/CATALOG.md",
 ]
 
 MEMORY_SOURCE_DIRS = [
     "context/memory",
     "context/wiki",
+    "daily",
 ]
+
+# Top-level context/*.md is the durable synthesis layer (overview,
+# relationship-history, ops synthesis, timeline, current-state, decisions,
+# SOUL/USER, ...). Globbed non-recursively so deep-search-only subfolders
+# (inbox/, notion/items/, transcripts/, meetings/, reference/) stay out. Kept in
+# sync with the routine_semantic tier in config/memory-index-policy.json so the
+# markdown fallback and the semantic index cover the same surfaces (2026-07-27).
+MEMORY_TOPLEVEL_MD_DIRS = [
+    "context",
+]
+
+# Curated knowledge subfolders: durable vendor/product/reference synthesis one
+# level down inside context/ (e.g. context/myob-exo/). The top-level *.md glob
+# above is non-recursive, so a whole knowledge folder was a recall blind spot
+# (2026-07-29 fix). Kept in sync with KNOWLEDGE_SUBFOLDERS in
+# scripts/memsearch-reindex.sh and routine_semantic in the index policy. Add a
+# folder NAME here to make its markdown routinely searchable, root and clients.
+KNOWLEDGE_SUBFOLDERS = [
+    "myob-exo",
+    "operator",
+]
+# Noisy machine maps inside a knowledge folder (large table-of-contents / topic
+# dumps) that must stay OUT of routine recall. Matched against the full path.
+KNOWLEDGE_SUBFOLDER_SKIP_RE = re.compile(r"/official-help/topic-index\.md$")
 
 CLIENT_REFERENCE_DIRS = [
     "brand_context",
@@ -44,6 +75,11 @@ CLIENT_REFERENCE_DIRS = [
 # Cron-generated maintenance reports that live inside memory folders but are
 # not memory. Kept out of recall so boilerplate never competes with real facts.
 GENERATED_REPORT_RE = re.compile(r"_(gap-analysis|memory-health)\.md$")
+
+# Non-recall files caught by the top-level context/*.md glob: learnings.shared.md
+# is the git-tracked mirror of learnings.md (double-counts lessons), prompt-tags.md
+# is prompt config. Kept in sync with the same skip in memsearch-reindex.sh.
+NON_MEMORY_NAMES = {"learnings.shared.md", "prompt-tags.md"}
 
 MAX_MARKDOWN_FILE_BYTES = int(os.environ.get("AI_OS_MEMORY_SEARCH_MAX_FILE_BYTES", "600000"))
 MACOS_DATALESS_FLAG = 0x40000000
@@ -182,6 +218,17 @@ def source_roots(root: Path, initial_root: Path, scope: str, client: str | None)
     if scope == "all":
         return [root, *client_dirs(root)]
 
+    if scope == "workspace":
+        # One client plus the root layer, never other clients (default recall
+        # scope inside a client folder). Without a client it is just root.
+        if client:
+            target = root / "clients" / client
+        elif current_is_client:
+            target = initial_root
+        else:
+            return [root]
+        return [root, target] if (target / "context").is_dir() else [root]
+
     raise ValueError(f"unknown memory search scope: {scope}")
 
 
@@ -195,6 +242,30 @@ def candidate_files(root: Path, source_root: Path) -> list[Path]:
         if directory.is_dir():
             files.extend(sorted(directory.rglob("*.md")))
 
+    # Durable synthesis layer: top-level *.md only (non-recursive), matching the
+    # routine_semantic tier so fallback recall does not silently lose these
+    # surfaces when Milvus is locked/blocked.
+    for rel_dir in MEMORY_TOPLEVEL_MD_DIRS:
+        directory = source_root / rel_dir
+        if directory.is_dir():
+            files.extend(sorted(directory.glob("*.md")))
+
+    # Curated knowledge subfolders (e.g. context/myob-exo/): durable vendor/
+    # product/reference synthesis one level down, walked recursively but with the
+    # noisy machine maps skipped. Matches add_knowledge_subfolder in
+    # memsearch-reindex.sh so fallback and semantic index cover the same surfaces
+    # (2026-07-29 blind-spot fix). No-op when the folder is absent.
+    context_dir = source_root / "context"
+    if context_dir.is_dir():
+        for sub in KNOWLEDGE_SUBFOLDERS:
+            sub_dir = context_dir / sub
+            if sub_dir.is_dir():
+                files.extend(
+                    path
+                    for path in sorted(sub_dir.rglob("*.md"))
+                    if not KNOWLEDGE_SUBFOLDER_SKIP_RE.search(path.as_posix())
+                )
+
     # Client brand context is useful when the caller deliberately scopes recall
     # to clients, but root brand/transcript archives are not routine memory.
     if source_root != root and is_client_root(source_root):
@@ -206,6 +277,7 @@ def candidate_files(root: Path, source_root: Path) -> list[Path]:
     # Generated maintenance reports inside memory folders are machine
     # boilerplate, not memory (2026-07-16 audit) - keep them out of recall.
     files = [p for p in files if not GENERATED_REPORT_RE.search(p.name)]
+    files = [p for p in files if p.name not in NON_MEMORY_NAMES]
 
     seen: set[Path] = set()
     unique: list[Path] = []
@@ -320,7 +392,12 @@ def query_is_system_recall(groups: list[TermGroup]) -> bool:
     return bool(terms & SYSTEM_RECALL_TERMS)
 
 
-def source_fit(section: Section, groups: list[TermGroup]) -> float:
+TEMPORAL_QUERY_RE = re.compile(
+    r"\b(yesterday|today|tonight|recently|latest|last (night|week|month)|this (week|month))\b|\d{4}-\d{2}-\d{2}"
+)
+
+
+def source_fit(section: Section, groups: list[TermGroup], temporal: bool = False) -> float:
     """Prefer the memory source type that matches the query shape."""
     is_system_query = query_is_system_recall(groups)
     fit = 1.0
@@ -328,19 +405,24 @@ def source_fit(section: Section, groups: list[TermGroup]) -> float:
     client_match = re.match(r"clients/[^/]+/(.+)", source_rel)
     local_rel = client_match.group(1) if client_match else source_rel
 
-    if local_rel == "context/learnings.md" and not is_system_query:
-        fit *= 0.35
     if source_rel.startswith("clients/") and is_system_query:
         fit *= 0.55
     if not is_system_query:
         haystack = section_haystack(section)
         if any(marker in haystack for marker in SYSTEM_NOTE_MARKERS):
             fit *= 0.35
-    if (
-        len(groups) >= 5
-        and local_rel.startswith("context/memory/")
-    ):
-        fit *= 1.15
+    # Temporal-intent queries ("what did we do yesterday", a date) genuinely
+    # want the dated session record, not durable lessons (review pass 2, F5).
+    if temporal and (local_rel.startswith("context/memory/") or local_rel.startswith("daily/")):
+        fit *= 1.5
+    # NOTE (2026-07-28 memory diagnosis): this function used to multiply any
+    # learnings.md hit by 0.35 on non-system queries and boost daily logs 1.15x
+    # on longer queries. That structurally suppressed the user's own lesson and
+    # preference record for every normal work query - the golden set's
+    # learnings-expected cases went 2/13 under it - and was a direct cause of
+    # "memory exists but never surfaces". Learnings authority now comes from
+    # SOURCE_RULES alone, with the narrow temporal boost above as the one
+    # query-shaped exception.
     return fit
 
 
@@ -391,7 +473,7 @@ def idf_weights(section_count: int, freqs: dict[str, int]) -> dict[str, float]:
     }
 
 
-def score_section(section: Section, query: str, groups: list[TermGroup], idf: dict[str, float]) -> float:
+def score_section(section: Section, query: str, groups: list[TermGroup], idf: dict[str, float], temporal: bool = False) -> float:
     haystack = f"{section.heading}\n{section.content}".lower()
     if not groups and not query.strip():
         return 0.0
@@ -425,7 +507,7 @@ def score_section(section: Section, query: str, groups: list[TermGroup], idf: di
     length_factor = max(0.45, 1.0 / math.sqrt(max(word_count / 160, 1.0)))
 
     raw = (weighted_unique * 2.0 + weighted_counts + phrase_bonus + heading_bonus) * coverage_bonus
-    return raw * authority(section.rel_source) * recency(section.rel_source) * length_factor * source_fit(section, groups)
+    return raw * authority(section.rel_source) * recency(section.rel_source) * length_factor * source_fit(section, groups, temporal)
 
 
 def search(root: Path, query: str, top_k: int, scope: str, client: str | None) -> list[dict]:
@@ -440,13 +522,35 @@ def search(root: Path, query: str, top_k: int, scope: str, client: str | None) -
 
     freqs = document_frequency(sections, groups)
     idf = idf_weights(len(sections), freqs)
+    temporal = bool(TEMPORAL_QUERY_RE.search(query.lower()))
     scored: list[tuple[float, Section]] = []
     for section in sections:
-        final_score = score_section(section, query, groups, idf)
+        final_score = score_section(section, query, groups, idf, temporal)
         if final_score > 0:
             scored.append((final_score, section))
 
     scored.sort(key=lambda item: item[0], reverse=True)
+
+    # Source-diversity reorder (same lever as merge-memory-results.py, 2026-07-27):
+    # pull the best chunks of each DISTINCT source to the head before slicing
+    # top-k, so one file cannot monopolize every slot and crowd out the distinct
+    # expected source. Two chunks per source keep their rank before demotion
+    # (review pass 2, F4: a strict one-per-source cap was evicting high-scoring
+    # second chunks of the correct file on nearly every query). Pure reorder -
+    # it can never drop a present source.
+    per_source: dict[str, int] = {}
+    diverse: list[tuple[float, Section]] = []
+    rest: list[tuple[float, Section]] = []
+    for item in scored:
+        src = item[1].rel_source
+        count = per_source.get(src, 0)
+        if count >= 2:
+            rest.append(item)
+        else:
+            per_source[src] = count + 1
+            diverse.append(item)
+    scored = diverse + rest
+
     results = []
     for final_score, section in scored[:top_k]:
         chunk_id = f"{section.rel_source}:{section.start_line}:{section.end_line}"
@@ -475,7 +579,7 @@ def main() -> int:
     parser.add_argument("--root", default=Path(__file__).resolve().parents[1])
     parser.add_argument(
         "--scope",
-        choices=["current", "root", "client", "clients", "all"],
+        choices=["current", "root", "client", "clients", "all", "workspace"],
         default="current",
         help="Memory scope: current workspace, root only, one client, all clients, or root plus all clients.",
     )

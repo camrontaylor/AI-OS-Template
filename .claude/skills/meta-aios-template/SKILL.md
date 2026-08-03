@@ -63,6 +63,15 @@ Reading, dry-runs, and coverage checks are local work and need no approval. Thes
 
 Generic "continue" never approves these. Never widen the `ai_os_owned` allowlist, never push straight to template `main`, never strip a client name in flight to force a held file through, never copy local memory / client data / `.env` values into Notion.
 
+## Eval
+
+```bash
+bash scripts/template-release-check.sh
+bash scripts/template-sync.sh --status
+```
+
+Pass when the release check finds no private/client leakage, status is read-only, template writes remain PR-gated, and Notion writes still require a separate named approval.
+
 ## Rules
 
 - Build on the existing scripts; this skill orchestrates, it does not re-sync.

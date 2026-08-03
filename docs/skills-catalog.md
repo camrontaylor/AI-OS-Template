@@ -4,38 +4,119 @@
 
 Two tiers. LIVE skills are active and you invoke them by typing a forward slash plus the exact name (the slash name, the folder name, and the frontmatter name all match). LIBRARY skills are staging candidates in `skills-library/`; they are NOT invocable until promoted into `.claude/skills/`.
 
-## Live skills (24) - invoke with `/name`
+## Live skills (105) - invoke with `/name`
 
 | Invoke | Folder | What it does |
 |--------|--------|--------------|
-| `/meta-find-skills` | `.claude/skills/meta-find-skills/` | Find the right skill for what the user wants to do, searching AI-OS's own curated sources before reaching outside. |
-| `/meta-memory-write` | `.claude/skills/meta-memory-write/` | Saves durable facts to context/MEMORY.md, the curated working scratchpad read at session start. |
+| `/comms-message` | `.claude/skills/comms-message/` | Draft, review, or sharpen an actual written message to a client or contact. |
+| `/coreyhaines-marketing-ab-testing` | `.claude/skills/coreyhaines-marketing-ab-testing/` | Design and run A/B tests and build a systematic growth experimentation program - hypotheses, sample-size and significance math, primary and guardrail metrics, ICE-scored experiment backlog. |
+| `/coreyhaines-marketing-ad-creative` | `.claude/skills/coreyhaines-marketing-ad-creative/` | Generate and iterate ad creative at scale - headlines, descriptions, primary text, plus static and motion ad concepts for Google, Meta, LinkedIn, TikTok, and X, including performance-data-driven... |
+| `/coreyhaines-marketing-ads` | `.claude/skills/coreyhaines-marketing-ads/` | Plan, optimize, and scale paid ad campaigns on Google, Meta, LinkedIn, and X - budgets, audience targeting, bidding, retargeting, ABM, and ROAS/CPA optimization, including when to kill an ad. |
+| `/coreyhaines-marketing-ai-seo` | `.claude/skills/coreyhaines-marketing-ai-seo/` | Optimize content to get cited and surfaced by AI search and assistants (Google AI Overviews, ChatGPT, Perplexity, Claude, Gemini) - extractable content structure, llms.txt, Open Knowledge Format... |
+| `/coreyhaines-marketing-analytics` | `.claude/skills/coreyhaines-marketing-analytics/` | Set up, audit, or fix analytics tracking and measurement - GA4, GTM, event and conversion tracking, UTM conventions, and tracking plans across tools like Mixpanel and Segment. |
+| `/coreyhaines-marketing-aso` | `.claude/skills/coreyhaines-marketing-aso/` | Audit and optimize App Store and Google Play listings from a live URL - fetches the listing, scores metadata, visuals, keywords, and ratings, then delivers a prioritized action plan and competitor... |
+| `/coreyhaines-marketing-attribution` | `.claude/skills/coreyhaines-marketing-attribution/` | Figure out which marketing actually drives conversions and revenue: choose and interpret attribution models (first/last-touch, multi-touch, MMM, incrementality), reconcile conflicting numbers across... |
+| `/coreyhaines-marketing-churn-prevention` | `.claude/skills/coreyhaines-marketing-churn-prevention/` | Reduce SaaS churn with cancel flows, dynamic save offers, exit surveys, dunning and failed-payment recovery, and proactive retention across billing tools like Stripe, Chargebee, and Paddle. |
+| `/coreyhaines-marketing-co-marketing` | `.claude/skills/coreyhaines-marketing-co-marketing/` | Find co-marketing partners and plan joint campaigns for SaaS - audience-overlap analysis, partner-fit scoring, joint launch and cross-promotion ideas, and agreement structure. |
+| `/coreyhaines-marketing-cold-email` | `.claude/skills/coreyhaines-marketing-cold-email/` | Write B2B cold outreach emails and multi-touch follow-up sequences that get replies - subject lines, opening lines, body copy, CTAs, and personalization from research signals. |
+| `/coreyhaines-marketing-community-marketing` | `.claude/skills/coreyhaines-marketing-community-marketing/` | Design, launch, and grow an online community for product growth and loyalty - platform strategy across Discord, Slack, Circle, Reddit, and forums, plus brand advocates, ambassador programs, and... |
+| `/coreyhaines-marketing-competitor-profiling` | `.claude/skills/coreyhaines-marketing-competitor-profiling/` | Research and profile competitors from a list of their URLs, producing structured competitor dossier markdown files that combine live site scraping with SEO and market data. |
+| `/coreyhaines-marketing-competitors` | `.claude/skills/coreyhaines-marketing-competitors/` | Create competitor comparison and alternative pages that rank for competitive search terms and position your product, in four formats: singular alternative, plural alternatives, you vs competitor,... |
+| `/coreyhaines-marketing-content-strategy` | `.claude/skills/coreyhaines-marketing-content-strategy/` | Plan what content to create: topic clusters, content pillars, editorial calendars, and roadmaps that drive traffic, authority, and leads. |
+| `/coreyhaines-marketing-copy-editing` | `.claude/skills/coreyhaines-marketing-copy-editing/` | Edit, review, and polish existing marketing copy through focused passes, or refresh outdated content, without rewriting from scratch. |
+| `/coreyhaines-marketing-copywriting` | `.claude/skills/coreyhaines-marketing-copywriting/` | Write, rewrite, or improve marketing copy for any web page - homepage, landing, pricing, feature, about, product - including headlines, CTAs, value props, and taglines. |
+| `/coreyhaines-marketing-cro` | `.claude/skills/coreyhaines-marketing-cro/` | Analyze marketing pages and forms and recommend changes to lift conversion rates - homepage, landing, pricing, feature, lead capture, contact forms. |
+| `/coreyhaines-marketing-customer-research` | `.claude/skills/coreyhaines-marketing-customer-research/` | Conduct and synthesize customer research: analyze transcripts, surveys, reviews, and tickets, or gather fresh intel from Reddit, G2, forums, and communities to build personas and voice-of-customer... |
+| `/coreyhaines-marketing-directory-submissions` | `.claude/skills/coreyhaines-marketing-directory-submissions/` | Plan and run product directory submissions for backlinks, domain rating, and discovery - Product Hunt, BetaList, G2, Capterra, AI and MCP registries - with positioning variants and a submission... |
+| `/coreyhaines-marketing-emails` | `.claude/skills/coreyhaines-marketing-emails/` | Design multi-email automated flows and lifecycle programs - welcome, onboarding, nurture, re-engagement, post-purchase, and sales sequences. |
+| `/coreyhaines-marketing-free-tools` | `.claude/skills/coreyhaines-marketing-free-tools/` | Plan, evaluate, or scope a free marketing tool (engineering as marketing) - calculators, generators, graders, audit tools - that attracts leads, traffic, and links. |
+| `/coreyhaines-marketing-image` | `.claude/skills/coreyhaines-marketing-image/` | Create, generate, edit, and optimize marketing images: blog heroes, social graphics, product mockups, banners, profile covers, OG images, plus web optimization (WebP, compression). |
+| `/coreyhaines-marketing-influencer-marketing` | `.claude/skills/coreyhaines-marketing-influencer-marketing/` | Run influencer, creator, and ambassador partnerships end to end: find and vet partners, structure and price deals, brief creators, keep disclosure FTC-compliant, and measure real ROI across B2C and... |
+| `/coreyhaines-marketing-launch` | `.claude/skills/coreyhaines-marketing-launch/` | Plan a product or feature launch: go-to-market strategy, channel plan (owned, rented, borrowed), Product Hunt, waitlists, beta and early access, launch-day checklist. |
+| `/coreyhaines-marketing-lead-magnets` | `.claude/skills/coreyhaines-marketing-lead-magnets/` | Plan and design lead magnets that capture emails: ebooks, checklists, cheat sheets, templates, gated content, and how to distribute them. |
+| `/coreyhaines-marketing-marketing-council` | `.claude/skills/coreyhaines-marketing-marketing-council/` | Convene a simulated board of legendary marketers (Godin, Ogilvy, Schwartz, Dunford, Sutherland, Hormozi, Sharp) who each weigh in through their real frameworks, surface where they disagree, then... |
+| `/coreyhaines-marketing-marketing-ideas` | `.claude/skills/coreyhaines-marketing-marketing-ideas/` | Browse and match from a library of 139 proven SaaS marketing ideas, filtered to your stage, budget, and resources, with implementation detail on the ones you pick. |
+| `/coreyhaines-marketing-marketing-loops` | `.claude/skills/coreyhaines-marketing-marketing-loops/` | Set up recurring, self-running marketing workflows an AI agent runs on a cadence, each with a trigger, bounded steps, a self-check, state, and a stop condition, wiring the other marketing skills... |
+| `/coreyhaines-marketing-marketing-plan` | `.claude/skills/coreyhaines-marketing-marketing-plan/` | Produce a comprehensive 12-month marketing plan structured by AARRR (Acquisition, Activation, Retention, Referral, Revenue), customized to the client's budget, team, and stage, cross-referenced with... |
+| `/coreyhaines-marketing-marketing-psychology` | `.claude/skills/coreyhaines-marketing-marketing-psychology/` | Apply psychological principles and mental models to marketing: cognitive biases, persuasion, behavioral science, and decision-making frameworks explained with concrete marketing applications. |
+| `/coreyhaines-marketing-offers` | `.claude/skills/coreyhaines-marketing-offers/` | Design or improve the thing you actually sell: value framing, bonus stacking, guarantees and risk reversal, scarcity and urgency, naming, and payment structure. |
+| `/coreyhaines-marketing-onboarding` | `.claude/skills/coreyhaines-marketing-onboarding/` | Optimize post-signup onboarding and activation: time-to-value, the aha moment, first-run experience, empty states, setup checklists, and where new users drop off. |
+| `/coreyhaines-marketing-paywalls` | `.claude/skills/coreyhaines-marketing-paywalls/` | Design and optimize in-product upgrade moments - paywalls, upgrade screens, upsell modals, feature gates - to convert free users to paid after they have hit value. |
+| `/coreyhaines-marketing-popups` | `.claude/skills/coreyhaines-marketing-popups/` | Build and optimize interrupt-style conversion elements - popups, modals, overlays, slide-ins, exit-intent, sticky bars, and announcement banners - that convert without annoying users. |
+| `/coreyhaines-marketing-pricing` | `.claude/skills/coreyhaines-marketing-pricing/` | Set pricing, packaging, and monetization strategy - tiers, freemium, free trials, value metric, price increases, per-seat, annual vs monthly, willingness to pay - plus pricing-page teardowns scoring... |
+| `/coreyhaines-marketing-product-marketing` | `.claude/skills/coreyhaines-marketing-product-marketing/` | Create and maintain the product marketing context document (brand_context/product-marketing.md) - the foundational product, audience, positioning, and ICP details every other marketing skill reads so... |
+| `/coreyhaines-marketing-programmatic-seo` | `.claude/skills/coreyhaines-marketing-programmatic-seo/` | Build SEO pages at scale from templates and data - location pages, directory pages, comparison and integration pages - that rank and avoid thin-content penalties. |
+| `/coreyhaines-marketing-prospecting` | `.claude/skills/coreyhaines-marketing-prospecting/` | Build and qualify prospect lists across B2B SaaS, general B2B, local small business, and early-adopter demand-signal discovery - turning an ICP into a scored, verified, ready-to-outreach lead sheet. |
+| `/coreyhaines-marketing-public-relations` | `.claude/skills/coreyhaines-marketing-public-relations/` | Land earned media for software products - find journalists, pitch stories, newsjack live news cycles, build media lists and press kits, respond to HARO and Qwoted requests. |
+| `/coreyhaines-marketing-referrals` | `.claude/skills/coreyhaines-marketing-referrals/` | Design, optimize, and analyze referral, affiliate, and word-of-mouth programs that turn customers and partners into a growth engine - incentives, viral loops, payouts, ambassador programs. |
+| `/coreyhaines-marketing-revops` | `.claude/skills/coreyhaines-marketing-revops/` | Design and optimize the systems that connect marketing, sales, and success into one revenue engine - lead scoring, lead routing, MQL/SQL definitions, pipeline stages, CRM automation, data hygiene,... |
+| `/coreyhaines-marketing-sales-enablement` | `.claude/skills/coreyhaines-marketing-sales-enablement/` | Create sales collateral reps actually use - pitch decks, one-pagers, leave-behinds, objection-handling docs, demo scripts, talk tracks, playbooks, deal-specific ROI. |
+| `/coreyhaines-marketing-schema` | `.claude/skills/coreyhaines-marketing-schema/` | Add, fix, or optimize schema.org structured data (JSON-LD) so pages earn rich results in Google - FAQ, product, review, Article, breadcrumb, and Organization schema, plus validation. |
+| `/coreyhaines-marketing-seo-audit` | `.claude/skills/coreyhaines-marketing-seo-audit/` | Audit and diagnose SEO problems - crawlability, indexation, Core Web Vitals, on-page tags, internal links, E-E-A-T, and hreflang/international - then return a prioritized fix list. |
+| `/coreyhaines-marketing-signup` | `.claude/skills/coreyhaines-marketing-signup/` | Optimize signup, registration, and free-trial flows to cut friction and lift completion - field-by-field audits, single vs multi-step, social auth, trust copy, and A/B test ideas. |
+| `/coreyhaines-marketing-site-architecture` | `.claude/skills/coreyhaines-marketing-site-architecture/` | Plan a website page hierarchy, navigation, URL structure, and internal linking - delivers ASCII trees, Mermaid sitemaps, URL maps, and nav specs. |
+| `/coreyhaines-marketing-sms` | `.claude/skills/coreyhaines-marketing-sms/` | Plan, build, and optimize SMS and MMS marketing programs - welcome, abandoned cart, post-purchase, win-back, and promo flows - with TCPA and A2P 10DLC compliance, copy, platform picks, and metrics. |
+| `/coreyhaines-marketing-social` | `.claude/skills/coreyhaines-marketing-social/` | Create, repurpose, schedule, and optimize social content across LinkedIn, X, Instagram, TikTok, and Facebook - content pillars, hooks, carousels, short-form video scripts, engagement, and social... |
+| `/coreyhaines-marketing-video` | `.claude/skills/coreyhaines-marketing-video/` | Produce marketing videos with AI tools and code - AI generation (Veo, Sora, Runway, Kling), AI avatars (HeyGen, Synthesia), programmatic frameworks (Remotion, Hyperframes), editing/repurposing, and... |
+| `/coreyhaines-skills-business-brainstorm` | `.claude/skills/coreyhaines-skills-business-brainstorm/` | Pressure-test a new business, product, or side-project idea against a 9-dimension founder filter (problem, wedge, monetization, moat, distribution, energy fit, opportunity cost, and more), check the... |
+| `/coreyhaines-skills-company-brain` | `.claude/skills/coreyhaines-skills-company-brain/` | Build and query a shared, AI-ready team knowledge base - people, companies, meetings, SOPs, and decisions - with multi-author trust levels and sensitivity tags. |
+| `/coreyhaines-skills-company-cfo` | `.claude/skills/coreyhaines-skills-company-cfo/` | Run a monthly company CFO workflow - pull bank, payment, payroll, and expense data, categorize and reconcile, compute end-of-month cash by transaction sum, update a scenario projector, and write the... |
+| `/coreyhaines-skills-decide` | `.claude/skills/coreyhaines-skills-decide/` | Structured decision workflow (based on the 37signals Guide to Making Decisions) that picks the load-bearing questions, walks them, reaches a call or "wait", and archives the rationale with a revisit... |
+| `/coreyhaines-skills-deep-research` | `.claude/skills/coreyhaines-skills-deep-research/` | Runs multi-source, multi-pass research (WebSearch, WebFetch, agent-browser, recency scan of Reddit/X/YouTube/HN, memory, Notion) and outputs a cited brief with contradictions, gaps, and next steps,... |
+| `/coreyhaines-skills-domain` | `.claude/skills/coreyhaines-skills-domain/` | Brainstorms and checks available .com domains for a new brand: name ideas, availability, aftermarket pricing, USPTO trademark screening, and social-handle checks. |
+| `/coreyhaines-skills-jab-hook` | `.claude/skills/coreyhaines-skills-jab-hook/` | Plans an X and LinkedIn posting rotation using Gary Vaynerchuk's jab-jab-jab-right-hook (mostly value posts so promo asks land), drafting into Typefully; modes for a 7-day plan, next post, coverage... |
+| `/coreyhaines-skills-loopify` | `.claude/skills/coreyhaines-skills-loopify/` | Sets up an autonomous agent loop, cron job, or recurring Claude Code workflow, choosing dynamic vs fixed vs one-shot pacing, building idempotent loop bodies, and setting bail-out conditions so it... |
+| `/coreyhaines-skills-paste` | `.claude/skills/coreyhaines-skills-paste/` | Cleans and reformats content (usually terminal output) for pasting into Slack, Notion, Twitter/X, LinkedIn, email, or GitHub: strips ANSI codes, box-drawing chars, and prompt artifacts, applies... |
+| `/coreyhaines-skills-personal-cfo` | `.claude/skills/coreyhaines-skills-personal-cfo/` | Models personal and household financial scenarios: house purchase plus rental income, renovation budgets, monthly cash flow, big-purchase decisions, and savings what-ifs, output as markdown... |
+| `/coreyhaines-skills-pm` | `.claude/skills/coreyhaines-skills-pm/` | Manages projects across your businesses with a kanban plus Eisenhower method, one board per business, connecting to whatever PM tool each uses (Notion, GitHub Projects, Plane, Linear, or file-based);... |
+| `/coreyhaines-skills-read-book` | `.claude/skills/coreyhaines-skills-read-book/` | Reads a book or long PDF (PDF, EPUB, MOBI, markdown, txt, pasted text, or public-domain URL) and extracts structured notes: per-chapter TL;DR, key concepts, quotes, action items, frameworks; modes... |
+| `/coreyhaines-skills-second-brain` | `.claude/skills/coreyhaines-skills-second-brain/` | Captures into, compiles, queries, lints, or connects a personal Second Brain markdown vault (Karpathy LLM Wiki schema: raw sources, AI-compiled interlinked wiki pages, generated outputs); modes for... |
+| `/coreyhaines-skills-skillify` | `.claude/skills/coreyhaines-skills-skillify/` | Creates, adapts, or updates a Claude Code skill in your own sibling repos: builds one from a chat, video, dump, or scratch; ports an external skill with keep/adapt/add classification, license check,... |
+| `/coreyhaines-skills-slide-deck` | `.claude/skills/coreyhaines-skills-slide-deck/` | Drafts, updates, converts, or exports slide decks as TypeScript Slide[] arrays for a React/Next.js slide system, using your primitives, brand gradients, and speaker notes; modes for new, update,... |
+| `/coreyhaines-skills-social-fetch` | `.claude/skills/coreyhaines-skills-social-fetch/` | Fetches a single social post by URL (tweet, X thread, LinkedIn, Instagram, TikTok, Bluesky, Reddit, Mastodon, Threads, Hacker News) and returns normalized structured data (author, text, engagement,... |
+| `/coreyhaines-skills-toolify` | `.claude/skills/coreyhaines-skills-toolify/` | Integrates an external tool, API, MCP server, or service into a Next.js or Rails project: walks auth, config, env vars, client wrapper code, example usage, .mcp.json wiring, and an optional... |
+| `/coreyhaines-skills-watch-video` | `.claude/skills/coreyhaines-skills-watch-video/` | Transcribes and analyzes any video (YouTube, Loom, Vimeo, Riverside, Zoom, local MP4, X/IG, anything yt-dlp supports) at a chosen depth: transcript only, visual frame analysis, or multimodal, saving... |
+| `/eng-implement` | `.claude/skills/eng-implement/` | Real code work that deserves more than a quick edit: spec-first, test-driven build, structured debugging, domain modeling, setup wizards. |
+| `/memory-recall` | `.claude/skills/memory-recall/` | Search and recall prior AI-OS memory: past sessions, decisions, project context, "have we seen this before". |
+| `/meta-aios-template` | `.claude/skills/meta-aios-template/` | Keep the public AI-OS template repo and its Notion docs in sync with this install, without leaking client or personal content. |
+| `/meta-bake-it-in` | `.claude/skills/meta-bake-it-in/` | Absorb an external repo, skill, or resource into the CORE of AI-OS (personality, rules, hooks, cron) instead of adding a skill. |
+| `/meta-context-intake` | `.claude/skills/meta-context-intake/` | Intake, classify, and review messy AI-OS context before it becomes memory or infrastructure. |
+| `/meta-find-skills` | `.claude/skills/meta-find-skills/` | Find the right skill for a task, searching AI-OS's own curated sources - live skills, the skills-library backlog and resources lanes, the optional catalog - before reaching outside. |
+| `/meta-memory-write` | `.claude/skills/meta-memory-write/` | Save durable facts to context/MEMORY.md, the scratchpad read at session start. |
 | `/meta-skill-creator` | `.claude/skills/meta-skill-creator/` | Create new skills, modify and improve existing skills, and measure skill performance. |
-| `/meta-synthesize-locals` | `.claude/skills/meta-synthesize-locals/` | Synthesizes verbose SKILL.local.md files after migration from the old single-file pattern. |
-| `/meta-systems-check` | `.claude/skills/meta-systems-check/` | Run a full health check of the AI-OS install and report a plain-English scorecard of what works, what is missing, and what is broken. |
-| `/meta-worktree` | `.claude/skills/meta-worktree/` | Audit the AI-OS folder and worktrees in plain English, then offer to tidy up. |
+| `/meta-skill-intake` | `.claude/skills/meta-skill-intake/` | Bring an outside skill, pack, or repo into AI-OS: assess it, then promote it live or park it. |
+| `/meta-systems-check` | `.claude/skills/meta-systems-check/` | Health AND refinement review of the AI-OS install, as a plain-English scorecard: what works, what is missing, what is broken, AND what is sub-optimal - how data/information is being accessed, what... |
+| `/meta-worktree` | `.claude/skills/meta-worktree/` | Audit the AI-OS folder and worktrees in plain English, then offer to tidy up: branches, dirty work, stashes, recovery branches, local-vs-GitHub state, and work another session left behind. |
 | `/meta-wrap-up` | `.claude/skills/meta-wrap-up/` | End-of-session checklist that reviews deliverables, collects feedback, fixes skills, updates learnings, and commits work. |
 | `/mkt-brand-voice` | `.claude/skills/mkt-brand-voice/` | Extract or build a brand's voice so every skill writes in their style. |
-| `/mkt-content-repurposing` | `.claude/skills/mkt-content-repurposing/` | Repurpose one piece of content into platform-native posts across LinkedIn, Twitter/X, Instagram, TikTok, YouTube, Threads, Bluesky, and Reddit. |
-| `/mkt-copywriting` | `.claude/skills/mkt-copywriting/` | Persuasive writing for anything that needs to sell. |
+| `/mkt-content-repurposing` | `.claude/skills/mkt-content-repurposing/` | Repurpose one piece of content into platform-native posts (LinkedIn, X, Instagram, TikTok, YouTube, Threads, Bluesky, Reddit). |
+| `/mkt-copywriting` | `.claude/skills/mkt-copywriting/` | Persuasive writing that needs to sell: landing pages, sales pages, emails, ads, social posts, headlines, CTAs. |
 | `/mkt-icp` | `.claude/skills/mkt-icp/` | Build or refine an ideal customer profile so every skill speaks to the right person. |
-| `/mkt-positioning` | `.claude/skills/mkt-positioning/` | Find the angle that makes something sell. |
+| `/mkt-positioning` | `.claude/skills/mkt-positioning/` | Find the angle that makes something sell: maps competitor messaging, then generates 3-5 positioning angles with a recommended pick. |
 | `/mkt-ugc-scripts` | `.claude/skills/mkt-ugc-scripts/` | Write short-form UGC video scripts for talking-head and avatar delivery. |
-| `/ops-agent-email` | `.claude/skills/ops-agent-email/` | The agent's own email inbox (AgentMail) at your-agent@agentmail.to. |
-| `/ops-cron` | `.claude/skills/ops-cron/` | Schedule recurring tasks with AI-OS's managed cron runtime. |
-| `/ops-versioning` | `.claude/skills/ops-versioning/` | Keeps versions of documents and content invisible and automatic. |
-| `/str-ai-seo` | `.claude/skills/str-ai-seo/` | When the user wants to optimize content for AI search engines, get cited by LLMs, or appear in AI-generated answers. |
-| `/str-trending-research` | `.claude/skills/str-trending-research/` | Research what's trending in the last 30 days across Reddit, X, and the web. |
-| `/tool-humanizer` | `.claude/skills/tool-humanizer/` | Remove AI-generated writing patterns and restore natural human voice. |
-| `/tool-youtube` | `.claude/skills/tool-youtube/` | Fetch latest videos from YouTube channels and extract full transcripts. |
-| `/viz-ad-creative-codex` | `.claude/skills/viz-ad-creative-codex/` | Generate consistent, on-brand paid ad creative batches natively in Codex using Codex's built-in image generation, with no Gemini, fal, or other model API key. |
-| `/viz-ad-creative-fal` | `.claude/skills/viz-ad-creative-fal/` | Generate consistent, on-brand paid ad creative batches in Claude using fal.ai as the image and video engine (FLUX, Recraft, Ideogram, nano-banana, Kling, Veo, Seedance). |
-| `/viz-ad-creative-figma` | `.claude/skills/viz-ad-creative-figma/` | Generate consistent, on-brand paid ad creative batches in Claude with a deterministic Figma, Figma MCP, Figma Buzz/Weave-style, or local HTML template engine. |
-| `/viz-excalidraw-diagram` | `.claude/skills/viz-excalidraw-diagram/` | Generate Excalidraw diagram JSON files that make visual arguments - not just labelled boxes. |
+| `/ops-agent-email` | `.claude/skills/ops-agent-email/` | The agent's own email inbox (AgentMail), shared across every client. |
+| `/ops-client-dashboard` | `.claude/skills/ops-client-dashboard/` | Read your agency's shared client task dashboard, the board where subscribed clients' tasks live. |
+| `/ops-cron` | `.claude/skills/ops-cron/` | Schedule recurring tasks with AI-OS's managed cron runtime (jobs live in cron/jobs/). |
+| `/ops-versioning` | `.claude/skills/ops-versioning/` | Invisible, automatic version history for documents and content. |
+| `/q-question` | `.claude/skills/q-question/` | Answer a question with the right level of research, evidence, and judgement, scaling depth to the stakes: a quick fact, a verified current claim, or a fully researched answer with sources and... |
+| `/q-unstuck` | `.claude/skills/q-unstuck/` | The antidote to a roadblock or wall: refuses to take no for an answer, then runs lateral-thinking techniques (assumption autopsy, inversion, first principles, and more) until the wall cracks or is... |
+| `/str-ai-seo` | `.claude/skills/str-ai-seo/` | Optimize content to get cited by AI search engines and LLMs. |
+| `/str-research-findings` | `.claude/skills/str-research-findings/` | Capture the user's own research notes, pasted findings, discovery calls, and tool-stack hypotheses into the root AI-OS research hub, even with no URL. |
+| `/str-resources` | `.claude/skills/str-resources/` | Capture any URL (video, blog, newsletter, podcast, article, PDF): pulls the full content, extracts frameworks and insights, and saves to AI-OS projects, the Notion Notes database, and relevant client... |
+| `/str-trending-research` | `.claude/skills/str-trending-research/` | Research what's trending in the last 30 days across Reddit, X, and the web, and produce a brief other skills can use. |
+| `/tool-firecrawl-scraper` | `.claude/skills/tool-firecrawl-scraper/` | Turn websites into LLM-ready data with the Firecrawl API: scrape, crawl, map, search, extract, batch, and change tracking, with JavaScript rendering and anti-bot bypass. |
+| `/tool-humanizer` | `.claude/skills/tool-humanizer/` | Remove AI-writing patterns and restore a natural human voice: fixes 50+ tells like inflated symbolism, hedging, buzzwords, em-dash overuse, and rule-of-three. |
+| `/tool-youtube` | `.claude/skills/tool-youtube/` | YouTube skill, three modes: Capture (paste a URL to transcribe, extract frameworks, and save to Notion and workspaces), Channel (list recent uploads), Watch (paste a URL with a question for visual... |
+| `/viz-ad-creative-codex` | `.claude/skills/viz-ad-creative-codex/` | Generate on-brand paid ad creative batches natively in Codex using its built-in image generation, with no external image API key. |
+| `/viz-ad-creative-fal` | `.claude/skills/viz-ad-creative-fal/` | Generate on-brand paid ad creative batches in Claude using fal.ai for image and video (FLUX, Recraft, Ideogram, nano-banana, Kling, Veo, Seedance). |
+| `/viz-ad-creative-figma` | `.claude/skills/viz-ad-creative-figma/` | Generate on-brand paid ad creative batches in Claude with a deterministic Figma or local HTML template engine. |
+| `/viz-dither` | `.claude/skills/viz-dither/` | Generate a cohesive 1-bit dither graphic system in any brand palette: dithered duotone portraits and avatars, animated dither background 'bleeds', seamless texture tiles, and matching hard-edged... |
+| `/viz-excalidraw-diagram` | `.claude/skills/viz-excalidraw-diagram/` | Generate Excalidraw diagram JSON that makes a visual argument, not just labelled boxes: workflows, architectures, concepts, system designs. |
+| `/viz-make-interfaces-feel-better` | `.claude/skills/viz-make-interfaces-feel-better/` | Review or apply interface-polish details in frontend code - concentric border radius, optical alignment, shadows vs borders, animations, tabular numbers, text wrapping, image outlines,... |
 
 ## Skills library (staging, review-only, not invocable)
 
-These live under `skills-library/backlog/<pack>/<name>/`. To make one live: move it through `triage/` then `review/`, rename to the `{category}-{name}` convention, and register it in `.claude/skills/` and `AGENTS.md`. See `skills-library/README.md`.
+These live under `skills-library/backlog/<pack>/<name>/`. To make one live: assess it through `meta-skill-intake`, get an explicit promote decision, rename it to the `{category}-{name}` convention, satisfy the live registration bar, and regenerate this catalog. Parking keeps the source in backlog. See `skills-library/README.md`.
 
 ### backlog/ad-creative-suite (3)
 
@@ -79,7 +160,7 @@ These live under `skills-library/backlog/<pack>/<name>/`. To make one live: move
 | `cybersecurity-skills/vuln-research/` | Research a specific CVE or vulnerability disclosure end-to-end - what version is affected, is your code reachable, is there a public PoC, is there a patch, what's the exposure window, what's the... |
 | `cybersecurity-skills/web-pentest/` | Perform black-box / grey-box web application penetration testing on an authorized target - auth bypass, IDOR, session handling, business-logic flaws, parameter tampering, Burp Suite / OWASP ZAP... |
 
-### backlog/marketing (44)
+### backlog/marketing (49)
 
 | Skill folder | What it does |
 |--------------|--------------|
@@ -89,6 +170,7 @@ These live under `skills-library/backlog/<pack>/<name>/`. To make one live: move
 | `marketing/ai-seo/` | When the user wants to optimize content for AI search engines, get cited by LLMs, or appear in AI-generated answers. |
 | `marketing/analytics/` | When the user wants to set up, improve, or audit analytics tracking and measurement. |
 | `marketing/aso/` | When the user wants to audit or optimize an App Store or Google Play listing. |
+| `marketing/attribution/` | When the user wants to figure out which marketing actually drives conversions and revenue, choose or interpret an attribution model, or reconcile conflicting numbers across tools. |
 | `marketing/churn-prevention/` | When the user wants to reduce churn, build cancellation flows, set up save offers, recover failed payments, or implement retention strategies. |
 | `marketing/co-marketing/` | When the user wants to find co-marketing partners, plan joint campaigns, or brainstorm partnership opportunities. |
 | `marketing/cold-email/` | Write B2B cold emails and follow-up sequences that get replies. |
@@ -104,11 +186,15 @@ These live under `skills-library/backlog/<pack>/<name>/`. To make one live: move
 | `marketing/emails/` | When the user wants to create or optimize an email sequence, drip campaign, automated email flow, or lifecycle email program. |
 | `marketing/free-tools/` | When the user wants to plan, evaluate, or build a free tool for marketing purposes - lead generation, SEO value, or brand awareness. |
 | `marketing/image/` | When the user wants to create, generate, edit, or optimize images for marketing - blog heroes, social graphics, product mockups, profile banners, listing visuals, or brand assets. |
+| `marketing/influencer-marketing/` | When the user wants to run influencer, creator, or ambassador partnerships to promote their product - finding and vetting partners, structuring deals, briefing creators, disclosure compliance, and... |
 | `marketing/launch/` | When the user wants to plan a product launch, feature announcement, or release strategy. |
 | `marketing/lead-magnets/` | When the user wants to create, plan, or optimize a lead magnet for email capture or lead generation. |
+| `marketing/marketing-council/` | When the user wants multiple expert perspectives on a marketing question - a simulated board of advisors staffed by legendary marketers (Seth Godin, David Ogilvy, Eugene Schwartz, April Dunford, Rory... |
 | `marketing/marketing-ideas/` | When the user needs marketing ideas, inspiration, or strategies for their SaaS or software product. |
+| `marketing/marketing-loops/` | When the user wants to set up a recurring, self-running marketing workflow - a repeatable loop an AI agent runs on a cadence (weekly, daily, on a trigger) rather than a one-off task. |
 | `marketing/marketing-plan/` | When the user needs a comprehensive marketing plan for a client, a company they advise, or their own product. |
 | `marketing/marketing-psychology/` | When the user wants to apply psychological principles, mental models, or behavioral science to marketing. |
+| `marketing/offers/` | When the user wants to design, construct, or improve an offer - the thing they actually sell - including value framing, bonus stacking, guarantee design, scarcity/urgency, naming, and payment... |
 | `marketing/onboarding/` | When the user wants to optimize post-signup onboarding, user activation, first-run experience, or time-to-value. |
 | `marketing/paywalls/` | When the user wants to create or optimize in-app paywalls, upgrade screens, upsell modals, or feature gates. |
 | `marketing/popups/` | When the user wants to create or optimize popups, modals, overlays, slide-ins, or banners for conversion purposes. |
@@ -130,4 +216,4 @@ These live under `skills-library/backlog/<pack>/<name>/`. To make one live: move
 
 ---
 
-Totals: 24 live skills, 76 library skills.
+Totals: 105 live skills, 81 library skills.

@@ -81,11 +81,14 @@ fi
 
 echo ""
 
-# --- Auto-captured logs (.memsearch/memory/) ---
+# --- Auto-captured logs (.memsearch/memory/) - dormant plugin shadow path ---
+# This is the memsearch plugin's own shadow capture, NOT AI-OS canonical memory.
+# It went dormant 2026-07-04; session-backfill (transcript reconstruction) is the
+# real safety net now. Shown only for diagnostics. See .memsearch/README.md.
 AUTO_DATES=( $(collect_dates "$AUTO_DIR") )
-echo "=== Auto-Captures (.memsearch/memory/) ==="
+echo "=== Auto-Captures (.memsearch/memory/, dormant plugin shadow) ==="
 if [ ${#AUTO_DATES[@]} -eq 0 ]; then
-  echo "No auto-captured logs found."
+  echo "No auto-captured logs (expected - plugin shadow capture dormant since 2026-07-04)."
 else
   LAST_AUTO_INDEX=$(( ${#AUTO_DATES[@]} - 1 ))
   echo "Range: ${AUTO_DATES[0]} → ${AUTO_DATES[$LAST_AUTO_INDEX]}"

@@ -1,9 +1,9 @@
 ---
 name: coreyhaines-marketing-pricing
-description: "Set pricing, packaging, and monetization strategy - tiers, freemium, free trials, value metric, price increases, per-seat, annual vs monthly, willingness to pay. Not for in-app upgrade screens (see coreyhaines-marketing-paywalls) or offer construction on services, courses, and high-ticket B2B (see coreyhaines-marketing-offers)."
-when_to_use: 'Invoke when the request sounds like: ''pricing tiers'', ''how much should I charge'', ''freemium'', ''Van Westendorp'', ''should I offer a free plan'', ''my pricing is wrong'''
+description: "Set pricing, packaging, and monetization strategy - tiers, freemium, free trials, value metric, price increases, per-seat, annual vs monthly, willingness to pay - plus pricing-page teardowns scoring human clarity and AI-agent readability. Not for in-app upgrade screens (see coreyhaines-marketing-paywalls) or offer construction on services, courses, and high-ticket B2B (see coreyhaines-marketing-offers)."
+when_to_use: 'Invoke when the request sounds like: ''pricing tiers'', ''how much should I charge'', ''freemium'', ''Van Westendorp'', ''should I offer a free plan'', ''my pricing is wrong'', ''pricing page teardown'', ''can AI read my pricing'''
 metadata:
-  version: 2.0.1
+  version: 2.1.0
 ---
 
 # Pricing Strategy
@@ -206,6 +206,21 @@ Identifies which features customers value most:
 
 ---
 
+## Pricing Page Teardown
+
+When someone wants to audit an existing pricing *page* for **clarity, transparency, and AI-readability** (not the pricing strategy itself, and not conversion-rate optimization - that's `cro`), run a **teardown** that scores it across two axes and returns prioritized fixes:
+
+- **Human buyer experience** - value-prop clarity, plan differentiation, cognitive load, trust signals, pricing psychology, and price transparency.
+- **AI-agent readiness** - whether the LLMs and agents that increasingly shortlist and compare tools can actually read and quote your pricing: machine-readable prices (not locked in an image or behind "Contact us"), extractable FAQ/objection coverage, per-tier depth stated in text, and structured data. Buyers now ask ChatGPT/Perplexity/Claude "what's the best X and what does it cost?" *before* visiting - a pricing page an agent can't parse loses deals you never see.
+
+**Fast check - the "paste test":** give the pricing URL to a browsing-capable AI (Perplexity, ChatGPT with search, Claude with web) - or paste the rendered page text - and ask "what are the plans and prices?" A clean miss means agents fetching your page will struggle too (a heuristic, not proof every agent fails).
+
+The AI-readiness fixes are usually high-impact, low-effort (put prices in text, add `Offer` schema). Hand implementation to **schema** (Product/Offer JSON-LD) and **ai-seo** (extractability, AI-bot access, `llms.txt`).
+
+**For the full 10-dimension rubric, scoring, and report template:** See [references/pricing-page-teardown.md](references/pricing-page-teardown.md). *(AI-agent-readiness lens adapted from Kyle Poyar / Growth Unhinged.)*
+
+---
+
 ## Pricing Checklist
 
 ### Before Setting Prices
@@ -244,3 +259,5 @@ Identifies which features customers value most:
 - **coreyhaines-marketing-ab-testing**: For testing pricing changes
 - **coreyhaines-marketing-revops**: For deal desk processes and pipeline pricing
 - **coreyhaines-marketing-sales-enablement**: For proposal templates and pricing presentations
+- **coreyhaines-marketing-ai-seo**: For making the pricing page extractable/citable by AI (the teardown's AI-agent-readiness axis)
+- **coreyhaines-marketing-schema**: For Product/Offer structured data so machines can read your tiers and prices

@@ -5,6 +5,6 @@ import { useRouter } from "next/navigation";
 
 export default function BoardPage() {
   const router = useRouter();
-  useEffect(() => { router.replace("/"); }, [router]);
+  useEffect(() => { router.replace("/agent"); }, [router]);
   return null;
 }

@@ -19,10 +19,14 @@ make_fixture() {
   mkdir -p \
     "$TEST_ROOT/repo/scripts" \
     "$TEST_ROOT/repo/context" \
+    "$TEST_ROOT/repo/config" \
     "$TEST_ROOT/repo/.claude/skills/demo" \
     "$TEST_ROOT/repo/.claude/skills/_catalog" \
     "$TEST_ROOT/repo/projects/system-health"
   cp "$REAL_REPO/scripts/skill-system-audit.sh" "$TEST_ROOT/repo/scripts/skill-system-audit.sh"
+  # The audit reads config/update-manifest.json for its never_publish exemption
+  # set; without it the audit crashes instead of emitting the intended warning.
+  printf '{"never_publish":[]}\n' > "$TEST_ROOT/repo/config/update-manifest.json"
   cat > "$TEST_ROOT/repo/.claude/skills/demo/SKILL.md" <<'EOF'
 ---
 name: demo
@@ -32,7 +36,7 @@ description: Fixture skill.
 ## Context Needs
 None.
 EOF
-  printf '# Learnings\n' > "$TEST_ROOT/repo/context/learnings.md"
+  printf '# Learnings\n\n## demo\n' > "$TEST_ROOT/repo/context/learnings.md"
   printf '{"core_skills":[],"skills":{}}\n' > "$TEST_ROOT/repo/.claude/skills/_catalog/catalog.json"
   printf '{"installed_skills":[],"removed_skills":[]}\n' > "$TEST_ROOT/repo/.claude/skills/_catalog/installed.json"
   cat > "$TEST_ROOT/repo/scripts/gen-skills-catalog.py" <<'EOF'

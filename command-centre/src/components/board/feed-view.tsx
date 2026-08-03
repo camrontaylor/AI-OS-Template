@@ -1602,7 +1602,7 @@ function FilePreviewInline({ relativePath, extension, onClose, fillHeight, onChe
   const fileName = parts[parts.length - 1] || relativePath;
 
   const openPath = (subPath: string) => {
-    router.push(appendClientId(`/?tab=docs&file=${encodeURIComponent(subPath)}`, clientId ?? null));
+    router.push(appendClientId(`/docs?file=${encodeURIComponent(subPath)}`, clientId ?? null));
   };
 
   return (
@@ -3417,7 +3417,7 @@ function DetailPanel({
                   // Build breadcrumb from path
                   const pathParts = file.relativePath.split("/").filter(Boolean);
                   const breadcrumb = pathParts.length > 1 ? pathParts.slice(0, -1).join(" / ") : "";
-                  const docsHref = `/?tab=docs&file=${encodeURIComponent(file.relativePath)}`;
+                  const docsHref = `/docs?file=${encodeURIComponent(file.relativePath)}`;
                   return (
                     <div key={file.id}>
                       <div style={{

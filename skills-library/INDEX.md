@@ -1,8 +1,8 @@
 # Skills Library - Index
 
-> Secondary catalog. NOT auto-loaded, NOT auto-routed, NOT reconciled. Consulted only as a Task-Routing fallback (see AGENTS.md → Skills Library). Two folders, three actions: backlog (inert) → assess → promoted | parked.
+> Secondary catalog. NOT auto-loaded, NOT auto-routed, NOT reconciled. Consulted only as a Task-Routing fallback (see AGENTS.md → Skills Library). Two lanes inside one home: `backlog/` for SKILL-shaped packs (inert → assess → promoted | parked - unchanged since the 2026-07-21 simplification, deliberately left alone per the 2026-07-15 "leave skills-library as-is, the mess is external" verdict), `resources/` for non-skill external resources - apps, MCP servers, toolkits, frameworks (evaluated, metadata-only record, never full-source-vendored). `meta-skill-intake` routes by shape: a source with `SKILL.md` file(s) → `backlog/`; a source without → `resources/`. Both read/write the same `sources.json` + `LICENSES.md` for one provenance ledger.
 
-_Built 2026-06-16, updated 2026-07-21 · 179 candidates_
+_Built 2026-06-16, updated 2026-07-21 · 179 candidates. `resources/` lane added 2026-07-28 (repos evaluated 2026-07-23)._
 
 ## Candidates with a status (assessed - awaiting your promote/park call)
 
@@ -14,6 +14,18 @@ Everything else in the backlog is inert until you ask for an assessment. These f
 | `planner` | `backlog/planner/ASSESSMENT.md` | **Parked** - source is all-rights-reserved Conversion Factory material (open question 4) and no planner request has appeared in memory. Unpark by answering the 4 open questions in the assessment. |
 
 _`meta-skill-intake` was promoted 2026-07-16 (it owns this pipeline). The old `skills-library-review-watcher` cron is retired - the review stage no longer exists._
+
+## Resources (non-skill external resources)
+
+Full source is **never vendored here** - a `RESOURCE.md` metadata record only (source, license, security-scan grade, disposition, what was kept, why parked, safe path if revisited). Reclone from the pinned source URL if the actual content is ever needed again. Registered in `sources.json`'s `resources` array (parallel to `sources` for skill packs and `candidates` for noted-but-unevaluated repos - see that file's `_comment` for the four-array model). Routed here by `meta-skill-intake` when a source has no `SKILL.md` (an app, MCP server, toolkit, or framework); evaluated the same way a skill candidate is (intelligence-layer assess), but the disposition set is PARKED / CONNECTOR-CANDIDATE / PARTIALLY-ABSORBED / ABSORBED rather than promote-into-`.claude/skills/`. `meta-bake-it-in` is the executor whenever a resource's assess step recommends absorbing a piece into core.
+
+| Resource | License | Disposition | Record |
+|------|---------|---------|------|
+| `resources/ai-job-search/` (MadsLorentzen/ai-job-search) | MIT | **Partially-absorbed** - capability parked (job search irrelevant to an agency operator), 2 patterns kept | [`RESOURCE.md`](resources/ai-job-search/RESOURCE.md) |
+| `resources/agent-reach/` (Panniantong/Agent-Reach) | MIT | **Partially-absorbed** - toolkit parked (scrapes personal sessions, duplicates managed Apify/Firecrawl), 1 fact kept + 1 held proposal | [`RESOURCE.md`](resources/agent-reach/RESOURCE.md) |
+| `resources/codebase-memory-mcp/` (DeusData/codebase-memory-mcp) | MIT | **Parked** - narrow value for AI-OS's repo size, intrusive default installer (writes global skills + settings hooks) | [`RESOURCE.md`](resources/codebase-memory-mcp/RESOURCE.md) |
+
+Full evaluation + security-scan detail behind all three: [`projects/meta-bake-it-in/2026-07-23_ai-job-search-codebase-memory-agent-reach.md`](../projects/meta-bake-it-in/2026-07-23_ai-job-search-codebase-memory-agent-reach.md).
 
 ## Backlog
 
@@ -110,7 +122,7 @@ _22 total · 18 net-new, 4 already-live._
 
 ### Marketing & Strategy
 
-_47 total · 7 net-new, 40 already-live. Updated 2026-07-08 (added marketing-council, marketing-loops, offers)._
+_49 total · Updated 2026-07-28 (promoted attribution + influencer-marketing live; refreshed analytics 2.0.1, pricing 2.1.0). Prior 2026-07-08 added marketing-council, marketing-loops, offers._
 
 | Skill | Cat | What it does | Active dup? | Triggers | Source |
 |-------|-----|--------------|-------------|----------|--------|
@@ -125,7 +137,9 @@ _47 total · 7 net-new, 40 already-live. Updated 2026-07-08 (added marketing-cou
 | ad-creative | mkt | Generate and iterate ad creative at scale (headlines, descriptions, primary text) for paid platforms based on performance. | yes - skip | ad copy variations, ad creative, generate headlines, RSA headlines | coreyhaines31/marketingskills |
 | ads | mkt | Strategy, targeting, bidding, and optimization for paid campaigns across Google, Meta, LinkedIn, and X. | yes - skip | PPC, paid media, ROAS, CPA | coreyhaines31/marketingskills |
 | ai-seo | mkt | Optimize content to be cited by AI search engines and LLMs (AEO/GEO/LLMO, AI Overviews, llms.txt, knowledge bundles). | yes - skip | AI SEO, AEO, GEO, LLMO | coreyhaines31/marketingskills |
-| analytics | mkt | Set up, audit, and improve analytics tracking and measurement (GA4, GTM, events, UTMs, attribution). | yes - skip | set up tracking, GA4, conversion tracking, event tracking | coreyhaines31/marketingskills |
+| analytics | mkt | Set up, audit, and improve analytics tracking and measurement (GA4, GTM, events, UTMs). | yes - skip | set up tracking, GA4, conversion tracking, event tracking | coreyhaines31/marketingskills |
+| attribution | mkt | Which marketing drives conversions/revenue - attribution models, MMM/incrementality, reconciling conflicting numbers across tools, and first-party attribution instrumentation. | **PROMOTED -> coreyhaines-marketing-attribution** (2026-07-28) | which channel drives revenue, my dashboards disagree, MMM, incrementality, close the identify gap | coreyhaines31/marketingskills |
+| influencer-marketing | mkt | Run influencer/creator/ambassador partnerships end to end - vetting, deal structuring, FTC disclosure, briefs, and ROI measurement across B2C and B2B. | **PROMOTED -> coreyhaines-marketing-influencer-marketing** (2026-07-28) | influencer marketing, creator partnerships, brand ambassador, FTC disclosure | coreyhaines31/marketingskills |
 | aso | mkt | Audit and optimize App Store / Google Play listings - fetches live data, scores metadata/visuals/ratings, returns a prioritized plan. | yes - skip | ASO audit, app store optimization, optimize my app listing, app store ranking | coreyhaines31/marketingskills |
 | churn-prevention | mkt | Reduce voluntary and involuntary churn via cancel flows, save offers, dunning, win-back, and retention strategy. | yes - skip | churn, cancel flow, save offer, dunning | coreyhaines31/marketingskills |
 | co-marketing | mkt | Identify co-marketing partners and brainstorm high-impact joint campaigns for SaaS. | yes - skip | co-marketing, partner marketing, joint campaign, cross-promotion | coreyhaines31/marketingskills |
@@ -161,6 +175,14 @@ _47 total · 7 net-new, 40 already-live. Updated 2026-07-08 (added marketing-cou
 | site-architecture | str | Plan website page hierarchy, navigation, URL structure, and internal linking (information architecture / sitemaps). | yes - skip | sitemap, site structure, information architecture, navigation design | coreyhaines31/marketingskills |
 | social | mkt | Create, schedule, and optimize social content across platforms plus social listening and engagement triage. | yes - skip | LinkedIn post, Twitter thread, content calendar, social listening | coreyhaines31/marketingskills |
 | video | mkt | Produce marketing video via AI models, avatars, and programmatic frameworks (Remotion, HeyGen, Veo, Sora, Runway). | yes - skip | video production, AI video, Remotion, HeyGen | coreyhaines31/marketingskills |
+
+### Writing & Editing
+
+_1 total · 1 net-new. Vendored 2026-07-30._
+
+| Skill | Cat | What it does | Active dup? | Triggers | Source |
+|-------|-----|--------------|-------------|----------|--------|
+| no-ai-slop (in `backlog/no-ai-slop/`) | mkt/tool | Human-editor pass: edits 20+ AI-slop patterns (binary contrasts, colon reveals, faux-insight setups, importance puffery, weasel attribution, fake-profound kickers) out of a draft while preserving the writer's voice, OR detects patterns without rewriting. Ships an `eval.md` self-check. | **ABSORBED into core (2026-07-30)** via `meta-bake-it-in` - now the system default for all prose: `AGENTS.md` "## Anti-Slop Standard" (always-on doctrine), 8 net-new patterns merged into `tool-humanizer/pattern-library.md` (Section 9), `ai_slop` signal in `response-bloat-check.js`. Skill itself **parked** (not promoted - would duplicate tool-humanizer). Record: `projects/meta-bake-it-in/2026-07-30_no-ai-slop.md`. Detect mode = only unbaked piece. | make this less AI-sounding, is this AI slop, edit my draft, sharper writing, detect AI patterns | petergyang/no-ai-slop (MIT) |
 
 ### Engineering (eng)
 
@@ -246,6 +268,7 @@ _9 total · 7 net-new, 2 already-live._
 | web-design-guidelines | viz | Review UI code against Vercel's Web Interface Guidelines (accessibility, UX, design best practices), fetching the latest rules and reporting file:line findings. | no | review my UI, check accessibility, audit design, review UX against best practices | conversionfactory/agent-config (shared) |
 | canvas-design | viz | Create beautiful visual art in .png and .pdf documents using a design philosophy - posters, art, static design pieces. | yes - skip | create a poster, piece of art, design, static visual piece | conversionfactory/agent-config (shared) |
 | theme-factory | viz | Apply 10 preset (or on-the-fly) color/font themes to artifacts - slides, docs, reports, HTML landing pages - for consistent professional styling. | yes - skip | styling slides or artifacts with a theme, applying a color/font palette, theme showcase selection, generating a new theme | conversionfactory/agent-config (shared) |
+| make-interfaces-feel-better (in `backlog/make-interfaces-feel-better/`) | viz/eng | Interface-polish reviewer: concentric radius, optical alignment, shadow-vs-border, interruptible/enter/exit animation, tabular nums, text wrap, image outlines, scale-on-press, hit areas, icon stroke weight, motion restraint. Quick/full modes, Block/Needs-changes/Approve verdict. | **PROMOTED -> viz-make-interfaces-feel-better** (2026-07-30; author name dropped for the standard viz category prefix per user direction). Complements live impeccable (broad UX) + eng-implement (build). | make it feel better, feels off, polish this UI, review my component, border radius looks wrong, icons off-center | jakubkrehel/make-interfaces-feel-better (MIT) |
 
 ### Thinking & Decisions
 

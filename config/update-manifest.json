@@ -8,6 +8,7 @@
     "CHANGELOG.md",
     "VERSION",
     ".cursor/rules/ai-os.mdc",
+    ".claude/commands/",
     ".claude/hooks/",
     ".claude/skills/*/SKILL.md",
     ".claude/skills/*/references/",
@@ -34,6 +35,8 @@
     ".claude/skills/*/SKILL.local.md",
     ".claude/skills/*/*.local.md",
     "CLAUDE.local.md",
+    "command-centre/src/components/marketing/marketing-plan-view.tsx",
+    "scripts/notion-sync/com.camron.notion-sync.plist",
     "context/MEMORY.md",
     "context/USER.md",
     "context/SOUL.md",
@@ -55,7 +58,9 @@
     "skills-library/backlog/cf-frameworks/",
     "skills-library/backlog/planner/",
     "skills-library/backlog/copy-qa/",
-    "skills-library/backlog/community-claude-md-rules/"
+    "skills-library/backlog/community-claude-md-rules/",
+    ".claude/skills/ops-website/",
+    ".claude/skills/str-sitemap-workshop/"
   ],
   "local_override_guidance": [
     "Put skill edits in SKILL.local.md beside the upstream SKILL.md.",

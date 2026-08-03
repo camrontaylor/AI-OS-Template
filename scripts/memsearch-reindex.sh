@@ -123,20 +123,83 @@ rm -f context/notion/_memsearch.md 2>/dev/null || true
 SOURCES=()
 add_source() {
   local p="$1"
-  if [ -e "$p" ]; then
-    SOURCES+=("$p")
-  fi
+  [ -e "$p" ] || return 0
+  # Idempotent: skip if this exact path is already queued. Lets the explicit
+  # required lines below coexist with the top-level *.md globs without adding
+  # the same file twice.
+  local existing
+  for existing in "${SOURCES[@]:-}"; do
+    [ "$existing" = "$p" ] && return 0
+  done
+  SOURCES+=("$p")
+}
+
+# Curated knowledge subfolders: durable vendor/product/reference synthesis that
+# lives ONE level down inside a context/ folder (not a top-level *.md, and not a
+# deep-search-only tree like meetings/, inbox/, or transcripts/). These were a
+# recall blind spot - both indexers walk context/*.md NON-recursively, so a whole
+# knowledge folder could be invisible to recall (2026-07-29 fix: a client
+# context/myob-exo/ folder was built 07-28 and was never reachable). Add a folder NAME
+# here to make its markdown routinely indexed, root and every client. Keep in
+# sync with routine_semantic in config/memory-index-policy.json and with the
+# KNOWLEDGE_SUBFOLDERS list in scripts/memory-search.py.
+KNOWLEDGE_SUBFOLDERS=(myob-exo operator)
+# Noisy machine maps inside a knowledge folder that must stay OUT of routine
+# recall (large table-of-contents / topic dumps that would drown recall in
+# hundreds of near-identical headings). Matched against the full path.
+KNOWLEDGE_SUBFOLDER_SKIP_GLOBS=('*/official-help/topic-index.md')
+
+add_knowledge_subfolder() {
+  # $1 = a context/ directory (e.g. "context" or "clients/{slug}/context").
+  # No-op when the named subfolders are absent, so it is safe to call for root
+  # and every client uniformly.
+  local ctx="$1" sub f skip keep
+  for sub in "${KNOWLEDGE_SUBFOLDERS[@]}"; do
+    [ -d "$ctx/$sub" ] || continue
+    while IFS= read -r f; do
+      keep=1
+      for skip in "${KNOWLEDGE_SUBFOLDER_SKIP_GLOBS[@]}"; do
+        # shellcheck disable=SC2254
+        case "$f" in $skip) keep=0; break ;; esac
+      done
+      [ "$keep" = 1 ] && add_source "$f"
+    done < <(find "$ctx/$sub" -type f -name '*.md' | sort)
+  done
 }
 
 add_source context/MEMORY.md
 add_source context/memory/
 add_source context/learnings.md
+# Root top-level curated context (SOUL, USER, decisions, learnings.shared,
+# prompt-tags, ...). These are durable hot memory that used to fall through the
+# cracks: only MEMORY.md and learnings.md were indexed, so identity and
+# standing-decision knowledge was invisible to semantic recall (2026-07-27 fix).
+# Non-recursive on purpose - subfolders (inbox/, notion/, transcripts/) keep
+# their deep-search-only tier from config/memory-index-policy.json.
+shopt -s nullglob
+for f in context/*.md; do
+  # Skip files that are not recall memory: learnings.shared.md is the git-tracked
+  # sanitized MIRROR of learnings.md (indexing both double-counts the same lesson
+  # and lets the mirror outrank the authoritative copy - proven in the golden
+  # recall benchmark), and prompt-tags.md is reusable prompt config, not memory.
+  case "$(basename "$f")" in
+    learnings.shared.md|prompt-tags.md) continue ;;
+  esac
+  add_source "$f"
+done
+shopt -u nullglob
 add_source context/wiki/
 # The curated Notion catalog (Stack + Resources), so "what tool did I save for X"
 # is answerable from memory. Deliberately the single generated CATALOG.md and NOT
 # context/notion/items/ - indexing all ~500 raw scraped pages would add more
 # marketing copy than there is real memory, and drown recall in product taglines.
+# Curated knowledge subfolders at root (none today; no-op unless one is added).
+add_knowledge_subfolder context
 add_source context/notion/CATALOG.md
+# The human daily notes: your journal plus the auto session/Notion index. Real
+# hot memory, and terse (note titles and links, never raw note bodies - those
+# stay deep-search-only in context/notion/), so it belongs in routine recall.
+add_source daily/
 
 shopt -s nullglob
 for client_dir in clients/*/; do
@@ -144,6 +207,26 @@ for client_dir in clients/*/; do
   add_source "${client_dir}context/MEMORY.md"
   add_source "${client_dir}context/memory/"
   add_source "${client_dir}context/learnings.md"
+  # Client topic wiki: durable per-client synthesis (for example integration,
+  # setup, and discovery-question notes), symmetric to the root
+  # context/wiki/ indexed above. The markdown fallback already covers this via
+  # MEMORY_SOURCE_DIRS; naming it here makes the semantic index deterministic so
+  # it is never pruned as an unlisted source (2026-07-29 parity fix).
+  add_source "${client_dir}context/wiki/"
+  # Durable client synthesis layer: the top-level context/*.md files (overview,
+  # relationship-history, ops synthesis, timeline, current-state, billing, ...).
+  # These are the richest curated client knowledge and were previously invisible
+  # to semantic recall - only MEMORY.md/learnings.md were indexed (2026-07-27
+  # fix). Non-recursive: subfolders (meetings/, inbox/, intake/, transcripts/,
+  # reference/) keep their deep-search-only / candidate tiers per
+  # config/memory-index-policy.json - raw transcripts stay out, but the
+  # relationship-history that summarizes every call is now indexed.
+  for f in "${client_dir}context"/*.md; do add_source "$f"; done
+  # Curated knowledge subfolders (e.g. myob-exo/): durable vendor/product/
+  # reference synthesis one level down, minus noisy machine maps. See
+  # KNOWLEDGE_SUBFOLDERS above. This closes the recursive blind spot without
+  # sweeping in the deep-search-only trees (meetings/, inbox/, transcripts/).
+  add_knowledge_subfolder "${client_dir}context"
 done
 shopt -u nullglob
 if [ ${#SOURCES[@]} -eq 0 ]; then

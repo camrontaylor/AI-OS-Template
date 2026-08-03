@@ -109,6 +109,15 @@ process.stdin.on('end', () => {
       resolved: resolveFrom(activeRoot, 'context/current-state.md', 'client'),
       label: 'Client current-state brief - generated active work context',
     });
+    // Root working memory too: the nightly distill routes cross-cutting and
+    // root-session facts into root MEMORY.md, and client sessions were the one
+    // place that never saw it (2026-07-28 memory diagnosis: client facts landed
+    // in root MEMORY.md, unreachable from that client session). It is capped at
+    // 2,500 chars, so the cost is negligible.
+    targets.push({
+      resolved: resolveFrom(workspaceRoot, 'context/MEMORY.md', 'root'),
+      label: 'Root MEMORY - cross-workspace working memory (root scratchpad; client MEMORY above wins on conflict)',
+    });
   }
 
   // Daily log: today first, yesterday as fallback if today has no session yet

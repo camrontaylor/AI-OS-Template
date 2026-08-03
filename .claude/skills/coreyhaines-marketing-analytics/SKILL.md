@@ -1,9 +1,9 @@
 ---
 name: coreyhaines-marketing-analytics
-description: "Set up, audit, or fix analytics tracking and measurement - GA4, GTM, event and conversion tracking, UTM conventions, tracking plans, and attribution across tools like Mixpanel and Segment. Not for A/B test measurement (see coreyhaines-marketing-ab-testing)."
+description: "Set up, audit, or fix analytics tracking and measurement - GA4, GTM, event and conversion tracking, UTM conventions, and tracking plans across tools like Mixpanel and Segment. Not for attribution modeling or reconciling numbers across tools (see coreyhaines-marketing-attribution) or A/B test measurement (see coreyhaines-marketing-ab-testing)."
 when_to_use: 'Invoke when the request sounds like: "set up tracking", "GA4", "conversion tracking", "UTM parameters", "are my events firing", "how do I measure this"'
 metadata:
-  version: 2.0.0
+  version: 2.0.1
 ---
 
 # Analytics Tracking
@@ -322,3 +322,4 @@ For implementation, see the [AI-OS connectors map](../../../docs/connectors.md).
 - **coreyhaines-marketing-seo-audit**: For organic traffic analysis
 - **coreyhaines-marketing-cro**: For conversion optimization (uses this data)
 - **coreyhaines-marketing-revops**: For pipeline metrics, CRM tracking, and revenue attribution
+- **coreyhaines-marketing-attribution**: For attribution models, multi-touch/MMM/incrementality, and reconciling conflicting numbers across tools (once tracking is live)

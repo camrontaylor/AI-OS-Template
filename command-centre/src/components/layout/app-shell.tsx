@@ -1,7 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { RefreshCw } from "lucide-react";
 import { Sidebar } from "./sidebar";
+import { ClientSwitcher } from "./client-switcher";
+import { OperationsRail } from "./operations-rail";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 export function AppShell({ children, title }: { children: React.ReactNode; title?: string }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -24,38 +29,40 @@ export function AppShell({ children, title }: { children: React.ReactNode; title
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
       />
       <main style={{ flex: 1, minWidth: 0, minHeight: "100vh" }}>
-        {/* Sticky header */}
         <header
-          className="px-4 sm:px-6"
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            height: 56,
-            position: "sticky",
-            top: 0,
-            zIndex: 50,
-            backgroundColor: "color-mix(in srgb, var(--background) 80%, transparent)",
-            backdropFilter: "blur(12px)",
-          }}
+          className="sticky top-0 z-50 flex min-h-14 flex-wrap items-center justify-between gap-3 border-b bg-background/90 px-4 py-2 backdrop-blur-xl sm:px-6"
         >
-          <h2
-            style={{
-              fontFamily: "var(--font-inter), Inter, sans-serif",
-              fontWeight: 700,
-              fontSize: 20,
-              color: "var(--foreground)",
-              margin: 0,
-            }}
-          >
-            {title || "Command Centre"}
-          </h2>
+          <div className="flex min-w-0 items-center gap-3">
+            <h2 className="m-0 truncate text-lg font-semibold text-foreground">
+              {title || "Command Centre"}
+            </h2>
+            <Badge variant="outline" className="hidden shrink-0 sm:inline-flex">
+              Local
+            </Badge>
+          </div>
+          <div className="flex min-w-0 flex-1 items-center justify-end gap-2">
+            <div className="hidden w-full max-w-[280px] md:block">
+              <ClientSwitcher direction="down" />
+            </div>
+            <Badge variant="secondary" className="hidden shrink-0 lg:inline-flex">
+              Context ready
+            </Badge>
+            <Button
+              size="sm"
+              variant="outline"
+              type="button"
+              onClick={() => window.location.reload()}
+            >
+              <RefreshCw data-icon="inline-start" />
+              Refresh context
+            </Button>
+          </div>
         </header>
-        <div
-          className="px-4 pb-4 sm:px-6 sm:pb-6"
-          style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 16 }}
-        >
-          {children}
+        <div className="flex min-h-[calc(100vh-3.5rem)]">
+          <div className="flex min-w-0 flex-1 flex-col gap-4 px-4 pb-4 pt-4 sm:px-6 sm:pb-6">
+            {children}
+          </div>
+          <OperationsRail />
         </div>
       </main>
     </div>

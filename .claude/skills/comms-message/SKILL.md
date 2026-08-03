@@ -18,6 +18,8 @@ ask clear, and keep the user's voice intact.
 
 ## Context Needs
 
+Client work: run `bash scripts/agency-gather.sh <slug>` (from the AI-OS root) FIRST. It refreshes and inlines the curated brief, client MEMORY.md, and client learnings in one pass, then manifests the rest for targeted reads. The table below is what to load when gather is unavailable or the message is not client work.
+
 | File | Load level | Purpose |
 |------|------------|---------|
 | Root `context/USER.md` | full if available | Match the user's plain, direct style |
@@ -180,6 +182,7 @@ one-off messages as files unnecessarily.
 
 ## Rules
 
+- 2026-07-29: When the client has asked an explicit set of questions, preserve the question-by-question reply as the main artifact. Strategic boundaries and research should support each answer, not replace the reply with a project memo. If the user assigns one question to a separate page or document, keep the detailed answer there and link to it briefly from the message.
 - 2026-06-29: Use this skill for actual written communication to clients across all folders, not only the current client folder.
 - 2026-06-29: For quick client-message wording checks, return a ready-to-send version in chat and do not force a file save.
 - 2026-06-29: Avoid heavy phrases like "misaligned expectations" unless the relationship context calls for formal language.

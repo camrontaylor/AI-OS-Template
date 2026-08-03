@@ -26,7 +26,7 @@ function levelLabel(level: number | string): string {
 }
 
 function ProjectCard({ project }: { project: Project }) {
-  const href = `/?tab=docs&file=projects/briefs/${project.slug}/brief.md`;
+  const href = `/docs?file=projects/briefs/${project.slug}/brief.md`;
   const title = project.name.replace(/-/g, " ");
   return (
     <a href={href} className="block">

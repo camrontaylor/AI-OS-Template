@@ -1,6 +1,6 @@
 # /onboarding
 
-The onboarding entry point for first-time users.
+The onboarding entry point for first-time users. (Also runs as `/start-here`, kept as an alias.)
 
 ## Guard
 
@@ -28,14 +28,14 @@ Create today's memory file per CLAUDE.md's **Daily Memory** section:
 Check whether the user's data is backed up to their own GitHub repo:
 1. First, check `.env` for `IS_TEMPLATE_MAINTAINER=true`. If set, **skip this entire step** - the user owns the template repo and `origin` is already correct.
 2. Run `git remote -v` and inspect the `origin` URL.
-3. If `origin` contains `camrontaylor/ai-os-template` or another upstream template URL, the user has not set up their own private repo yet.
+3. If `origin` contains `camrontaylor/AI-OS-Template` or another upstream template URL, the user hasn't set up their own repo yet.
 4. If there is no `origin` at all, same situation.
 
 **If not configured:**
 > "Before we get started - your brand data, client files, and project outputs all live locally right now. If anything happens to this machine, they're gone. Let's back them up to a private GitHub repo that only you can access."
 
 Then guide them:
-- If `gh` CLI is available and authenticated: offer to create a private repo automatically (`gh repo create my-ai-os --private --source=. --remote=origin`), rename the template remote to `upstream`, and push.
+- If `gh` CLI is available and authenticated: offer to create a private repo automatically (`gh repo create my-ai-os --private --source=. --remote=origin`), rename the old origin to `upstream`, and push.
 - If `gh` is not available: give manual steps - create a private repo on GitHub, then run `git remote rename origin upstream && git remote add origin <their-url> && git push -u origin main`.
 - Reassure: "This is a **private** repo - only you can see it. Your brand voice, client data, and business content stay completely private."
 - After setup: "You're backed up. I'll remind you to push at the end of each session."
@@ -98,7 +98,7 @@ Do NOT present all four at once.
 "You can pick one, mix a couple, or describe it your own way."
 
 Then add one follow-up line:
-> "If you're starting from zero and want a more thorough voice extraction, I can run you through our Agentic Academy playbook in Step 5 (~10-15 min) - otherwise we'll keep it quick."
+> "If you're starting from zero and want a more thorough voice extraction, I can run you through the AI-OS voice playbook in Step 5 (~10-15 min) - otherwise we'll keep it quick."
 
 → Wait for answer. Capture both the tone answer and a **deep_voice_flow** flag: `yes` if they opted in, `no` if they declined, `unset` if they didn't express a preference.
 
@@ -154,7 +154,7 @@ Read each skill's SKILL.md for the full methodology:
 - If the user provided a URL in Step 3 that scraped successfully, or pasted usable copy in Step 4 → route into **Auto-Scrape** / **Extract**. Do not mention Playbook.
 - Otherwise route into **Build mode**. Inside Build:
   - `deep_voice_flow = yes` → go directly into the Playbook variant (`references/playbook-questions.md`). Don't re-ask the quick-vs-deep fork.
-  - `deep_voice_flow = unset` → offer Playbook as the default: *"You're starting from zero on voice - want to run the Agentic Academy playbook (~20-25 min, deeper) or keep it to a quick 8-question setup?"* Route based on their answer.
+  - `deep_voice_flow = unset` → offer Playbook as the default: *"You're starting from zero on voice - want to run the AI-OS voice playbook (~20-25 min, deeper) or keep it to a quick 8-question setup?"* Route based on their answer.
   - `deep_voice_flow = no` → go directly into Quick Build (`references/build-questions.md`). Don't mention Playbook again.
 
 Create `context/learnings.md` with sections matching installed skill folder names (e.g., `## mkt-brand-voice`).
@@ -195,8 +195,8 @@ Now let's pick which skills to keep. Everything's pre-selected - just untick wha
 Quick overview for [business]:
 - **Content & Copy** - write landing pages, repurpose content, create video scripts in your voice
 - **Research & Strategy** - find trending topics your audience cares about
-- **Visual** - generate images and diagrams
-- **Utility** - humanizer (de-AI your text) and YouTube transcripts
+- **Visual & Video** - generate images, diagrams, and AI avatar videos
+- **Utility** - humanizer (de-AI your text), web scraping, YouTube transcripts
 ```
 
 **Then present the optional skills as a numbered checklist** so the user can see what's available. Read `.claude/skills/_catalog/catalog.json` and list each optional skill with its number, name, and a one-line description framed for the user's business. Group by category. Example:
@@ -214,23 +214,24 @@ Everything's pre-selected. Tell me which to remove - or say "keep all" to move o
 
 **Visual & Video**
  5. viz-excalidraw-diagram - architecture and workflow diagrams
- 6. viz-ad-creative-codex - no-key ad creative batches in Codex
  7. viz-ad-creative-fal - fal-powered ad creative and short video (needs FAL_KEY)
  8. viz-ad-creative-figma - Figma/template ad creative (FIGMA_TOKEN optional)
+ 9. viz-ugc-heygen - AI avatar videos (needs HEYGEN_API_KEY)
 
 **Utility**
- 9. tool-humanizer - de-AI all written output
-10. tool-youtube - YouTube transcript extraction (needs YOUTUBE_API_KEY)
+10. tool-humanizer - de-AI all written output
+11. tool-firecrawl-scraper - advanced web scraping (needs FIRECRAWL_API_KEY)
+12. tool-youtube - YouTube transcript extraction (needs YOUTUBE_API_KEY)
 
 **Operations**
-11. ops-cron - schedule recurring tasks
+13. ops-cron - schedule recurring tasks
 
 Which would you like to remove? (e.g. "remove 5, 6, 7" or "keep all")
 ```
 
 Wait for the user's response. Then run the script in CLI mode with their selections:
 ```bash
-python3 scripts/select-skills.py --remove "viz-excalidraw-diagram,viz-ad-creative-fal"
+python3 scripts/select-skills.py --remove "viz-excalidraw-diagram,viz-ad-creative-fal,viz-ugc-heygen"
 ```
 
 If the user says "keep all" or similar, run:

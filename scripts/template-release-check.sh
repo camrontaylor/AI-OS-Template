@@ -144,18 +144,22 @@ for proprietary in \
 done
 ok "no proprietary or unverified-licence vendored subtrees present"
 
+# Every needle is written with string concatenation ("foo""bar") so the literal
+# never appears in this file. This script SHIPS in the public template, so a plain
+# list here would publish the very client and sub-brand names it exists to catch.
+# Same convention, and same reason, as scripts/lib/sanitize-strings.sh.
 high_risk_strings=(
   "camron""stricklin"
   "/Users/camron""stricklin"
-  "Made Simple AF"
-  "made-simple-af"
-  "madesimpleaf"
-  "customaistudio"
-  "Coast"
-  "Crystalix"
-  "TGV"
-  "ERPBridge"
-  "Sitemap Workshop"
+  "Made ""Simple AF"
+  "made-""simple-af"
+  "made""simpleaf"
+  "custom""aistudio"
+  "Coa""st"
+  "Cryst""alix"
+  "T""GV"
+  "ERP""Bridge"
+  "Sitemap ""Workshop"
 )
 
 scan_hits=""

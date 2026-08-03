@@ -2,8 +2,8 @@
 
 Mark a GSD project as complete. GSD operates in two modes:
 
-- **Flat mode** - single project, files at `.planning/` root. Archive flips the brief status only.
-- **Workstream mode** - multiple projects at `.planning/workstreams/{slug}/`. Archive runs
+- **Flat mode** — single project, files at `.planning/` root. Archive flips the brief status only.
+- **Workstream mode** — multiple projects at `.planning/workstreams/{slug}/`. Archive runs
   `workstream complete` (moves state to `.planning/milestones/`) then flips the brief.
 
 ## Steps
@@ -17,19 +17,19 @@ node ~/.claude/get-shit-done/bin/gsd-tools.cjs workstream list --raw
 
 Parse the `mode` field:
 
-- **`"flat"`** → flat mode means a single project with no workstreams. This is the default. **Immediately proceed to Step 2a** - do NOT stop here, the project brief may still exist.
+- **`"flat"`** → flat mode means a single project with no workstreams. This is the default. **Immediately proceed to Step 2a** — do NOT stop here, the project brief may still exist.
 - **`"workstream"` with workstreams** → go to Step 2b.
-- **`"workstream"` with no workstreams** → tell the user: "No active GSD project found - nothing to archive."
+- **`"workstream"` with no workstreams** → tell the user: "No active GSD project found — nothing to archive."
 
-### Step 2a: Flat mode - find the active brief
+### Step 2a: Flat mode — find the active brief
 
 Scan `projects/briefs/*/brief.md` for `level: 3` and `status: active`.
 
-- **None** → "No active GSD project found - nothing to archive."
+- **None** → "No active GSD project found — nothing to archive."
 - **One** → continue to Step 3a.
 - **Multiple** → ask the user which one to archive.
 
-### Step 2b: Workstream mode - pick the workstream
+### Step 2b: Workstream mode — pick the workstream
 
 - **One workstream** → continue to Step 3b.
 - **Multiple** → ask the user which one to archive.
@@ -80,6 +80,6 @@ node ~/.claude/get-shit-done/bin/gsd-tools.cjs workstream complete {slug} --raw
 
 ## Anti-Patterns
 
-- Never delete `.planning/` files manually - use `workstream complete` in workstream mode.
+- Never delete `.planning/` files manually — use `workstream complete` in workstream mode.
 - Never archive without user confirmation.
-- Never assume workstream mode - always check `mode` from `workstream list --raw`.
+- Never assume workstream mode — always check `mode` from `workstream list --raw`.

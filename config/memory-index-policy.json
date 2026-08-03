@@ -3,15 +3,35 @@
   "purpose": "Define which AI-OS context paths are routine semantic memory, review-gated semantic candidates, deep-search-only material, or excluded from memory indexing.",
   "tiers": {
     "routine_semantic": {
-      "description": "Small, curated memory sources indexed by the regular MemSearch maintenance path.",
+      "description": "Curated memory sources indexed by the regular MemSearch maintenance path (scripts/memsearch-reindex.sh). Includes hot memory (MEMORY.md), dated logs, learnings, the durable top-level context/*.md synthesis layer (overview, relationship-history, ops synthesis, timeline, current-state, decisions, SOUL/USER), the topic wiki, the generated Notion CATALOG, daily notes, and named curated knowledge subfolders (context/<name>/) declared in knowledge_subfolders. Deliberately non-recursive on context/*.md so deep-search-only subfolders stay excluded; only the explicitly allowlisted knowledge subfolders are walked one level down.",
       "paths": [
         "context/MEMORY.md",
         "context/memory/",
         "context/learnings.md",
+        "context/*.md",
+        "context/wiki/",
+        "context/notion/CATALOG.md",
+        "daily/",
+        "context/myob-exo/**/*.md",
+        "context/operator/**/*.md",
         "clients/*/context/MEMORY.md",
         "clients/*/context/memory/",
-        "clients/*/context/learnings.md"
-      ]
+        "clients/*/context/learnings.md",
+        "clients/*/context/*.md",
+        "clients/*/context/wiki/",
+        "clients/*/context/myob-exo/**/*.md",
+        "clients/*/context/operator/**/*.md"
+      ],
+      "knowledge_subfolders": {
+        "description": "Curated knowledge subfolders indexed one level down inside context/ (root and every client), minus knowledge_subfolder_excludes. First member myob-exo/ was a recall blind spot (built 2026-07-28, invisible until the 2026-07-29 fix) because context/*.md is non-recursive. Mirrored by KNOWLEDGE_SUBFOLDERS in scripts/memsearch-reindex.sh and scripts/memory-search.py. Add a folder name in all three places to index a new knowledge folder.",
+        "names": [
+          "myob-exo",
+          "operator"
+        ],
+        "knowledge_subfolder_excludes": [
+          "**/official-help/topic-index.md"
+        ]
+      }
     },
     "selective_semantic_candidates": {
       "description": "Durable references that can be proposed for semantic indexing after review, but are not routine hot memory.",
@@ -26,11 +46,18 @@
         "context/inbox/",
         "context/notion/",
         "context/transcripts/",
+        "context/archive/",
+        "context/thinking/",
+        "context/agency/",
         "projects/",
         "brand_context/",
         "clients/*/context/inbox/",
         "clients/*/context/intake/",
         "clients/*/context/transcripts/",
+        "clients/*/context/meetings/",
+        "clients/*/context/drive/",
+        "clients/*/context/directives/",
+        "clients/*/context/docs/",
         "clients/*/projects/",
         "clients/*/brand_context/"
       ]
@@ -47,6 +74,7 @@
         "dist/",
         "build/",
         ".next/",
+        "clients/*/context/execution/",
         "**/*.png",
         "**/*.jpg",
         "**/*.jpeg",

@@ -70,15 +70,22 @@ function parseMarkdownFrontmatter(raw) {
   const match = text.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/);
 
   if (!match) {
+    // An opening `---` fence with no valid closing fence is MALFORMED
+    // frontmatter, not "no frontmatter at all". Signal it so a consumer can
+    // fail SAFE instead of silently applying defaults. For a cron job, empty
+    // data means `active ?? "true"` fails OPEN to active:true daily - a zombie
+    // that runs and fails forever (weekly-memsearch-rebuild, 2026-07-28).
     return {
       data: {},
       content: text,
+      malformed: /^---\r?\n/.test(text),
     };
   }
 
   return {
     data: parseFrontmatterData(match[1]),
     content: text.slice(match[0].length),
+    malformed: false,
   };
 }
 

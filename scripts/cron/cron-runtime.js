@@ -588,7 +588,16 @@ function parseJobFile(agenticOsDir, workspace, filePath) {
   const slug = path.basename(filePath, ".md");
   const raw = fs.readFileSync(filePath, "utf-8");
   const parsed = parseMarkdownFrontmatter(raw);
-  const active = String(parsed.data.active ?? "true").toLowerCase() === "true";
+  // Fail SAFE on malformed frontmatter: a broken fence parses to empty data,
+  // which would otherwise fail OPEN to active:true daily (a zombie that runs
+  // and fails forever). A malformed job is forced inactive and flagged so the
+  // health rollup can surface it instead of it silently running.
+  const parseError = parsed.malformed
+    ? "malformed frontmatter (missing closing --- fence)"
+    : null;
+  const active = parseError
+    ? false
+    : String(parsed.data.active ?? "true").toLowerCase() === "true";
   const retry = Number.parseInt(String(parsed.data.retry ?? "0"), 10);
   const time = String(parsed.data.time ?? "00:00");
   const days = String(parsed.data.days ?? "daily");
@@ -602,6 +611,7 @@ function parseJobFile(agenticOsDir, workspace, filePath) {
     time,
     days,
     active,
+    parseError,
     model: String(parsed.data.model || "sonnet"),
     permission_mode: String(parsed.data.permission_mode || "").trim(),
     notify: String(parsed.data.notify || "on_finish"),
@@ -1455,6 +1465,24 @@ function defaultMacCronNotificationSender(agenticOsDir, notification) {
     const escapeOsa = (value) =>
       String(value || "").replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/[\r\n]+/g, " ");
     const script = `display notification "${escapeOsa(body)}" with title "${escapeOsa(title)}" subtitle "${escapeOsa(subtitle)}"`;
+
+    // Also push to the phone on failure/timeout, so a broken job is loud even
+    // when the laptop is closed or away from the desk. Fire-and-forget: a push
+    // problem must never break the macOS banner or the job. No-op unless an
+    // ntfy topic is configured (env AIOS_NTFY_TOPIC or notify-config.json).
+    if (notification.event && notification.event !== "success") {
+      try {
+        const { sendPush } = require("./notify-push");
+        sendPush(agenticOsDir, {
+          title,
+          message: [subtitle, body].filter(Boolean).join(" - "),
+          priority: notification.event === "timeout" ? "high" : "urgent",
+          tags: notification.event === "timeout" ? "hourglass_flowing_sand" : "rotating_light",
+        }).catch(() => {});
+      } catch (_) {
+        // notify-push unavailable -> macOS banner still fires below
+      }
+    }
 
     const child = spawn("osascript", ["-e", script], {
       cwd: agenticOsDir,

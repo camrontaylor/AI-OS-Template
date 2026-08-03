@@ -31,7 +31,7 @@ Do these five steps silently. Do NOT output anything - no greeting, no recap, no
 5. Scan `.claude/skills/` silently (ls only). The UserPromptSubmit hook creates or appends the `## Session N` block on the first real user prompt, so greetings do not create empty sessions.
 
 **What NOT to do at startup (deferred to wrap-up or on-demand):**
-- Do NOT read `brand_context/` files - skills lazy-load these per Context Matrix when needed
+- Do NOT read `brand_context/` files - skills lazy-load these per their own Context Needs table when needed
 - Do NOT read `context/learnings.md` - only loaded per-skill during execution
 - Do NOT read yesterday's memory if today already has session blocks
 - Do NOT flag stale `brand_context/` files - deferred to wrap-up
@@ -98,6 +98,7 @@ Track these events as they happen during the session. Never say "I've logged tha
 - You were confirmed wrong (user corrected you and you accept it, or a file/test/tool proved a prior claim of yours wrong) → append a one-line lesson to `### Corrections` (add the section if absent). Confirmed mistakes only, never opinions, open questions, or unverified guesses. This is the same silent auto-tracking; the nightly distill turns it into a durable learning.
 - The user expresses a durable preference (approves or rejects a style, wording, format, or approach; uses or sends a deliverable as-is; reworks one before using it) → append a one-line bullet to `### Preferences` (add the section if absent). Durable taste only, never one-off task instructions.
 - Task left incomplete → append to `### Open threads`
+- User journals, or says "add this to today's note" → write it into `daily/{today}.md` above the `aios:auto` markers, then refresh the auto block with `bash scripts/daily-note.sh` (see AGENTS.md "Daily Notes"). Silent, like the other tracking.
 
 ### Session End
 

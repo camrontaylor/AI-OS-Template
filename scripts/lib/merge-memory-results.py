@@ -47,6 +47,38 @@ def load_authority_weights() -> dict[str, float]:
     return DEFAULT_AUTHORITY_WEIGHTS
 
 
+def source_diversity_enabled() -> bool:
+    """Read reranker.source_diversity from memory-config.json (default True)."""
+    config_path = Path(__file__).resolve().parents[2] / "context" / "memory-config.json"
+    try:
+        data = json.loads(config_path.read_text(encoding="utf-8"))
+        return bool(data.get("reranker", {}).get("source_diversity", True))
+    except (OSError, ValueError, TypeError, json.JSONDecodeError):
+        return True
+
+
+def diversify_by_source(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Pull the best-scoring chunk of each distinct source to the head, in score
+    order, then append the remaining same-source chunks. Pure reorder - no item
+    is dropped - so it cannot remove a source that was already present; it can
+    only add distinct sources to the head. This stops one file from occupying
+    several of the top-k slots and crowding out the distinct source that answers
+    the query (2026-07-27: fixed the standing MYOB-rotation and orphaned-worktree
+    golden near-misses, both caused by one file taking two of the top-3 slots)."""
+    seen: set[str] = set()
+    head: list[dict[str, Any]] = []
+    tail: list[dict[str, Any]] = []
+    for item in items:
+        src = result_source(item).replace("\\", "/")
+        if src and src in seen:
+            tail.append(item)
+        else:
+            if src:
+                seen.add(src)
+            head.append(item)
+    return head + tail
+
+
 def source_authority(source: str, weights: dict[str, float]) -> float:
     path = source.replace("\\", "/")
     exact = [
@@ -163,6 +195,8 @@ def merge(semantic: list[dict[str, Any]], markdown: list[dict[str, Any]], top_k:
         merged.append(item)
 
     merged.sort(key=lambda item: item.get("fusion_score", 0.0), reverse=True)
+    if source_diversity_enabled():
+        merged = diversify_by_source(merged)
     return merged[:top_k]
 
 

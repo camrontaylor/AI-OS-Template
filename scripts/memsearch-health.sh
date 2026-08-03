@@ -7,6 +7,10 @@
 
 set -euo pipefail
 
+# Tag probe searches as eval so the memory-observability usage log does not count
+# this health check as organic recall.
+export AI_OS_RECALL_CALLER=eval
+
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 WRITE_REPORT=0
 if [[ "${1:-}" == "--report" ]]; then
