@@ -4,15 +4,15 @@ This guide is for the first few hours with AI-OS. It assumes the template is
 already on your machine and you want to know exactly what to do next.
 
 If you are brand new, read [Start Here And First Run](start-here-first-run.md)
-first. That page explains the `/start-here` onboarding command in detail.
+first. That page explains the `start-here` onboarding skill in detail.
 
 ## The First 90 Minutes
 
 ```mermaid
 flowchart TD
   A["Open AI-OS folder"] --> B["Run centre launcher"]
-  B --> C["Open Claude Code"]
-  C --> D["Run /start-here"]
+  B --> C["Open your AI-OS agent"]
+  C --> D["Run start-here"]
   D --> E["Build brand context"]
   E --> F["Choose skills"]
   F --> G["Ask for one real deliverable"]
@@ -41,13 +41,13 @@ After first setup, you can usually run:
 centre
 ```
 
-Then open Claude Code from the same root folder:
+Then open your agent from the same root folder. For Claude Code:
 
 ```bash
 claude
 ```
 
-## Step 2: Run `/start-here`
+## Step 2: Run `start-here`
 
 Inside Claude Code, run:
 
@@ -61,7 +61,8 @@ If that alias is unavailable, run:
 /onboarding
 ```
 
-This command checks backup setup, asks the core business questions, builds or
+In tools without slash-command support, ask the agent to use the `start-here`
+skill. This skill checks backup setup, asks the core business questions, builds or
 confirms brand context, walks through skill selection, explains projects and
 clients, and gives a first recommendation.
 
@@ -70,7 +71,7 @@ comes from trying to use skills before brand context and user context exist.
 
 ## Step 3: Know What It Will Ask
 
-`/start-here` asks up to four core questions:
+`start-here` asks up to four core questions:
 
 1. What does your business do?
 2. Who is your ideal customer?
@@ -91,7 +92,7 @@ context/learnings.md
 
 ## Step 4: Choose Skills
 
-After brand context exists, `/start-here` shows the optional skill list. You can
+After brand context exists, `start-here` shows the optional skill list. You can
 keep all skills or remove what you do not need.
 
 Example:
@@ -234,13 +235,16 @@ claude
 /start-here
 ```
 
+In another compatible agent, open the client folder and ask it to use the
+`start-here` skill.
+
 Read [Multi-Client Guide](multi-client-guide.md) before doing real client work.
 
 ## What To Read Next
 
 | If you want to understand | Read |
 |---|---|
-| The first-run command | [Start Here And First Run](start-here-first-run.md) |
+| The first-run skill | [Start Here And First Run](start-here-first-run.md) |
 | The system shape | [How AI-OS Works](how-it-works.md) |
 | Commands and paths | [Cheat Sheet](cheat-sheet.md) |
 | Memory and search | [Memory And Cron](memory-and-cron.md) |
@@ -253,7 +257,7 @@ Read [Multi-Client Guide](multi-client-guide.md) before doing real client work.
 
 Use AI-OS like an operator would use a workspace:
 
-- run `/start-here` on a fresh install,
+- run `start-here` on a fresh install,
 - keep the source files clean,
 - end sessions so memory saves,
 - put client work in client folders,

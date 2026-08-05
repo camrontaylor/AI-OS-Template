@@ -184,7 +184,7 @@ promote the repeated method into a skill once the pattern is clear.
 
 ## First-Run Optional Skills Versus Live Skills
 
-During `/start-here`, the user sees a selectable list of optional skills from:
+During `start-here`, the user sees a selectable list of optional skills from:
 
 ```text
 .claude/skills/_catalog/catalog.json
@@ -202,7 +202,7 @@ docs/skills-catalog.md
 
 So a fresh user should understand two things:
 
-- `/start-here` helps decide which optional template skills to keep,
+- `start-here` helps decide which optional template skills to keep,
 - `docs/skills-catalog.md` shows every live skill currently installed.
 
 ## Current Live Skills At A Glance

@@ -11,8 +11,8 @@ flowchart TD
   B --> C["Guided install checks prerequisites"]
   C --> D["Bootstrap files repaired or created"]
   D --> E["Command Centre opens"]
-  E --> F["Open Claude Code"]
-  F --> G["Run /start-here"]
+  E --> F["Open your AI-OS agent"]
+  F --> G["Run start-here"]
   G --> H["Run first real session"]
   H --> I["Optional setup: memory, clients, cron, connectors"]
 ```
@@ -30,7 +30,7 @@ You need:
 | Bash | Run the setup scripts. |
 | Python 3 | Run helper scripts and checks. |
 | Node.js + npm | Run the Command Centre dashboard. |
-| Claude Code | Main runtime interface. |
+| Claude Code, Cursor, Codex, or another compatible agent | Runtime interface for AI-OS. |
 
 ## Fresh Install
 
@@ -109,7 +109,7 @@ bash scripts/setup.sh
 
 ## First Agent Session
 
-After setup, open Claude Code from the repo root:
+After setup, open your agent from the repo root. For Claude Code:
 
 ```bash
 claude
@@ -127,7 +127,8 @@ If that alias is unavailable, run:
 /onboarding
 ```
 
-The onboarding command builds or confirms the foundation:
+In tools without slash-command support, ask the agent to use the `start-here`
+skill. The onboarding skill builds or confirms the foundation:
 
 - who you are,
 - what the business is,

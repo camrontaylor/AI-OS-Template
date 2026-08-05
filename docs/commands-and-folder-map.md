@@ -45,8 +45,9 @@ Run these from the AI-OS root folder unless the guide says otherwise.
 | Open the Command Centre after installing the shortcut | `centre` |
 | Open on Windows | `powershell -File scripts\centre.ps1` |
 | Start Claude Code from the AI-OS root | `claude` |
-| Run first-time onboarding inside Claude Code | `/start-here` |
-| Run onboarding if the alias is unavailable | `/onboarding` |
+| Run first-time onboarding in Claude Code | `/start-here` |
+| Run first-time onboarding in another compatible agent | Ask it to use the `start-here` skill |
+| Run the old Claude Code alias | `/onboarding` |
 | Preview an AI-OS update | `bash scripts/update.sh --dry-run` |
 | Apply an AI-OS update | `bash scripts/update.sh` |
 | Undo the last completed update | `bash scripts/update.sh --rollback` |

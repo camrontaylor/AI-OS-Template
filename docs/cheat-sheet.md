@@ -9,7 +9,7 @@
 | End session | Just say "done" or "that's it" — wrap-up runs automatically |
 | Switch clients | End session → new terminal → `cd` into different client folder |
 | Quick clear (no save) | `/clear` (end session first to save context) |
-| First time with new client | Just open Claude — onboarding runs automatically |
+| First time with new client | Open the client folder in your AI-OS agent and run `start-here` |
 
 ## Client Management
 

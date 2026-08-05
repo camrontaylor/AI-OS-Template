@@ -1,18 +1,20 @@
 # Start Here And First Run
 
 This is the first page for someone who has just copied AI-OS, opened it in
-Claude Code, and wants to know what to do next.
+Claude Code, Cursor, Codex, or another compatible agent, and wants to know what
+to do next.
 
 The short answer:
 
 ```text
-Open AI-OS -> run /start-here -> answer the setup questions -> choose skills
+Open AI-OS -> run start-here -> answer the setup questions -> choose skills
 -> run one small real task -> end the session so memory saves
 ```
 
-`/start-here` is the canonical onboarding command. The older slash name is
-`/onboarding`; it is kept as a compatibility alias and points back to
-`.claude/commands/start-here.md`.
+`start-here` is the canonical onboarding skill at
+`.claude/skills/start-here/SKILL.md`. In Claude Code, run it with the
+`/start-here` slash command. The older slash name is `/onboarding`; it is kept
+as a compatibility alias and points back to the same skill.
 
 ## The First Command
 
@@ -34,14 +36,13 @@ If `/start-here` is unavailable in the agent interface, use:
 /onboarding
 ```
 
-Do this before asking AI-OS for a large project. The onboarding command builds
-the basic context that makes the rest of the system useful.
+Do this before asking AI-OS for a large project. In tools without slash-command support, ask the agent to "use the start-here skill". The onboarding skill builds the basic context that makes the rest of the system useful.
 
-## What `/start-here` Does
+## What `start-here` Does
 
 ```mermaid
 flowchart TD
-  A["Run /start-here"] --> B["Check backup remote"]
+  A["Run start-here"] --> B["Check backup remote"]
   B --> C["Scan brand context and user profile"]
   C --> D["Ask core business questions"]
   D --> E["Collect links and assets"]
@@ -59,7 +60,7 @@ context.
 ## Step 0: Backup Check
 
 AI-OS keeps your brand context, client files, and project outputs on your
-machine. The onboarding command checks whether your Git remote points at your
+machine. The onboarding skill checks whether your Git remote points at your
 own private repo or still points at the upstream template.
 
 If it is not backed up yet, it explains the risk and helps you create a private
@@ -71,7 +72,7 @@ you.
 
 ## Step 1: Workspace Scan
 
-The command checks:
+The skill checks:
 
 - whether `brand_context/` already has real files,
 - whether `context/USER.md` is populated,
@@ -96,7 +97,7 @@ later questions, it should skip that question and keep moving.
 
 For a client workspace, the same questions are asked about that client.
 
-After the first brand files exist, the command gathers operating context:
+After the first brand files exist, the skill gathers operating context:
 
 - role and working style,
 - recurring jobs AI-OS should help with,
@@ -110,7 +111,7 @@ without making setup feel like a tax form.
 
 ## Step 3: Links, Assets, And Optional Keys
 
-The command asks for useful links:
+The skill asks for useful links:
 
 - website,
 - LinkedIn,
@@ -140,7 +141,7 @@ generic AI text.
 
 ## Step 5: User Profile
 
-The command updates:
+The skill updates:
 
 ```text
 context/USER.md
@@ -167,7 +168,7 @@ or:
 remove 5, 6, 9
 ```
 
-The command then runs:
+The skill then runs:
 
 ```bash
 python3 scripts/select-skills.py --remove "skill-a,skill-b"
@@ -331,7 +332,7 @@ Do this:
 1. Clone AI-OS.
 2. Run `bash scripts/centre.sh`.
 3. Open `claude` from the AI-OS root.
-4. Run `/start-here`.
+4. Run `start-here`.
 5. Answer the setup questions.
 6. Keep or remove optional skills.
 7. Ask for one small real deliverable.

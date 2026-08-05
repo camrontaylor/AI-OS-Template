@@ -53,15 +53,17 @@ Next time, it picks up where you left off.
 
 ## How first-run onboarding works
 
-For a fresh install, the first real command should be:
+For a fresh install, the first real onboarding surface should be:
 
 ```text
 /start-here
 ```
 
-`/start-here` is the canonical first-run command. `/onboarding` is kept as a
-compatibility alias that points back to `.claude/commands/start-here.md`.
-The command walks the new user through the actual AI-OS setup path:
+`start-here` is the canonical first-run skill at
+`.claude/skills/start-here/SKILL.md`. Claude Code exposes it as `/start-here`;
+`/onboarding` is kept as a compatibility alias. Other compatible tools should
+route to the same local skill. It walks the new user through the actual AI-OS
+setup path:
 
 1. check whether the workspace is backed up to the user's own GitHub repo,
 2. scan existing brand context and user profile,
@@ -74,7 +76,7 @@ The command walks the new user through the actual AI-OS setup path:
 9. explain projects, client workspaces, sessions, and nightly jobs,
 10. recommend the first useful task.
 
-That command is the bridge between "I copied the repo" and "AI-OS has enough
+That skill is the bridge between "I copied the repo" and "AI-OS has enough
 context to help me." Read [Start Here And First Run](start-here-first-run.md)
 for the full plain-words version.
 

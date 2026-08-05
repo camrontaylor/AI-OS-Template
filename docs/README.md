@@ -36,7 +36,7 @@ shortest route to being useful.
 
 ```mermaid
 flowchart TD
-  A["Install and launch"] --> B["Run /start-here"]
+  A["Install and launch"] --> B["Run start-here"]
   B --> C["Build or confirm brand context"]
   C --> D["Choose skills"]
   D --> E["Use one skill for real work"]
@@ -49,9 +49,9 @@ flowchart TD
 | Moment | What to read | What to do |
 |---|---|---|
 | First install | Root `README.md` | Clone, run `centre`, finish the guided bootstrap. |
-| First command | [Start Here And First Run](start-here-first-run.md) | Open `claude` and run `/start-here` from the AI-OS root. |
+| First command | [Start Here And First Run](start-here-first-run.md) | Run the `start-here` skill from the AI-OS root. In Claude Code, type `/start-here`. |
 | First concept | [What AI-OS Is](what-ai-os-is.md) | Understand the mental model before changing settings. |
-| First session | [Getting Started](getting-started.md) | Let `/start-here` build context, then ask for one real deliverable. Keep it small. |
+| First session | [Getting Started](getting-started.md) | Let `start-here` build context, then ask for one real deliverable. Keep it small. |
 | First saved memory | [Memory And Cron](memory-and-cron.md) | End the session normally and check that a daily log was written. |
 | First repeatable workflow | [Skills Catalog](skills-catalog.md) | Use the matching skill instead of ad-hoc prompting. |
 | First larger project | [Projects Guide](projects-guide.md) | Decide whether it is Level 1, Level 2, Level 3, or Live. |
@@ -68,8 +68,8 @@ Read these first if you are new or explaining AI-OS to someone else.
 |---|---|
 | [What AI-OS Is](what-ai-os-is.md) | The simple mental model: rules, memory, skills, workspace structure, and what AI-OS is not. |
 | [Install And Setup](install-and-setup.md) | Fresh install, launcher behavior, first session, optional setup, and setup checklist. |
-| [Start Here And First Run](start-here-first-run.md) | The `/start-here` onboarding command: backup check, brand setup, skill selection, clients, sessions, and cron. |
-| [Getting Started](getting-started.md) | The first 90 minutes: run `/start-here`, choose skills, run one real task, save memory, and know where output went. |
+| [Start Here And First Run](start-here-first-run.md) | The `start-here` onboarding skill: backup check, brand setup, skill selection, clients, sessions, and cron. |
+| [Getting Started](getting-started.md) | The first 90 minutes: run `start-here`, choose skills, run one real task, save memory, and know where output went. |
 | [How AI-OS Works](how-it-works.md) | The plain-English system map. Rules, memory, skills, brand context, and session flow. |
 | [Cheat Sheet](cheat-sheet.md) | The commands and paths you will actually use. |
 | [Commands And Folder Map](commands-and-folder-map.md) | Practical command guide and folder source-of-truth map. |
@@ -231,9 +231,10 @@ not memory. External writes need approval. Read
 
 ### Where should a new user start?
 
-Start by opening Claude Code from the AI-OS root and running `/start-here`.
+Start by opening your AI-OS agent from the root and running `start-here`. In
+Claude Code, type `/start-here`.
 Read [Start Here And First Run](start-here-first-run.md) if you want to know
-exactly what that command does. Then read [What AI-OS Is](what-ai-os-is.md),
+exactly what that skill does. Then read [What AI-OS Is](what-ai-os-is.md),
 [How AI-OS Works](how-it-works.md), and keep [Cheat Sheet](cheat-sheet.md)
 open. Read the other docs only when the work needs them.
 

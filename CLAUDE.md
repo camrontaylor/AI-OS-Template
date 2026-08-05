@@ -17,7 +17,7 @@ If `CLAUDE.local.md` exists in this directory, **read it now** before anything e
 ### Session Type Detection
 
 Scan `brand_context/` for populated `.md` files and `context/memory/` for dated session logs (ls, not read). Ignore `README.md` and the `_templates/` folder - those ship with a fresh install and do NOT count as real brand context.
-- **First-run** ONLY when BOTH are empty: no real brand files in `brand_context/` AND no dated session logs in `context/memory/` → run `/onboarding`
+- **First-run** ONLY when BOTH are empty: no real brand files in `brand_context/` AND no dated session logs in `context/memory/` → run `/start-here`
 - **Otherwise** → returning mode → silent startup (below). A brand-neutral root with session history is a returning install, never first-run.
 
 ### Returning Mode (silent - zero output)
@@ -38,7 +38,7 @@ Do these five steps silently. Do NOT output anything - no greeting, no recap, no
 - Do NOT scan and report active projects - only load if memory references one
 - Do NOT run reconciliation - deferred to wrap-up
 - Do NOT check cron dispatcher status - only if user asks
-- Do NOT auto-run `/onboarding`
+- Do NOT auto-run `/start-here`
 - Do NOT output anything
 
 **GitHub backup check (once per day):** Only on the first session of the day (today's memory file had no prior session blocks). First check `.env` for `IS_TEMPLATE_MAINTAINER=true` - if set, skip entirely. Otherwise, if `origin` still points to the upstream template repo, warn once. Otherwise silent.

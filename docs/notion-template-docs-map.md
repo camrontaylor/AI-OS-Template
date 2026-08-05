@@ -46,7 +46,7 @@ bash scripts/notion-docs-coverage-report.sh
 | `AI-OS Docs` | `docs/README.md` | `README.md` | Refresh root index, reader path, and section ordering. |
 | `What AI-OS Is` | `docs/what-ai-os-is.md` | `docs/how-it-works.md` | Refresh as the plain-language front door. |
 | `Install AI-OS From Scratch` | `docs/install-and-setup.md` | `README.md` | Refresh install flow, launcher, checks, and first session. |
-| `Start Here and First Run` | `docs/start-here-first-run.md` | `.claude/commands/start-here.md`, `.claude/commands/onboarding.md` | Create as the practical first-run guide for new template users. |
+| `Start Here and First Run` | `docs/start-here-first-run.md` | `.claude/skills/start-here/SKILL.md`, `.claude/commands/start-here.md`, `.claude/commands/onboarding.md` | Create as the practical first-run guide for new template users. |
 | `Get Started` | `docs/getting-started.md` | `docs/cheat-sheet.md` | Refresh first 90 minute path. |
 | `Complete Setup Guide` | `docs/install-and-setup.md` | `docs/services-keys-and-connectors.md` | Refresh full setup and optional configuration. |
 | `How AI-OS Works` | `docs/how-it-works.md` | `docs/what-ai-os-is.md`, `docs/meta/system-architecture.md` | Refresh system map and session flow. |
@@ -80,8 +80,8 @@ The Notion root page is not just a list. It should teach the reading order:
 
 1. What AI-OS is.
 2. How to install and run it.
-3. Why the first Claude command is `/start-here`.
-4. What `/start-here` sets up.
+3. Why the first onboarding surface is the `start-here` skill.
+4. What `start-here` sets up.
 5. How one session works.
 6. How memory works.
 7. How real work is organized.
@@ -91,14 +91,14 @@ The Notion root page is not just a list. It should teach the reading order:
 ### Start Here and First Run
 
 This page should answer the question a brand-new user has after copying the
-repo and opening Claude Code:
+repo and opening an AI-OS-compatible agent:
 
 > What do I type first, and what is AI-OS going to run me through?
 
-Use `docs/start-here-first-run.md` and `.claude/commands/start-here.md`. It
+Use `docs/start-here-first-run.md` and `.claude/skills/start-here/SKILL.md`. It
 must cover:
 
-- `/start-here` and `/onboarding`,
+- the `start-here` skill, `/start-here`, and `/onboarding`,
 - backup remote check,
 - brand context setup,
 - `context/USER.md`,

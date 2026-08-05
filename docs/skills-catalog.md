@@ -4,7 +4,7 @@
 
 Two tiers. LIVE skills are active and you invoke them by typing a forward slash plus the exact name (the slash name, the folder name, and the frontmatter name all match). LIBRARY skills are staging candidates in `skills-library/`; they are NOT invocable until promoted into `.claude/skills/`.
 
-## Live skills (105) - invoke with `/name`
+## Live skills (106) - invoke with `/name`
 
 | Invoke | Folder | What it does |
 |--------|--------|--------------|
@@ -100,6 +100,7 @@ Two tiers. LIVE skills are active and you invoke them by typing a forward slash 
 | `/ops-versioning` | `.claude/skills/ops-versioning/` | Invisible, automatic version history for documents and content. |
 | `/q-question` | `.claude/skills/q-question/` | Answer a question with the right level of research, evidence, and judgement, scaling depth to the stakes: a quick fact, a verified current claim, or a fully researched answer with sources and... |
 | `/q-unstuck` | `.claude/skills/q-unstuck/` | The antidote to a roadblock or wall: refuses to take no for an answer, then runs lateral-thinking techniques (assumption autopsy, inversion, first principles, and more) until the wall cracks or is... |
+| `/start-here` | `.claude/skills/start-here/` | Run AI-OS first-run onboarding as a complete Q/A setup flow. |
 | `/str-ai-seo` | `.claude/skills/str-ai-seo/` | Optimize content to get cited by AI search engines and LLMs. |
 | `/str-research-findings` | `.claude/skills/str-research-findings/` | Capture the user's own research notes, pasted findings, discovery calls, and tool-stack hypotheses into the root AI-OS research hub, even with no URL. |
 | `/str-resources` | `.claude/skills/str-resources/` | Capture any URL (video, blog, newsletter, podcast, article, PDF): pulls the full content, extracts frameworks and insights, and saves to AI-OS projects, the Notion Notes database, and relevant client... |
@@ -216,4 +217,4 @@ These live under `skills-library/backlog/<pack>/<name>/`. To make one live: asse
 
 ---
 
-Totals: 105 live skills, 81 library skills.
+Totals: 106 live skills, 81 library skills.

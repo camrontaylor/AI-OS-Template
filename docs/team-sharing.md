@@ -27,7 +27,7 @@ Invite your teammates to that repo.
 
 1. Clone it: `git clone <your-private-repo-url> && cd AI-OS-team-starter`
 2. Run setup: `bash scripts/centre.sh`
-3. Paste their own API keys when asked, then let Claude run `/onboarding` to build their own brand voice and memory.
+3. Paste their own API keys when asked, then run the `start-here` skill to build their own brand voice and memory. In Claude Code, type `/start-here`.
 
 That is the whole setup. They now have their own assistant, their own private brain, sharing your skills and rules.
 
