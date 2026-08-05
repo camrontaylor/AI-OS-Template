@@ -10,9 +10,9 @@ Open AI-OS -> run /start-here -> answer the setup questions -> choose skills
 -> run one small real task -> end the session so memory saves
 ```
 
-`/start-here` is the friendly name for the onboarding command. It points to
-`.claude/commands/onboarding.md`. The older slash name is `/onboarding`; both
-lead to the same first-run flow.
+`/start-here` is the canonical onboarding command. The older slash name is
+`/onboarding`; it is kept as a compatibility alias and points back to
+`.claude/commands/start-here.md`.
 
 ## The First Command
 
@@ -48,8 +48,9 @@ flowchart TD
   E --> F["Build brand voice, positioning, and ICP"]
   F --> G["Update USER.md"]
   G --> H["Choose optional skills"]
-  H --> I["Explain projects, clients, sessions, and cron"]
-  I --> J["Recommend first useful task"]
+  H --> I["Gather role, workflows, tools, privacy, and first-success context"]
+  I --> J["Explain projects, clients, sessions, and cron"]
+  J --> K["Recommend first useful task"]
 ```
 
 It does not just say hello. It prepares the workspace so future work has
@@ -82,18 +83,30 @@ should tell you that you are already set up and ask what you are working on.
 
 ## Step 2: Four Core Questions
 
-For a fresh root workspace, `/start-here` asks up to four questions, one at a
-time:
+For a fresh root workspace, `/start-here` starts with up to four brand-foundation
+questions, one at a time:
 
-1. What does your business do?
-2. Who is your ideal customer?
-3. What makes you different?
-4. How do you want to come across?
+1. What does your business do, and what do you sell or want AI-OS to help produce?
+2. Who is your ideal customer, and what problem are they trying to solve?
+3. What makes you different, and what proof or examples should AI-OS know?
+4. How should the voice come across?
 
 It should not ask all four at once. If your answer already covers one of the
 later questions, it should skip that question and keep moving.
 
 For a client workspace, the same questions are asked about that client.
+
+After the first brand files exist, the command gathers operating context:
+
+- role and working style,
+- recurring jobs AI-OS should help with,
+- whether the workspace serves one brand or multiple clients,
+- important tools and connectors,
+- privacy, approval, and boundary rules,
+- what would make the first setup useful today.
+
+It still asks one question at a time. The point is to collect enough context
+without making setup feel like a tax form.
 
 ## Step 3: Links, Assets, And Optional Keys
 

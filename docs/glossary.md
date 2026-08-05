@@ -10,8 +10,8 @@ Plain-English definitions for the terms used in AI-OS.
 | Agent runtime | The tool doing the work, such as Claude Code, Cursor, or another compatible coding agent. |
 | `AGENTS.md` | The canonical instruction file for AI-OS. Agents should treat this as the runtime contract. |
 | `CLAUDE.md` | Claude Code wrapper file. In AI-OS it points Claude back to `AGENTS.md`. |
-| `/start-here` | The first-run onboarding command for new users. It is an alias for `/onboarding`. |
-| `/onboarding` | The underlying command that runs first-run setup, brand context, skill selection, and orientation. |
+| `/start-here` | The canonical first-run onboarding command for new users. It runs Q/A setup, brand context, skill selection, operating context, and orientation. |
+| `/onboarding` | A compatibility alias that points to `/start-here`. |
 | Skill | A reusable method stored in `.claude/skills/{skill}/SKILL.md`. Skills tell the agent how to do a type of work. |
 | Meta skill | A skill that maintains AI-OS itself, such as memory, wrap-up, health checks, context intake, or skill creation. |
 | Optional skill | A selectable template skill shown during first-run setup. Optional does not mean low quality; it means not every user needs it. |

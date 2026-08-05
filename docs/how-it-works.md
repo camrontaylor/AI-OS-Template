@@ -59,19 +59,20 @@ For a fresh install, the first real command should be:
 /start-here
 ```
 
-`/start-here` is an alias for `/onboarding`. It reads
-`.claude/commands/onboarding.md` and walks the new user through the actual
-AI-OS setup path:
+`/start-here` is the canonical first-run command. `/onboarding` is kept as a
+compatibility alias that points back to `.claude/commands/start-here.md`.
+The command walks the new user through the actual AI-OS setup path:
 
 1. check whether the workspace is backed up to the user's own GitHub repo,
 2. scan existing brand context and user profile,
-3. ask the core business questions,
+3. ask the core business and operating-context questions one at a time,
 4. collect links and assets,
 5. build brand voice, positioning, and ICP files,
 6. update `context/USER.md`,
 7. ask which optional skills to keep,
-8. explain projects, client workspaces, sessions, and nightly jobs,
-9. recommend the first useful task.
+8. gather role, recurring work, client, tool, privacy, and first-success context,
+9. explain projects, client workspaces, sessions, and nightly jobs,
+10. recommend the first useful task.
 
 That command is the bridge between "I copied the repo" and "AI-OS has enough
 context to help me." Read [Start Here And First Run](start-here-first-run.md)

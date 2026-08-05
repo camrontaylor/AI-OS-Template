@@ -46,7 +46,7 @@ bash scripts/notion-docs-coverage-report.sh
 | `AI-OS Docs` | `docs/README.md` | `README.md` | Refresh root index, reader path, and section ordering. |
 | `What AI-OS Is` | `docs/what-ai-os-is.md` | `docs/how-it-works.md` | Refresh as the plain-language front door. |
 | `Install AI-OS From Scratch` | `docs/install-and-setup.md` | `README.md` | Refresh install flow, launcher, checks, and first session. |
-| `Start Here and First Run` | `docs/start-here-first-run.md` | `.claude/commands/onboarding.md`, `.claude/commands/start-here.md` | Create as the practical first-run guide for new template users. |
+| `Start Here and First Run` | `docs/start-here-first-run.md` | `.claude/commands/start-here.md`, `.claude/commands/onboarding.md` | Create as the practical first-run guide for new template users. |
 | `Get Started` | `docs/getting-started.md` | `docs/cheat-sheet.md` | Refresh first 90 minute path. |
 | `Complete Setup Guide` | `docs/install-and-setup.md` | `docs/services-keys-and-connectors.md` | Refresh full setup and optional configuration. |
 | `How AI-OS Works` | `docs/how-it-works.md` | `docs/what-ai-os-is.md`, `docs/meta/system-architecture.md` | Refresh system map and session flow. |
@@ -95,13 +95,14 @@ repo and opening Claude Code:
 
 > What do I type first, and what is AI-OS going to run me through?
 
-Use `docs/start-here-first-run.md` and `.claude/commands/onboarding.md`. It
+Use `docs/start-here-first-run.md` and `.claude/commands/start-here.md`. It
 must cover:
 
 - `/start-here` and `/onboarding`,
 - backup remote check,
 - brand context setup,
 - `context/USER.md`,
+- role, workflow, client, tool, privacy, and first-success Q/A,
 - optional skill selection,
 - project modes,
 - first client setup,
