@@ -23,7 +23,8 @@ map_rel = "docs/notion-template-docs-map.md"
 plan_rel = "projects/briefs/2026-06-29_ai-os-docs-notion-update-plan.md"
 packet_rel = "projects/briefs/2026-06-29_ai-os-docs-notion-sync-packet.md"
 drafts_rel = "projects/briefs/2026-06-29_ai-os-docs-notion-page-drafts.md"
-approval_terms = ["Approval Gate", "Approval cue", "target", "action"]
+payloads_rel = "projects/briefs/2026-08-04_ai-os-docs-notion-body-payloads.md"
+approval_terms = ["Approval Gate", "Approval phrase", "target", "action", "artifact", "risk"]
 
 required_artifacts = [
     "docs/README.md",
@@ -31,6 +32,9 @@ required_artifacts = [
     plan_rel,
     packet_rel,
     drafts_rel,
+    payloads_rel,
+    "scripts/notion-docs-payload-check.sh",
+    "scripts/notion-docs-extract-payloads.sh",
 ]
 
 failures = []
@@ -70,6 +74,7 @@ map_text = read(map_rel)
 plan_text = read(plan_rel)
 packet_text = read(packet_rel)
 drafts_text = read(drafts_rel)
+payloads_text = read(payloads_rel)
 docs_index = read("docs/README.md")
 
 rows = []
@@ -111,6 +116,7 @@ for row in rows:
         (plan_rel, plan_text, "update plan"),
         (packet_rel, packet_text, "sync packet"),
         (drafts_rel, drafts_text, "page drafts"),
+        (payloads_rel, payloads_text, "body payloads"),
     ]:
         if page in text:
             ok(f"{label} mentions page: {page}")
@@ -135,10 +141,20 @@ if drafts_rel in packet_text:
 else:
     fail("Sync packet does not link the page draft bundle.")
 
+if payloads_rel in packet_text:
+    ok("Sync packet links the body payload bundle.")
+else:
+    fail("Sync packet does not link the body payload bundle.")
+
 if packet_rel in plan_text and drafts_rel in plan_text:
     ok("Update plan links both sync packet and page draft bundle.")
 else:
     fail("Update plan does not link both sync packet and page draft bundle.")
+
+if "27 existing child page tags" in payloads_text:
+    ok("Body payload bundle declares root child-page preservation count.")
+else:
+    fail("Body payload bundle missing root child-page preservation count.")
 
 if linked_in_docs_index(map_rel, docs_index):
     ok("Docs index links the Notion template docs map.")
@@ -146,9 +162,9 @@ else:
     fail("Docs index does not link the Notion template docs map.")
 
 if "Memory Search, Vector Databases, and AI Observability" in plan_text:
-    ok("Update plan includes the new memory tooling page.")
+    ok("Update plan includes the existing memory tooling page.")
 else:
-    fail("Update plan missing the new memory tooling page.")
+    fail("Update plan missing the existing memory tooling page.")
 
 lines = [
     f"# Notion Docs Coverage - {today}",

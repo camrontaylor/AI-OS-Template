@@ -29,7 +29,7 @@ def is_mainline_openai_model(model_id: str) -> bool:
     model_lower = model_id.lower()
     if not re.match(r'^gpt-5(\.\d+)*$', model_lower):
         return False
-    excludes = ['mini', 'nano', 'chat', 'codex', 'pro', 'preview', 'turbo']
+    excludes = ['mini', 'nano', 'chat', 'pro', 'preview', 'turbo']
     for exc in excludes:
         if exc in model_lower:
             return False

@@ -11,7 +11,7 @@ Before extracting, assess what you have.
 **Authenticity check:** Are these polished (website, press release) or raw (Slack, email)?
 More polish = less authentic voice. Weight raw content more heavily.
 
-**Variety check:** Do samples cover different contexts - professional, casual, educational?
+**Variety check:** Do samples cover different contexts — professional, casual, educational?
 Single-context samples produce one-dimensional voice guides.
 
 **Exclusion check:** Flag and exclude:
@@ -23,7 +23,7 @@ Single-context samples produce one-dimensional voice guides.
 **Size check:** Under 500 words total? Offer Quick mode (top 5 traits + 3 rules). Don't attempt full extraction.
 
 Output a brief assessment before extracting:
-> "I have [X samples / Y words]. Quality: [high/medium - why]. Using [full/quick] mode. Excluding: [what and why]."
+> "I have [X samples / Y words]. Quality: [high/medium — why]. Using [full/quick] mode. Excluding: [what and why]."
 
 ---
 
@@ -85,15 +85,15 @@ For each dimension, note a specific example from the samples.
 
 ## Phase 3: Phrase Harvesting
 
-Pull exact phrases from the samples - don't paraphrase.
+Pull exact phrases from the samples — don't paraphrase.
 
-**Transition phrases** - how they shift topics:
+**Transition phrases** — how they shift topics:
 > "Here's the thing...", "What I've learned...", "Let me be honest..."
 
-**Emphasis phrases** - how they land a point:
+**Emphasis phrases** — how they land a point:
 > "The reality is...", "This is the part people miss...", "Full stop."
 
-**Closers** - how they wrap up a thought or piece:
+**Closers** — how they wrap up a thought or piece:
 > "That's the move.", "Start there.", "Simple as that."
 
 Aim for 3-5 examples in each category, quoted directly.
@@ -106,17 +106,17 @@ One of the most underused voice tools. Map which topics they speak with full aut
 
 | Zone | What it sounds like | Language markers |
 |------|-------------------|-----------------|
-| Full authority | Expert territory - no hedging | "Here's what works.", "The answer is..." |
+| Full authority | Expert territory — no hedging | "Here's what works.", "The answer is..." |
 | Earned perspective | Real experience, not absolute mastery | "In my experience...", "What I've found..." |
 | Active exploration | Still figuring it out, learning out loud | "I'm testing this...", "Early take:..." |
 
-Assign their stated expertise areas to zones. A voice that sounds authoritative about one thing and exploratory about another feels real - a voice that sounds equally authoritative about everything feels hollow.
+Assign their stated expertise areas to zones. A voice that sounds authoritative about one thing and exploratory about another feels real — a voice that sounds equally authoritative about everything feels hollow.
 
 ---
 
 ## Phase 5: Anti-Pattern Documentation
 
-Source from evidence: "You never used [word] across [X samples] - it doesn't fit your voice."
+Source from evidence: "You never used [word] across [X samples] — it doesn't fit your voice."
 
 What would they NEVER say?
 - Words that would feel wrong in their mouth
@@ -136,4 +136,4 @@ Before producing the voice profile, check:
 - [ ] Is the tone spectrum based on evidence from samples, not assumptions?
 - [ ] Could a ghostwriter use this guide without asking follow-up questions?
 
-Flag any issues before finalising: "The anti-pattern section only has 1 entry - I need more samples or direct input."
+Flag any issues before finalising: "The anti-pattern section only has 1 entry — I need more samples or direct input."

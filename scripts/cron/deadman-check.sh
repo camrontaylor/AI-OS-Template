@@ -50,7 +50,8 @@ if [ "$last_alert" -gt 0 ] && [ $(( (now - last_alert) / 3600 )) -lt "$RENOTIFY_
 fi
 
 msg="No AI-OS cron job has completed in ~${age_h}h (threshold ${MAX_AGE_H}h). The scheduler may be down - daemon crashed, Mac was off, or the leader is stuck. Check: bash scripts/status-crons.sh"
-NODE_BIN="$(command -v node || echo node)"
+source "$REPO/scripts/lib/node-runtime.sh"
+NODE_BIN="$(aios_resolve_node "$REPO")"
 AIOS_WORKSPACE_DIR="$REPO" "$NODE_BIN" "$REPO/scripts/cron/notify-push.js" \
   "AI-OS cron may be DOWN" "$msg" "urgent" >/dev/null 2>&1 || true
 echo "$now" > "$STATE" 2>/dev/null || true

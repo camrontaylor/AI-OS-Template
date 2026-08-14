@@ -89,7 +89,6 @@ Walk through tool connections and save status in `tool_connections`.
 
 | Skill | Required | Useful optional |
 |---|---|---|
-| `viz-ad-creative-codex` | Codex with native image generation | ChatGPT Images, Adobe Firefly, Runway, Canva, or sibling skills as manual/subscription fallback |
 | `viz-ad-creative-fal` | `FAL_KEY`, Node 18+ | fal MCP for model discovery/pricing |
 | `viz-ad-creative-figma` | `FIGMA_TOKEN` + template file, or Node + `npm install` | Figma MCP, Figma file key, Figma Buzz/Weave-style template workflow |
 

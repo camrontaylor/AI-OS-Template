@@ -210,7 +210,7 @@ before the external action.
 | Auth error | Headless Claude auth or cron wrapper. |
 | Duplicate runs | Command Centre and daemon host/leader lock. |
 | Missed overnight run | Mac sleep/power state and nightly wake. |
-| Memory search lock | Avoid immediate retries around Milvus Lite index jobs. |
+| Memory search lock | Avoid immediate retries around search-index jobs. |
 | Unexpected cost | Job active state, model, timeout, retry count, and prompt scope. |
 
 ## Related Docs

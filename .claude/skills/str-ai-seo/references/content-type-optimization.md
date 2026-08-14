@@ -23,7 +23,7 @@ Not all content is equally citable. Prioritize these formats:
 - Thin product pages with marketing fluff
 - Gated content (AI can't access it)
 - Content without dates or author attribution
-- PDF-only content (harder for most AI to parse - exception: Perplexity favors PDFs)
+- PDF-only content (harder for most AI to parse — exception: Perplexity favors PDFs)
 
 ---
 

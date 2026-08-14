@@ -6,7 +6,7 @@
 ---
 
 ```markdown
-# {Topic} - Trending Research Brief
+# {Topic} — Trending Research Brief
 
 **Researched:** {YYYY-MM-DD}
 **Query type:** {RECOMMENDATIONS | NEWS | HOW-TO | GENERAL}
@@ -47,15 +47,15 @@
 
 Potential content ideas based on this research:
 
-1. **{Angle name}** - {one sentence description}
+1. **{Angle name}** — {one sentence description}
    - Format: {LinkedIn post | YouTube video | email | thread}
    - Why now: {why this is timely}
 
-2. **{Angle name}** - {one sentence description}
+2. **{Angle name}** — {one sentence description}
    - Format: {best format for this}
    - Why now: {timeliness}
 
-3. **{Angle name}** - {one sentence description}
+3. **{Angle name}** — {one sentence description}
    - Format: {best format for this}
    - Why now: {timeliness}
 
@@ -64,14 +64,14 @@ Potential content ideas based on this research:
 ## Source Log
 
 ### Reddit
-- [{Thread title}]({URL}) - r/{subreddit} - {upvotes} upvotes, {comments} comments
-- [{Thread title}]({URL}) - r/{subreddit} - {upvotes} upvotes
+- [{Thread title}]({URL}) — r/{subreddit} — {upvotes} upvotes, {comments} comments
+- [{Thread title}]({URL}) — r/{subreddit} — {upvotes} upvotes
 
 ### X / Twitter
-- [{Post excerpt}]({URL}) - @{handle} - {likes} likes, {reposts} reposts
-- [{Post excerpt}]({URL}) - @{handle} - {likes} likes
+- [{Post excerpt}]({URL}) — @{handle} — {likes} likes, {reposts} reposts
+- [{Post excerpt}]({URL}) — @{handle} — {likes} likes
 
 ### Web
-- [{Article title}]({URL}) - {domain} - {date}
-- [{Article title}]({URL}) - {domain} - {date}
+- [{Article title}]({URL}) — {domain} — {date}
+- [{Article title}]({URL}) — {domain} — {date}
 ```

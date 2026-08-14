@@ -14,6 +14,7 @@ Usage:
     uv run digest.py --channels "@TED" --hours 48 --transcript --max-videos 10
     uv run digest.py --search "OpenClaw,AI agents" --hours 72 --transcript
 """
+from __future__ import annotations
 
 import argparse
 import json
@@ -22,11 +23,36 @@ import sys
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
+CONFIG_FILE = Path.home() / ".config" / "watch" / ".env"
+
+
+def _read_config_key(name: str) -> str | None:
+    if not CONFIG_FILE.exists():
+        return None
+    try:
+        for line in CONFIG_FILE.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, _, value = line.partition("=")
+            if key.strip() != name:
+                continue
+            value = value.strip()
+            if len(value) >= 2 and value[0] in ('"', "'") and value[-1] == value[0]:
+                value = value[1:-1]
+            return value or None
+    except OSError:
+        return None
+    return None
+
 
 def get_api_key(provided: str | None) -> str | None:
     if provided:
         return provided
-    return os.environ.get("YOUTUBE_API_KEY")
+    value = os.environ.get("YOUTUBE_API_KEY")
+    if value and value.strip():
+        return value.strip()
+    return _read_config_key("YOUTUBE_API_KEY")
 
 
 # ── Channel resolution ──────────────────────────────────────────────────

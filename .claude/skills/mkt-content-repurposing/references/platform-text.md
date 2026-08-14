@@ -29,16 +29,16 @@ Worth knowing: organic reach is down roughly 50% vs a year ago. Quality over qua
 ### How to Structure a Carousel
 
 - **Slide 1:** A bold claim or question that makes them stop scrolling. Minimal design, high contrast. End with "Swipe to see [outcome]."
-- **Slides 2-6:** One idea per slide. Number it. Give a headline and 2-3 sentences. Keep text readable on a phone - 24pt minimum, 40pt+ for headlines.
+- **Slides 2-6:** One idea per slide. Number it. Give a headline and 2-3 sentences. Keep text readable on a phone — 24pt minimum, 40pt+ for headlines.
 - **Second-to-last slide:** Recap everything in 5 words per point. People who swiped fast catch up here.
 - **Final slide:** CTA. "Follow for more [topic]." "Repost if useful." "Save this."
 
 ### How to Structure a Text Post
 
 ```
-[First line that stops the scroll - this is 90% of the work]
+[First line that stops the scroll — this is 90% of the work]
 
-[2-3 lines of context - why this matters right now]
+[2-3 lines of context — why this matters right now]
 
 Here's what I've found:
 
@@ -46,7 +46,7 @@ Here's what I've found:
 2. [Point + why it matters]
 3. [Point + why it matters]
 
-[The takeaway - one sentence, make it land]
+[The takeaway — one sentence, make it land]
 
 [Question or CTA that invites a response]
 
@@ -78,12 +78,12 @@ Here's what I've found:
 
 - **Replies beat everything.** Especially replies from accounts you already interact with. This is weighted highest.
 - **Quote tweets are worth 2x** a plain retweet. Adding your take to someone else's post gets rewarded.
-- **Time spent on your tweet** matters - reading time, link clicks, everything.
+- **Time spent on your tweet** matters — reading time, link clicks, everything.
 - **Profile clicks** signal curiosity. Tweets that make people check your profile get boosted.
 - **Images and video increase visibility.** Not massively, but enough to matter.
 - **First few hours decide everything.** Early engagement triggers amplification. Late engagement does little.
 
-Since 2025: the Following feed uses Grok AI for ranking - it's no longer chronological. Most users land on the For You feed by default.
+Since 2025: the Following feed uses Grok AI for ranking — it's no longer chronological. Most users land on the For You feed by default.
 
 ### Format Specs
 
@@ -96,7 +96,7 @@ Since 2025: the Following feed uses Grok AI for ranking - it's no longer chronol
 
 ### How to Structure a Thread
 
-**Tweet 1 - the hook decides everything:**
+**Tweet 1 — the hook decides everything:**
 ```
 [Bold statement or specific promise]
 
@@ -105,7 +105,7 @@ Since 2025: the Following feed uses Grok AI for ranking - it's no longer chronol
 Thread:
 ```
 
-**Tweets 2 through N - each one earns the next:**
+**Tweets 2 through N — each one earns the next:**
 ```
 [Number]. [Point in one line]
 
@@ -114,7 +114,7 @@ Thread:
 [Proof, example, or result if you have one]
 ```
 
-**Last tweet - wrap it up and ask for the share:**
+**Last tweet — wrap it up and ask for the share:**
 ```
 TL;DR:
 - [Key point]

@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const { spawn } = require("child_process");
 const { findWorkspaceRoot, hasWorkspaceMarker, workspaceMarkers } = require("./workspace-root.cjs");
+const { assertPinnedNode } = require("../../scripts/lib/assert-node-version.cjs");
 
 const appRoot = path.resolve(__dirname, "..");
 const workspaceRoot = findWorkspaceRoot(appRoot);
@@ -40,6 +41,11 @@ if (!hasWorkspaceMarker(workspaceRoot)) {
   fail(
     `AI-OS workspace marker not found at ${workspaceRoot}. Expected one of: ${workspaceMarkers.join(", ")}`
   );
+}
+try {
+  assertPinnedNode(workspaceRoot);
+} catch (error) {
+  fail(error.message);
 }
 assertFileExists(nextCliPath, "App-local Next CLI");
 

@@ -32,7 +32,7 @@ finish() {
   # (the 2026-07-16 audit found 345 MB of dead collections). GC them with:
   # bash scripts/memsearch-gc.sh
   local canonical orphans=""
-  canonical="$(bash "$ROOT/scripts/lib/memsearch-collection.sh" 2>/dev/null || true)"
+  canonical="$(bash "$ROOT/scripts/lib/memsearch-collection.sh" "$ROOT" 2>/dev/null || true)"
   if [[ -n "$canonical" && -d "$HOME/.memsearch/milvus.db/collections" ]]; then
     local coll
     for coll in "$HOME"/.memsearch/milvus.db/collections/*/; do

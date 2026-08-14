@@ -15,7 +15,7 @@ What drives results on visual and video-first platforms. Specs, what the algorit
 - **First 30-90 minutes set the ceiling.** Early engagement determines how far your content gets pushed.
 - **Relationships compound.** If someone DMs you, visits your profile, and comments regularly, Instagram shows them more of your stuff.
 
-Since 2025: photos are getting love again (not just video). Carousels can go up to 20 slides. Hashtags matter way less than they used to - content signals dominate.
+Since 2025: photos are getting love again (not just video). Carousels can go up to 20 slides. Hashtags matter way less than they used to — content signals dominate.
 
 ### Format Specs
 
@@ -30,7 +30,7 @@ Since 2025: photos are getting love again (not just video). Carousels can go up 
 
 - **Slide 1:** Stop the scroll. Bold text, one idea, high contrast. Create curiosity.
 - **Slide 2:** Set up the problem. "Here's what most people get wrong" or "The thing nobody tells you."
-- **Slides 3-7:** One point per slide. Keep it readable - if someone can't get it from a quick glance on their phone, simplify.
+- **Slides 3-7:** One point per slide. Keep it readable — if someone can't get it from a quick glance on their phone, simplify.
 - **Slides 8-9:** Recap for the fast-swipers.
 - **Slide 10:** CTA. Save, follow, share.
 
@@ -39,20 +39,20 @@ Design: 4:5 ratio (1080x1350px). Minimum 24pt body text, 40pt+ headlines. High c
 ### How to Script a Reel
 
 ```
-[0-3 sec] HOOK - say something that makes them stay. Start mid-thought, not with an intro.
-[3-25 sec] DELIVER - 3-5 points, or a story with tension. Keep it moving.
-[25-30 sec] CLOSE - "Save this" / "Follow for more" / loop the ending back to the start.
+[0-3 sec] HOOK — say something that makes them stay. Start mid-thought, not with an intro.
+[3-25 sec] DELIVER — 3-5 points, or a story with tension. Keep it moving.
+[25-30 sec] CLOSE — "Save this" / "Follow for more" / loop the ending back to the start.
 ```
 
-Two-thirds of viewers decide whether to keep watching in the first 3 seconds. Front-load the hook - visually and verbally, at the same time.
+Two-thirds of viewers decide whether to keep watching in the first 3 seconds. Front-load the hook — visually and verbally, at the same time.
 
 ### Reel Formats That Work
 
-1. **Talking head + text on screen** - you speaking with key points overlaid. Good for establishing authority.
-2. **Before/after** - show the transformation immediately. Works for anything results-based.
-3. **POV setup** - "POV: You just [relatable scenario]." Good for humour and relatability.
-4. **Quick tutorial** - show the process, no fluff. Best for actionable stuff.
-5. **Trending audio + your angle** - ride the wave of a trending sound, twist it to your niche.
+1. **Talking head + text on screen** — you speaking with key points overlaid. Good for establishing authority.
+2. **Before/after** — show the transformation immediately. Works for anything results-based.
+3. **POV setup** — "POV: You just [relatable scenario]." Good for humour and relatability.
+4. **Quick tutorial** — show the process, no fluff. Best for actionable stuff.
+5. **Trending audio + your angle** — ride the wave of a trending sound, twist it to your niche.
 
 ### Caption Structures
 
@@ -67,7 +67,7 @@ Two-thirds of viewers decide whether to keep watching in the first 3 seconds. Fr
 1. Only posting static images (the algorithm deprioritises them unless they're genuinely good)
 2. Video without captions (80%+ of people watch on mute)
 3. Reposting TikToks with the watermark still on
-4. Random visual style - inconsistency makes your grid look like a mess
+4. Random visual style — inconsistency makes your grid look like a mess
 
 ---
 
@@ -79,7 +79,7 @@ Two-thirds of viewers decide whether to keep watching in the first 3 seconds. Fr
 - **Rewatches are gold.** Multiple views from the same person is a strong positive signal.
 - **Shares to DMs drive reach.** The share button is more powerful than likes.
 - **Niche beats broad.** Since 2025, TikTok rewards creators who serve specific communities (#BusinessTok, #AutomationTok) over generic viral attempts.
-- **AI categorisation.** TikTok classifies your content by type - education, humour, story - and matches it to users who engage with that type. Being consistent helps.
+- **AI categorisation.** TikTok classifies your content by type — education, humour, story — and matches it to users who engage with that type. Being consistent helps.
 - **Production quality is factored in.** Good lighting, clear audio, clean editing all contribute to ranking now.
 
 The testing pattern: your video goes to a small batch (~200-500 people). If they engage, it goes to a bigger batch. Each batch has to perform for the next one to happen. That's why the first 3 seconds make or break everything.
@@ -90,7 +90,7 @@ Since 2025: longer videos (30-60+ sec) are getting pushed if retention stays hig
 
 **Quick teach (15-30 sec):**
 ```
-[0-3s] Hook - make a bold claim or call out your audience
+[0-3s] Hook — make a bold claim or call out your audience
 [3-25s] Deliver 3-5 points, rapid-fire
 [25-30s] CTA or loop point (end where you started)
 ```
@@ -121,7 +121,7 @@ Since 2025: longer videos (30-60+ sec) are getting pushed if retention stays hig
 ### Things That Help
 
 1. Trending sounds (even at low volume) boost discoverability
-2. Captions are non-negotiable - most people watch on mute
+2. Captions are non-negotiable — most people watch on mute
 3. Loop your endings back to the start for rewatch credit
 4. End with a question or hot take to bait comments
 5. "Part 1" / "Episode 2" drives follows and series engagement
@@ -168,7 +168,7 @@ Since 2025: stronger personalisation based on device, time of day, individual ha
 
 **30s - 2 min (Interest):** Why this matters. Who should watch. Set expectations so they commit to the full video.
 
-**Main section (Desire):** Deliver the goods. Break it into clear sections. Use examples, proof, and results. Signpost verbally - "First... Next... Finally..."
+**Main section (Desire):** Deliver the goods. Break it into clear sections. Use examples, proof, and results. Signpost verbally — "First... Next... Finally..."
 
 **Last 30 sec (Action):** Summarise the key points. Give one clear next step. End screen with subscribe + "Watch this next."
 
@@ -184,7 +184,7 @@ Since 2025: stronger personalisation based on device, time of day, individual ha
 
 ### Don't Do This
 
-1. Clickbait that doesn't deliver (YouTube correlates CTR with retention - high clicks + low watch time = punishment)
+1. Clickbait that doesn't deliver (YouTube correlates CTR with retention — high clicks + low watch time = punishment)
 2. No hook in the first 30 seconds (people leave and you lose watch-time signal)
 3. Cluttered thumbnails (max 3 elements: face, text, object)
 4. Missing cards and end screens (free tools for keeping people on your channel)

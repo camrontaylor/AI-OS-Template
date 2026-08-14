@@ -188,6 +188,7 @@ If dependencies are missing:
 
 ```bash
 cd command-centre
+nvm use
 npm install
 cd ..
 bash scripts/centre.sh
@@ -205,7 +206,7 @@ Common issues:
 |---|---|---|
 | Browser does not open | App did not start or port is busy. | Check terminal output and `http://localhost:3000`. |
 | `centre` command not found | Shell did not load shortcut. | Run `bash scripts/centre.sh` directly. |
-| Missing dependencies | `node_modules` missing or stale. | Run `npm install` in `command-centre/`. |
+| Missing dependencies | `node_modules` missing or stale. | Run `nvm use && npm install` in `command-centre/`. |
 | Wrong client shown | Client selector or URL state. | Switch client view or work from the client folder. |
 | Cron not running | Dashboard closed or daemon stopped. | Run `bash scripts/status-crons.sh`. |
 

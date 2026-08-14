@@ -1,8 +1,11 @@
 # AI-OS
 
-Turn Claude Code into your AI Operating System.
+Turn Claude Code, Codex, Cursor, Hermes, or another compatible agent harness
+into your AI operating system.
 
-AI-OS gives Claude Code personality, memory, and skills so it works like a team member, not a chatbot. It remembers your brand voice, learns your preferences over time, and runs proven methodologies instead of winging it every session.
+AI-OS gives the agent rules, memory, brand context, skills, projects, and client
+workspaces so it can work with continuity instead of starting cold every
+session.
 
 ---
 
@@ -21,7 +24,9 @@ on your machine as you use it, and they stay there.
 
 On first launch, `centre.sh` runs the guided bootstrap automatically. It checks your system, prepares the local files AI-OS needs, repairs missing dependencies when needed, and asks the one-time setup questions.
 
-When it finishes, open Claude Code. It automatically detects you're new and walks you through building your brand foundation -- voice, positioning, and ideal customer profile.
+When it finishes, open Claude Code and run `/start-here`. If you use another
+compatible harness, ask it to follow the first-run guide in
+`docs/start-here-first-run.md`.
 
 On Windows, use:
 
@@ -46,19 +51,25 @@ That's it. The `centre` command reuses the saved launcher state, repairs missing
 
 On Windows, the guided install can optionally add `centre` to both Windows PowerShell and PowerShell 7 profiles. If you prefer not to install the shortcut, keep using `powershell -File scripts\centre.ps1`.
 
-Compatibility note: AI-OS remains Claude-first, but the shared project instructions now live in `AGENTS.md`. Claude reads them through `CLAUDE.md`, and Cursor reads the pointer in `.cursor/rules/ai-os.mdc`.
+Compatibility note: AI-OS is agent-first. Claude Code is a first-class runtime,
+Codex reads `AGENTS.md` directly, Cursor reads the pointer in
+`.cursor/rules/ai-os.mdc`, and other harnesses should follow the same project
+contract when they support project instructions.
 
 ---
 
 ## What You Get
 
-AI-OS is built on three layers:
+AI-OS is built on three practical layers:
 
-1. **Agent Identity** -- Personality (SOUL.md), your profile (USER.md), and session memory. This is what makes it feel like working with someone who knows your business.
+1. **Agent identity** -- personality, user profile, and session memory. This is
+   what makes the agent feel like it knows your business.
 
-2. **Skills** -- Modular capabilities that can be added or removed. Each skill follows a tested methodology and self-improves as you give feedback -- corrections go directly into the skill, not just a note.
+2. **Skills** -- repeatable methods for work like marketing, research, writing,
+   operations, system changes, and client delivery.
 
-3. **Brand Context** -- Your voice, positioning, and ideal customer profile. Skills load only what they need, so output stays focused and on-brand.
+3. **Brand context** -- voice, positioning, ideal customer profile, offers, and
+   samples so output sounds like the business.
 
 For the practical documentation map, start with the [AI-OS Docs](docs/README.md).
 For a full install path, read [Install And Setup](docs/install-and-setup.md).
@@ -196,15 +207,17 @@ bash scripts/update.sh
 
 ## Semantic Memory (optional)
 
-AI-OS includes a semantic recall layer (Tier 1) that lets Claude Code search across pinned memory, daily logs, and learnings -- not just today's log. Client brand context is available when recall is scoped to clients; transcript and broad reference archives are explicit deep-search surfaces, not routine memory recall.
+AI-OS can search across pinned memory, daily logs, learnings, and client memory.
+The markdown files stay the source of truth. Search helpers only make older
+notes easier to find.
 
-For a plain-words explanation of MemSearch, Milvus Lite, Zilliz, Pinecone, and
-Langfuse, read [Memory Search, Vector Databases, and AI
-Observability](docs/memory-search-and-observability.md). The short rule:
-AI-OS memory files remain the source of truth; vector databases and
-observability tools are escalation layers around them.
+For the plain-words guide, read [Memory Search, Vector Databases, and AI
+Observability](docs/memory-search-and-observability.md). The short rule: use
+local AI-OS memory for your workspace, and add production retrieval or tracing
+only when an app or client workflow needs it.
 
-The guided installer and updater offer this as the recommended memory upgrade, but never install it silently. Claude Code is the default because AI-OS is Claude-first. You can choose Claude Code or skip for now.
+The guided installer and updater offer searchable memory as an optional upgrade.
+They do not install it silently.
 
 Manual setup:
 
@@ -224,9 +237,13 @@ PowerShell on Windows:
 powershell -File scripts\setup-memory.ps1
 ```
 
-The script installs the `memsearch` CLI with `uv tool install "memsearch[onnx]"`, configures the vector backend, configures the selected agent runtime, and runs the initial index. It indexes only AI-OS memory files: root `context/MEMORY.md`, `context/memory/`, `context/learnings.md`, plus the same memory and learning surfaces under every `clients/*` workspace when present. Root brand context, transcripts, larger reference trees, and plugin `.memsearch/memory/` shadow captures stay outside routine semantic indexing so client-specific daily memory remains authoritative.
+The setup script installs the search helper, configures the selected runtime,
+and runs the first index. It indexes AI-OS memory files, not every file on your
+machine.
 
-On macOS/Linux it uses local Milvus Lite. On native Windows it uses a free [Zilliz Cloud](https://cloud.zilliz.com) cluster. For the free Zilliz option, choose AWS `eu-central-1` (Frankfurt) or GCP `us-west-1` (Oregon); other regions may require a paid plan. If `ZILLIZ_URI` and `ZILLIZ_TOKEN` are missing, the PowerShell setup opens Zilliz Cloud in your browser and asks you to paste the values. Git Bash prints the same guidance and can open the browser when PowerShell is available.
+On macOS/Linux it uses local search storage. On native Windows it may ask for a
+hosted search backend, or you can skip semantic recall and rely on markdown
+search.
 
 On native Windows, setup disables the real-time `memsearch watch` background helper with the Windows User environment variable `MEMSEARCH_NO_WATCH=1`. This prevents orphaned watcher processes from keeping project folders open. Restart Claude Code and open terminals after setup so they inherit the setting.
 
@@ -238,7 +255,11 @@ Manual semantic recall goes through the AI-OS wrapper:
 bash scripts/memsearch-search.sh "your query" 10
 ```
 
-The wrapper runs hybrid recall: semantic MemSearch plus exact markdown recall, fused together so specific source hits can outrank broad semantic matches. From the root workspace it defaults to root AI-OS memory only. From inside a client folder it scopes recall to that client. Force a boundary with `--scope root|client|clients|all` and `--client slug` when needed. If Milvus is blocked, locked, or missing, it returns markdown recall only. The fallback can also run directly:
+The wrapper searches by meaning and exact markdown matches. From the root
+workspace it defaults to root AI-OS memory only. From inside a client folder it
+scopes recall to that client. Force a boundary with `--scope root|client|clients|all`
+and `--client slug` when needed. If semantic search is blocked, locked, or
+missing, it returns markdown recall only. The fallback can also run directly:
 
 ```bash
 bash scripts/memory-search.sh "your query" 10 --scope all

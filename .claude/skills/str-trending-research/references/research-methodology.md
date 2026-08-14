@@ -13,7 +13,7 @@ Before searching, extract the **core subject** from the topic. Strip noise words
 - "top Claude Code skills" → core: "Claude Code skills"
 - "what's happening with OpenAI" → core: "OpenAI"
 
-Don't add terms from your own knowledge. If user says "ChatGPT image prompting", search for exactly that - don't substitute "DALL-E" or "GPT-4o".
+Don't add terms from your own knowledge. If user says "ChatGPT image prompting", search for exactly that — don't substitute "DALL-E" or "GPT-4o".
 
 ### RECOMMENDATIONS ("best X", "top X")
 
@@ -79,9 +79,9 @@ WebSearch results often include engagement hints in snippets. Look for:
 
 **Reddit:**
 - "X upvotes" or "X points" in the snippet
-- "X comments" - indicates active discussion
-- Subreddit name - r/technology (broad) vs r/ClaudeAI (niche but focused)
-- Thread age - prefer threads from last 30 days
+- "X comments" — indicates active discussion
+- Subreddit name — r/technology (broad) vs r/ClaudeAI (niche but focused)
+- Thread age — prefer threads from last 30 days
 
 **X / Twitter:**
 - Like counts, repost counts in snippets
@@ -90,8 +90,8 @@ WebSearch results often include engagement hints in snippets. Look for:
 - Quote tweets (indicates debate)
 
 **Web:**
-- Publication date - strongly prefer last 30 days
-- Author credibility - known experts, official blogs
+- Publication date — strongly prefer last 30 days
+- Author credibility — known experts, official blogs
 - Comment counts on articles
 - "Updated" dates
 

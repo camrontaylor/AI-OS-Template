@@ -1,104 +1,159 @@
 # How AI-OS Works
 
-A plain-words tour of what is happening under the hood. You do not need any of this to use AI-OS. It is here for when you want to understand why it behaves the way it does.
+This is a plain-words tour of what happens under the hood. You do not need all
+of it to use AI-OS, but it helps when you want to understand why the system
+behaves the way it does.
 
-## The big idea
+## The Big Idea
 
-AI-OS turns a coding agent (Claude Code, Cursor) into a business assistant that knows you, remembers your work, and gets sharper every session. It does this with plain text files, not magic. The agent reads those files when a session starts, does the work, and writes back what it learned when the session ends.
+AI-OS turns an agent harness, such as Claude Code, Codex, Cursor, Hermes, or a
+similar tool, into a more consistent business assistant.
 
-## The four layers
+The harness does the model work. AI-OS gives it a shared workspace:
 
-1. **Identity** - who the agent is and who you are. `context/SOUL.md` is the agent's character. `context/USER.md` is your profile (name, business, how you like to work).
-2. **Skills** - what the agent can do. Each skill is a folder in `.claude/skills/`. A skill is just instructions the agent follows when your request matches its triggers.
-3. **Brand context** - your voice, positioning, and ideal customer, in `brand_context/`. Skills read these so output sounds like you, not like generic AI.
-4. **Memory** - what the agent remembers between sessions (below).
+- rules,
+- memory,
+- skills,
+- brand context,
+- project folders,
+- client folders,
+- scheduled jobs.
+
+Most of that workspace is plain text. The agent reads useful files when a
+session starts, does the work, and saves the important result back to files.
+
+## The Four Main Layers
+
+| Layer | What it means | Where it lives |
+|---|---|---|
+| Identity | Who the assistant is and who you are. | `context/SOUL.md`, `context/USER.md` |
+| Rules | How the assistant should behave and what must be protected. | `AGENTS.md` |
+| Skills | Practical methods for repeatable work. | `.claude/skills/` |
+| Memory | What should carry forward between sessions. | `context/` and `clients/*/context/` |
+
+Brand context and projects sit beside those layers. They give the agent voice,
+business context, and a clear place to save work.
 
 ```mermaid
 flowchart TD
-  A["You ask for work"] --> B["AGENTS.md runtime rules"]
-  B --> C["Relevant skill"]
-  C --> D["Brand and client context"]
-  D --> E["Memory recall"]
-  E --> F["Work output"]
-  F --> G["Daily log and learnings"]
-  G --> E
+  A["You ask for work"] --> B["AGENTS.md rules"]
+  B --> C["Relevant memory"]
+  C --> D["Relevant skill or general work"]
+  D --> E["Brand, project, or client context"]
+  E --> F["Output"]
+  F --> G["Session log and learnings"]
+  G --> C
 ```
 
-## How memory works
+## How A Session Flows
 
-The agent wakes up fresh every session. These files are its memory, read at the start:
+1. You open an agent inside the AI-OS folder.
+2. The agent reads the project rules and startup memory.
+3. You ask for work.
+4. The agent checks whether a skill fits the task.
+5. It gathers the local context needed for the work.
+6. It saves the output in the right place.
+7. Session notes and lessons are saved so future sessions start warmer.
 
-- `context/SOUL.md` - the agent's character. Rarely changes.
-- `context/USER.md` - who you are.
-- `context/MEMORY.md` - a small scratchpad of durable facts, active threads, and pending decisions. Capped at 2,500 characters on purpose, so it stays fast.
-- `context/memory/{date}.md` - a log for each day, one block per session. This is the running diary.
-- `context/learnings.md` - lessons each skill has picked up. Loaded only when that skill runs.
+The goal is continuity. You should not have to re-explain the same preferences,
+client context, or project history every time.
 
-One thing to know: edits to `MEMORY.md` during a session save to disk but only take effect next session. That is deliberate. It keeps startup fast and cheap.
+## How Memory Works
 
-Searchable memory is optional. When it is enabled, AI-OS still keeps the plain
-text files as the source of truth. MemSearch and Milvus Lite create a derived
-semantic index so the agent can find older notes by meaning, while markdown
-fallback keeps exact file search available if the semantic index is locked or
-unavailable. For the practical breakdown of MemSearch, Milvus Lite, Pinecone,
-and Langfuse, read `docs/memory-search-and-observability.md`.
+The agent does not truly remember everything by itself. AI-OS gives it memory
+files to read.
 
-## How a session flows
+| File or folder | Job |
+|---|---|
+| `context/MEMORY.md` | Small active note loaded at root session start. |
+| `context/memory/YYYY-MM-DD.md` | Daily session log. |
+| `context/learnings.md` | Lessons that skills and the system should reuse. |
+| `clients/{client}/context/` | Client-specific memory and current-state notes. |
+| `brand_context/` | Voice, positioning, audience, and examples. |
 
-1. **Start** - the agent reads the memory files above, so it already knows you.
-2. **Work** - you ask for something. The agent matches it to a skill and follows that skill's instructions, using your brand context.
-3. **End** - when you sign off, the agent saves what happened to today's log and updates learnings.
+Search helpers can find older notes, but the markdown files remain the source of
+truth. If a search helper is unavailable, the agent can still inspect the files.
 
-Next time, it picks up where you left off.
+For the practical memory guide, read [Memory And Cron](memory-and-cron.md).
 
-## How first-run onboarding works
+## First-Run Onboarding
 
-For a fresh install, the first real command should be:
+For a fresh install, the first useful command is:
 
 ```text
 /start-here
 ```
 
-`/start-here` is an alias for `/onboarding`. It reads
-`.claude/commands/onboarding.md` and walks the new user through the actual
-AI-OS setup path:
+If that alias is unavailable, run:
 
-1. check whether the workspace is backed up to the user's own GitHub repo,
-2. scan existing brand context and user profile,
-3. ask the core business questions,
-4. collect links and assets,
-5. build brand voice, positioning, and ICP files,
-6. update `context/USER.md`,
-7. ask which optional skills to keep,
-8. explain projects, client workspaces, sessions, and nightly jobs,
-9. recommend the first useful task.
+```text
+/onboarding
+```
 
-That command is the bridge between "I copied the repo" and "AI-OS has enough
-context to help me." Read [Start Here And First Run](start-here-first-run.md)
-for the full plain-words version.
+The onboarding flow helps you:
 
-## How skills get picked
+- confirm the workspace is backed up,
+- create or review your brand foundation,
+- fill in `context/USER.md`,
+- choose optional skills,
+- understand projects and client folders,
+- learn how sessions save memory,
+- decide whether scheduled jobs matter yet.
 
-When you ask for something, the agent checks for a skill whose triggers match. If one fits, it runs that skill. If none fits, it tells you there is a gap and offers to build a skill or handle it with general knowledge. It never silently ignores a skill that exists.
+It is the bridge between "I copied the repo" and "AI-OS has enough context to
+help me."
 
-## Where things live
+## How Skills Get Picked
+
+A skill is a task-specific method. When your request matches a skill, the agent
+should read that skill and follow it.
+
+Examples:
+
+- marketing copy uses a marketing or copywriting skill,
+- system changes use AI-OS meta skills,
+- website work uses website or frontend skills,
+- memory work uses memory-related skills.
+
+If no skill fits, the agent should handle the work normally and note the gap
+when the gap matters.
+
+## Where Things Live
 
 | You want | Look in |
-|----------|---------|
-| The agent's character | `context/SOUL.md` |
+|---|---|
+| The agent's shared rules | `AGENTS.md` |
+| Claude Code adapter | `CLAUDE.md` |
 | Your profile | `context/USER.md` |
-| Durable facts and threads | `context/MEMORY.md` |
+| Active memory | `context/MEMORY.md` |
 | Daily session logs | `context/memory/` |
-| Your brand voice and audience | `brand_context/` |
-| What the agent can do | `.claude/skills/` |
-| The rules the agent follows | `AGENTS.md` (and `CLAUDE.md` for Claude) |
+| Lessons | `context/learnings.md` |
+| Brand voice and audience | `brand_context/` |
+| Live skills | `.claude/skills/` |
+| Projects and outputs | `projects/` |
+| Client workspaces | `clients/` |
+| Scheduled jobs | `cron/jobs/` |
+| Optional local dashboard | Command Centre |
 
-## Related docs
+## What Makes It Tool-Agnostic
 
-- Design source of truth: `docs/meta/README.md`
-- Commands and paths at a glance: `docs/cheat-sheet.md`
-- Practical command and folder map: `docs/commands-and-folder-map.md`
-- Memory and the nightly jobs: `docs/memory-and-cron.md`
-- Memory search, vector databases, and observability: `docs/memory-search-and-observability.md`
-- Working with multiple clients: `docs/multi-client-guide.md`
-- The optional dashboard: `docs/command-centre-guide.md`
+AI-OS does not need every agent tool to be identical. It needs the project
+contract to be clear.
+
+`AGENTS.md` is the shared contract. Claude Code reads it through `CLAUDE.md`.
+Codex can read it directly. Cursor gets a pointer through its rules folder.
+Other harnesses should follow the same project instructions when they support
+that pattern.
+
+This means the same workspace can guide different tools without copying memory
+or rewriting the whole system for each one.
+
+## Related Docs
+
+- [What AI-OS Is](what-ai-os-is.md)
+- [Start Here And First Run](start-here-first-run.md)
+- [Memory And Cron](memory-and-cron.md)
+- [Memory Search, Vector Databases, and AI Observability](memory-search-and-observability.md)
+- [Commands And Folder Map](commands-and-folder-map.md)
+- [Multiple Client Workspaces](multi-client-guide.md)
+- [Command Centre](command-centre-guide.md)

@@ -11,8 +11,8 @@ first. That page explains the `/start-here` onboarding command in detail.
 ```mermaid
 flowchart TD
   A["Open AI-OS folder"] --> B["Run centre launcher"]
-  B --> C["Open Claude Code"]
-  C --> D["Run /start-here"]
+  B --> C["Open Claude Code or another harness"]
+  C --> D["Run or follow /start-here"]
   D --> E["Build brand context"]
   E --> F["Choose skills"]
   F --> G["Ask for one real deliverable"]
@@ -46,6 +46,9 @@ Then open Claude Code from the same root folder:
 ```bash
 claude
 ```
+
+If you are using Codex, Cursor, Hermes, or another compatible harness, open the
+same AI-OS root folder and ask it to follow [Start Here And First Run](start-here-first-run.md).
 
 ## Step 2: Run `/start-here`
 

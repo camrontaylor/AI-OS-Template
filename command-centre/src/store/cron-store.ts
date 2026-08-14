@@ -130,6 +130,7 @@ interface CronStore {
   runHistory: Record<string, CronRun[]>;
   showCreatePanel: boolean;
   editingJob: CronJob | null;
+  createJobDraft: CronJobCreateInput | null;
   /** scoped job key → active run info (persists until task reaches review/done) */
   activeRuns: Record<string, ActiveCronRun>;
   /** Slugs pinned to the top of the list */
@@ -146,6 +147,7 @@ interface CronStore {
   fetchRunHistory: (slug: string, clientId?: string | null) => Promise<void>;
   setShowCreatePanel: (show: boolean) => void;
   setEditingJob: (job: CronJob | null) => void;
+  setCreateJobDraft: (draft: CronJobCreateInput | null) => void;
   moveJob: (fromIndex: number, toIndex: number) => void;
   togglePin: (slug: string) => void;
 }
@@ -159,6 +161,7 @@ export const useCronStore = create<CronStore>((set, get) => ({
   runHistory: {},
   showCreatePanel: false,
   editingJob: null,
+  createJobDraft: null,
   activeRuns: {},
   pinnedSlugs:
     typeof window !== "undefined" ? loadPinnedSlugs(useClientStore.getState().selectedClientId) : [],
@@ -332,6 +335,7 @@ export const useCronStore = create<CronStore>((set, get) => ({
       set((state) => ({
         jobs: [job, ...state.jobs],
         showCreatePanel: false,
+        createJobDraft: null,
       }));
     } catch (err) {
       set({
@@ -399,11 +403,19 @@ export const useCronStore = create<CronStore>((set, get) => ({
   },
 
   setShowCreatePanel: (show: boolean) => {
-    set({ showCreatePanel: show });
+    set(show ? { showCreatePanel: true } : { showCreatePanel: false, createJobDraft: null });
   },
 
   setEditingJob: (job: CronJob | null) => {
-    set({ editingJob: job });
+    set({ editingJob: job, createJobDraft: null });
+  },
+
+  setCreateJobDraft: (draft: CronJobCreateInput | null) => {
+    set({
+      createJobDraft: draft,
+      showCreatePanel: draft !== null,
+      editingJob: null,
+    });
   },
 
   moveJob: (fromIndex: number, toIndex: number) => {

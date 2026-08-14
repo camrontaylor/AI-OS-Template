@@ -20,16 +20,17 @@ If you only want to use AI-OS for normal work, start with
 
 AI-OS is a local, tool-agnostic agent workspace.
 
-That means the core system must work across Claude Code, Cursor, and
-other compatible agents. Do not design a core behavior that only works because
-one tool happens to support it.
+That means the core system must work across Claude Code, Codex, Cursor, Hermes,
+and other compatible agents. Do not design a core behavior that only works
+because one tool happens to support it.
 
 ```mermaid
 flowchart TD
   A["AGENTS.md"] --> B["Shared runtime contract"]
   B --> C["Claude Code adapter"]
+  B --> D["Codex direct reader"]
   B --> E["Cursor adapter"]
-  B --> F["Future compatible agents"]
+  B --> F["Hermes or another harness"]
   B --> G["Skills, memory, hooks, docs"]
 ```
 
@@ -54,7 +55,7 @@ When two places disagree, use this order:
 Derived surfaces are useful, but they are not authority:
 
 - Command Centre is a dashboard over files.
-- MemSearch and Milvus Lite are indexes over markdown memory.
+- Memory search indexes are derived from markdown memory.
 - Notion docs are a template surface that should mirror local docs.
 - Reports summarize state, but the underlying files still matter.
 
@@ -203,8 +204,8 @@ The important boundary:
 flowchart TD
   A["Markdown memory files"] --> B["Source of truth"]
   A --> C["Markdown fallback search"]
-  A --> D["MemSearch index"]
-  D --> E["Milvus Lite"]
+  A --> D["Search index"]
+  D --> E["Semantic recall"]
   C --> F["Recall results"]
   E --> F
   F --> G["Agent answer"]
@@ -217,8 +218,8 @@ tests or evals. At minimum, verify that:
 
 - root recall does not leak client memory by default,
 - client recall stays scoped to the selected client,
-- markdown fallback still works when Milvus Lite is locked,
-- direct MemSearch access respects the scoped wrappers where required,
+- markdown fallback still works when the search index is locked,
+- direct search access respects the scoped wrappers where required,
 - and generated reports land in predictable folders.
 
 ## Changing Command Centre
@@ -376,7 +377,7 @@ Avoid these patterns:
 - [ ] Read memory docs and meta memory architecture.
 - [ ] Verified root/client scope.
 - [ ] Verified markdown fallback.
-- [ ] Verified Milvus Lite lock behavior if applicable.
+- [ ] Verified search-index lock behavior if applicable.
 - [ ] Updated troubleshooting docs.
 
 ### External release or write

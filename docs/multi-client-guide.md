@@ -10,11 +10,14 @@ AI-OS has two layers:
 1. **Shared methodology** - `AGENTS.md`, `CLAUDE.md`, `SOUL.md`, skills, scripts. Version-controlled and shared. Lives at the root of your AI-OS folder.
 2. **Client data** - `brand_context/`, memory, learnings, projects, and cron jobs. Unique per client. Lives inside `clients/{client-name}/`.
 
-Claude remains the primary runtime. The compatibility change is structural:
-- `AGENTS.md` is now the canonical shared instruction file
+AI-OS is agent-first. Claude Code is the easiest first path, but the structure
+also supports Codex, Cursor, Hermes, or another compatible harness:
+- `AGENTS.md` is the canonical shared instruction file
 - root `CLAUDE.md` imports `@AGENTS.md` for Claude Code
+- Codex can read `AGENTS.md` directly
+- Cursor reads its AI-OS rules pointer
 - each client gets its own `AGENTS.md` for client-specific instructions
-- each client also gets a thin `CLAUDE.md` wrapper that imports the local `AGENTS.md`
+- each client also gets a thin `CLAUDE.md` wrapper for Claude Code
 
 Everyone starts as a solo operator working from the root folder. When you need a second client, run `add-client.sh` and AI-OS creates a client workspace with separate context and outputs.
 
@@ -255,14 +258,16 @@ cd clients/client-one
 claude
 ```
 
-Claude automatically detects it's a new client and walks through the brand foundation.
+Then run `/start-here` in Claude Code, or ask your chosen harness to follow the
+same first-run guide. AI-OS should walk through the brand foundation for that
+client before doing large client work.
 
-### What Claude Sees in a Client Folder
+### What The Agent Sees In A Client Folder
 
 When you `cd clients/client-one && claude`:
 1. root `CLAUDE.md` loads and imports root `AGENTS.md`
 2. client `CLAUDE.md` loads and imports client `AGENTS.md`
-3. Claude heartbeat reads `context/SOUL.md` and `context/USER.md` from the root when needed
+3. the agent can read `context/SOUL.md` and `context/USER.md` from the root when needed
 4. `brand_context/`, `context/memory/`, and `context/learnings.md` come from the client folder
 5. `.claude/skills/` comes from the client folder
 

@@ -123,6 +123,7 @@ if [ -n "$GIT_COMMON" ] && [ "$GIT_COMMON" != "$GIT_DIR" ]; then
 fi
 
 [ -f "$MANIFEST" ] || { say "Manifest not found: $MANIFEST"; soft_exit 1; }
+source "$SCRIPT_DIR/lib/path-match.sh"
 # shellcheck source=scripts/lib/sanitize-strings.sh
 source "$SCRIPT_DIR/lib/sanitize-strings.sh"
 
@@ -142,30 +143,16 @@ open(sys.argv[3],"w").write("\n".join(m.get("user_owned",[])) + "\n")
 open(sys.argv[4],"w").write("\n".join(m.get("never_publish",[])) + "\n")
 PY
 
-# match FILE against a pattern list (dir-prefix if ends with /, else bash glob)
-matches_any() {
-  local file="$1" listfile="$2" pat
-  while IFS= read -r pat; do
-    [ -z "$pat" ] && continue
-    case "$pat" in
-      */) case "$file" in "$pat"*) return 0 ;; esac ;;
-      *)  # shellcheck disable=SC2254
-          case "$file" in $pat) return 0 ;; esac ;;
-    esac
-  done < "$listfile"
-  return 1
-}
-
 FILELIST="$TMP/files.txt"; : > "$FILELIST"
 NEVER_HIT=0
 while IFS= read -r f; do
-  matches_any "$f" "$OWNED_PATTERNS" || continue
-  matches_any "$f" "$USER_PATTERNS" && continue   # deny overlay wins
+  path_matches_any_file "$f" "$OWNED_PATTERNS" || continue
+  path_matches_any_file "$f" "$USER_PATTERNS" && continue   # deny overlay wins
   # Licence deny overlay. Proprietary / unverified-licence vendored subtrees must
   # never reach the public template (skills-library/LICENSES.md says so explicitly).
   # This is a hard exclusion, not a sanitizer hit: no amount of scrubbing makes
   # someone else's all-rights-reserved material republishable.
-  if matches_any "$f" "$NEVER_PATTERNS"; then NEVER_HIT=$((NEVER_HIT+1)); continue; fi
+  if path_matches_any_file "$f" "$NEVER_PATTERNS"; then NEVER_HIT=$((NEVER_HIT+1)); continue; fi
   printf '%s\n' "$f" >> "$FILELIST"
 done < <(git -C "$ROOT" ls-files)
 [ "$NEVER_HIT" -gt 0 ] && say "Excluded $NEVER_HIT file(s) under never_publish (proprietary / unverified licence)."
@@ -204,8 +191,8 @@ PRUNED=0
 while IFS= read -r mf; do
   [ -z "$mf" ] && continue
   case "$mf" in .git/*) continue ;; esac
-  matches_any "$mf" "$OWNED_PATTERNS" || continue
-  matches_any "$mf" "$USER_PATTERNS" && continue
+  path_matches_any_file "$mf" "$OWNED_PATTERNS" || continue
+  path_matches_any_file "$mf" "$USER_PATTERNS" && continue
   if ! grep -qxF "$mf" "$FILELIST"; then
     git -C "$MIRROR" rm -q --ignore-unmatch "$mf" >/dev/null 2>&1 && PRUNED=$((PRUNED+1))
   fi

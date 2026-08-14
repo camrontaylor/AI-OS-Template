@@ -1,6 +1,6 @@
 # Voice Adaptation
 
-Your brand voice doesn't change per platform - the delivery does. Same person, different room. You wouldn't talk to a LinkedIn audience the way you'd talk on TikTok, but you'd still be you.
+Your brand voice doesn't change per platform — the delivery does. Same person, different room. You wouldn't talk to a LinkedIn audience the way you'd talk on TikTok, but you'd still be you.
 
 This reference covers how to shift delivery without losing identity.
 
@@ -31,13 +31,13 @@ Take "build simple systems, not complicated ones" and watch how the delivery shi
 
 **Instagram:** [Bold text on slide: "Simple > Complex"] Caption: "Every business owner who comes to me wants the fancy setup. The ones who win build boring systems that just work."
 
-**TikTok:** "Okay so everyone's building these insanely complicated automations and I just need to say - stop. Here's what actually works..."
+**TikTok:** "Okay so everyone's building these insanely complicated automations and I just need to say — stop. Here's what actually works..."
 
 **YouTube:** "If you've tried to automate your business, you've probably hit this wall where everything feels way too complicated. Let me show you why that happens and what to do instead."
 
 **Threads:** "Hot take from building automations all year: the simple ones outperform the clever ones. Not even close."
 
-**Bluesky:** "Noticing a pattern - the businesses getting results from AI automation aren't building complex systems. They're building simple ones and actually using them."
+**Bluesky:** "Noticing a pattern — the businesses getting results from AI automation aren't building complex systems. They're building simple ones and actually using them."
 
 **Reddit:** "I've built automation systems for 30+ businesses this year. Tracked performance across all of them. The simple setups consistently outperform the complex ones. Here's the data and what I think is happening:"
 
@@ -45,7 +45,7 @@ Take "build simple systems, not complicated ones" and watch how the delivery shi
 
 ## Rules for Adapting
 
-1. **Shift the register, keep the personality.** If the brand is playful, it stays playful everywhere - just more restrained on LinkedIn, more loose on TikTok.
+1. **Shift the register, keep the personality.** If the brand is playful, it stays playful everywhere — just more restrained on LinkedIn, more loose on TikTok.
 2. **Change the vocabulary.** LinkedIn: "framework", "methodology." TikTok: "literally", "the thing is." Reddit: "FWIW", "IME." Match how people actually talk on each platform.
 3. **Lead differently.** LinkedIn opens with credibility. Twitter opens with the punchline. TikTok opens with a pattern interrupt. Reddit opens with "here's who I am and why you should listen."
 4. **Match the CTA energy.** LinkedIn: "Repost if useful." Twitter: "RT the first tweet." TikTok: "Part 2?" Reddit: "Happy to answer questions in the comments."

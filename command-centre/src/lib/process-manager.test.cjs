@@ -217,11 +217,18 @@ function createCronQuestionDb(task, runningRowSequence = [true]) {
               : undefined;
           }
 
-          if (normalized.includes("SELECT id FROM cron_runs WHERE taskId = ? AND result = 'running' LIMIT 1")) {
+          if (normalized.includes("SELECT id, startedAt, trigger, scheduledFor FROM cron_runs WHERE taskId = ? AND result = 'running' LIMIT 1")) {
             const next = state.runningRowSequence.length > 0
               ? state.runningRowSequence.shift()
               : false;
-            return next ? { id: 1 } : undefined;
+            return next
+              ? {
+                  id: 1,
+                  startedAt: state.task.startedAt ?? state.task.createdAt,
+                  trigger: "scheduled",
+                  scheduledFor: state.task.startedAt ?? state.task.createdAt,
+                }
+              : undefined;
           }
 
           throw new Error(`Unhandled get SQL: ${normalized}`);
@@ -296,6 +303,9 @@ function loadProcessManagerModule(stubs = {}) {
     },
     "./cron-service": {
       completeCronRunForTask: () => {},
+    },
+    "./marketing-findings": {
+      recordMarketingBlockerFinding: () => {},
     },
     "./prompt-tags": {
       expandPromptTags: (prompt) => prompt,
@@ -831,6 +841,7 @@ test("cron prose questions stay in review and record needs_input instead of done
   const db = createCronQuestionDb(task, [true]);
   const emittedEvents = [];
   const cronRunPayloads = [];
+  const blockerPayloads = [];
   const killedPids = [];
 
   try {
@@ -842,6 +853,11 @@ test("cron prose questions stay in review and record needs_input instead of done
       "./cron-service": {
         completeCronRunForTask: (_task, payload) => {
           cronRunPayloads.push(payload);
+        },
+      },
+      "./marketing-findings": {
+        recordMarketingBlockerFinding: (_db, payload) => {
+          blockerPayloads.push(payload);
         },
       },
       "./subprocess": {
@@ -891,6 +907,11 @@ test("cron prose questions stay in review and record needs_input instead of done
     assert.equal(cronRunPayloads.length, 1);
     assert.equal(cronRunPayloads[0].result, "failure");
     assert.equal(cronRunPayloads[0].completionReason, "needs_input");
+    assert.equal(blockerPayloads.length, 1);
+    assert.equal(blockerPayloads[0].jobSlug, "cron-question-job");
+    assert.equal(blockerPayloads[0].runId, 1);
+    assert.equal(blockerPayloads[0].taskId, task.id);
+    assert.equal(blockerPayloads[0].completionReason, "needs_input");
     assert.equal(
       emittedEvents.some((event) => event.type === "task:question"),
       true
@@ -929,6 +950,7 @@ test("a resumed cron task that asks again stays in review and does not create a 
   };
   const db = createCronQuestionDb(task, [true, false]);
   const cronRunPayloads = [];
+  const blockerPayloads = [];
 
   try {
     const { processManager } = loadProcessManagerModule({
@@ -939,6 +961,11 @@ test("a resumed cron task that asks again stays in review and does not create a 
       "./cron-service": {
         completeCronRunForTask: (_task, payload) => {
           cronRunPayloads.push(payload);
+        },
+      },
+      "./marketing-findings": {
+        recordMarketingBlockerFinding: (_db, payload) => {
+          blockerPayloads.push(payload);
         },
       },
       "./subprocess": {
@@ -999,6 +1026,8 @@ test("a resumed cron task that asks again stays in review and does not create a 
     assert.equal(db.state.task.completedAt, null);
     assert.equal(cronRunPayloads.length, 1);
     assert.equal(cronRunPayloads[0].completionReason, "needs_input");
+    assert.equal(blockerPayloads.length, 1);
+    assert.equal(blockerPayloads[0].jobSlug, "cron-question-twice-job");
   } finally {
     delete global.__processManager;
     cleanupTempWorkspace(workspaceDir);

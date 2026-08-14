@@ -1,6 +1,6 @@
 # Hook Library
 
-Hooks for talking-head delivery. These are designed to be spoken to camera - they work because of how they sound, not just how they read. Every hook is meant to stop the scroll in the first 3 seconds.
+Hooks for talking-head delivery. These are designed to be spoken to camera — they work because of how they sound, not just how they read. Every hook is meant to stop the scroll in the first 3 seconds.
 
 Pick hooks that match the script format and the speaker's natural style. Forced hooks feel worse than no hook at all.
 
@@ -29,7 +29,7 @@ Start mid-thought. No intro, no "hey guys", no context. Drop the viewer into som
 - "I wasn't going to share this, but..."
 - "This is the part where I'm supposed to [expected thing]. I'm not going to."
 - "Okay, stop what you're doing." [pause] "This is important."
-- "[Do something unusual on camera - hold up an object, point at something, start walking]"
+- "[Do something unusual on camera — hold up an object, point at something, start walking]"
 
 **Best for:** Hot Take, Story Arc, Myth Bust
 **Delivery:** Casual, almost like you're continuing a conversation they walked into.
@@ -63,7 +63,7 @@ Lead with what happened. The "how" is why they keep watching.
 - "Before: [state]. After: [state]. Here's the only thing I changed."
 
 **Best for:** Before/After, Testimonial, "I Tried X", Quick Teach
-**Delivery:** Start with the result stated plainly. Let the result do the work - don't oversell it.
+**Delivery:** Start with the result stated plainly. Let the result do the work — don't oversell it.
 
 ---
 
@@ -75,7 +75,7 @@ Open a question the viewer needs answered. The gap between what they know and wh
 - "The thing about [topic] that nobody is willing to say out loud..."
 - "I found out why [surprising thing]. It's not what you think."
 - "What would you do if [scenario]? Because that happened to me."
-- "Here's what [authority figure] does differently - and it's not [obvious thing]."
+- "Here's what [authority figure] does differently — and it's not [obvious thing]."
 
 **Best for:** Story Arc, Myth Bust, "I Tried X"
 **Delivery:** Slightly lower energy. Draw them in, don't shout at them.
@@ -108,7 +108,7 @@ Share something you tested, tried, or learned the hard way. Vulnerability builds
 - "This is embarrassing, but I [mistake]. And I learned something."
 
 **Best for:** "I Tried X", Story Arc, Hot Take
-**Delivery:** Genuine. Not performed vulnerability - actual honesty. People can tell the difference.
+**Delivery:** Genuine. Not performed vulnerability — actual honesty. People can tell the difference.
 
 ---
 

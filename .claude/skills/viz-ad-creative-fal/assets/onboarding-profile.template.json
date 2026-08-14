@@ -102,7 +102,6 @@
   },
   "examples": [],
   "tool_connections": {
-    "codex_native_imagegen": "unknown",
     "FAL_KEY": "unknown",
     "FIGMA_TOKEN": "unknown",
     "FIGMA_FILE_KEY": "unknown",

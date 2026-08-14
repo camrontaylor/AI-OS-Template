@@ -59,7 +59,7 @@ flowchart TD
 
 Data can leave your machine when:
 
-- you ask Claude Code, Cursor, or another agent to do work,
+- you ask Claude Code, Codex, Cursor, Hermes, or another agent harness to do work,
 - a skill uses an external API,
 - a connector reads or writes an external system,
 - a scheduled job runs through an agent provider,
@@ -92,11 +92,11 @@ AI-OS can create cost in a few places.
 
 | Layer | What costs money | How to control it |
 |---|---|---|
-| Agent runtime | Claude/model usage while doing work. | Use the right model, keep memory bounded, avoid needless re-runs. |
+| Agent runtime | Model usage while doing work in Claude Code, Codex, Cursor, Hermes, or another harness. | Use the right model, keep memory bounded, avoid needless re-runs. |
 | Cron jobs | Scheduled model calls. | Keep only useful jobs active and check logs. |
 | External APIs | Firecrawl, HeyGen, xAI, OpenAI, YouTube, etc. | Skills should check for keys and offer fallbacks. |
-| Hosted infrastructure | Zilliz, Pinecone, Langfuse Cloud, Vercel, etc. | Add only when the workflow has a real need. |
-| Local search | MemSearch with Milvus Lite. | Usually no per-query cost. First setup may download a small local model. |
+| Hosted infrastructure | Hosting, databases, search services, tracing/eval tools, storage, queues, etc. | Add only when the workflow has a real need. |
+| Local search | AI-OS memory search helpers. | Usually no per-query cost. First setup may download a small local model. |
 
 The biggest avoidable cost is not one expensive call. It is letting automated
 jobs, broad context, or repeated failed runs continue without checking logs.
@@ -106,11 +106,11 @@ jobs, broad context, or repeated failed runs continue without checking logs.
 | Question | Usually free/local | Might cost |
 |---|---|---|
 | Storing docs and memory | Markdown files in the repo. | Cloud backup or sync service if you add one. |
-| Searching old memory | Markdown fallback and local Milvus Lite. | Hosted vector database if you choose one. |
+| Searching old memory | Markdown files and local search helpers. | Hosted retrieval if you choose one for a real workflow. |
 | Running an agent session | No AI-OS fee. | Claude or model-provider usage. |
 | Running scheduled jobs | No AI-OS fee. | Model calls and any APIs the job uses. |
 | Scraping or researching the web | Manual paste or basic web fetch. | Firecrawl, paid search APIs, or model browsing. |
-| Observing AI app traces | Local logs. | Langfuse Cloud or hosted observability. |
+| Observing AI app traces | Local logs. | Hosted tracing or eval tooling. |
 | Deploying apps | Local development. | Vercel, hosting, domains, storage, queues. |
 
 Start with the local/default path. Add paid infrastructure only when the work
@@ -175,9 +175,8 @@ Hosted tools can be the right choice, but they should be added for a reason.
 
 | Tool type | Add it when |
 |---|---|
-| Zilliz/remote Milvus | You want hosted semantic recall while keeping a Milvus/MemSearch style. |
-| Pinecone | You are building a production client-facing retrieval app. |
-| Langfuse | You need traces, evals, cost tracking, or prompt review for model calls. |
+| Hosted search | You are building a production client-facing retrieval app or shared internal search workflow. |
+| Tracing/eval tooling | You need model-call traces, evals, cost tracking, or prompt review. |
 | Vercel | You are deploying a web app or API. |
 | Notion connector | You need live Notion read/write from an agent session. |
 

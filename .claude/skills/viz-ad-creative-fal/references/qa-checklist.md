@@ -2,7 +2,7 @@
 
 Run this gate after the export step and before you hand any ad to the user. If a check fails, fix it or stop. Never ship a broken asset. The point of this gate is simple: catch the wrong size, off-brand color, clipped text, over-limit copy, a duplicate, an unlogged cost, and a missing AI label before they reach a live campaign.
 
-This file is shared by all three engines (`codex`, `fal`, `figma`). One check (the AI-content disclosure flag) applies only to the generative engines, not to `figma`. That difference is called out in its own section.
+This file is shared by the `fal` and `figma` engines. One check (the AI-content disclosure flag) applies only to `fal`, not to `figma`. That difference is called out in its own section.
 
 ## Contents
 
@@ -13,7 +13,7 @@ This file is shared by all three engines (`codex`, `fal`, `figma`). One check (t
 - [4. Copy within platform character limits](#4-copy-within-platform-character-limits)
 - [5. Dedup check against the slate](#5-dedup-check-against-the-slate)
 - [6. Per-batch cost estimate logged](#6-per-batch-cost-estimate-logged)
-- [7. AI-content disclosure flag](#7-ai-content-disclosure-flag-codex--fal-only)
+- [7. AI-content disclosure flag](#7-ai-content-disclosure-flag-fal-only)
 - [Never fail silently](#never-fail-silently)
 
 ## How to run this gate
@@ -67,12 +67,12 @@ How to check: inspect the design (or the source frame/HTML) and confirm no criti
 
 ## 3. Brand lock: hex, logo, fonts
 
-Check the exported pixels against `brand-lock.md`. The generative engines (`codex`, `fal`) can drift across a large batch, so do not assume the later images still match the first. Check each one against the locked reference set, not against each other.
+Check the exported pixels against `brand-lock.md`. The `fal` engine can drift across a large batch, so do not assume the later images still match the first. Check each one against the locked reference set, not against each other.
 
 Verify three things:
 
 - **Brand hex within tolerance.** Sample the key brand color regions and confirm they match the locked hex from `brand-lock.md`. Allow a small tolerance for compression, but a clear off-brand color is a fail.
-- **Logo present and unmodified.** The logo must be there, the right one, not stretched, recolored, cropped, or re-drawn. On the `figma` engine the logo is a locked layer, so this is structural. On `codex`/`fal` the generator can warp or invent a logo, so look closely.
+- **Logo present and unmodified.** The logo must be there, the right one, not stretched, recolored, cropped, or re-drawn. On the `figma` engine the logo is a locked layer, so this is structural. On `fal`, the generator can warp or invent a logo, so look closely.
 - **Correct fonts.** The headline and body use the brand fonts named in `brand-lock.md`, not a model substitute.
 
 Why per-file and not per-batch: stateless image models lose brand identity over many calls. The gate must check every file against the reference set.
@@ -114,31 +114,30 @@ How: compare each new export against the slate (same headline plus same image pl
 
 Write a cost estimate for the whole batch into the batch record. The user needs to see what a run costs before it scales.
 
-- **`codex` engine:** no model API key is used in this skill. Log the runtime as Codex native image generation and note that subscription/tool limits may apply.
 - **`figma` engine:** no per-image generation cost (deterministic render/export). Log seat and any export notes instead, not a per-image price.
 - **`fal` engine:** estimate from live pricing, do not hardcode. Resolve prices at run time via the fal MCP `get_pricing` tool. As a ballpark only, budget about $0.01 to $0.07 per still image and about $0.05 to $0.40 per second of video. Several per-image prices (Ideogram V3, nano-banana/edit) are UNCONFIRMED, so verify live.
 
 Rule: every batch record carries a cost line. If the price could not be confirmed, log the estimate and mark it UNCONFIRMED rather than leaving it blank.
 
-## 7. AI-content disclosure flag (codex + fal only)
+## 7. AI-content disclosure flag (fal only)
 
 Set an AI-content disclosure flag on the batch for the generative engines. The `figma` engine does not need this flag when it only renders a locked template and generates no AI imagery.
 
 What to tell the client, plainly:
 
 - **Meta, TikTok, and YouTube require labeling AI-generated or materially altered creative in 2026.** If the ad's imagery was generated or heavily changed by AI, it must be disclosed.
-- **Codex-native and fal-generated images may need platform AI labels.** Check the current disclosure UI in Meta, TikTok, YouTube, and any regulated platform before launch.
-- **The `codex` and `fal` engines need this flag.** They produce AI imagery, so disclosure applies.
+- **fal-generated images may need platform AI labels.** Check the current disclosure UI in Meta, TikTok, YouTube, and any regulated platform before launch.
+- **The `fal` engine needs this flag.** It produces AI imagery, so disclosure applies.
 - **The `figma` deterministic engine does not need it** when it generates nothing and only fills and exports a locked template. If the image slots are filled with AI-made assets from another tool, tag the source asset and apply the platform disclosure.
 
-Rule: for any `codex` or `fal` batch, the QA record must carry the disclosure flag and a one-line note for the client that AI labeling may apply on Meta, TikTok, and YouTube. Do not let an AI-made ad go out without that flag set.
+Rule: for any `fal` batch, the QA record must carry the disclosure flag and a one-line note for the client that AI labeling may apply on Meta, TikTok, and YouTube. Do not let an AI-made ad go out without that flag set.
 
 ## Never fail silently
 
 If a required key or tool is missing at any point in this gate, print clear setup instructions and exit. Never produce a broken or unchecked asset quietly.
 
 - Missing measure tool (`sips`, `identify`, or `sharp`): print how to get one and stop. Do not skip the dimension check.
-- Missing `FIGMA_TOKEN` or `FAL_KEY` for the active engine: print the exact env block to add (house format: `# Service`, `# Used by`, fallback note, `KEY=`) and stop. The `codex` engine should not ask for a model API key.
+- Missing `FIGMA_TOKEN` or `FAL_KEY` for the active engine: print the exact env block to add (house format: `# Service`, `# Used by`, fallback note, `KEY=`) and stop.
 - Missing `brand-lock.md`, `ad-sizes.md`, or `ad-methodology.md`: say which file is missing and stop, since the gate cannot check against a spec it does not have.
 
 The failure this rule prevents: a silent skip that ships an unchecked asset. A loud stop with setup steps is always better than a quiet broken ad.

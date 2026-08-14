@@ -11,7 +11,7 @@ Challenge what everyone in the market believes.
 > "Everything you've been told about [topic] is wrong."
 > "Stop [common practice]. Here's what actually works."
 
-**Works when:** Market is frustrated with conventional approaches. Audience sees themselves as independent thinkers. There's a genuine contrarian insight to stand on - not just provocation for its own sake.
+**Works when:** Market is frustrated with conventional approaches. Audience sees themselves as independent thinkers. There's a genuine contrarian insight to stand on — not just provocation for its own sake.
 
 **Risk:** Falls flat if the contrarian claim can't be backed up with evidence or a clear mechanism.
 
@@ -24,7 +24,7 @@ Lead with HOW it works differently, not just WHAT it does.
 > "The [Named Method] that [specific result]"
 > "How [mechanism] lets you [outcome] without [usual sacrifice]"
 
-**Works when:** Market is sophisticated (Stage 3+). Similar promises already exist. The mechanism is the differentiator - it answers "why will this work when other things haven't?"
+**Works when:** Market is sophisticated (Stage 3+). Similar promises already exist. The mechanism is the differentiator — it answers "why will this work when other things haven't?"
 
 **How to find the mechanism:** What's the proprietary process, method, or system? What's the counterintuitive insight? Even if nothing is truly proprietary, there's always a mechanism. Name it.
 
@@ -37,7 +37,7 @@ Before and after. The gap between current pain and desired outcome.
 > "From [painful current state] to [desired outcome]"
 > "Go from [specific bad metric] to [specific good metric] in [timeframe]"
 
-**Works when:** The transformation is dramatic and specific. Market is problem-aware. The before/after contrast is visceral - not abstract.
+**Works when:** The transformation is dramatic and specific. Market is problem-aware. The before/after contrast is visceral — not abstract.
 
 **Sharpen it by:** Adding specificity. "Better results" is vague. "From 2% reply rate to 15% in 30 days" converts.
 
@@ -45,7 +45,7 @@ Before and after. The gap between current pain and desired outcome.
 
 ## 4. The Enemy Angle
 
-Position against a common enemy - not a competitor, but a problem, mindset, or obstacle.
+Position against a common enemy — not a competitor, but a problem, mindset, or obstacle.
 
 > "Stop letting [enemy] steal your [valuable thing]"
 > "The [enemy] is lying to you. Here's the truth."
@@ -63,7 +63,7 @@ Compress the time or reduce the effort required.
 > "[Outcome] in [surprisingly short time]"
 > "[Outcome] without [expected sacrifice]"
 
-**Works when:** Alternatives require significant time, effort, or expertise. Speed or ease is genuinely differentiated - not just claimed. The claim is believable.
+**Works when:** Alternatives require significant time, effort, or expertise. Speed or ease is genuinely differentiated — not just claimed. The claim is believable.
 
 **Risk:** Overused in many markets. "In just 5 minutes!" is often met with skepticism. Works best when paired with a mechanism that explains WHY it's faster.
 
@@ -76,7 +76,7 @@ Get hyper-specific about who it's for or what it delivers.
 > "For [very specific avatar] who want [very specific outcome]"
 > "The [specific number] [specific things] that [specific result]"
 
-**Works when:** Competing with generic offerings. Want to signal "this is built for YOU." The specificity creates a filter - the right people feel seen, the wrong people self-select out.
+**Works when:** Competing with generic offerings. Want to signal "this is built for YOU." The specificity creates a filter — the right people feel seen, the wrong people self-select out.
 
 **Power move:** Combine specificity with exclusion. "Not for agencies. Built for solo founders who ship their own marketing."
 
@@ -102,7 +102,7 @@ Make the guarantee the headline.
 > "[Outcome] or [dramatic consequence for seller]"
 > "Try it for [time period]. [Specific guarantee]."
 
-**Works when:** Risk is the primary objection. Confidence in delivery is genuinely high. The guarantee is memorable and specific - not just "money-back guarantee."
+**Works when:** Risk is the primary objection. Confidence in delivery is genuinely high. The guarantee is memorable and specific — not just "money-back guarantee."
 
 **Examples of strong risk reversal:** "Double your reply rate in 30 days or I'll write your next 50 emails free." The specificity of the consequence signals confidence.
 

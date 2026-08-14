@@ -1,0 +1,23 @@
+{
+  "skill_name": "str-research-findings",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Save this pasted note about a consultant's managed AI implementation stack so I can reuse it across AI-OS and client strategy later.",
+      "expected_output": "A dated finding in projects/str-research-findings, an updated index entry, and uncertain claims marked as needing verification.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I just had a discovery call and learned a repeatable workflow pattern. Capture the finding for future client work, but don't put it in memory yet.",
+      "expected_output": "A research finding saved to the root hub with promotion set to research hub only, not hot memory.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Here's a URL to an article I want saved as a resource.",
+      "expected_output": "The skill should not run; str-resources should handle URL resource capture.",
+      "files": []
+    }
+  ]
+}

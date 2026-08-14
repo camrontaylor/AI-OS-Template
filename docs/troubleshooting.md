@@ -85,8 +85,8 @@ Common causes:
 
 | Symptom | Meaning | Fix |
 |---|---|---|
-| Milvus lock error | Indexing is active or another process has the local DB. | Use markdown fallback, then retry later. |
-| Milvus access error | Semantic search needs local DB/loopback access. | Use the wrapper command or use markdown fallback. |
+| Search-index lock error | Indexing is active or another process has the local search index. | Use markdown fallback, then retry later. |
+| Search-index access error | Semantic search needs local file or loopback access. | Use the wrapper command or use markdown fallback. |
 | No semantic results | Index may be stale or not installed. | Run `bash scripts/setup-memory.sh --check`. |
 | Results from wrong scope | Search ran from root or wrong client. | Pass `--scope client --client slug`. |
 
@@ -108,8 +108,12 @@ If dependencies are missing:
 
 ```bash
 cd command-centre
+nvm use
 npm install
 ```
+
+AI-OS pins Node in `.nvmrc`; npm rejects installs from another major version so
+native modules cannot be silently rebuilt for the wrong ABI.
 
 Then go back to the root and launch again:
 

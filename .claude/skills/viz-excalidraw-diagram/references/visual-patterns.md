@@ -6,21 +6,21 @@ How to choose shapes, structure diagrams, and make the layout do the thinking.
 
 ## Pattern Library
 
-Pick the pattern that mirrors how the concept actually behaves. If a concept spawns multiple outputs, it gets a fan-out - not a labelled box.
+Pick the pattern that mirrors how the concept actually behaves. If a concept spawns multiple outputs, it gets a fan-out — not a labelled box.
 
 | Concept behaviour | Pattern | Shape |
 |-------------------|---------|-------|
-| Produces multiple outputs | **Fan-out** - central node with arrows radiating outward | Radial from centre |
-| Combines inputs into one | **Convergence** - multiple arrows funnelling to a single target | Funnel or merge point |
-| Has parent-child structure | **Tree** - trunk lines + branch lines + free-floating labels | Lines, not boxes |
-| Happens in sequence | **Timeline** - a spine line with small dots at intervals, labels beside each | Line + dots + text |
-| Repeats or improves | **Cycle** - elements in sequence with an arrow returning to the start | Loop back |
-| Represents fuzzy state | **Cloud** - overlapping ellipses of varied sizes | Ellipse cluster |
-| Transforms input to output | **Assembly line** - before, process box, after | Linear flow |
-| Compares two things | **Side-by-side** - parallel structures with visual contrast | Mirror layout |
-| Separates into phases | **Gap** - deliberate whitespace or a divider between sections | Visual break |
+| Produces multiple outputs | **Fan-out** — central node with arrows radiating outward | Radial from centre |
+| Combines inputs into one | **Convergence** — multiple arrows funnelling to a single target | Funnel or merge point |
+| Has parent-child structure | **Tree** — trunk lines + branch lines + free-floating labels | Lines, not boxes |
+| Happens in sequence | **Timeline** — a spine line with small dots at intervals, labels beside each | Line + dots + text |
+| Repeats or improves | **Cycle** — elements in sequence with an arrow returning to the start | Loop back |
+| Represents fuzzy state | **Cloud** — overlapping ellipses of varied sizes | Ellipse cluster |
+| Transforms input to output | **Assembly line** — before, process box, after | Linear flow |
+| Compares two things | **Side-by-side** — parallel structures with visual contrast | Mirror layout |
+| Separates into phases | **Gap** — deliberate whitespace or a divider between sections | Visual break |
 
-For multi-concept diagrams, each major concept should use a **different** pattern. A diagram where every concept is a rectangle in a grid isn't arguing anything - it's just formatted text.
+For multi-concept diagrams, each major concept should use a **different** pattern. A diagram where every concept is a rectangle in a grid isn't arguing anything — it's just formatted text.
 
 ---
 
@@ -70,10 +70,10 @@ Not every label needs a rectangle around it.
 All colour assignments come from `color-palette.md`. Key principles:
 
 - Each semantic purpose (start, end, decision, AI, error) has a dedicated fill/stroke pair
-- Free-floating text uses colour for hierarchy - titles, subtitles, and details each at a different shade
+- Free-floating text uses colour for hierarchy — titles, subtitles, and details each at a different shade
 - Evidence artifacts (code snippets, JSON) use dark backgrounds with coloured text
 - Always pair a darker stroke with a lighter fill for contrast
-- Don't invent new colours - if a concept doesn't fit an existing semantic category, use Primary/Neutral
+- Don't invent new colours — if a concept doesn't fit an existing semantic category, use Primary/Neutral
 
 ---
 
@@ -82,7 +82,7 @@ All colour assignments come from `color-palette.md`. Key principles:
 ### Hierarchy through scale
 
 The most important element is the largest. A rough sizing guide:
-- **Hero element**: ~300x150 - the visual anchor
+- **Hero element**: ~300x150 — the visual anchor
 - **Primary elements**: ~180x90
 - **Secondary**: ~120x60
 - **Small/supporting**: ~60x40
@@ -103,7 +103,7 @@ Position alone doesn't communicate a relationship. If A relates to B, draw an ar
 
 ## Lines as Structural Elements
 
-Lines (type: `line`, not arrows) are powerful as primary structure - often cleaner than boxes:
+Lines (type: `line`, not arrows) are powerful as primary structure — often cleaner than boxes:
 
 - **Timelines**: horizontal or vertical line with small dot markers at intervals, free-floating labels beside each dot
 - **Trees**: vertical trunk + horizontal branches, free-floating text at each node
@@ -117,13 +117,13 @@ Lines + free-floating text usually produces a cleaner diagram than boxes + conta
 ## Modern Aesthetics
 
 ### Roughness
-- `roughness: 0` - clean, crisp edges. Default for professional/technical diagrams.
-- `roughness: 1` - hand-drawn feel. Use for brainstorming or informal sketches.
+- `roughness: 0` — clean, crisp edges. Default for professional/technical diagrams.
+- `roughness: 1` — hand-drawn feel. Use for brainstorming or informal sketches.
 
 ### Stroke width
-- `1` - thin, elegant. Good for dividers, subtle connections.
-- `2` - standard. Good for shapes and primary arrows.
-- `3` - bold. Use sparingly for emphasis on the main flow.
+- `1` — thin, elegant. Good for dividers, subtle connections.
+- `2` — standard. Good for shapes and primary arrows.
+- `3` — bold. Use sparingly for emphasis on the main flow.
 
 ### Small markers over full shapes
-Small dots (10-20px ellipses) work well as timeline markers, bullet points, connection nodes, and visual anchors for free-floating text - without the visual weight of full shapes.
+Small dots (10-20px ellipses) work well as timeline markers, bullet points, connection nodes, and visual anchors for free-floating text — without the visual weight of full shapes.

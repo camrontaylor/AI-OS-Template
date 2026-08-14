@@ -112,21 +112,13 @@ Preserve real voice, don't over-correct: keep "I think", "honestly", "maybe" whe
 
 ### Tool-Agnostic Runtime Contract
 
-AI-OS must behave the same in Claude Code, Cursor, or any compatible tool. (1) Canonical rules live here: `AGENTS.md` is the source of truth; `CLAUDE.md` and `.cursor/rules/ai-os.mdc` are adapters only. (2) Tool defaults cannot outrank AI-OS: neutralize or scope away conflicting global tool rules, memory layers, skills, hooks, or profiles - never change AI-OS to fit them. (3) Memory authority stays inside AI-OS; no external memory layer is authoritative unless this repo configures it. (4) Skills resolve locally first: an AI-OS skill outranks any global skill. (5) Hooks and guards are shared, not forked: thin tool adapters call the same AI-OS hook logic. (6) Security and sandbox rules still apply, but tool safety systems never become product or workflow guidance.
+`AGENTS.md` is canonical; `CLAUDE.md` and `.cursor/rules/ai-os.mdc` are adapters. Global tool rules, memory, skills, hooks, and profiles never outrank this repo. Memory authority stays inside AI-OS. Shared guards have one implementation with thin adapters. Security and sandbox rules still apply.
 
-**Skill home rule (canonical):** `.claude/skills/` is the ONLY home for AI-OS skills, and `skills-library/backlog/` is the ONLY intake path. Never `skills add` / `npx skills add` into the live catalog; never install a plugin or a global skill (`~/.claude/skills`, `~/.agents/skills`) as a substitute for a curated AI-OS skill. Any new capability is vendored inert to the backlog, then promoted to `.claude/skills/` - nothing else counts as "adding a skill." This is the rule that keeps the `/` picker from re-cluttering; the felt mess comes from external sources (plugins, global installs) accumulating, not from AI-OS's own structure.
+Live skills exist only in `.claude/skills/`; other tools and clients link there. Never use a global/plugin install or `skills add` as a substitute. Intake is inert until explicitly promoted.
 
 ### Session Title Fence
 
-When the first user message of a new session states a real, nameable task, the very first thing in the reply is a fenced code block whose only content is a 2-3 word Title Case title:
-
-````
-```
-Session Titling
-```
-````
-
-Then continue straight into the work. The fence contains only the title on one line (no `/rename`, label, quotes, or extra words), for the user to copy into the tool's rename field; use the same words for the `### Title` line in today's memory session block; emit once per session - the one allowed first-reply preamble; skip it for greeting-only, status, casual, or trivial-Q&A openers. Claude Code wires `.claude/hooks/session-title-hint.js` on `UserPromptSubmit` as the reminder; instruction-only tools follow this rule from here. Never swap this for unsupported transcript writes or native auto-title hacks without the user explicitly accepting that fragility.
+On the first substantive prompt, emit once before all other text a fenced 2-3 word Title Case title whose only content is the title, and use it in today's session log. Skip greetings, status pings, and trivial questions. Never replace this with unsupported transcript writes or auto-title hacks. Reminder: `.claude/hooks/session-title-hint.js`.
 
 ### Skill & Connector Reconciliation
 
@@ -142,28 +134,19 @@ Every skill can have a `SKILL.local.md` beside its `SKILL.md`: the base ships fr
 
 ### Skills Library
 
-`skills-library/` is the inert staging area for material collected from elsewhere - **two lanes, one home** (the backlog lane simplified 2026-07-21 from an over-built five-stage pipeline; a `resources/` lane added 2026-07-28 for non-skill material, deliberately kept inside this same folder rather than a new top-level one, since the 2026-07-15 audit already concluded `skills-library/` itself was the clean part of the system). New material is routed automatically by shape. Skill-shaped (has `SKILL.md`): `skills-library/backlog/` - inert by default (nothing auto-loaded, auto-discovered, `skills add`-ed, or touched by reconciliation; the only runtime read is `INDEX.md`, and only on the Task Routing fallback below), then **assessed** (analysed against the live catalog - inferred intent, dependency have/need map, grain-fit, real past-use evidence from `context/memory/`, per-piece dispositions), then either **promoted** into `.claude/skills/` through the full registration bar (a head start, not a shortcut; one capability at a time, bundled into a single router skill) or **parked** (marked not-wanted in `INDEX.md`, left in place - no hard deletes). Not skill-shaped (an app, MCP server, toolkit, or framework - no `SKILL.md` anywhere): `skills-library/resources/<name>/RESOURCE.md` - a metadata-only record (source, license, security-scan grade via `scripts/lib/absorb-scan.py`, disposition, what was kept) that is **never full-source-vendored**, since there is nothing to promote a non-skill resource into and a large repo would just bloat this one for no reason; a keeper piece routes to `meta-bake-it-in`, same as the backlog lane. There is no `triage/` folder, no `review/` folder, and no Notion sign-off gate in either lane: you point at a source, I assess it in chat and you decide. Owner (both lanes): `meta-skill-intake`. Full detail (the `skills add` flood lesson, bundling patterns, the resources lane): `skills-library/README.md`.
+Skill-shaped sources enter `skills-library/backlog/` inert; non-skill apps, MCPs, and frameworks get metadata-only records in `skills-library/resources/`. Assessment compares them with live skills and real use evidence. Promotion requires the full registration bar and an explicit user decision; parking preserves the source. Never use `skills add` or a global install. Owner and full two-lane contract: `meta-skill-intake` and `skills-library/README.md`.
 
 ### Task Routing
 
-1. Check system operations first; execute a matching built-in operation directly.
-2. If the task explicitly targets an installed app, plugin, MCP server, connector, or Composio toolkit (Notion, Gmail, Drive, Calendar, HubSpot, Figma, GitHub, Vercel, an app mention...), use the matching native connector when callable, else Composio (`composio-cli`), before any local fallback; if neither is available or authenticated, prompt the user to connect the app instead of silently substituting local context. Native suits local/runtime tools; Composio suits SaaS accounts, client-owned OAuth, multi-account access, triggers. Use the `docs/connectors.md` fallback only after saying which live path was unavailable.
-3. Route to the best matching live skill per Skill Source Of Truth (read its `SKILL.md` fully, load `SKILL.local.md` when present).
-4. Size the work: multi-deliverable or multi-phase tasks get a project level (1, 2, 3, or Live; see Output Standards) decided before output - write the Level 2 brief or hand Level 3 to GSD. Never silently escalate. Skip for plain single tasks.
-5. If no installed skill matches, check `skills-library/INDEX.md` (`meta-find-skills` owns this search - both the backlog lane of skill-shaped candidates and the resources lane of evaluated non-skill external resources) before declaring a gap; a fitting candidate can be trialed in place (explicitly, never silently, never auto-promoted) or assessed and promoted via `meta-skill-intake`.
-6. If neither exists, say so and offer: build or find a skill, or handle it now with base knowledge.
-
-Never silently fall back to base knowledge when a skill or fitting candidate exists; never handle a task without making a skill gap explicit. For Notion: the connector is the working surface when output lives in Notion; local markdown is only the durable source copy, and nothing counts as a Notion update until the live page is written and verified.
+Route in order: built-in operation; named native connector; Composio fallback; best live skill; `skills-library/INDEX.md` via `meta-find-skills`; then state the gap and offer to build/find a skill or handle it now. Read each selected skill fully with its local override, Context Needs, and learnings. Multi-phase work gets the appropriate Output Standards level without silent escalation. If a named app is unavailable, ask to connect it. Notion work is complete only after the live page is written and verified.
 
 ### Web Data & Scraping Routing
 
-Climb from the cheapest rung; stop at the first that works. Binds every tool. (1) **Built-in web tools** (`WebSearch` / `WebFetch` / `parallel-search`) for normal reads, current facts, unblocked single pages - most tasks end here. (2) **Firecrawl (Composio)** for JS-heavy or blocked pages, clean markdown, site crawls, schema extraction, screenshots, many URLs (`FIRECRAWL_SCRAPE`/`_CRAWL`/`_EXTRACT`/`_SEARCH`/`_BATCH_SCRAPE`; ~1 credit/page, never for a simple fetch; deeper guidance: `tool-firecrawl-scraper`). (3) **Apify (Composio)** for named sites with store scrapers (Maps, Instagram, LinkedIn, Amazon, TikTok, X, more) and "set up a scraper" asks - name the actor and rough cost before a sizeable run. (4) **Reserve:** Bright Data for hard anti-bot at scale (not connected; recommend only when 2-3 fail); browser automation (`agent-browser` / Chrome MCP) for logged-in click/fill flows, not scraping. Both toolkits are live in Composio and always-approved; on `EXPIRED` or auth failure, say so and reconnect (`composio link`) - never drop to base knowledge. Map: [docs/connectors.md](docs/connectors.md).
-
-**Trust the output, not the exit code.** A scraper or fetch that returns zero rows or garbled fields while still exiting success is the real failure mode, not a hard crash: check the result before you trust it (re-running a query that provably worked before is the cheapest canary), and never read a rate-limit or a 403 as proof the source is dead. Reddit is the live case - anonymous `.json` is 403-blocked and its API is gated as of late 2025, so route Reddit through Apify, not a free anonymous endpoint. This binds cron-driven scraping jobs most of all, where a silent zero-row run looks identical to a clean one. (absorbed from MadsLorentzen/ai-job-search + Panniantong/Agent-Reach, 2026-07-23)
+Climb: built-in search/fetch; Firecrawl for blocked or JS-heavy extraction/crawls; Apify for named-site actors; Bright Data only after earlier rungs fail; browser automation for logged-in interaction. Check returned content, not exit code alone. Name actor and rough cost before sizeable Apify runs. Auth expiry routes to reconnect. Reddit uses Apify. Map: `docs/connectors.md`.
 
 ### Blocker Research Gate
 
-Mandatory for any prompt about feasibility, options, tool or platform limits, or workflow blockers - anything likely to produce a "no" or dead-end answer. Before answering negatively: (1) route through `q-question` when it fits that trigger list; (2) check local AI-OS docs, code, hooks, skills, memory, and project files before general knowledge; (3) if the answer depends on current capability, APIs, pricing, limits, connectors, or workarounds, browse current primary sources and community evidence; (4) if a live tool was named, try native connector, then Composio, then web/local fallback, saying which live path was unavailable; (5) return options, not a dead end - native support, workaround/custom build, remote/third-party path, process alternative; (6) recommend the best path, explain why, state confidence, name what would change the answer, give the smallest practical test. This applies to your OWN mid-task walls too: when an API does not support what you need, an approach has failed twice, or a "that is not possible" / "the only option is" sentence is forming, run the `q-unstuck` agent fast-path before reporting a dead end, so every dead-end report arrives with tried-angles receipts. A bare "no" is allowed only for safety, policy, legal, destructive-action, or permission reasons - even then offer the nearest safe alternative. Hook: `.claude/hooks/blocker-research-gate.js`.
+Before a negative feasibility/platform answer, use `q-question` when applicable, inspect local sources and current primary docs, try named connector paths, and test alternatives. After two failed approaches use `q-unstuck`. Return the best path, confidence, what would change the answer, and the smallest test. Bare refusals are limited to safety, legal, destructive, or permission boundaries and include the nearest safe option.
 
 ### Evidence Discipline
 
@@ -178,77 +161,49 @@ Reinforced at runtime by `.claude/hooks/agency-discipline-gate.js`; critic mecha
 
 ### Writing Context Gate
 
-Runs automatically before drafting, rewriting, editing, reviewing, or polishing any text the user may send, publish, or use with a client, prospect, audience, or stakeholder - the user should not need to name a skill. (1) Classify the surface: one-to-one client/stakeholder message -> `comms-message`; persuasive public or sales copy -> `mkt-copywriting`; repurposing into posts/threads/newsletters -> `mkt-content-repurposing`; UGC or spoken scripts -> `mkt-ugc-scripts`; brand voice work -> `mkt-brand-voice`; other specialist writing -> the matching live skill. (2) Load context first: that skill's `SKILL.md`, any `SKILL.local.md`, its `## Context Needs` files, and its learnings section; for client work, client-local context outranks root for facts, status, names, promises, scope, and history. (3) Invoke `memory-recall` when history could change the answer (past decisions, relationship context, prior wording, deadlines, scope, money, approvals, "as discussed"). (4) Keep low-risk wording checks light - no broad search unless facts, relationship risk, scope, money, or old context matter. (5) If no writing skill fits, say so, load available context, and produce the best current answer. Hook: `.claude/hooks/writing-context-gate.js`.
+Before publishable or stakeholder text, route to the matching writing skill, load its Context Needs, local override, learnings, and client-local facts, then run its humanizer gate. Use `memory-recall` when prior decisions, wording, promises, scope, money, or approvals could change the draft. Keep low-risk wording checks light. Hook: `.claude/hooks/writing-context-gate.js`.
 
 ### Correction Capture (Learning Loop)
 
-How AI-OS gets smarter instead of relearning. Interactive footprint is layer 1 only, silent (never announce "I logged that").
-
-1. **Record.** When confirmed wrong (user corrected you and you accept it, or a file/command/test/tool proved a claim wrong), add one bullet under `### Corrections` in today's session block - same silent auto-tracking as `### Decisions`. Confirmed mistakes only, never opinions or unverified guesses; a wrong lesson is worse than none. Client sessions log to the client folder, so scope is correct for free.
-2. **Promote (nightly):** `daily-correction-distill` appends each recorded correction to the scope-correct `context/learnings.md` - deterministic, never copies a client lesson into root.
-3. **Resurface:** the nightly memsearch index covers `context/learnings.md`, and skills read their own learnings section before running.
-4. **Detect and report (weekly):** `correction-capture-health` reports recorded-vs-promoted counts, gaps, and silent windows to `projects/ops-cron/`; it verifies recording-to-promotion, not capture completeness.
-
-Backend detail: `docs/memory-and-cron.md` "Correction Capture Backend". Entry format (under `# General` -> `## What doesn't work well`, or the skill's section): `- {YYYY-MM-DD}: Correction. Lesson: {what to do differently}.` Promoting a lesson into `CLAUDE.local.md` `## Rules` stays a human decision, never an automated write to a user-owned file.
+Confirmed corrections go silently under `### Corrections` in today's scope-correct session block; never log opinions or guesses. Nightly `daily-correction-distill` promotes them to the matching `context/learnings.md`; weekly health checks coverage. Human-owned `CLAUDE.local.md` changes require the user. Backend: `docs/memory-and-cron.md`.
 
 ### System Evolution Record
 
-The durable record of why AI-OS changed is `docs/meta/evolution-log.md` (what changed, why, the regression to avoid); `CHANGELOG.md` stays the release-facing list. When a session lands a real change to the system itself (agent contract, hooks, scripts, skills, memory design, cron, core config), add one dated entry - meaningful shifts, not every commit; `meta-wrap-up` Step 3i promotes genuine system changes at session end. Helper: `bash scripts/log-evolution.sh "Short Title" "What changed and why." "What regression to avoid."`
+Record meaningful system behavior/design changes in `docs/meta/evolution-log.md` with `scripts/log-evolution.sh`; `CHANGELOG.md` stays release-facing. Log the change, reason, and regression to avoid, not every commit.
 
 ### Template Propagation
 
-Documented systemic changes flow out to the template (`camrontaylor/AI-OS-Template`, the `upstream` remote) automatically - the reverse of `scripts/update.sh`. `scripts/template-sync.sh` owns it, with every safety property enforced in the script: allowlist-scoped to `ai_os_owned` minus `user_owned` (client data can never move); sanitizer-gated (a file carrying a client name or the maintainer's home path is held back and reported, never silently rewritten); branch-not-main (rolling `template-sync/main` branch, one open PR); disarmed by default (`--arm` required; only the maintainer's install is armed). Enforcement: SessionEnd hook `template-sync-notify.js` (`--auto`) and `meta-wrap-up` Step 3i. Never strip client names in flight, push straight to template `main`, widen the allowlist, or arm downstream installs by default. Full mechanics: `docs/template-release.md`.
+`scripts/template-sync.sh` owns public-template propagation: allowlist and sanitizer gated, rolling PR branch only, disarmed downstream. Never strip client names to bypass a hold, widen the allowlist casually, push template `main`, or copy memory/client data/secrets. Merge and Notion writes require the external approval gate. Contract: `docs/template-release.md`.
 
 ### Built-in Operations
 
-Core system functions handled by scripts; check before searching skills.
+Check scripts before skills. Exports go under `.backup/exports/`, scratch under `.tmp/`, and worktrees under `.worktrees/`; never scatter recovery copies outside the repo.
 
-**Workspace Artifact Containment:** never scatter generated folders or safety files on the Desktop, the parent `AI/` folder, or siblings of the repo. Backups, exports, and recovery bundles go under `.backup/exports/` (unless the user names a destination); scratch under `.tmp/`; worktrees under `.worktrees/`. Never create folders like `AI-OS copy`, `*-clean-history-*`, `*-stash-patches-*`, or `*-safety-*` in visible locations unless explicitly asked; if a handoff needs a visible export, explain the location and ask first.
-
-Operation-to-command map (all `bash scripts/...` unless noted): add a client -> **Add Client Flow** below; add/remove/list skills -> `add-skill.sh` / `remove-skill.sh` / `list-skills.sh`; bring in an outside skill -> `meta-skill-intake` skill; repair/check skill links -> `link-skills.sh` [`--check`]; log a system change -> `log-evolution.sh`; template sync -> `template-sync.sh` [`--dry-run`/`--arm`/`--disarm`/`--status`]; updates -> `update.sh` [`--dry-run`/`--rollback`]; extract clean history -> `extract-clean-history.sh`; skill tiers -> `python3 scripts/skill-tiers.py`; crons -> `start-crons.sh`/`stop-crons.sh`/`status-crons.sh`/`logs-crons.sh`; memory -> `setup-memory.sh`, `backup-memory.sh` [`list`/`restore`, confirming which snapshot first]; worktrees -> `worktree-new.sh <name>` (see **Worktree Workspace**), `worktree-list.sh`, `worktree-done.sh <name>`; team sharing -> **Team Sharing Flow** below; optional capabilities -> **Optional Capabilities Flow** below. Full trigger-phrase map: `docs/commands-and-folder-map.md`.
+Core commands: `add-client.sh`; skill add/remove/list/link scripts; `template-sync.sh`; `update.sh`; cron start/stop/status/log scripts; memory setup/backup; worktree new/list/done. Full map: `docs/commands-and-folder-map.md`.
 
 ### Team Sharing Flow
 
-Sharing AI-OS with a team uses a two-repo model: the user's private working repo stays private, and the team gets a separate clean repo built from tracked system files minus personal data. The boundary lives in one place, `TEAM_STRIP` in `scripts/lib/team.sh`, which strips `clients/`, `projects/`, `context/USER.md`, `context/operator/`, `CLAUDE.local.md`, `.claude/launch.json`, personal `.plist` files, `skills-library/` (it carries proprietary and unverified-licence vendored packs), and local capability markers. `context/SOUL.md` ships by default so the team shares one house voice.
-
-1. Ask for the private team repo URL if it was not given. Without one, the script produces an unstamped starter.
-2. First setup: `bash scripts/make-team-copy.sh [destination] [team-repo-url]`. Fresh git history, leak check, refuses a dirty tree unless `--allow-dirty`.
-3. Later updates: `bash scripts/team-status.sh` first, then `bash scripts/team-publish.sh <team-repo-url>` (URL optional when a `team` remote exists). Never push the working repo straight to the team repo.
-4. Teammates run `bash scripts/team-join.sh <team-repo-url>` in their clone so `update.sh` follows the team upstream.
-5. Publishing to a team repo is an external action - use the approval gate.
-
-Full guide: [docs/team-sharing.md](docs/team-sharing.md).
+Keep the private working repo private. Build a stripped team repo with `make-team-copy.sh`, inspect `team-status.sh`, then use approval-gated `team-publish.sh`; teammates use `team-join.sh`. The boundary excludes clients, projects, USER/operator context, local config, personal plists, vendored skills, and capability markers; SOUL ships for house voice. Never push the working repo directly to the team remote. Full guide: `docs/team-sharing.md`.
 
 ### Optional Capabilities Flow
 
-Optional capabilities are dormant architecture packs under `.aios/optional/`. They let AI-OS carry team, shared-client, and ingestion scaffolds without loading them, installing dependencies, changing routing, or creating live folders. A pack ships only if it is inert by default.
-
-1. Do NOT read pack `CAPABILITY.md` files during normal task routing. Only when the user asks about optional capabilities or enables one.
-2. List: `bash scripts/optional-list.sh`. Inspect: `bash scripts/optional-status.sh [capability]`.
-3. Enable: `bash scripts/optional-enable.sh <capability>` - copies that pack's starter templates and writes `.aios/enabled/<capability>.json`.
-4. Disable: `bash scripts/optional-disable.sh <capability>` - removes the local marker only, and preserves created work.
-5. Enabled markers are local and gitignored; pack definitions in `.aios/optional/` are versioned and ship with the template.
-6. Every pack declares purpose, created paths, writes, services, permission model, and rollback in its `manifest.json`.
-
-Current packs: `team-system` (safe system-only sharing), `team-knowledge` (curated shared docs in `team_context/`, separate from personal memory), `shared-clients` (scaffold for explicit shared client collaboration, separate from private `clients/`), `context-farmers` (scaffold for connector-backed ingestion that writes to an inbox first).
-
-Full guide: [docs/optional-capabilities.md](docs/optional-capabilities.md).
+Optional packs stay inert under `.aios/optional/` and are never read during normal routing. Inspect with `optional-list.sh`/`optional-status.sh`; enable with `optional-enable.sh`; disable through `optional-disable.sh`, which preserves created work. Local markers are gitignored. Every manifest declares paths, writes, services, permissions, and rollback. Guide: `docs/optional-capabilities.md`.
 
 ### Add Client Flow
 
-Ask for the client name if not provided; run `bash scripts/add-client.sh "{name}"`; explain the client-workspace structure (see Multi-Client Architecture); show how to switch with the full absolute path (`cd {absolute path}/clients/{slug} && claude`); link `docs/multi-client-guide.md`.
+Run `scripts/add-client.sh "{name}"`, explain the workspace, and show the absolute `cd .../clients/{slug} && claude` path. Guide: `docs/multi-client-guide.md`.
 
 ### Branching Policy
 
-Written from how this repo actually works: no long-lived `dev` branch, branch protection is not available on this GitHub plan, and history shows near-zero PR usage, so the policy does not pretend a PR gate exists. Content and config commit straight to local `main` (`projects/`, `brand_context/`, `context/`, `cron/jobs/`, `clients/*/`, skills, `AGENTS.md`, `CLAUDE.md`, `.env.example`, `scripts/*.sh`). Genuinely risky code work (load-bearing changes to `command-centre/src/**`, `.claude/hooks/*.js`, or other runtime code) uses an isolated worktree: `bash scripts/worktree-new.sh <name>` creates one under `.worktrees/` on a `work/<name>` branch - verify there, merge back deliberately. The session-end autosave is the safety net: `scripts/base-autosave.sh` commits leftover work locally AND pushes an `autosave/<branch>` backup ref to GitHub every session, no approval needed; it never pushes the default branch itself, and the backup ref mirrors each branch's history so any past version stays restorable (opt out: `AIOS_AUTOSAVE_NO_PUSH=1` or a `.command-centre/no-autopush` marker). `main` reaches GitHub via normal pushes - external actions under the Approval Gates below. The template flows through template-sync's PR only (see Template Propagation).
+Content/config may commit to local `main`. Load-bearing runtime work in `command-centre/src/**`, hooks, or equivalent uses `worktree-new.sh`, is verified there, then merged deliberately. Session-end autosave commits leftovers locally and pushes only `autosave/<branch>`; normal branch pushes remain external actions. Template changes use template-sync PRs.
 
 ### Worktree Workspace
 
-Start sessions on the primary checkout's `main`; worktrees are an explicit isolation tool, never left hidden after routine work. In a worktree, the gitignored brain (memory, learnings, `.env`, `.command-centre/`, `.memsearch/`, per-client memory) is symlinked back to the primary by the SessionStart hook `worktree-data-link.js`, so isolated code work uses one memory layer. The primary (`~/AI-OS`) stays clean automatically via one owner, the SessionEnd hook `base-autosave.js` calling `scripts/base-autosave.sh` (primary only, never worktrees or the brain, skipping files over 5 MB) - this is what stops the Claude Desktop stash prompt. Cursor cannot run hooks, so a Cursor-only session may leave the primary dirty until the next Claude session; the coexistence net (`~/.claude/coexistence`, `epitaxy-stash-guard.js`) backstops a stray stash. Use normal git judgment before committing or pushing from a side branch or worktree. Full guide: [docs/worktree-workspace.md](docs/worktree-workspace.md).
+Use the primary checkout for routine work and worktrees for explicit risky isolation. Worktrees link gitignored brain data to the primary. SessionEnd autosave owns the primary; Cursor-only residue is handled by the next hooked session. Close finished worktrees. Guide: `docs/worktree-workspace.md`.
 
 ### Before And After Major Deliverables
 
-Before: load only the files named by the skill's `## Context Needs` plus its learnings section; if brand context is missing, offer to build it - never block work on incomplete context. After: ask "How did this land? Any adjustments?"; log feedback to `context/learnings.md` under the skill's section; mention spotted gaps once, with opportunity framing.
+Before: load the skill's Context Needs and learnings only; missing brand context is an offer, not a block. After: ask once how it landed and record useful feedback under the skill.
 
 ### State Proof For External Actions
 
@@ -271,23 +226,9 @@ Generic consent ("yes", "go ahead", "do them all") approves local edits, tests, 
 
 ### Next Actions Footer
 
-Default to no footer. Most replies need none - do not append one reflexively; a footer on a reply that did not need one is the single most frequent sanctioned bloat (verified in `.claude/hooks_info/bloat-misses.log`). Add a **Next Actions** block only when there is a genuine, non-obvious next move the user would want and does not already know. When you do, it is the last thing in the reply, after the work, answer-first (see Response Discipline), and never a placeholder or a "nothing pending" line. If the reply already ends with a clarifying question or an obvious single step, that is the next action - do not append a `Next:` line restating it.
+Default to no footer. Add one only for a genuine, non-obvious move: one `Next:` line for a small turn, or up to three ranked, executable bullets for substantive work. Do not repeat a question or obvious next step. A Considerations block appears only when a real risk, assumption, source weakness, unavailable tool, or uncertainty changes what the user should do.
 
-**Considerations (optional; directly above Next Actions):** when something genuinely affects what the user would do or check (a risk, assumed context, an unavailable tool, a thin source, low confidence, a possible guess), surface it in a `**Considerations**` block of 2 to 6 value-dense lines; omit when nothing real needs flagging; carve-out replies take none.
-
-**When a footer is genuinely warranted, scale it:** a trivial turn that truly has a next step gets one line (`Next: {action} - {why}`); a substantive turn gets a `**Next Actions**` heading with one to three ranked bullets, cap three. A footer on a turn that did not need one is the defect this rule guards against.
-
-Per-line format: `- {action} - {one-line reasoning}`. Plain hyphen, never a dash. Each action names the skill, file, command, or decision.
-
-**Carve-outs (no footer):** clarifying questions (the question is the next action); safety refusals (at most one neutral line to a legitimate alternative); the meta-wrap-up Session Summary (at most an honest closeout line).
-
-**Ranked recommendation, not a menu:** order bullets by what you would actually do next; when only one move is right, emit one bullet.
-
-**Actionable by reference (greenlightable):** the footer is a plan approvable in one word and executable by a cold agent - each item a concrete step you will take, self-contained (exact files, commands, branch, done-state; no conversational shorthand), with options and your default inline when a pick is genuinely needed so "yes" maps to one action; on approval, execute in order, restating any item no longer self-resolvable.
-
-**Wrap-up gate.** As open items run out, the footer narrows toward recommending `meta-wrap-up` - recommend only, NEVER auto-run; allowed in any session type once work is complete (only its automatic trigger stays suppressed for content-writing, positioning, and research sessions); never mandatory - real work outranks it. Recommending it requires a silent open-loop audit of your work and the full conversation to come back clean, with the one-line reason asserting the clean state ("no blocking loops remain") so a skipped audit is a falsifiable claim. **Open-loop taxonomy (canonical; meta-wrap-up Step 0 references it). Clean = no blocking loops:** promised-but-undelivered; unanswered user question; failing or unverified state; unsaved or unplaced output (never written to disk, or absolute path never shown); open decision the user owns. Non-blocking residue (speculative ideas; disclosed assumptions accepted by silence) does not stall convergence - log it under `### Open threads` at wrap-up. If any blocking loop exists, the footer names those loops (capped at three) and does not mention wrap-up.
-
-**Reconciliation:** post-deliverable prompts do not stack - the footer's wrap-up line subsumes the standalone checkpoint question, and the "How did this land?" ask stays at most one body line; first reply of a session runs title fence, then work, then footer; pure greetings get a single `Next:` line at most, or none; the footer audit and meta-wrap-up Step 0 are one check at two enforcement points, Step 0 authoritative. **Scope:** binds interactive replies composed by the main session; spawned subagents do not load AGENTS.md, so the composing agent owns the footer; in non-interactive runs, suppress it or write it to the run log only; backstop if adherence proves unreliable is a presence-only `Stop`-hook check.
+Recommend `meta-wrap-up` only after a silent audit finds no promised work, unanswered question, failing or unverified state, unsaved output, or user-owned decision. If blocking loops remain, name at most three and keep working. Non-interactive jobs suppress the footer or write it to the run log.
 
 ---
 
@@ -297,47 +238,40 @@ Layered memory; caps on session-start files keep the prefix cache stable.
 
 ### File Roles
 
-| File | Purpose | Cap | Loaded when |
-|------|---------|-----|-------------|
-| `context/SOUL.md` | Agent identity | ~3 KB | Session start (silent) |
-| `context/USER.md` | User profile and preferences | ~1.5 KB | Session start (silent) |
-| `context/MEMORY.md` | Curated scratchpad: facts, threads, environment notes, pending decisions | **2,500 chars** | Session start (silent) |
-| `context/memory/{YYYY-MM-DD}.md` | Daily session log, per-session blocks (first prompt creates; Stop finalizer fills; wrap-up polishes) | unbounded | Session start (today's only) |
-| `daily/{YYYY-MM-DD}.md` | Human journal plus auto session index plus the day's Notion saves; the Obsidian collaboration surface | unbounded | On demand, in-session, daily cron |
-| `clients/{slug}/context/current-state.md` | Generated client brief | generated | Client session start, on demand, daily cron |
-| `context/learnings.md` | Skill-specific learnings | unbounded | Per-skill (lazy) |
-| `context/decisions.md` | Directional decisions with a reopen gate and reopen count | unbounded | Surfaced via `current-state.md` at client session start |
+| File | Role | Startup |
+|---|---|---|
+| `context/SOUL.md` | Agent identity, about 3 KB | Always |
+| `context/USER.md` | User profile, about 1.5 KB | Always |
+| `context/MEMORY.md` | Curated facts, active threads, environment, pending decisions; 2,500 chars | Always |
+| `context/memory/YYYY-MM-DD.md` | Append-only session blocks | Today's |
+| `daily/YYYY-MM-DD.md` | Human journal plus generated session/Notion index | On demand |
+| `clients/*/context/current-state.md` | Generated client brief | Client startup |
+| `context/learnings.md` | Skill learnings | Per skill |
+| `context/decisions.md` | Directional calls and reopen gates | Via current-state |
 
 ### Memory Budget And Write
 
-`context/MEMORY.md` is capped at **2,500 characters**: before any write, read it in full and check `wc -c`; if the new content would exceed the cap, consolidate first (merge similar lines, remove stale, tighten), then add; if still over, ask which entry to drop. Mid-session writes persist but take effect next session (intentional - preserves the prefix cache); always say so in confirmations (`Saved - will be active from next session.`).
+Every root/client `MEMORY.md` is capped at 2,500 characters. Before writing, read it and check size; consolidate duplicates/stale wording first. If distinct live work still cannot fit, ask what to drop. Mid-session changes activate next session and confirmations say so.
 
-Write triggers ("remember this", "note that", "save this to memory", "update memory", "log this", "forget about", "remove from memory") route to the `meta-memory-write` skill, which owns the full flow (target resolution via `scripts/lib/memory-target-resolver.js`, add/replace/remove actions with dedup, the fixed sections `## Active Threads` / `## Environment Notes` / `## Pending Decisions` - never new ones). Invariants: a client workspace writes to that client's `MEMORY.md`; a root prompt clearly naming exactly one client writes to that client; all-client, AI-OS, template, shared-methodology, MemSearch, sync, and migration facts write to root; multiple named clients without a shared frame need one confirmation question; never copy client facts up into root memory unless explicitly asked; never store secret values - env var names only (e.g., `FIRECRAWL_API_KEY in .env`).
+Memory write/forget triggers use `meta-memory-write` and `memory-target-resolver.js`. Use only Active Threads, Environment Notes, and Pending Decisions. Client work stays client-local; shared/system facts stay root; multi-client ambiguity gets one question. Never store secret values.
 
 ### Memory Retrieval
 
-When the user asks about past context, decisions, or facts:
+For past context, use startup memory/today's log first, then `memory-recall`: `bash scripts/memsearch-search.sh "query" 10`. On semantic failure use `memory-search.sh` fallback and say so; a Milvus lock means indexing is active, never start another. Scope with `root|client|clients|all|workspace`; workspace means the current client plus root, never sibling clients. Use wrappers, not raw memsearch commands.
 
-1. **Tier 0** - `context/MEMORY.md` and today's daily log: already in context, zero cost.
-2. **Tier 1** - semantic search via the `memory-recall` skill: `bash scripts/memsearch-search.sh "query" 10` (Tier 1.5 markdown fallback: `bash scripts/memory-search.sh "query" 10 --scope ...`, no Milvus, no port). Root defaults to root memory; a client folder defaults to `workspace` scope (that client PLUS the root layer, never other clients; changed 2026-07-28); force with `--scope root|client|clients|all|workspace` and `--client {slug}`. Hard rules: never use the memsearch plugin's shadow collection (the authoritative index is resolved by `scripts/lib/memsearch-collection.sh`); on `markdown_fallback`, answer from those results and say semantic search was unavailable - never say memory is empty; on a Milvus lock error an index job is active - do not start another, use the fallback and retry; wrappers over raw `memsearch` commands (diagnostics only). Coverage, reranker/fusion, and Milvus Lite mechanics: the `memory-recall` `SKILL.md`. Client facts stay in client folders; search returns source paths.
-3. **Cite sources** every time. Found: answer + inline cite + temporal context, flagging sources >14 days old as possibly outdated. Partial: what you know, what you don't, where you looked, the temporal gap. Absent: name what you checked and say the topic may predate capture or an unlogged session. For partial or absent, run `bash scripts/lib/memory-meta.sh "[topic]"` first. Tiers 2-3 (expanded chunks, transcript deep-search) are deferred. Never fabricate sources.
+Cite source paths and dates. Mark sources older than 14 days as possibly stale. For partial/absent results, run `memory-meta.sh`, state what was checked and the gap, and never invent a source. Full retrieval/reranking mechanics: `memory-recall/SKILL.md`.
 
 ### Daily Notes (Obsidian collaboration surface)
 
-`daily/{YYYY-MM-DD}.md` is a per-day note that doubles as the user's journal and a memory layer. It is the human-facing companion to the machine `context/memory/` log, meant to be opened and edited in Obsidian (the AI-OS root is an Obsidian vault). It has two parts: a `## Journal` section the user owns (never auto-touched), and an auto block between `<!-- aios:auto:start -->` and `<!-- aios:auto:end -->` markers that AI-OS regenerates. Daily notes are a routine memory-recall source (`daily/` is in the semantic index and the markdown fallback), so journaling and the day's captures are searchable through `memory-recall`; only note titles and links enter recall, never raw note bodies (those stay deep-search-only in `context/notion/`).
+`daily/YYYY-MM-DD.md` is the Obsidian-facing journal plus a generated block between `aios:auto` markers. The user-owned Journal is never auto-edited. `daily-note.sh` builds session links and Notion save links from existing AI-OS data; `--catch-up` finalizes yesterday and refreshes today. Past finalized days stay frozen.
 
-- **Builder, not a hook fork.** `bash scripts/daily-note.sh [YYYY-MM-DD]` composes the auto block from data AI-OS already keeps: the day's `## Session N` blocks in `context/memory/` (each linked back with `[[context/memory/<date>#Session N|...]]`) and the day's Notion saves in `context/notion/items/{resources,stack}` (title, one-line description, link). It edits only the region between the markers; a finalized past day is frozen so the note is a permanent record. `--catch-up` finalizes yesterday and refreshes today (used by the `daily-note-refresh` cron).
-- **Backlink liberally, clients first.** Sessions and journal entries link real client hubs such as `[[acme]]` or `[[northwind]]`, including aliases when configured. Client hubs at `clients/{slug}/{slug}.md` (with `aliases:`) are the resolve targets, so every day and session that names a client shows in that client's backlinks. Client slugs and aliases are discovered dynamically, never hardcoded.
-- **In-session behavior.** During real work, when the user journals or says "add this to today's note", write it into `daily/{today}.md` above the `aios:auto` markers, and refresh the auto block with `bash scripts/daily-note.sh` after session work lands. This is silent auto-tracking, like the daily log.
-- **The Notes database** (the third Notion source) is excluded from sync by default in `scripts/notion-sync/notion_sync.py` for a credential-safety reason; it only appears in daily notes once that sync is deliberately re-enabled.
+Journal or “today's note” requests write above the markers, add client backlinks, then refresh the block. Daily notes are routine recall sources. Raw Notion note bodies remain excluded; the Notes database stays out unless its credential-sensitive sync is deliberately enabled. Full contract: `docs/memory-and-cron.md`.
 
 ### Decision Ledger
 
-Directional decisions (positioning, offer, pricing, naming, ICP, strategy) are the calls that cost the most when they are silently re-made. The Correction Capture loop above captures confirmed *wrong facts*; the ledger captures *directional calls and the bar to reopen them*, so a settled decision stays settled until its gate is met instead of being rewritten every time a new session rebuilds the picture from scratch.
+Root/client `context/decisions.md` stores directional calls with Status, Decided, Call, Reopen gate, Gate met, Reopened count, optional Confirmed, Note, and Source. Live facts remain in facts-of-record and outrank the ledger.
 
-`context/decisions.md` (root and per client, append-only) holds one entry per decision: the `Call`, the date, a `Reopen gate` (what must be true to reopen - a buyer signal, a test result, explicit user direction), `Gate met` (yes/no), a `Reopened` counter, and an optional `Confirmed` date (the last time the call was re-verified as still current, separate from when it was `Decided`; a re-ground pass sets it, and its absence means the call has never been re-confirmed since it was written). When a decision is remade, bump the counter and append the new call rather than overwriting, so the churn is visible in the file itself.
-
-The rule: **before reopening a ledgered decision whose gate is unmet, surface the entry (the call, the gate, the reopen count) and treat reopening as the user's decision, not a silent redo.** An authorized reopen (the user directs it, or the gate is met) is normal and fine; silent re-deciding of a settled call is the failure this prevents. `client-memory-maintenance.sh --mode brief` surfaces open, gated, and churned entries at the top of `current-state.md` (loaded at client session start); `meta-wrap-up` writes and updates entries at session close. Format and backend: `docs/memory-and-cron.md` "Decision Ledger Backend".
+Before reopening an unmet-gate decision, surface its call, gate, and count; only the user or a met gate authorizes change. Append revised calls and increment count rather than erasing churn. `client-memory-maintenance.sh --mode brief` surfaces guarded entries; `meta-wrap-up` maintains them. Backend: `docs/memory-and-cron.md`.
 
 ---
 

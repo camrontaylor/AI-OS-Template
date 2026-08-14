@@ -20,7 +20,7 @@ Studied across Perplexity.ai, this research ranked 9 optimization methods by the
 | **Fluency optimization** | +15-30% | Improve readability and flow |
 | ~~Keyword stuffing~~ | **-10%** | **Actively hurts AI visibility** |
 
-**Best combination:** Fluency + Statistics = maximum boost. Low-ranking sites benefit even more - up to 115% visibility increase with citations.
+**Best combination:** Fluency + Statistics = maximum boost. Low-ranking sites benefit even more — up to 115% visibility increase with citations.
 
 ---
 
@@ -56,7 +56,7 @@ Studied across Perplexity.ai, this research ranked 9 optimization methods by the
 
 ## Third-Party Presence
 
-AI systems don't just cite your website - they cite where you appear. Brands are 6.5x more likely to be cited via third-party sources than their own domains.
+AI systems don't just cite your website — they cite where you appear. Brands are 6.5x more likely to be cited via third-party sources than their own domains.
 
 **Key third-party sources:**
 - Wikipedia mentions (7.8% of all ChatGPT citations)

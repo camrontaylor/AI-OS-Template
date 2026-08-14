@@ -1,8 +1,8 @@
 # Color Palette & Brand Style
 
-**This is the single source of truth for all colors and brand-specific styles.** To customize diagrams for your own brand, edit this file - everything else in the skill is universal.
+**This is the single source of truth for all colors and brand-specific styles.** To customize diagrams for your own brand, edit this file — everything else in the skill is universal.
 
-Style: Warm PaperBanana editorial - hand-drawn feel, warm cream background, playful but professional.
+Style: Warm PaperBanana editorial — hand-drawn feel, warm cream background, playful but professional.
 
 ---
 
@@ -90,5 +90,5 @@ Used for code snippets, data examples, and other concrete evidence inside techni
 
 - `roughness: 1` on all shapes for hand-drawn quality
 - `strokeWidth: 2` for bold charcoal outlines
-- `fontFamily: 3` (monospace) for labels - feels like handwritten notes
-- Organic, slightly imperfect feel - this is editorial illustration, not engineering blueprint
+- `fontFamily: 3` (monospace) for labels — feels like handwritten notes
+- Organic, slightly imperfect feel — this is editorial illustration, not engineering blueprint

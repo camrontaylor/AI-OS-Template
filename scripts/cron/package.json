@@ -6,6 +6,9 @@
   "engines": {
     "node": "24.x"
   },
+  "scripts": {
+    "preinstall": "node ../lib/assert-node-version.cjs"
+  },
   "dependencies": {
     "better-sqlite3": "^12.8.0"
   }

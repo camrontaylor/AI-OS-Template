@@ -16,3 +16,13 @@ export interface ApprovalRequest {
   createdAt: string;
   resolvedAt: string | null;
 }
+
+export interface ApprovalRequestWithTask extends ApprovalRequest {
+  taskTitle: string | null;
+  taskStatus: string | null;
+  taskClientId: string | null;
+  taskProjectSlug: string | null;
+  taskNeedsInput: boolean;
+  taskPermissionMode: string | null;
+  taskExecutionPermissionMode: string | null;
+}

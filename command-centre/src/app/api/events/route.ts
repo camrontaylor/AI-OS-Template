@@ -4,10 +4,10 @@ import { startCronTaskSync } from "@/lib/cron-task-sync";
 
 export const dynamic = "force-dynamic";
 
-// Start the cron-task sync poller when the first SSE client connects
-startCronTaskSync();
-
 export async function GET() {
+  // Start the cron-task sync poller when the first SSE client connects.
+  startCronTaskSync();
+
   const encoder = new TextEncoder();
 
   const stream = new ReadableStream({

@@ -1,26 +1,29 @@
 # What AI-OS Is
 
-AI-OS is a local workspace that makes different coding agents behave like the
-same business assistant.
+AI-OS is a local workspace that gives AI agent tools the same operating layer:
+rules, memory, skills, projects, and client context.
 
-It is not one app. It is not a chatbot. It is not a cloud platform.
+You can use it with Claude Code, Codex, Cursor, Hermes, or another compatible
+agent harness. The harness is the worker. AI-OS is the workspace and memory
+around the worker.
 
-It is a folder of rules, memory, skills, docs, scripts, projects, and client
-workspaces arranged so agents can work with context instead of starting from
-zero every time.
+It is not one app. It is not a chatbot. It is not a cloud platform. It is a
+folder designed so agent sessions do not start from zero every time.
 
 ## The Short Version
 
 AI-OS gives an agent four things:
 
-1. **Rules** - how to behave, what to protect, and how to decide.
-2. **Memory** - what matters from past work.
-3. **Skills** - repeatable ways to do real tasks.
-4. **Workspace structure** - where projects, clients, docs, and outputs live.
+| Part | What it does |
+|---|---|
+| Rules | Tells the agent how to behave, what to protect, and when to ask for approval. |
+| Memory | Carries useful context from past sessions into future work. |
+| Skills | Gives the agent repeatable methods for common work. |
+| Workspace structure | Shows where projects, clients, docs, outputs, and jobs belong. |
 
 ```mermaid
 flowchart TD
-  A["Claude Code, Cursor, or another agent"] --> B["AI-OS"]
+  A["Claude, Codex, Cursor, Hermes, or another harness"] --> B["AI-OS"]
   B --> C["Rules"]
   B --> D["Memory"]
   B --> E["Skills"]
@@ -33,31 +36,27 @@ flowchart TD
   G --> H
 ```
 
-The agent is the worker. AI-OS is the operating layer around the worker.
-
 ## The Plain-English Mental Model
 
-Think of AI-OS like a well-organized office for an AI agent.
+Think of AI-OS like a well-organized office for your AI assistant.
 
 | Office part | AI-OS version |
 |---|---|
 | Desk rules | `AGENTS.md` |
-| Personal notes | `context/` |
+| Notes about you | `context/USER.md` and `context/MEMORY.md` |
 | Brand files | `brand_context/` |
 | Playbooks | `.claude/skills/` |
 | Client folders | `clients/` |
 | Project folders | `projects/` |
-| Scheduled reminders | `cron/jobs/` |
+| Scheduled work | `cron/jobs/` |
 | Local dashboard | Command Centre |
 
-The value is not that any one file is special. The value is that the same
-structure is always there, so the agent knows where to look and where to save
-work.
+The value is the arrangement. The same structure is always there, so the agent
+knows where to look, how to work, and where to save the result.
 
 ## What AI-OS Is For
 
-AI-OS is built for people who want an AI assistant that can help with real
-business work over time.
+AI-OS is built for real business work that benefits from context over time.
 
 It fits work like:
 
@@ -70,28 +69,28 @@ It fits work like:
 - automations,
 - internal tools,
 - creative systems,
-- and repeatable workflows.
+- repeatable workflows.
 
-It is strongest when the work benefits from memory, taste, process, or context.
+It is strongest when the agent needs memory, taste, process, or client context.
 
 ## What AI-OS Is Not
 
 AI-OS is not:
 
-- a replacement for Claude, Cursor, or other agents,
+- a replacement for Claude, Codex, Cursor, Hermes, or other agent tools,
 - a hosted SaaS product,
 - a database-first knowledge base,
-- a project management app,
 - a CRM,
+- a project management app,
 - a Notion template only,
-- or a guarantee that every agent will be perfect.
+- a guarantee that every answer will be correct.
 
-Those tools can connect to it or sit beside it. AI-OS is the local operating
-system that keeps the work coherent.
+Those tools can connect to AI-OS or sit beside it. AI-OS keeps the work
+coherent.
 
 ## Why It Exists
 
-Most AI tools have the same problem: every session starts too cold.
+Most agent tools have the same problem: every session starts too cold.
 
 The agent may be smart, but it does not automatically know:
 
@@ -99,19 +98,19 @@ The agent may be smart, but it does not automatically know:
 - what you are building,
 - what decisions were already made,
 - what tone you prefer,
-- what skills already exist,
+- which skills already exist,
 - what client context matters,
-- or where output should go.
+- where output should go.
 
-AI-OS fixes that by making the context explicit and local.
+AI-OS makes that context explicit and local.
 
 ```mermaid
 flowchart LR
-  A["Cold agent"] --> B["Reads AI-OS"]
+  A["Cold agent session"] --> B["Reads AI-OS"]
   B --> C["Knows the rules"]
-  B --> D["Finds the right memory"]
-  B --> E["Uses the right skill"]
-  B --> F["Saves output in the right place"]
+  B --> D["Finds memory"]
+  B --> E["Uses skills"]
+  B --> F["Saves output clearly"]
   C --> G["Warmer next session"]
   D --> G
   E --> G
@@ -130,14 +129,17 @@ The main rules live in:
 AGENTS.md
 ```
 
-That file tells agents how AI-OS works, how to route tasks, how memory behaves,
-how client boundaries work, when approval is needed, and what must never happen
-silently.
+That file tells compatible agents how AI-OS works: task routing, memory,
+client boundaries, approval gates, writing standards, and safe defaults.
 
 Tool-specific files point back to it:
 
 - `CLAUDE.md` for Claude Code,
-- `.cursor/` for Cursor.
+- `.cursor/` for Cursor,
+- Codex reads `AGENTS.md` directly.
+
+Other harnesses should follow the same contract when they can read project
+instructions.
 
 ### Memory
 
@@ -155,8 +157,8 @@ Client memory lives inside each client folder:
 clients/{client}/context/
 ```
 
-The markdown files are the source of truth. Search tools like MemSearch and
-Milvus Lite help find older memory, but they do not replace the files.
+The markdown files are the source of truth. Search helpers can find older notes,
+but they do not replace the files.
 
 ### Skills
 
@@ -166,8 +168,8 @@ Skills live in:
 .claude/skills/
 ```
 
-A skill is a small operating procedure. It tells the agent how to do a specific
-kind of work, what context to load, what to avoid, and what output to produce.
+A skill is a practical method. It tells the agent what context to load, what
+steps to follow, what to avoid, and what the output should look like.
 
 ### Brand Context
 
@@ -178,8 +180,7 @@ brand_context/
 ```
 
 This is where voice, positioning, ideal customer context, offers, samples, and
-messaging live. It helps the agent sound like the business instead of generic
-AI.
+messaging live. It helps the agent sound like the business instead of generic AI.
 
 ### Projects
 
@@ -189,7 +190,7 @@ Project output belongs in:
 projects/
 ```
 
-AI-OS separates small tasks, planned projects, and live ongoing systems so work
+Small tasks, planned projects, and ongoing systems get different homes so work
 does not get lost in the root folder.
 
 ### Clients
@@ -201,39 +202,22 @@ clients/{client}/
 ```
 
 Each client can have its own memory, brand context, projects, and instructions
-while still sharing the root AI-OS methodology.
+while still using the shared AI-OS rules and skills.
 
 ### Command Centre
 
 Command Centre is the optional local dashboard.
 
 It can show projects, tasks, jobs, clients, docs, and local system state. It is
-useful, but it is not the source of truth. AI-OS must still work when Command
-Centre is closed.
+useful, but it is not the source of truth. AI-OS still works when Command Centre
+is closed.
 
 ### Notion Docs
 
-Notion is a template docs surface.
+Notion is the public docs surface for the template.
 
-The local `docs/` folder should remain the source used to update Notion. That
-keeps the template docs practical while preserving the local repo as authority.
-
-## Why AI-OS Is Local-First
-
-Local-first means the important state lives in the folder you control.
-
-That matters because:
-
-- memory can be inspected,
-- docs can be edited,
-- clients can stay separate,
-- search indexes can be rebuilt,
-- backups are possible,
-- and future agents can understand the system from files.
-
-External tools can still help. Langfuse can observe model calls. Pinecone can
-power production retrieval. Notion can present docs. GitHub can publish a
-template. But none of those should be the only copy of critical AI-OS state.
+The local `docs/` folder remains the source. Notion should mirror the practical
+docs, not replace them.
 
 ## The Core Loop
 
@@ -241,7 +225,7 @@ template. But none of those should be the only copy of critical AI-OS state.
 flowchart TD
   A["Start session"] --> B["Agent reads rules and memory"]
   B --> C["User asks for work"]
-  C --> D["Agent routes to skill or general work"]
+  C --> D["Agent uses the right context or skill"]
   D --> E["Output saved in the right place"]
   E --> F["Session notes and learnings saved"]
   F --> G["Next session starts warmer"]
@@ -250,48 +234,8 @@ flowchart TD
 That loop is the product.
 
 If a change makes this loop clearer, safer, or more reliable, it probably
-belongs in AI-OS.
-
-If a change makes this loop hidden, fragile, tool-specific, or dependent on a
-cloud service, it needs a stronger reason.
-
-## When AI-OS Is Enough
-
-AI-OS is enough when you need:
-
-- a personal or small-team AI workspace,
-- local memory,
-- client separation,
-- repeatable skills,
-- docs,
-- scripts,
-- scheduled jobs,
-- and practical continuity between sessions.
-
-This covers most operator, consultant, and internal business workflows.
-
-## When You Need More Than AI-OS
-
-You may need extra infrastructure when you are building production AI software
-for other users.
-
-Examples:
-
-- hosted vector search for many users,
-- app-level permissions,
-- customer-facing retrieval,
-- high availability,
-- trace analytics for model calls,
-- prompt and eval workflows,
-- data pipelines,
-- or enterprise audit requirements.
-
-In that case, AI-OS can still be the builder's workspace, but the production app
-may need tools like Pinecone, Zilliz Cloud, Langfuse, LangChain, LlamaIndex, or
-custom infrastructure.
-
-For that decision, read
-[Memory Search And Observability](memory-search-and-observability.md).
+belongs in AI-OS. If it makes the loop hidden, fragile, tool-specific, or
+dependent on a service you do not control, it needs a stronger reason.
 
 ## Where To Go Next
 
