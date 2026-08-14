@@ -13,6 +13,14 @@ if [ -z "$ROOT" ]; then
   ROOT="$SCRIPT_ROOT"
 fi
 
+if [ -n "${HOME:-}" ] && [ -d "$HOME/.local/bin" ]; then
+  case ":$PATH:" in
+    *":$HOME/.local/bin:"*) ;;
+    *) PATH="$PATH:$HOME/.local/bin" ;;
+  esac
+  export PATH
+fi
+
 usage() {
   echo "Usage: bash scripts/memsearch-search.sh \"query\" [top-k] [--scope root|client|clients|all|workspace] [--client slug]" >&2
 }

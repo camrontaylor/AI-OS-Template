@@ -7,6 +7,7 @@ import crypto from "crypto";
 import { getDb } from "./db";
 import { getConfig, getClientAiOsDir } from "./config";
 import { completeCronRunForTask } from "./cron-service";
+import { recordMarketingBlockerFinding } from "./marketing-findings";
 import { emitTaskEvent, emitChatEvent } from "./event-bus";
 import { ClaudeOutputParser } from "./claude-parser";
 import { fileWatcher } from "./file-watcher";
@@ -2158,21 +2159,53 @@ Keep subtasks high-level — one per major deliverable, not every granular step.
 
     const db = getDb();
     const runningRow = db
-      .prepare("SELECT id FROM cron_runs WHERE taskId = ? AND result = 'running' LIMIT 1")
-      .get(task.id) as { id: number } | undefined;
+      .prepare(
+        "SELECT id, startedAt, trigger, scheduledFor FROM cron_runs WHERE taskId = ? AND result = 'running' LIMIT 1"
+      )
+      .get(task.id) as
+      | { id: number; startedAt: string | null; trigger: string | null; scheduledFor: string | null }
+      | undefined;
 
     if (!runningRow) {
       return;
     }
 
+    const result: "success" | "failure" | "timeout" =
+      overrides.result ?? (task.errorMessage ? "failure" : "success");
+    const exitCode = overrides.exitCode ?? (task.errorMessage ? 1 : 0);
+    const completedAt = new Date().toISOString();
+
     completeCronRunForTask(task, {
       costUsd,
       durationMs,
-      result: overrides.result ?? (task.errorMessage ? "failure" : "success"),
-      exitCode: overrides.exitCode ?? (task.errorMessage ? 1 : 0),
-      completedAt: new Date().toISOString(),
+      result,
+      exitCode,
+      completedAt,
       ...(overrides.completionReason ? { completionReason: overrides.completionReason } : {}),
     });
+
+    if (result !== "success") {
+      try {
+        recordMarketingBlockerFinding(db, {
+          jobSlug: task.cronJobSlug,
+          jobName: task.title,
+          runId: runningRow.id,
+          taskId: task.id,
+          clientId: task.clientId,
+          result,
+          exitCode,
+          completionReason: overrides.completionReason ?? null,
+          errorMessage: task.errorMessage,
+          startedAt: runningRow.startedAt ?? task.startedAt,
+          completedAt,
+          durationSec: Math.round(durationMs / 1000),
+          trigger: runningRow.trigger,
+          scheduledFor: runningRow.scheduledFor,
+        });
+      } catch (error) {
+        console.error("[process-manager] Failed to record marketing blocker finding:", error);
+      }
+    }
   }
 
   private handleSpawnError(taskId: string, err: unknown): void {

@@ -33,9 +33,9 @@ flowchart LR
 | Level | Name | When | Where |
 |-------|------|------|-------|
 | **1** | Single task | One or a few small deliverables | `projects/{category}/` |
-| **2** | Planned project | Multi-deliverable, cross-session — campaigns, launches | `projects/briefs/{project-name}/` |
+| **2** | Planned project | Multi-deliverable, cross-session work like campaigns or launches | `projects/briefs/{project-name}/` |
 | **3** | GSD project | Complex multi-phase with dependencies | `projects/briefs/{project-name}/` + `.planning/` |
-| **Live** | Running system | Deployed or scheduled, maintained over time — websites, automations, content engines | `projects/live/{name}/` |
+| **Live** | Running system | Deployed or scheduled systems maintained over time, such as websites, automations, and content engines | `projects/live/{name}/` |
 
 **"Your working folder"** = the root `AI-OS/` folder for solo/system-wide work, or `clients/client-name/` for client-specific work. All paths are relative to wherever you `cd`'d.
 
@@ -56,7 +56,7 @@ flowchart TD
 
 ## Level 1: Single Task
 
-Just ask Claude. Output goes to `projects/{category}-{type}/`. No brief, no project folder. Use Shift+Tab twice for plan mode if upfront thinking helps.
+Ask the agent directly. Output goes to `projects/{category}-{type}/`. No brief, no project folder. In Claude Code, use Shift+Tab twice for plan mode if upfront thinking helps.
 
 ```
 projects/mkt-copywriting/2026-03-24_blog-post.md
@@ -152,7 +152,7 @@ work grows.
 
 For complex multi-phase work with dependencies and milestones.
 
-GSD uses a `.planning/` folder at the root of each workspace to store its roadmap, requirements, phase plans, and state. For client work, this lives inside the client folder — `clients/client-name/.planning/`. The root `AI-OS/` folder should never have `.planning/`; keeping it clean is what allows multiple clients to run GSD projects in parallel.
+GSD uses a `.planning/` folder at the root of each workspace to store its roadmap, requirements, phase plans, and state. For client work, this lives inside the client folder: `clients/client-name/.planning/`. The root `AI-OS/` folder should never have `.planning/`; keeping it clean is what allows multiple clients to run GSD projects in parallel.
 
 Your project's outputs and brief live in `projects/briefs/{project-name}/` inside the same workspace.
 
@@ -177,10 +177,10 @@ clients/website-client/              <- client workspace
 
 Each client workspace runs its own independent GSD project:
 
-- **`clients/abc/`** → active GSD project at `clients/abc/.planning/`
-- **`clients/xyz/`** → active GSD project at `clients/xyz/.planning/`
+- **`clients/abc/`** has an active GSD project at `clients/abc/.planning/`.
+- **`clients/xyz/`** has an active GSD project at `clients/xyz/.planning/`.
 
-To start a GSD project for a client, select that client in the command-centre and ask Claude to run `/gsd-new-project`. GSD creates `.planning/` in the client workspace root automatically.
+To start a GSD project for a client, select that client in Command Centre and ask the agent to run `/gsd-new-project`. GSD creates `.planning/` in the client workspace root automatically.
 
 ### Archiving a completed GSD project
 
@@ -190,7 +190,7 @@ When you're done with a GSD project, run `/archive-gsd`. This updates the brief'
 
 ## Live Projects
 
-Some work is never "done" — it runs. A website, an automated content system, a recurring data pipeline. These are **live projects**: deployed or scheduled systems you maintain over time, not tasks with an end state.
+Some work is never "done"; it runs. A website, an automated content system, or a recurring data pipeline is a **live project**: a deployed or scheduled system you maintain over time, not a task with an end state.
 
 They live under `projects/live/{name}/` inside the workspace (usually a client):
 
@@ -269,8 +269,8 @@ clients/
 ```
 
 **How to tell them apart:**
-- Category folders live directly under `projects/` using `{category}-{type}` naming (e.g., `mkt-copywriting`) — no `brief.md` inside
-- Project folders live under `projects/briefs/` with descriptive names (e.g., `kanban-dashboard`) — always have a `brief.md` inside
+- Category folders live directly under `projects/` using `{category}-{type}` naming (e.g., `mkt-copywriting`). No `brief.md` inside.
+- Project folders live under `projects/briefs/` with descriptive names (e.g., `kanban-dashboard`). Always have a `brief.md` inside.
 - When listing projects, most recent first (by `created` date in frontmatter)
 
 The heartbeat scans for `brief.md` files inside `projects/briefs/*/` to find active projects.
@@ -279,7 +279,7 @@ The heartbeat scans for `brief.md` files inside `projects/briefs/*/` to find act
 
 ## Session Memory and Projects
 
-When you're working on a Level 2 or 3 project, each session's memory block (`context/memory/YYYY-MM-DD.md`) includes a `### Project` field that links back to the project name. This means when Claude starts your next session and reads yesterday's memory, it automatically loads the project's `brief.md` for full context — you don't need to re-explain what you're working on.
+When you're working on a Level 2 or 3 project, each session's memory block (`context/memory/YYYY-MM-DD.md`) includes a `### Project` field that links back to the project name. This means the next compatible agent session can find the project's `brief.md` for context. You do not need to re-explain what you're working on.
 
 For single tasks (Level 1), the project field is omitted and sessions work as before.
 
@@ -309,4 +309,4 @@ claude
 
 The paths are always relative to your working directory. If you're in the wrong folder, outputs go to the wrong place. The heartbeat confirms which workspace you're in.
 
-All three levels coexist. You might use Level 1 for daily requests, Level 2 for a campaign, and Level 3 for a website rebuild — all within the same workspace.
+All three levels coexist. You might use Level 1 for daily requests, Level 2 for a campaign, and Level 3 for a website rebuild inside the same workspace.

@@ -1,6 +1,6 @@
 # Evidence Artifacts and Depth Layers
 
-How to build comprehensive, educational diagrams that teach - not just label.
+How to build comprehensive, educational diagrams that teach — not just label.
 
 ---
 
@@ -48,13 +48,13 @@ The principle: **show what things look like**, not just what they're called. A b
 
 ## Multi-Zoom Architecture
 
-Comprehensive diagrams work at multiple levels simultaneously - like a map that shows both country borders and street names.
+Comprehensive diagrams work at multiple levels simultaneously — like a map that shows both country borders and street names.
 
 ### Level 1: Summary Flow
 
 A simplified overview showing the full pipeline or process at a glance. Often placed at the top or as a visual spine through the diagram.
 
-Think: `Input -> Processing -> Output` or `Client -> Server -> Database` - the 10-second understanding.
+Think: `Input -> Processing -> Output` or `Client -> Server -> Database` — the 10-second understanding.
 
 ### Level 2: Section Boundaries
 
@@ -64,13 +64,13 @@ Group by responsibility (Backend / Frontend), by phase (Setup / Execution / Clea
 
 ### Level 3: Detail Inside Sections
 
-Evidence artifacts, code snippets, and concrete examples within each section. This is where the educational value lives. Inside a "Backend" section, show the actual API response format - not just a box labelled "API Response".
+Evidence artifacts, code snippets, and concrete examples within each section. This is where the educational value lives. Inside a "Backend" section, show the actual API response format — not just a box labelled "API Response".
 
 **For comprehensive diagrams, aim to include all three levels.** The summary gives context, the sections organise, and the details teach.
 
 ---
 
-## Simple vs Comprehensive - Quick Reference
+## Simple vs Comprehensive — Quick Reference
 
 | Simple | Comprehensive |
 |--------|---------------|

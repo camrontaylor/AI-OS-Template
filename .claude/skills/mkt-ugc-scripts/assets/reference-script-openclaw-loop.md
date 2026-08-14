@@ -4,14 +4,14 @@ This is the quality benchmark. Scripts should match this tone, structure, and en
 
 ## What makes it work
 
-1. **Personal experience framing** - "I will never use X again" not "you should stop using X"
-2. **Specific tool names and details** - OpenClaw, Opus 4.6, Claude Max plan, Telegram, Discord
-3. **Real frustrations with specifics** - "all the gateway errors that I have to go to my computer and restart the gateway"
-4. **Natural speech connectors** - "which I already paid for", "literally last night", "on top of that"
-5. **Comparison grounds the value** - doesn't just say "this is great", says "this replaces X and does it better"
-6. **No listicle energy** - continuous narrative flow, not "tip 1, tip 2, tip 3"
-7. **Soft conditional CTA** - "If you want a full video breakdown, as well as all of my personal templates... click the link in bio"
-8. **No SSML breaks needed** - natural speech flows without forced pauses
+1. **Personal experience framing** — "I will never use X again" not "you should stop using X"
+2. **Specific tool names and details** — OpenClaw, Opus 4.6, Claude Max plan, Telegram, Discord
+3. **Real frustrations with specifics** — "all the gateway errors that I have to go to my computer and restart the gateway"
+4. **Natural speech connectors** — "which I already paid for", "literally last night", "on top of that"
+5. **Comparison grounds the value** — doesn't just say "this is great", says "this replaces X and does it better"
+6. **No listicle energy** — continuous narrative flow, not "tip 1, tip 2, tip 3"
+7. **Soft conditional CTA** — "If you want a full video breakdown, as well as all of my personal templates... click the link in bio"
+8. **No SSML breaks needed** — natural speech flows without forced pauses
 
 ## The script
 

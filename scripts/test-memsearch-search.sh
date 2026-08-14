@@ -86,6 +86,35 @@ PY
   ok "search wrapper resolves the canonical collection and widens the rerank candidate pool"
 }
 
+test_user_local_bin_is_discovered_without_login_path() {
+  make_fake_repo
+  mkdir -p "$TEST_ROOT/home/.local/bin"
+  cat > "$TEST_ROOT/home/.local/bin/memsearch" <<'EOF'
+#!/usr/bin/env bash
+printf '%s\n' "$*" > "${MEMSEARCH_LOG:?}"
+printf '[{"source":"context/MEMORY.md","text":"service path semantic"}]\n'
+EOF
+  chmod +x "$TEST_ROOT/home/.local/bin/memsearch"
+
+  (
+    cd "$TEST_ROOT/repo"
+    export HOME="$TEST_ROOT/home"
+    export PATH="/usr/bin:/bin"
+    export MEMSEARCH_LOG="$TEST_ROOT/memsearch-local-bin.log"
+    bash scripts/memsearch-search.sh "service path" 5 > "$TEST_ROOT/local-bin.json"
+  )
+
+  assert_contains "$TEST_ROOT/memsearch-local-bin.log" "search service path --top-k 40 --json-output --collection test_collection"
+  python3 - "$TEST_ROOT/local-bin.json" <<'PY'
+import json, sys
+data = json.load(open(sys.argv[1]))
+assert data, "expected semantic results from HOME/.local/bin memsearch"
+modes = {mode for item in data for mode in item.get("search_modes", [item.get("search_mode")])}
+assert "semantic" in modes, data
+PY
+  ok "search wrapper discovers user-local memsearch in non-login shells"
+}
+
 test_sandbox_failure_returns_markdown_fallback() {
   make_fake_repo
   cat > "$TEST_ROOT/bin/memsearch" <<'EOF'
@@ -190,6 +219,7 @@ PY
 
 info "Running memsearch search wrapper tests..."
 test_success_uses_canonical_collection
+test_user_local_bin_is_discovered_without_login_path
 test_sandbox_failure_returns_markdown_fallback
 test_semantic_timeout_returns_markdown_fallback
 test_root_default_filters_client_results

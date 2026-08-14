@@ -1,0 +1,85 @@
+/* viz-dither — the runtime CSS system. Framework-agnostic.
+   Palette is driven by CSS variables so one theme swap re-colours everything.
+   Pair with PNGs from scripts/dither.py and icons from scripts/pixel_icons.py.
+
+   THE SYSTEM (keep it cohesive):
+   - Imagery = true dither PNGs (portrait, avatar, gradient bleeds, tiles).
+   - Icons  = hard-edged pixel-grid SVG (<PixelIcon>), one weight, one grid.
+   - Palette = paper + ink + accent ONLY. No third colour, no anti-aliasing.
+*/
+
+:root {
+  /* Override these to re-theme. The PNGs are baked in these colours, so
+     regenerate assets (dither.py) with matching hex if you change them. */
+  --dither-paper: #FAF9F7;
+  --dither-ink: #0F0F0F;
+  --dither-accent: #E5532A;
+  --dither-accent-ink: #BC4A18; /* accent for SMALL text; passes AA */
+
+  /* Motion knobs */
+  --dither-drift-dur: 16s;
+}
+
+/* Every dither asset stays crisp (square dots) when scaled. */
+.dither-img { display: block; image-rendering: pixelated; }
+
+/* ---- Pixel icons (currentColor tints them) ---- */
+.pixel-icon { display: block; image-rendering: pixelated; }
+.pixel-icon--ink { color: var(--dither-ink); }
+.pixel-icon--accent { color: var(--dither-accent); }
+.pixel-icon--soft { color: color-mix(in srgb, var(--dither-ink) 55%, transparent); }
+/* Size pixel icons in multiples of 12 (24, 36) so each cell is an integer
+   number of px and edges stay crisp. */
+
+/* ---- Background dither "bleeds" (atmosphere) ---- */
+/* Put a .dither-bleed inside a position:relative; overflow:hidden container.
+   The container MUST be positioned or the bleed anchors to the wrong ancestor. */
+.dither-bleed { position: absolute; pointer-events: none; z-index: 0; }
+.dither-bleed img {
+  width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated;
+  transform-origin: center;
+}
+/* Fade the square PNG bounds to a soft circle so it reads as atmosphere,
+   never a hard block. */
+.dither-bleed--masked {
+  -webkit-mask-image: radial-gradient(closest-side, #000 55%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 55%, transparent 100%);
+}
+
+/* Corner placement utilities (tune per layout). */
+.dither-bleed--tr { top: -12%; right: -6%; width: min(46%, 560px); aspect-ratio: 1; opacity: 0.42; }
+.dither-bleed--bl { bottom: -18%; left: -8%; width: min(34%, 420px); aspect-ratio: 1; opacity: 0.3; }
+.dither-bleed--br { bottom: -22%; right: -8%; width: min(50%, 600px); aspect-ratio: 1; opacity: 0.34; }
+
+/* ---- Animation ----
+   One slow authored moment, never a jitter. Pick a class per bleed.
+   All motion is disabled under prefers-reduced-motion. */
+.dither-anim-drift img { animation: dither-drift var(--dither-drift-dur) ease-in-out infinite; }
+.dither-anim-breathe img { animation: dither-breathe var(--dither-drift-dur) ease-in-out infinite; }
+.dither-anim-rotate img { animation: dither-rotate calc(var(--dither-drift-dur) * 3) linear infinite; }
+
+@keyframes dither-drift {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.06) rotate(4deg); }
+}
+@keyframes dither-breathe {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+@keyframes dither-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Repeating dither texture as a section background (uses a tile PNG). */
+.dither-texture {
+  background-image: var(--dither-tile, none);
+  background-repeat: repeat;
+  image-rendering: pixelated;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dither-anim-drift img,
+  .dither-anim-breathe img,
+  .dither-anim-rotate img { animation: none; }
+}

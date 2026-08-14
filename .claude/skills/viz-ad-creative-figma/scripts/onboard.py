@@ -73,7 +73,6 @@ def connection_status(skill_name: str) -> Dict[str, str]:
     package_json = skill_dir() / "package.json"
     node_modules = skill_dir() / "node_modules"
     status = {
-        "codex_native_imagegen": "runtime_tool_required" if skill_name.endswith("-codex") else "not_applicable",
         "FAL_KEY": "set" if os.environ.get("FAL_KEY") else "missing",
         "FIGMA_TOKEN": "set" if os.environ.get("FIGMA_TOKEN") else "missing",
         "FIGMA_FILE_KEY": "set" if os.environ.get("FIGMA_FILE_KEY") else "missing",
@@ -101,8 +100,6 @@ def recommended_connections(skill_name: str, status: Dict[str, str]) -> List[str
 
 
 def next_setup_action(skill_name: str, status: Dict[str, str]) -> str:
-    if skill_name.endswith("-codex"):
-        return "Run bash scripts/setup.sh, then use Codex native image generation in Step 7 or save the prompt pack for a subscription UI."
     if skill_name.endswith("-fal"):
         if status["FAL_KEY"] != "set":
             return "Add FAL_KEY to .env, then rerun bash scripts/setup.sh."

@@ -14,6 +14,8 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+source "$SCRIPT_DIR/lib/node-runtime.sh"
 TOKEN="${1:-}"
 TOKEN_FILE="$HOME/.config/claude-code-oauth-token"
 AI_KEYS_FILE="${AI_KEYS_ENV_FILE:-$HOME/.config/ai-keys.env}"
@@ -36,12 +38,7 @@ fi
 # Generate the launchd plist if it is missing. Nothing else in the repo creates it,
 # and it is what makes the nightly jobs durable: launchd reloads the daemon on login.
 if [[ ! -f "$PLIST" ]]; then
-  REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-  NODE_BIN="$(command -v node || true)"
-  if [[ -z "$NODE_BIN" ]]; then
-    echo "node not found on PATH. Install Node 18+ and re-run."
-    exit 1
-  fi
+  NODE_BIN="$(aios_resolve_node "$REPO_ROOT")"
   NODE_DIR="$(dirname "$NODE_BIN")"
   CLAUDE_BIN="${REAL_CLAUDE_BIN:-$(command -v claude || echo /usr/local/bin/claude)}"
   WRAPPER="$SCRIPT_DIR/claude-cron-wrapper.sh"

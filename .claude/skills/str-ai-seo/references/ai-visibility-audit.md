@@ -25,11 +25,11 @@ Test 10-20 of your most important queries across platforms:
 ## Step 2: Analyze Citation Patterns
 
 When your competitors get cited and you don't, examine:
-- **Content structure** - Is their content more extractable?
-- **Authority signals** - Do they have more citations, stats, expert quotes?
-- **Freshness** - Is their content more recently updated?
-- **Schema markup** - Do they have structured data you're missing?
-- **Third-party presence** - Are they cited via Wikipedia, Reddit, review sites?
+- **Content structure** — Is their content more extractable?
+- **Authority signals** — Do they have more citations, stats, expert quotes?
+- **Freshness** — Is their content more recently updated?
+- **Schema markup** — Do they have structured data you're missing?
+- **Third-party presence** — Are they cited via Wikipedia, Reddit, review sites?
 
 ---
 
@@ -56,11 +56,11 @@ For each priority page, verify:
 
 Verify your robots.txt allows AI crawlers. Each AI platform has its own bot, and blocking it means that platform can't cite you:
 
-- **GPTBot** and **ChatGPT-User** - OpenAI (ChatGPT)
-- **PerplexityBot** - Perplexity
-- **ClaudeBot** and **anthropic-ai** - Anthropic (Claude)
-- **Google-Extended** - Google Gemini and AI Overviews
-- **Bingbot** - Microsoft Copilot (via Bing)
+- **GPTBot** and **ChatGPT-User** — OpenAI (ChatGPT)
+- **PerplexityBot** — Perplexity
+- **ClaudeBot** and **anthropic-ai** — Anthropic (Claude)
+- **Google-Extended** — Google Gemini and AI Overviews
+- **Bingbot** — Microsoft Copilot (via Bing)
 
 Check your robots.txt for `Disallow` rules targeting any of these. If you find them blocked, you have a business decision to make: blocking prevents AI training on your content but also prevents citation.
 

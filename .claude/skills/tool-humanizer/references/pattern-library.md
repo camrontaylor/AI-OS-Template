@@ -139,6 +139,29 @@ paramount, indispensable, invaluable, exemplary, adept, unwavering, groundbreaki
 **Medium confidence (context-dependent):**
 robust (non-technical), comprehensive (as praise), streamline, enhance, empower, innovative, strategic, dynamic, sustainable, leverage
 
+## 9. Structural & Rhetorical Slop (from no-ai-slop) — Severity: HIGH
+
+<!-- absorbed:meta-bake-it-in | no-ai-slop (petergyang/no-ai-slop, MIT) | 2026-07-30 -->
+Patterns the earlier sections don't cover. Each: state the point plainly instead.
+
+| Pattern | Smells like | Fix |
+|---------|-------------|-----|
+| Colon reveal | "The best part: it learns." / "The detail that makes it work: a separate agent grades it." | Plain sentence: "A separate agent does the grading, which is what makes it work." Colons are for lists, labels, quotes - not fake drama. Sentence case after a colon unless grammar/proper noun/title/code needs otherwise. |
+| Faux-insight setup | "What nobody tells you...", "The part everyone misses...", "This is the part most people skip" | Cut the setup, let the claim stand: "Distribution is the moat." |
+| Fake-strong verb | "The app serves as a centralized hub for X" | Prefer "is"/"has" when clearer: "The app tracks X, Y, Z in one place." |
+| Synonym cycling | the agent... the assistant... the tool (rotating terms for one thing) | Repeat the clear word: "The agent reviews it, scores it, and suggests fixes." |
+| Negative listing | "Not a X. Not a Y. A Z." | Just say Z. |
+| Dramatic fragmentation | "That's it. That's the whole thing." / "X. And Y. And Z." | Complete sentences. |
+| Fake-profound kicker | a final "deep" metaphor / aphorism / mic-drop line | Delete it (don't rewrite into a better metaphor). End on the clearest concrete sentence already there, or add a plain takeaway/next action. |
+| Formatting slop | emoji in headings, bold sprinkled mid-sentence for emphasis, bullets where two sentences of prose read better, headers over two-sentence sections | Format follows content, not decoration. |
+
+(Summary-recap endings are already covered by Section 4 "Formulaic conclusions" - not repeated here.)
+
+**Hedging nuance (sharpens Section 2, absorbed from no-ai-slop):** keep "I think", "maybe", "honestly", "to be honest" when they carry *real* uncertainty, self-awareness, or the writer's spoken rhythm. Cut them only when they add nothing. Don't blanket-strip hedges - that flattens a human voice.
+
+**Em dashes:** in AI-OS the house rule (CLAUDE.local rule 2) overrides Section 7's generic threshold - zero em dashes or en dashes, ever. This note points to that rule; it does not restate the Section 7 line.
+<!-- /absorbed -->
+
 ---
 
 ## Detection Priority

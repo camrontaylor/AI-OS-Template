@@ -11,8 +11,8 @@ flowchart TD
   B --> C["Guided install checks prerequisites"]
   C --> D["Bootstrap files repaired or created"]
   D --> E["Command Centre opens"]
-  E --> F["Open Claude Code"]
-  F --> G["Run /start-here"]
+  E --> F["Open an agent harness"]
+  F --> G["Run or follow /start-here"]
   G --> H["Run first real session"]
   H --> I["Optional setup: memory, clients, cron, connectors"]
 ```
@@ -30,7 +30,7 @@ You need:
 | Bash | Run the setup scripts. |
 | Python 3 | Run helper scripts and checks. |
 | Node.js + npm | Run the Command Centre dashboard. |
-| Claude Code | Main runtime interface. |
+| Agent harness | Claude Code is the easiest first path. Codex, Cursor, Hermes, or another compatible harness can also follow the AI-OS project instructions. |
 
 ## Fresh Install
 
@@ -140,6 +140,10 @@ The onboarding command builds or confirms the foundation:
 
 Then ask for one real deliverable. Do not start by configuring everything.
 
+If you are using Codex, Cursor, Hermes, or another compatible harness, ask it
+to follow [Start Here And First Run](start-here-first-run.md) from the AI-OS
+root. The same files and setup goals apply even when slash commands differ.
+
 ## Optional Setup
 
 ### Searchable memory
@@ -204,7 +208,7 @@ Read:
 | Clone repo | Yes | `AI-OS/` exists locally. |
 | Run `bash scripts/centre.sh` | Yes | Guided install finishes. |
 | Open Command Centre | Optional | `http://localhost:3000` opens. |
-| Open Claude Code | Yes for Claude users | `claude` starts in repo root. |
+| Open an agent harness | Yes | Claude Code can run `claude` from the repo root. Other compatible harnesses should open the same folder and follow `AGENTS.md`. |
 | Run `/start-here` | Yes for new users | Backup, brand foundation, user profile, and skill selection are handled. |
 | Build brand foundation | Strongly recommended | `brand_context/` has useful files. |
 | Run first deliverable | Yes | Output is saved somewhere clear. |

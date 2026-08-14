@@ -3,8 +3,8 @@
 AI-OS memory is designed to be local, inspectable, bounded at startup, and
 searchable when needed.
 
-For a practical user-facing guide to MemSearch, Milvus Lite, remote
-Milvus/Zilliz, Pinecone, and Langfuse, see
+For a practical user-facing guide to local memory search, hosted retrieval, and
+AI observability decisions, see
 [`../memory-search-and-observability.md`](../memory-search-and-observability.md).
 
 ## The Layers

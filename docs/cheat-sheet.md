@@ -6,10 +6,10 @@
 |--------|-----|
 | Start working (solo) | `cd ~/Projects/AI-OS && claude` |
 | Start working (client) | `cd ~/Projects/AI-OS/clients/client-name && claude` |
-| End session | Just say "done" or "that's it" — wrap-up runs automatically |
-| Switch clients | End session → new terminal → `cd` into different client folder |
+| End session | Just say "done" or "that's it". Wrap-up runs automatically. |
+| Switch clients | End session, open a new terminal, then `cd` into a different client folder. |
 | Quick clear (no save) | `/clear` (end session first to save context) |
-| First time with new client | Just open Claude — onboarding runs automatically |
+| First time with new client | Open the client folder and run or follow `/start-here`. |
 
 ## Client Management
 
@@ -50,17 +50,17 @@ The Command Centre schedules jobs while it is running. If you want scheduling wi
 | Daemon logs | `bash scripts/logs-crons.sh` |
 | Run job manually | `bash scripts/run-job.sh job-name` |
 | Check job logs | `cat cron/logs/job-name.log` |
-| List jobs | `ls cron/jobs/` or ask Claude "what's scheduled?" |
+| List jobs | `ls cron/jobs/` or ask the agent "what's scheduled?" |
 
 ## Projects ([full guide](projects-guide.md))
 
 | Level | Name | How | Where |
 |-------|------|-----|-------|
-| **1** | Single task | Just ask Claude | `projects/{category}-{type}/` |
-| **2** | Planned project | Claude scopes it → project folder with `brief.md` | `projects/briefs/{project-name}/` |
-| **3** | GSD project | `/gsd-new-project` → full phased planning | `projects/briefs/{project-name}/` + `.planning/` |
+| **1** | Single task | Ask the agent directly | `projects/{category}-{type}/` |
+| **2** | Planned project | Agent scopes it, then creates a project folder with `brief.md` | `projects/briefs/{project-name}/` |
+| **3** | GSD project | `/gsd-new-project` creates full phased planning | `projects/briefs/{project-name}/` + `.planning/` |
 
-Level 1 output goes to category folders. Level 2/3 output goes inside the project folder alongside `brief.md`. Claude automatically helps you pick the right level when you state your goal. Run `/archive-gsd` when a GSD project is done; `.planning/` stays in place as the project record.
+Level 1 output goes to category folders. Level 2/3 output goes inside the project folder alongside `brief.md`. AI-OS should help you pick the right level when you state your goal. Run `/archive-gsd` when a GSD project is done; `.planning/` stays in place as the project record.
 
 ## Key Paths (within your working folder)
 
@@ -98,11 +98,11 @@ Add/remove/edit skills from the **root**. They sync to clients automatically on 
 
 - Solo user? Work from the root folder. Nothing extra needed.
 - Multiple clients? One client folder each, inside `clients/`.
-- End session before switching clients — wrap-up runs automatically
+- End session before switching clients. Wrap-up runs automatically.
 - Onboarding runs automatically on first session per client
 - Edit shared skills at the **root** level - client paths resolve to that source
-- Client-only skills are fine — create them in the client's `.claude/skills/` folder
+- Client-only skills are fine. Create them in the client's `.claude/skills/` folder.
 - Edit root AGENTS.md → all clients see the shared methodology automatically
 - Edit root SOUL.md / USER.md → all clients see it automatically
 - `update.sh` reconciles skill and script discovery links for all clients
-- Skills always have fallbacks — no API key required to start working
+- Skills always have fallbacks. No API key is required to start working.

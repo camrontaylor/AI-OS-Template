@@ -30,7 +30,7 @@ def validate_excalidraw(data: dict) -> list[str]:
     elif not isinstance(data["elements"], list):
         errors.append("'elements' must be an array")
     elif len(data["elements"]) == 0:
-        errors.append("'elements' array is empty - nothing to render")
+        errors.append("'elements' array is empty — nothing to render")
 
     return errors
 
@@ -131,7 +131,7 @@ def render(
         )
 
         page.goto(template_url)
-        page.wait_for_function("window.__moduleReady === true", timeout=30000)
+        page.wait_for_function("window.__moduleReady === true", timeout=120000)
 
         json_str = json.dumps(data)
         result = page.evaluate(f"window.renderDiagram({json_str})")
@@ -151,6 +151,11 @@ def render(
             sys.exit(1)
 
         svg_el.screenshot(path=str(output_path))
+
+        svg_markup = page.evaluate("el => el.outerHTML", svg_el)
+        svg_path = output_path.with_suffix(".svg")
+        svg_path.write_text(svg_markup, encoding="utf-8")
+
         browser.close()
 
     return output_path

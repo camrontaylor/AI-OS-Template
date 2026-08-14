@@ -8,29 +8,29 @@ Exact format for `brand_context/positioning.md`. All sections required.
 ## Last Updated
 {YYYY-MM-DD} by positioning skill
 
-# {Brand/Product Name} - Positioning
+# {Brand/Product Name} — Positioning
 
 ## Primary Angle
 
 **Name:** {Angle name, e.g., "The Capability Transfer"}
-**Statement:** {One sentence positioning - clear, specific, differentiated}
+**Statement:** {One sentence positioning — clear, specific, differentiated}
 **Psychology:** {Why this works with this audience at this market stage}
 **Headline direction:** "{Example headline using this angle}"
 **Best for:** {Market conditions and audience segments where this angle converts}
 
 ## Market Assessment
 
-**Sophistication:** Stage {N} - {stage name}
-**Transformation:** {What the customer's life looks like after - the core promise}
-**Mechanism:** {The unique HOW - what makes the approach different}
+**Sophistication:** Stage {N} — {stage name}
+**Transformation:** {What the customer's life looks like after — the core promise}
+**Mechanism:** {The unique HOW — what makes the approach different}
 **Primary alternative:** {What customers do instead of buying this}
 
 ## Competitive Landscape
 
 **Competitors analyzed:**
-- {Name} - "{their headline}"
-- {Name} - "{their headline}"
-- {Name} - "{their headline}"
+- {Name} — "{their headline}"
+- {Name} — "{their headline}"
+- {Name} — "{their headline}"
 
 **Saturated claims (avoid):**
 - {Claim 1}
@@ -38,7 +38,7 @@ Exact format for `brand_context/positioning.md`. All sections required.
 - {Claim 3}
 
 **White space identified:**
-- {Gap 1 - what's missing in the market}
+- {Gap 1 — what's missing in the market}
 - {Gap 2}
 
 ## All Angles Explored
@@ -61,7 +61,7 @@ Exact format for `brand_context/positioning.md`. All sections required.
 - Headline: "{example}"
 - Best for: {conditions}
 
-{Continue for all angles generated - typically 3-5}
+{Continue for all angles generated — typically 3-5}
 
 ## Selection Rationale
 

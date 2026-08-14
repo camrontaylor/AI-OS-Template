@@ -8,22 +8,22 @@ Exact format for `brand_context/icp.md`. All sections required.
 ## Last Updated
 {YYYY-MM-DD} by icp skill
 
-# {Brand Name} - Ideal Customer Profile
+# {Brand Name} — Ideal Customer Profile
 
 ## Who They Are
 
-**In one sentence:** {Specific description - not demographics, but situation and identity}
+**In one sentence:** {Specific description — not demographics, but situation and identity}
 **Example:** "Solo SaaS founders making $5-15k MRR who do their own marketing because they can't justify hiring yet."
 
 **Situation:** {What's happening in their life/business right now}
-**Identity:** {How they'd describe themselves - not how you'd describe them}
+**Identity:** {How they'd describe themselves — not how you'd describe them}
 **Role:** {What they actually do day-to-day, not their job title}
-**Stage:** {Where they are in their journey - beginner, intermediate, scaling, plateaued}
+**Stage:** {Where they are in their journey — beginner, intermediate, scaling, plateaued}
 
 ## Primary Pain
 
-**The problem:** {Specific, painful, urgent - in their words}
-**What it costs them:** {Time, money, energy, opportunity - be specific}
+**The problem:** {Specific, painful, urgent — in their words}
+**What it costs them:** {Time, money, energy, opportunity — be specific}
 **How they describe it:** "{Exact phrases they use to talk about this problem}"
 
 **Secondary pains:**
@@ -43,8 +43,8 @@ Exact format for `brand_context/icp.md`. All sections required.
 ## Desired Outcome
 
 **What "after" looks like:** {Specific, vivid description of life after the problem is solved}
-**What they'd tell a friend:** "{Casual, real version - not a testimonial}"
-**The deeper motivation:** {What they really want underneath the surface problem - status, freedom, security, identity}
+**What they'd tell a friend:** "{Casual, real version — not a testimonial}"
+**The deeper motivation:** {What they really want underneath the surface problem — status, freedom, security, identity}
 
 ## Objections
 
@@ -57,7 +57,7 @@ Exact format for `brand_context/icp.md`. All sections required.
 ## Their Language
 
 **Words they use for the problem:**
-- "{Phrase 1}" - {context where this appears}
+- "{Phrase 1}" — {context where this appears}
 - "{Phrase 2}"
 - "{Phrase 3}"
 
@@ -66,10 +66,10 @@ Exact format for `brand_context/icp.md`. All sections required.
 - "{Phrase 2}"
 
 **Words that would turn them off:**
-- "{Phrase}" - {why it doesn't resonate}
-- "{Phrase}" - {why}
+- "{Phrase}" — {why it doesn't resonate}
+- "{Phrase}" — {why}
 
-**Jargon level:** {None / Light / Moderate / Heavy - and what terms they do and don't use}
+**Jargon level:** {None / Light / Moderate / Heavy — and what terms they do and don't use}
 
 ## Where They Hang Out
 
@@ -84,17 +84,17 @@ Exact format for `brand_context/icp.md`. All sections required.
 ## Buying Triggers
 
 What pushes them from "considering" to "buying":
-- {Trigger 1 - e.g., "A failed launch that cost them money"}
-- {Trigger 2 - e.g., "Seeing a competitor get results with a similar approach"}
-- {Trigger 3 - e.g., "Reaching a revenue milestone where the problem becomes too expensive to ignore"}
+- {Trigger 1 — e.g., "A failed launch that cost them money"}
+- {Trigger 2 — e.g., "Seeing a competitor get results with a similar approach"}
+- {Trigger 3 — e.g., "Reaching a revenue milestone where the problem becomes too expensive to ignore"}
 
 ## Secondary Segments
 
 {If multiple distinct customer types emerged, note them here for future reference.
-Don't build full profiles - just enough to identify them.}
+Don't build full profiles — just enough to identify them.}
 
 ### Segment: {Name}
 - **Who:** {One sentence}
 - **Key difference from primary:** {What's different about their pain, stage, or buying behavior}
-- **Priority:** {High / Medium / Low - based on value and volume}
+- **Priority:** {High / Medium / Low — based on value and volume}
 ```

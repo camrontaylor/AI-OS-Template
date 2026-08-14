@@ -11,7 +11,7 @@ MISSING=0
 if command -v uv &>/dev/null; then
     echo "  uv ............ installed ($(uv --version 2>/dev/null || echo 'ok'))"
 else
-    echo "  uv ............ not found - installing..."
+    echo "  uv ............ not found — installing..."
     if command -v brew &>/dev/null; then
         brew install uv
     else
@@ -31,7 +31,7 @@ fi
 if command -v yt-dlp &>/dev/null; then
     echo "  yt-dlp ........ installed ($(yt-dlp --version 2>/dev/null || echo 'ok'))"
 else
-    echo "  yt-dlp ........ not found - installing..."
+    echo "  yt-dlp ........ not found — installing..."
     if command -v brew &>/dev/null; then
         brew install yt-dlp
     else
@@ -50,6 +50,6 @@ echo ""
 if [ "$MISSING" -eq 0 ]; then
     echo "=== All dependencies ready ==="
 else
-    echo "=== Some dependencies failed - see above ==="
+    echo "=== Some dependencies failed — see above ==="
     exit 1
 fi

@@ -746,3 +746,9 @@ Regression to avoid: Do not put the override inside ~/.claude/skills/impeccable 
 Made no-ai-slop's AI-tell pattern-and-word standard the system default for all prose: new AGENTS.md '## Anti-Slop Standard' always-on doctrine (chat replies + deliverables), 8 net-new patterns merged into tool-humanizer/pattern-library.md, and an 'ai_slop' measurement signal in response-bloat-check.js. Single canonical list in tool-humanizer; doctrine points to it, no duplication.
 
 Regression to avoid: Do not re-add a full duplicated banned-word list into AGENTS.md (bloat) or overwrite existing tool-humanizer/Response-Discipline lines - doctrine names tells, the skill holds the catalog, edits are additive.
+
+## 2026-08-04 - complete skill support in template sync
+
+Template sync and update now share one ownership path matcher, so wildcard directory prefixes such as .claude/skills/*/references/ match nested skill support files correctly. The update manifest now includes standard skill support directories for references, assets, evals, scripts, agents, eval-viewer, and package.json files, letting promoted MIT skills such as the Corey Haines marketing and maker packs ship as complete template capabilities instead of SKILL.md-only shells.
+
+Regression to avoid: Do not copy the entire .claude/skills tree or bypass sanitizer/never_publish; widen only explicit AI-OS-owned skill support paths and keep local overrides user-owned.

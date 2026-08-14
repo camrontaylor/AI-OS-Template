@@ -1,6 +1,6 @@
 # ICP Research Methods
 
-How to extract customer profile data from public sources. The goal is real customer language and patterns - not assumptions.
+How to extract customer profile data from public sources. The goal is real customer language and patterns — not assumptions.
 
 ---
 
@@ -37,7 +37,7 @@ Search for threads where the target audience discusses the problem the product s
 - How they frame the problem (their words, not industry jargon)
 - What solutions they've tried and why they switched
 - What they're really optimising for (speed? cost? quality? simplicity?)
-- Emotional language - frustration, hope, resignation
+- Emotional language — frustration, hope, resignation
 
 **Authenticity check:** Reddit language is usually more honest than review language. People complain more specifically and recommend more genuinely.
 
@@ -70,7 +70,7 @@ Particularly valuable for understanding sophistication level and specific questi
 
 ### 5. Survey Data / Testimonials
 
-If the user provides these, they're gold - direct customer voice.
+If the user provides these, they're gold — direct customer voice.
 
 **What to extract:**
 - Transformation stories (before/after)
@@ -87,10 +87,10 @@ After collecting data across sources:
 ### 1. Pattern Extraction
 
 Group customer statements into themes:
-- **Pain patterns** - what problems come up most? What language recurs?
-- **Alternative patterns** - what have they tried? What specifically failed?
-- **Outcome patterns** - what do they actually want? (Often different from what founders think)
-- **Objection patterns** - what makes them hesitate?
+- **Pain patterns** — what problems come up most? What language recurs?
+- **Alternative patterns** — what have they tried? What specifically failed?
+- **Outcome patterns** — what do they actually want? (Often different from what founders think)
+- **Objection patterns** — what makes them hesitate?
 
 ### 2. Language Mining
 
@@ -104,7 +104,7 @@ Pull exact phrases that appear across multiple sources. These are the customer's
 
 If the research reveals multiple distinct customer types, note them all but identify the primary:
 - **Primary segment:** Largest, most valuable, most clearly defined
-- **Secondary segments:** Smaller or less defined - note for future reference
+- **Secondary segments:** Smaller or less defined — note for future reference
 
 ### 4. Assumption Validation
 

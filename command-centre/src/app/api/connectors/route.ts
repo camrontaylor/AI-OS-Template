@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 import { getConfig } from "@/lib/config";
+import { parseComposioSnapshot, type ApiService, type McpServer } from "@/lib/marketing-integrations";
 
 /**
  * GET /api/connectors
@@ -13,19 +14,6 @@ import { getConfig } from "@/lib/config";
  *                    only - values are NEVER read or returned.
  * Read-only, root-scoped (connectors are shared infrastructure).
  */
-
-interface McpServer {
-  name: string;
-  command: string;
-  source: string;
-}
-
-interface ApiService {
-  key: string;
-  service: string;
-  usedBy: string;
-  configured: boolean;
-}
 
 function readMcp(file: string, source: string): McpServer[] {
   try {
@@ -90,11 +78,16 @@ export async function GET() {
       ...readMcp(path.join(root, "command-centre", ".mcp.json"), "command-centre"),
     ];
     const services = parseEnvExample(path.join(root, ".env.example"));
+    const connectorsDocPath = path.join(root, "docs", "connectors.md");
+    const composio = fs.existsSync(connectorsDocPath)
+      ? parseComposioSnapshot(fs.readFileSync(connectorsDocPath, "utf-8"))
+      : undefined;
 
     return NextResponse.json({
       mcpServers,
       services,
       configuredCount: services.filter((s) => s.configured).length,
+      composio,
     });
   } catch (error) {
     console.error("GET /api/connectors error:", error);

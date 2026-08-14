@@ -3,9 +3,9 @@
 This is the practical guide to AI-OS. Start simple, then go deeper only when
 you need more detail.
 
-AI-OS is a local agent workspace. It gives Claude Code, Cursor, and
-other compatible coding agents the same operating system: rules, memory, brand
-context, skills, projects, scheduled jobs, and client workspaces.
+AI-OS is a local agent workspace. It gives Claude Code, Codex, Cursor, Hermes,
+and other compatible agent harnesses the same operating system: rules, memory,
+brand context, skills, projects, scheduled jobs, and client workspaces.
 
 The most important idea:
 
@@ -49,7 +49,7 @@ flowchart TD
 | Moment | What to read | What to do |
 |---|---|---|
 | First install | Root `README.md` | Clone, run `centre`, finish the guided bootstrap. |
-| First command | [Start Here And First Run](start-here-first-run.md) | Open `claude` and run `/start-here` from the AI-OS root. |
+| First command | [Start Here And First Run](start-here-first-run.md) | Open Claude Code and run `/start-here`, or ask your chosen harness to follow the same first-run guide. |
 | First concept | [What AI-OS Is](what-ai-os-is.md) | Understand the mental model before changing settings. |
 | First session | [Getting Started](getting-started.md) | Let `/start-here` build context, then ask for one real deliverable. Keep it small. |
 | First saved memory | [Memory And Cron](memory-and-cron.md) | End the session normally and check that a daily log was written. |
@@ -84,8 +84,8 @@ not remember, and why the search stack exists.
 
 | Doc | What it gives you |
 |---|---|
-| [Memory And Cron](memory-and-cron.md) | Plain-words explanation of memory layers, MemSearch, Milvus Lite, and nightly jobs. |
-| [Memory Search And Observability](memory-search-and-observability.md) | Practical decision guide for MemSearch, Milvus Lite, Zilliz, Pinecone, and Langfuse. |
+| [Memory And Cron](memory-and-cron.md) | Plain-words explanation of memory files, search, and nightly jobs. |
+| [Memory Search And Observability](memory-search-and-observability.md) | Practical guide to local memory search, hosted retrieval, and tracing/evals for production workflows. |
 | [Memory Architecture](meta/memory-architecture.md) | Design source of truth for agents changing the memory system. |
 | [Health And Regression](meta/health-and-regression.md) | What the system checks so memory and jobs do not silently drift. |
 
@@ -97,7 +97,7 @@ flowchart TD
   B["Daily logs"] --> E["Long-term history"]
   C["Learnings"] --> F["Skill-specific improvements"]
   D --> G["Agent session"]
-  E --> H["MemSearch and markdown recall"]
+  E --> H["Search helpers and markdown recall"]
   F --> H
   H --> G
   G --> I["New log entries and better learnings"]
@@ -196,31 +196,28 @@ Not primarily. AI-OS is a workspace and operating layer for coding agents. The
 Command Centre is an optional local dashboard, but the core system is files,
 rules, scripts, memory, and skills.
 
-### Does AI-OS replace Claude or Cursor?
+### Does AI-OS replace Claude, Codex, Cursor, or Hermes?
 
-No. It gives them the same working context. Claude Code, Cursor, and
-future compatible tools are runtime interfaces. AI-OS is the shared operating
-system underneath them.
+No. It gives them the same working context. Claude Code, Codex, Cursor, Hermes,
+and future compatible tools are runtime interfaces. AI-OS is the shared
+operating system underneath them.
 
 ### Does AI-OS memory live in a database?
 
-The source of truth does not. Memory lives in markdown files. Semantic search
-uses a derived index through MemSearch and Milvus Lite, but that index can be
-rebuilt from the files.
+The source of truth does not. Memory lives in markdown files. Search helpers can
+build an index from those files, but the files remain the source.
 
-### When do I need Pinecone or another vector database?
+### When do I need hosted retrieval?
 
-Usually not for AI-OS workspace memory. Consider Pinecone when you are building
-a production client-facing AI app that needs hosted retrieval, multiple users,
-metadata filters, permissions, uptime, and scale. Read
-[Memory Search And Observability](memory-search-and-observability.md).
+Usually not for AI-OS workspace memory. Consider hosted retrieval when you are
+building a production client-facing AI app with many users, permissions, uptime
+needs, and a large document set. Read [Memory Search And Observability](memory-search-and-observability.md).
 
-### When do I need Langfuse?
+### When do I need observability?
 
-Use Langfuse when you need traces, prompt review, cost tracking, failures, or
-evals for model calls in a script, app, automation, or client AI build. It does
-not automatically observe normal Claude Code conversations unless the
-model calls pass through code you control.
+Use tracing or eval tooling when a script, app, automation, or client AI build
+needs repeatable quality checks, cost review, failure review, or prompt-change
+testing. Ordinary agent conversations usually do not need this.
 
 ### Is AI-OS private?
 
@@ -231,11 +228,11 @@ not memory. External writes need approval. Read
 
 ### Where should a new user start?
 
-Start by opening Claude Code from the AI-OS root and running `/start-here`.
-Read [Start Here And First Run](start-here-first-run.md) if you want to know
-exactly what that command does. Then read [What AI-OS Is](what-ai-os-is.md),
-[How AI-OS Works](how-it-works.md), and keep [Cheat Sheet](cheat-sheet.md)
-open. Read the other docs only when the work needs them.
+Start by opening Claude Code from the AI-OS root and running `/start-here`. If
+you are using another harness, ask it to follow [Start Here And First Run](start-here-first-run.md).
+Then read [What AI-OS Is](what-ai-os-is.md), [How AI-OS Works](how-it-works.md),
+and keep [Cheat Sheet](cheat-sheet.md) open. Read the other docs only when the
+work needs them.
 
 ## If You Are An Agent Working In This Repo
 

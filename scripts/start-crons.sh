@@ -4,6 +4,8 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SCRIPT_PATH="$REPO_ROOT/scripts/cron/cron-daemon.cjs"
 source "$REPO_ROOT/scripts/lib/cron-ui.sh"
+source "$REPO_ROOT/scripts/lib/node-runtime.sh"
+NODE_BIN="$(aios_resolve_node "$REPO_ROOT")"
 
 # Preflight: the standalone cron runtime needs its own node deps (better-sqlite3).
 # Show a clear message instead of a raw "Cannot find module" stack trace.
@@ -32,7 +34,7 @@ agentic_os_cron_banner \
     "This terminal stays attached while the daemon is running."
 agentic_os_cron_info "Launching the shared cron runtime..."
 
-if node "$SCRIPT_PATH" start "$@"; then
+if "$NODE_BIN" "$SCRIPT_PATH" start "$@"; then
     agentic_os_cron_success "Managed cron daemon is running."
     agentic_os_cron_note "Use 'bash scripts/status-crons.sh' to check state or 'bash scripts/logs-crons.sh' to follow logs."
 else

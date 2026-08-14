@@ -301,9 +301,10 @@ export function parseCronLogSegments(logContent: string): CronLogSegment[] {
       continue;
     }
 
-    if (line.startsWith("[cron-daemon]")) {
+    const trimmedLineStart = line.trimStart();
+    if (trimmedLineStart.startsWith("[cron-daemon]")) {
       flushCronTextBuffer(currentSegment.bodyItems, textBuffer);
-      currentSegment.bodyItems.push({ kind: "system", content: line });
+      currentSegment.bodyItems.push({ kind: "system", content: trimmedLineStart });
       continue;
     }
 

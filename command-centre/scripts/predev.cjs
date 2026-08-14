@@ -1,10 +1,19 @@
 const { execSync, spawnSync } = require("child_process");
 const path = require("path");
+const { assertPinnedNode } = require("../../scripts/lib/assert-node-version.cjs");
 
 const port = String(process.env.PORT || "3000");
 
 // The command-centre folder is one level up from this scripts/ folder.
 const commandCentreDir = path.resolve(__dirname, "..");
+const agenticOsDir = path.resolve(commandCentreDir, "..");
+
+try {
+  assertPinnedNode(agenticOsDir);
+} catch (error) {
+  console.error(`[predev] ${error.message}`);
+  process.exit(1);
+}
 
 // better-sqlite3 is a native module. If the Node that runs the dev server is a
 // different version from the Node that ran `npm install`, the compiled binary

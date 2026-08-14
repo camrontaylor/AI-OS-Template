@@ -6,6 +6,8 @@ import { getCronJobKey, useCronStore } from "@/store/cron-store";
 import { useClientStore } from "@/store/client-store";
 import { RunHistory } from "./run-history";
 import type { CronJob, CronRun } from "@/types/cron";
+import type { ScheduledOperation } from "@/lib/marketing-scheduled-operations";
+import { Badge } from "@/components/ui/badge";
 
 interface CronRowProps {
   job: CronJob;
@@ -16,6 +18,7 @@ interface CronRowProps {
   onDragEnd: () => void;
   isDragOver: boolean;
   isDragging: boolean;
+  operation?: ScheduledOperation;
 }
 
 function formatSchedule(days: string, time: string): string {
@@ -99,6 +102,7 @@ export function CronRow({
   onDragEnd,
   isDragOver,
   isDragging,
+  operation,
 }: CronRowProps) {
   const expandedJob = useCronStore((s) => s.expandedJob);
   const runHistory = useCronStore((s) => s.runHistory);
@@ -143,6 +147,11 @@ export function CronRow({
       : activeRun?.status === "running"
         ? activeRun.activityLabel || "Running..."
         : null;
+  const statusLabel =
+    operation?.statusLabel ??
+    (isActiveRun ? (activeRun?.status === "queued" ? "Queued" : "Running") : job.active ? "Active" : "Paused");
+  const statusBadgeVariant =
+    operation?.statusBadgeVariant ?? (isActiveRun ? "default" : job.active ? "secondary" : "outline");
 
   return (
     <div
@@ -216,21 +225,38 @@ export function CronRow({
                 {runStatusLabel}
               </div>
             ) : (
-              job.description && (
-                <div
-                  style={{
-                    fontSize: 12,
-                    color: "var(--muted-foreground)",
-                    marginTop: 4,
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    maxWidth: 280,
-                  }}
-                >
-                  {job.description}
-                </div>
-              )
+              <>
+                {job.description && (
+                  <div
+                    style={{
+                      fontSize: 12,
+                      color: "var(--muted-foreground)",
+                      marginTop: 4,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      maxWidth: 280,
+                    }}
+                  >
+                    {job.description}
+                  </div>
+                )}
+                {operation && (
+                  <div
+                    style={{
+                      fontSize: 11,
+                      color: "var(--muted-foreground)",
+                      marginTop: 4,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      maxWidth: 280,
+                    }}
+                  >
+                    {operation.workflowTitle} - {operation.categoryLabel} - {operation.nextActionLabel}
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
@@ -299,51 +325,9 @@ export function CronRow({
 
         {/* Status chip */}
         <div>
-          {isActiveRun ? (
-            <span
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 4,
-                padding: "4px 12px",
-                borderRadius: "0.375rem",
-                fontSize: 12,
-                fontWeight: 500,
-                backgroundColor: "var(--muted)",
-                color: "var(--muted-foreground)",
-              }}
-              title={systemStatus?.statusSummary}
-            >
-              <span
-                style={{
-                  display: "inline-block",
-                  width: 7,
-                  height: 7,
-                  borderRadius: "50%",
-                  backgroundColor: "var(--primary)",
-                  animation: "pulse-dot 2s ease-in-out infinite",
-                  flexShrink: 0,
-                }}
-              />
-              Running
-            </span>
-          ) : (
-            <div title={systemStatus?.statusSummary}>
-              <span
-                style={{
-                  display: "inline-block",
-                  padding: "4px 12px",
-                  borderRadius: "0.375rem",
-                  fontSize: 12,
-                  fontWeight: 500,
-                  backgroundColor: job.active ? "var(--muted)" : "var(--border)",
-                  color: job.active ? "var(--foreground)" : "var(--muted-foreground)",
-                }}
-              >
-                {job.active ? "Active" : "Paused"}
-              </span>
-            </div>
-          )}
+          <Badge variant={statusBadgeVariant} title={systemStatus?.statusSummary}>
+            {statusLabel}
+          </Badge>
         </div>
 
         {/* Actions */}

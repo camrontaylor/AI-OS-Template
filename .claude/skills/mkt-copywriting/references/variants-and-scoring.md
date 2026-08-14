@@ -8,11 +8,11 @@ Never ship the first version. Generate options, measure quality, then recommend 
 
 Produce at least 5 headlines per project, each using a different angle from the persuasion toolkit:
 
-1. **Outcome-first** - plainest possible statement of the benefit. No cleverness. Maximum clarity.
-2. **Curiosity** - implies a discovery or insight without revealing it. Specific enough to seem real.
-3. **Social proof** - opens with a number, a name, or a collective result.
-4. **Contrarian** - challenges a widely held assumption. Must be genuinely surprising.
-5. **Story** - implies a narrative arc. Setup → tension → implied resolution.
+1. **Outcome-first** — plainest possible statement of the benefit. No cleverness. Maximum clarity.
+2. **Curiosity** — implies a discovery or insight without revealing it. Specific enough to seem real.
+3. **Social proof** — opens with a number, a name, or a collective result.
+4. **Contrarian** — challenges a widely held assumption. Must be genuinely surprising.
+5. **Story** — implies a narrative arc. Setup → tension → implied resolution.
 
 Generate 2-5 more by combining angles: question + outcome, data + transformation, how-to + time constraint, warning + curiosity, timely hook + outcome.
 
@@ -39,7 +39,7 @@ For landing pages and sales pages, produce at least 2 complete drafts from diffe
 
 ### Draft A: Primary angle
 
-The most straightforward version of the strongest positioning. Uses whatever framework best fits the format - full landing page arc for pages, hook-value-CTA for emails, hook-benefit-CTA for ads. This is the one you'd ship if budget only allowed one test.
+The most straightforward version of the strongest positioning. Uses whatever framework best fits the format — full landing page arc for pages, hook-value-CTA for emails, hook-benefit-CTA for ads. This is the one you'd ship if budget only allowed one test.
 
 ### Draft B: Challenge angle
 
@@ -78,7 +78,7 @@ When writing emails, produce 5-7 subject line options across different approache
 4. Direct question
 5. Contrarian/unexpected
 6. (If applicable) Personalised using audience data
-7. (If applicable) Time-sensitive - only when the urgency is real
+7. (If applicable) Time-sensitive — only when the urgency is real
 
 Star the recommendation.
 
@@ -106,7 +106,7 @@ QUALITY SCORECARD
 Clarity:      8/10   "Offer is clear, mechanism needs more detail"
 Specificity:  6/10   "Too many round numbers, not enough named sources"
 Voice:        7/10   "Reads well but could belong to any brand in this space"
-Desire:       5/10   "Benefits listed but not felt - needs scenarios"
+Desire:       5/10   "Benefits listed but not felt — needs scenarios"
 Proof:        4/10   "Single testimonial, no metrics, no case study"
 Urgency:      3/10   "No reason to act this week vs next quarter"
 Flow:         7/10   "Smooth overall, section 3 is a wall of text"
@@ -133,9 +133,9 @@ Priority fixes:
 
 ### When to run scoring
 
-- **Before rewriting existing copy** - score first, show gaps, then rewrite. Builds trust.
-- **After generating new copy** - self-assess honestly. Flag any dimension under 7 and offer to fix it.
-- **On request** - whenever the user asks to evaluate or rate a piece of copy.
+- **Before rewriting existing copy** — score first, show gaps, then rewrite. Builds trust.
+- **After generating new copy** — self-assess honestly. Flag any dimension under 7 and offer to fix it.
+- **On request** — whenever the user asks to evaluate or rate a piece of copy.
 
 ---
 
@@ -144,7 +144,7 @@ Priority fixes:
 After generating copy, suggest 3-5 testable changes with this format:
 
 ```
-Test [N]: [What's changing] - [Option A] vs [Option B]
+Test [N]: [What's changing] — [Option A] vs [Option B]
 Hypothesis: [Why one might outperform, grounded in a principle]
 Measure:    [The specific metric: CTR, conversion, engagement, time on page]
 Expected:   [Directional estimate: +X-Y% on the metric]
@@ -154,14 +154,14 @@ Priority:   [HIGH / MEDIUM / LOW]
 ### What to test, in order
 
 **HIGH priority:**
-1. **Headlines** - the element with the most leverage. Different headline angles can produce wildly different results. Test first, always.
-2. **Opening hook** - determines whether they read past the fold. Test different entry styles.
-3. **CTA wording and placement** - benefit-oriented vs direct command, position above vs below proof section.
+1. **Headlines** — the element with the most leverage. Different headline angles can produce wildly different results. Test first, always.
+2. **Opening hook** — determines whether they read past the fold. Test different entry styles.
+3. **CTA wording and placement** — benefit-oriented vs direct command, position above vs below proof section.
 
 **MEDIUM priority:**
-4. **Evidence structure** - lead with a testimonial vs lead with data vs lead with the founder's story.
-5. **Copy length** - shorter for highly aware audiences, longer for less aware. The right length depends on how much context the reader needs.
+4. **Evidence structure** — lead with a testimonial vs lead with data vs lead with the founder's story.
+5. **Copy length** — shorter for highly aware audiences, longer for less aware. The right length depends on how much context the reader needs.
 
 **LOW priority (optimise once the above are settled):**
-6. **Body angle** - primary vs challenge vs evidence-first from the variants above.
-7. **Friction reducers** - the guarantee copy, social proof numbers, and ease-of-start claims below the CTA.
+6. **Body angle** — primary vs challenge vs evidence-first from the variants above.
+7. **Friction reducers** — the guarantee copy, social proof numbers, and ease-of-start claims below the CTA.

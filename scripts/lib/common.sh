@@ -58,6 +58,7 @@ cd "$REPO_ROOT"
 if [[ -f "$(dirname "${BASH_SOURCE[0]}")/team-config.sh" ]]; then
     source "$(dirname "${BASH_SOURCE[0]}")/team-config.sh"
 fi
+source "$SCRIPT_DIR/lib/path-match.sh"
 
 # ---------- Upstream branch ----------
 UPSTREAM_BRANCH="${AGENTIC_OS_UPSTREAM_BRANCH:-main}"
@@ -298,34 +299,6 @@ dedupe_array() {
             eval "$array_name+=(\"\$item\")"
         done
     fi
-}
-
-path_matches_pattern() {
-    local path="$1"
-    local pattern="$2"
-    [[ -z "$pattern" ]] && return 1
-
-    if [[ "$pattern" == */ ]]; then
-        [[ "$path" == "$pattern"* ]]
-        return $?
-    fi
-
-    case "$path" in
-        $pattern) return 0 ;;
-    esac
-    return 1
-}
-
-path_matches_any() {
-    local path="$1"
-    shift || true
-    local pattern
-    for pattern in "$@"; do
-        if path_matches_pattern "$path" "$pattern"; then
-            return 0
-        fi
-    done
-    return 1
 }
 
 load_update_manifest() {

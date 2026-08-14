@@ -339,5 +339,38 @@ export function getDb(): Database.Database {
   db.exec("CREATE INDEX IF NOT EXISTS idx_approval_requests_taskId ON approval_requests(taskId)");
   db.exec("CREATE INDEX IF NOT EXISTS idx_approval_requests_status ON approval_requests(status)");
 
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS marketing_findings (
+      id TEXT PRIMARY KEY,
+      source TEXT NOT NULL,
+      sourceId TEXT NOT NULL,
+      idempotencyKey TEXT NOT NULL,
+      findingType TEXT NOT NULL CHECK (findingType IN ('audit_finding', 'opportunity', 'geo_check', 'prompt_visibility', 'plan_task', 'workflow', 'tracker_checkin', 'blocker')),
+      status TEXT NOT NULL DEFAULT 'open' CHECK (status IN ('open', 'materialized', 'blocked', 'verified', 'consumed', 'dismissed')),
+      severity TEXT NOT NULL DEFAULT 'info' CHECK (severity IN ('info', 'low', 'medium', 'high', 'critical')),
+      channel TEXT NOT NULL,
+      headline TEXT NOT NULL,
+      summary TEXT NOT NULL,
+      occurredAt TEXT NOT NULL,
+      evidenceRefs TEXT NOT NULL DEFAULT '[]',
+      artifactRefs TEXT NOT NULL DEFAULT '[]',
+      verificationJson TEXT NOT NULL DEFAULT '[]',
+      blockerJson TEXT,
+      keyMetricsJson TEXT NOT NULL DEFAULT '{}',
+      planTaskDraftId TEXT,
+      taskId TEXT,
+      clientId TEXT,
+      consumedAt TEXT,
+      createdAt TEXT NOT NULL,
+      updatedAt TEXT NOT NULL,
+      UNIQUE (source, idempotencyKey),
+      FOREIGN KEY (taskId) REFERENCES tasks(id) ON DELETE SET NULL
+    )
+  `);
+  db.exec("CREATE INDEX IF NOT EXISTS idx_marketing_findings_status ON marketing_findings(status)");
+  db.exec("CREATE INDEX IF NOT EXISTS idx_marketing_findings_channel ON marketing_findings(channel)");
+  db.exec("CREATE INDEX IF NOT EXISTS idx_marketing_findings_occurredAt ON marketing_findings(occurredAt)");
+  db.exec("CREATE INDEX IF NOT EXISTS idx_marketing_findings_consumedAt ON marketing_findings(consumedAt)");
+
   return db;
 }

@@ -91,7 +91,7 @@ ANGLE: [One-line description]
 WHY NOW: [What's making this relevant right now]
 FORMAT: [Recommended script framework]
 HOOK IDEA: [One draft hook]
-SIGNAL: [Where you found this - Reddit thread, X posts, etc.]
+SIGNAL: [Where you found this — Reddit thread, X posts, etc.]
 ```
 
 Let them pick. They know their audience better than research does.
@@ -107,7 +107,7 @@ If `str-trending-research` isn't installed, or the user skips research:
 3. Ask what misconceptions exist in their industry
 4. Use these to suggest angles from your own knowledge
 
-The research makes angles timely and backed by real engagement data. Without it, you're relying on evergreen topics and the user's domain knowledge - which still works, it's just less data-driven.
+The research makes angles timely and backed by real engagement data. Without it, you're relying on evergreen topics and the user's domain knowledge — which still works, it's just less data-driven.
 
 ---
 
@@ -115,10 +115,10 @@ The research makes angles timely and backed by real engagement data. Without it,
 
 When writing 3-5 scripts in a batch, vary the angles:
 
-- **1 trending/timely** - riding what's in the conversation right now
-- **1 evergreen teach** - valuable anytime, builds authority
-- **1 opinion/hot take** - generates engagement and comments
-- **1 story/personal** - builds connection and trust
-- **1 problem-solver** - directly helps the audience
+- **1 trending/timely** — riding what's in the conversation right now
+- **1 evergreen teach** — valuable anytime, builds authority
+- **1 opinion/hot take** — generates engagement and comments
+- **1 story/personal** — builds connection and trust
+- **1 problem-solver** — directly helps the audience
 
 This mix keeps the content calendar interesting and serves different algorithm signals (shares, saves, comments, watch time).

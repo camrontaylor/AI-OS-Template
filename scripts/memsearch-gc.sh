@@ -26,7 +26,7 @@ if [ -f "$LOCK_PID_FILE" ] && kill -0 "$(cat "$LOCK_PID_FILE" 2>/dev/null)" 2>/d
   exit 0
 fi
 
-CANONICAL="$(bash "$SCRIPT_DIR/lib/memsearch-collection.sh" 2>/dev/null || true)"
+CANONICAL="$(bash "$SCRIPT_DIR/lib/memsearch-collection.sh" "$ROOT" 2>/dev/null || true)"
 if [ -z "$CANONICAL" ]; then
   echo "Could not resolve the canonical collection - refusing to GC."
   exit 1
@@ -45,6 +45,7 @@ send_to_trash() {
   if command -v trash >/dev/null 2>&1; then
     trash "$target" && echo "  trashed: $target ($size)"
   else
+    mkdir -p "$HOME/.Trash"
     local dest="$HOME/.Trash/$(basename "$target").$(date +%s)"
     mv "$target" "$dest" && echo "  moved to Trash: $target ($size)"
   fi

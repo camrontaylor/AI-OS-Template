@@ -80,14 +80,14 @@ Memory search has two layers:
 ```mermaid
 flowchart LR
   A["Markdown memory"] --> B["Markdown fallback search"]
-  A --> C["MemSearch"]
-  C --> D["Milvus Lite index"]
+  A --> C["Semantic search wrapper"]
+  C --> D["Search index"]
   B --> E["Recall result"]
   D --> E
 ```
 
-Markdown memory is the source of truth. MemSearch and Milvus Lite make it easier
-to find old context by meaning.
+Markdown memory is the source of truth. Search helpers make it easier to find
+old context by meaning.
 
 ## Client Commands
 
@@ -285,7 +285,7 @@ When two places disagree, use this order:
 2. Root `.claude/skills/` wins for shared skill methodology.
 3. Client `AGENTS.md`, `context/`, `brand_context/`, and `projects/` win for
    client-specific facts.
-4. Markdown memory wins over MemSearch or Milvus Lite index results.
+4. Markdown memory wins over search-index results.
 5. Local docs in `docs/` should be used to update Notion template docs.
 
 ## Common Mistakes

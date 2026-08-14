@@ -9,13 +9,13 @@ Prioritise based on what context is already loaded from brand_context/.
 
 ### Approach A: Conversational Interview (Default)
 Best for: Quick setup, users who prefer to talk it through.
-Use the Question Bank below - pick the most relevant 6-8 questions based on what context you already have.
+Use the Question Bank below — pick the most relevant 6-8 questions based on what context you already have.
 
 ### Approach B: Guided Questionnaire
 Best for: Users who want to think through their voice methodically, especially when no content samples or URLs are available.
-Use the Structured Questionnaire below - walk them through it section by section.
+Use the Structured Questionnaire below — walk them through it section by section.
 
-If the user mentions having example posts, content they like, or links to reference - combine with Extract mode (Mode 1) for best results.
+If the user mentions having example posts, content they like, or links to reference — combine with Extract mode (Mode 1) for best results.
 
 ---
 
@@ -23,14 +23,14 @@ If the user mentions having example posts, content they like, or links to refere
 
 ### Identity (pick 2-3)
 
-1. What are 3-5 words that describe your personality - not your brand's positioning, but how you actually show up?
+1. What are 3-5 words that describe your personality — not your brand's positioning, but how you actually show up?
 2. What do you stand for? What's your core belief about your industry or topic that most people in your space wouldn't say out loud?
 3. What's your background? What experiences shaped how you see things?
-4. What makes you genuinely different from others in your space - not just what you offer, but how you think?
+4. What makes you genuinely different from others in your space — not just what you offer, but how you think?
 
 ### Audience (pick 1-2)
 
-5. Who are you talking to? Be specific - not "entrepreneurs", but what kind, at what stage, with what problem?
+5. Who are you talking to? Be specific — not "entrepreneurs", but what kind, at what stage, with what problem?
 6. What tone resonates with your audience? What do they respond to? What would turn them off?
 
 ### Positioning (skip if positioning.md is loaded)
@@ -43,7 +43,7 @@ If the user mentions having example posts, content they like, or links to refere
 
 ### Practical (always ask these)
 
-9. Any words or phrases that are signature to you - things you say all the time?
+9. Any words or phrases that are signature to you — things you say all the time?
 10. Any words or phrases you hate or actively avoid? Things that feel off-brand the moment you read them?
 11. How do you feel about: humor? Profanity? Hot takes? Being polarising?
 
@@ -51,7 +51,7 @@ If the user mentions having example posts, content they like, or links to refere
 
 ## Approach B: Structured Questionnaire
 
-Walk the user through these sections ONE AT A TIME. Each section has a question and examples to help them think. Capture their answers - these become the raw material for the voice profile.
+Walk the user through these sections ONE AT A TIME. Each section has a question and examples to help them think. Capture their answers — these become the raw material for the voice profile.
 
 ### Section 1: Your Anti-Corporate Stance
 **Question:** "What annoys you most about how business is typically done in your industry?"
@@ -69,7 +69,7 @@ Give them options to react to:
 - "I've been there too, here's what worked" (experiential)
 - "Let me ask you a few questions first" (diagnostic)
 
-*What this reveals: Their relationship stance - guide, teacher, peer, consultant.*
+*What this reveals: Their relationship stance — guide, teacher, peer, consultant.*
 
 ### Section 3: Your Communication Style
 **Question:** "In real conversations, are you more..."
@@ -177,13 +177,13 @@ From their answers, build:
 **5. Map confidence zones**
 
 Based on their stated expertise and background, assign topics to zones:
-- Full authority: their core expertise areas - speak definitively
-- Earned perspective: areas with experience but not mastery - use "in my experience"
-- Active exploration: areas they're currently figuring out - speak curiously
+- Full authority: their core expertise areas — speak definitively
+- Earned perspective: areas with experience but not mastery — use "in my experience"
+- Active exploration: areas they're currently figuring out — speak curiously
 
 **6. Write example phrases**
 
-Generate 3-5 phrases in their voice based on everything above. These should feel specific, not generic. Then write 2-3 anti-examples - the same ideas in the wrong voice.
+Generate 3-5 phrases in their voice based on everything above. These should feel specific, not generic. Then write 2-3 anti-examples — the same ideas in the wrong voice.
 
 **7. Platform adaptations**
 

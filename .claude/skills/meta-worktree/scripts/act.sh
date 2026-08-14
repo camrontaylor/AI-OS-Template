@@ -20,7 +20,12 @@ for id in "$@"; do
 
     base-off-main)
       bash "$BASE/scripts/base-return-to-main.sh"
-      echo "tried to return base to main. New branch: $(git rev-parse --abbrev-ref HEAD)"
+      now_branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo unknown)"
+      if [ "$now_branch" = "main" ]; then
+        echo "returned the base folder to main. No branch-only commits were abandoned, and recovery snapshots are preserved."
+      else
+        echo "could not return the base folder to main automatically. Current branch: $now_branch"
+      fi
       ;;
 
     base-dirty)
@@ -29,9 +34,11 @@ for id in "$@"; do
       ;;
 
     main-ahead)
-      ts="$(date +%F)"
-      if git push origin "HEAD:refs/heads/backup/$ts-autosave" --force-with-lease 2>&1 | tail -1 | grep -qE '(new branch|->)'; then
-        echo "backed up to GitHub on branch backup/$ts-autosave"
+      ts="$(date +%Y-%m-%d-%H%M%S)"
+      short="$(git rev-parse --short HEAD 2>/dev/null || echo head)"
+      branch="backup/$ts-autosave-$short"
+      if git push origin "HEAD:refs/heads/$branch" 2>&1 | tail -1 | grep -qE '(new branch|->)'; then
+        echo "backed up to GitHub on branch $branch"
       else
         echo "backup push had no effect (already up to date or push failed - check GitHub)"
       fi
@@ -56,10 +63,6 @@ for id in "$@"; do
       echo "removed $removed safety snapshot(s) older than 30 days"
       ;;
 
-    log-pending|log-branch-state|info|fyi)
-      echo "$id: informational only, no action taken"
-      ;;
-
     wt-stale-*)
       name="${id#wt-stale-}"
       if [ -f "$BASE/scripts/worktree-done.sh" ]; then
@@ -71,14 +74,16 @@ for id in "$@"; do
 
     wt-dirty-*)
       name="${id#wt-dirty-}"
-      # find the worktree path and run autosave there
-      dir="$(git worktree list --porcelain 2>/dev/null | awk -v n="$name" '/^worktree /{p=$2} p && index(p,"/"n)==length(p)-length(n){print p; exit}')"
-      if [ -n "$dir" ] && [ -d "$dir" ]; then
-        ( cd "$dir" && bash "$BASE/scripts/base-autosave.sh" )
-        echo "saved unsaved edits in worktree '$name'"
+      if [ -f "$BASE/scripts/worktree-autosave.sh" ]; then
+        bash "$BASE/scripts/worktree-autosave.sh" "$name"
       else
-        echo "could not locate worktree '$name'"
+        echo "worktree-autosave.sh missing; cannot save worktree '$name'"
       fi
+      ;;
+
+    wt-prunable-*)
+      git worktree prune 2>/dev/null || true
+      echo "pruned missing worktree metadata"
       ;;
 
     wt-orphan-*)
@@ -92,6 +97,10 @@ for id in "$@"; do
       else
         echo "orphan folder '$name' not found (already gone?)"
       fi
+      ;;
+
+    wt-open-*|log-pending|log-branch-state|info|fyi)
+      echo "$id: informational only, no action taken"
       ;;
 
     branch-*|stash-*|recovered-files)

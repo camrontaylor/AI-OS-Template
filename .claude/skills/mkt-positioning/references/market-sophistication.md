@@ -11,7 +11,7 @@ The market hasn't seen this before. No competitors. No awareness of the solution
 **Angle approach:** Simple, direct announcement. Name the problem and the solution.
 > "Now you can [do thing that wasn't possible before]."
 
-**Messaging style:** Educate. Explain the category. Don't differentiate - there's nothing to differentiate from yet.
+**Messaging style:** Educate. Explain the category. Don't differentiate — there's nothing to differentiate from yet.
 
 **Example:** The first email marketing tool didn't need to explain why it was better than other email tools. It just needed to explain why email marketing exists.
 
@@ -37,7 +37,7 @@ Many players. Similar claims. Skepticism rising. "Save time with AI" is now mean
 **Angle approach:** Explain the mechanism. Show WHY your approach works when others don't.
 > "Here's WHY this works when others don't: [mechanism]."
 
-**Messaging style:** Proof and differentiation. The claim alone isn't enough - the audience needs to understand the how. Named methods, proprietary processes, and unique mechanisms become essential.
+**Messaging style:** Proof and differentiation. The claim alone isn't enough — the audience needs to understand the how. Named methods, proprietary processes, and unique mechanisms become essential.
 
 **This is where most markets live.** If the market has 5+ competitors making similar promises, you're here.
 
@@ -78,7 +78,7 @@ Ask these diagnostic questions:
 4. **Do customers buy based on brand/identity, not features?** (Yes = Stage 4-5)
 5. **Is there a dominant leader everyone compares to?** (Yes = Stage 5)
 
-The stage isn't fixed - different audience segments can be at different stages. A technical audience might be at Stage 3 while a mainstream audience is at Stage 2 for the same product.
+The stage isn't fixed — different audience segments can be at different stages. A technical audience might be at Stage 3 while a mainstream audience is at Stage 2 for the same product.
 
 ---
 

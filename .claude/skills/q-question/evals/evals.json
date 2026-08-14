@@ -1,0 +1,23 @@
+{
+  "skill_name": "q-question",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "My client is asking whether we can build semantic AI search and product recommendations into their HubSpot site. I can code a custom search bar if needed. Is this actually possible, and what can I safely tell them?",
+      "expected_output": "A conditional yes/no feasibility answer that checks current HubSpot docs, separates native HubSpot search from custom/external backend options, states constraints, and gives client-safe wording.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Quick one: what's the capital of New Zealand?",
+      "expected_output": "A direct answer without unnecessary research ceremony.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Should I move this client from Webflow to a custom Next.js site? They want advanced search, gated content, and CRM integration, but I don't want to overbuild if Webflow can handle it.",
+      "expected_output": "A decision answer that names the actual tradeoff, checks assumptions, compares the options, gives a recommendation with caveats, and identifies what would change the answer.",
+      "files": []
+    }
+  ]
+}

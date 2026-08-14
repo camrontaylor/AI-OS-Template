@@ -69,7 +69,7 @@ Keep it plain. Translate any jargon. Never print secret values; the script repor
 
 - Node runtime, and the Command Centre dependencies (better-sqlite3).
 - The onboarding command is present.
-- The nightly cron daemon (macOS launchd): loaded, off, or stalled.
+- Scheduler authority: local macOS launchd, or an explicitly declared Hermes VPS migration with local launchd intentionally stopped.
 - Semantic memory (memsearch) installed.
 - API keys: how many documented keys are exported in the current process. It does not read `.env`.
 - Connector readiness: connector map, AgentMail files, Notion sync files, Notion resource-health status, Notion blocker notes, and client-dashboard shared profile.

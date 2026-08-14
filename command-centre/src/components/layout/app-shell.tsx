@@ -1,14 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { RefreshCw } from "lucide-react";
 import { Sidebar } from "./sidebar";
 import { ClientSwitcher } from "./client-switcher";
 import { OperationsRail } from "./operations-rail";
+import { TaskDeepLinkHandler } from "./task-deep-link-handler";
+import { BrandContextBanner } from "@/components/board/brand-context-banner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useGsdSync } from "@/hooks/use-gsd-sync";
 
 export function AppShell({ children, title }: { children: React.ReactNode; title?: string }) {
+  useGsdSync();
+
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   // Auto-collapse sidebar on narrow viewports
@@ -24,6 +29,9 @@ export function AppShell({ children, title }: { children: React.ReactNode; title
 
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
+      <Suspense fallback={null}>
+        <TaskDeepLinkHandler />
+      </Suspense>
       <Sidebar
         collapsed={sidebarCollapsed}
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
@@ -58,6 +66,7 @@ export function AppShell({ children, title }: { children: React.ReactNode; title
             </Button>
           </div>
         </header>
+        <BrandContextBanner />
         <div className="flex min-h-[calc(100vh-3.5rem)]">
           <div className="flex min-w-0 flex-1 flex-col gap-4 px-4 pb-4 pt-4 sm:px-6 sm:pb-6">
             {children}

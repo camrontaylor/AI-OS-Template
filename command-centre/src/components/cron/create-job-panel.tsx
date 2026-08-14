@@ -16,6 +16,8 @@ export function CreateJobPanel() {
   const updateJob = useCronStore((s) => s.updateJob);
   const editingJob = useCronStore((s) => s.editingJob);
   const setEditingJob = useCronStore((s) => s.setEditingJob);
+  const createJobDraft = useCronStore((s) => s.createJobDraft);
+  const setCreateJobDraft = useCronStore((s) => s.setCreateJobDraft);
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -23,7 +25,7 @@ export function CreateJobPanel() {
   const [model, setModel] = useState("sonnet");
   const [prompt, setPrompt] = useState("");
 
-  // Sync state when editingJob changes
+  // Sync state when editing, opening a template draft, or creating a blank job.
   useEffect(() => {
     if (editingJob) {
       setName(editingJob.name || "");
@@ -31,6 +33,12 @@ export function CreateJobPanel() {
       setSchedule({ time: editingJob.time || "09:00", days: editingJob.days || "daily" });
       setModel(editingJob.model || "sonnet");
       setPrompt(editingJob.prompt || "");
+    } else if (createJobDraft) {
+      setName(createJobDraft.name || "");
+      setDescription(createJobDraft.description || "");
+      setSchedule({ time: createJobDraft.time || "09:00", days: createJobDraft.days || "daily" });
+      setModel(createJobDraft.model || "sonnet");
+      setPrompt(createJobDraft.prompt || "");
     } else {
       setName("");
       setDescription("");
@@ -38,13 +46,14 @@ export function CreateJobPanel() {
       setModel("sonnet");
       setPrompt("");
     }
-  }, [editingJob]);
+  }, [editingJob, createJobDraft]);
 
   if (!showCreatePanel && !editingJob) return null;
 
   const handleClose = () => {
     setShowCreatePanel(false);
     setEditingJob(null);
+    setCreateJobDraft(null);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
