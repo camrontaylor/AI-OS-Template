@@ -17,6 +17,7 @@ patterns = {
     'retired branding': rb'(?i)\x73kool|\x73imon|\x73crapes|\x61gentic(?:[-_ ]os)?|\b\x73capes\b|a\s+g\s+e\s+n\s+t\s+i\s+c',
 }
 failures = []
+runtime_placeholders = {'backups/.gitkeep', 'backups/memory/.gitkeep'}
 for raw in paths:
     if not raw:
         continue
@@ -35,7 +36,7 @@ for raw in paths:
             continue  # Credential detector syntax necessarily contains credential examples.
         if re.search(pattern, content):
             failures.append((name, label))
-    if re.search(r'(^|/)(?:node_modules|\.next|\.command-centre|\.AI-OS|backups)(/|$)', name):
+    if re.search(r'(^|/)(?:node_modules|\.next|\.command-centre|\.AI-OS|backups)(/|$)', name) and not (name in runtime_placeholders and not content):
         failures.append((name, 'local runtime artifact'))
     if name.startswith('cron/jobs/') and path.suffix == '.md':
         if not re.search(rb"(?m)^active:\s*['\"]?false['\"]?\s*$", content):

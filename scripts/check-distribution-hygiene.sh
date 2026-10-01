@@ -18,6 +18,11 @@ is_allowed_distribution_path() {
         brand_context/.gitkeep \
         |clients/.gitkeep \
         |projects/.gitkeep \
+        |projects/briefs/.gitkeep \
+        |cron/logs/.gitkeep \
+        |cron/status/.gitkeep \
+        |backups/.gitkeep \
+        |backups/memory/.gitkeep \
         |context/MEMORY.md \
         |context/SOUL.md \
         |context/USER.md \
@@ -42,6 +47,11 @@ required_paths=(
     "brand_context/.gitkeep"
     "clients/.gitkeep"
     "projects/.gitkeep"
+    "projects/briefs/.gitkeep"
+    "cron/logs/.gitkeep"
+    "cron/status/.gitkeep"
+    "backups/.gitkeep"
+    "backups/memory/.gitkeep"
     "context/MEMORY.md"
     "context/SOUL.md"
     "context/USER.md"
@@ -63,11 +73,14 @@ while IFS= read -r file; do
     if ! is_allowed_distribution_path "$file"; then
         fail "user-owned distribution path is tracked: $file"
     fi
-done < <(git ls-files -- brand_context projects context team_context clients)
+done < <(git ls-files -- brand_context projects context team_context clients cron/logs cron/status backups)
 
 for file in "${required_paths[@]}"; do
     if ! git ls-files --error-unmatch -- "$file" >/dev/null 2>&1; then
         fail "required distribution scaffold is missing: $file"
+    fi
+    if [[ "$file" == */.gitkeep ]] && { [[ ! -f "$file" ]] || grep -q '[^[:space:]]' "$file"; }; then
+        fail "distribution placeholder must exist and be blank: $file"
     fi
 done
 
