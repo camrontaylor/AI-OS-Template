@@ -4,6 +4,8 @@ import importlib.util
 import os
 from pathlib import Path
 import shutil
+import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -84,4 +86,8 @@ class DiscoveryTests(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    # The existing distribution CI gate also covers scoped maintenance behavior.
+    result = subprocess.run([sys.executable, str(Path(__file__).with_name('test-workspace-maintenance.py'))])
+    if result.returncode:
+        raise SystemExit(result.returncode)
     unittest.main()

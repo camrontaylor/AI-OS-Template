@@ -12,6 +12,8 @@ Lessons and user feedback belong here. This template starts with no session hist
 
 ## fin-personal-cfo
 
+## meta-find-skills
+
 ## meta-memory-recall
 
 ## meta-memory-write

@@ -83,6 +83,12 @@ No extra shim is needed for Codex.
 
 ### What you manage separately
 
+In Solo mode, a generated `context/current-state.md` gives each client a short
+recent summary and links to its own source files. Refresh it at substantive task
+startup, then read only the relevant sources. Confirmed corrections also stay in
+that client's logs and learnings. Commands and Team boundaries:
+[Reliable work](agent-reliability.md).
+
 - Brand context
 - Learnings
 - Session memory

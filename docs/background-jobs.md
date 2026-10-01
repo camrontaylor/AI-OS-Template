@@ -3,7 +3,7 @@
 A scheduled job repeats a task at a chosen time. It needs Claude Code, a running
 scheduler and an awake host. The browser tab itself is not the scheduler.
 
-All nine included example jobs start **paused**. Review the prompt, schedule,
+All ten included example jobs start **paused**. Review the prompt, schedule,
 model and scope before enabling one. Jobs can use model/API usage and paid services.
 
 In Command Centre, open **Scheduled** to inspect, edit, run, pause or resume a job.

@@ -42,8 +42,8 @@ for raw in paths:
             failures.append((name, 'example job must start paused'))
 
 skill_files = list((root / '.claude/skills').glob('*/SKILL.md'))
-if len(skill_files) != 93:
-    failures.append(('.claude/skills', f'expected 93 shipped definitions, found {len(skill_files)}'))
+if len(skill_files) != 94:
+    failures.append(('.claude/skills', f'expected 94 shipped definitions, found {len(skill_files)}'))
 for path in skill_files:
     source = path.read_text()
     parts = source.split('---', 2)
@@ -57,4 +57,4 @@ if failures:
     for name, label in failures:
         print(f'ERROR: {name}: {label}')
     sys.exit(1)
-print(f'Public template checks passed: {len(paths)-1} paths, 93 skills, paused jobs, valid discovery links, no credential or retired-brand patterns.')
+print(f'Public template checks passed: {len(paths)-1} paths, 94 skills, paused jobs, valid discovery links, no credential or retired-brand patterns.')

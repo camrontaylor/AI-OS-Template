@@ -2,6 +2,18 @@
 
 All notable changes to AI-OS will be documented in this file. Written for humans, not machines.
 
+## Unreleased
+
+### Added
+
+- Shared thinking, task recovery, evidence and code rules, with scoped checkpoints and live result checks.
+- Solo correction promotion, client current-state briefs and read-only setup checks through one local maintenance command. The new correction job starts paused.
+- `meta-find-skills` selects one to three methods from the shared and authorized client inventory. The pack now contains 94 skills.
+
+### Preserved
+
+- Team snapshot authority, user-owned context and overrides, optional setup and paused example jobs. Local maintenance stops when Team mode is detected.
+
 ## v1.1.5 - 2026-09-29
 
 ### Security

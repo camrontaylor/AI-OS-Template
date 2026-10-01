@@ -23,7 +23,10 @@ runtime support, not a requirement for Codex. Quick start: `docs/quick-start.md`
 
 When the user asks for something:
 1. Check **Built-in Operations** first — if it matches, execute directly.
-2. Otherwise search `.claude/skills/` frontmatter for a matching skill. Codex
+2. Use an explicitly named skill when it fits. For uncertain or multifaceted
+   routing, invoke `meta-find-skills` to choose one to three methods from the
+   complete shared inventory and the active client's authorized inventory.
+   Otherwise search `.claude/skills/` frontmatter for a matching skill. Codex
    discovers the same source through `.agents/skills/`; respect active client
    `skillOverrides` and prefer client-local skills over inherited ones.
 3. If a skill matches, invoke it (and read its `SKILL.local.md` alongside).
@@ -38,6 +41,44 @@ choose to build a skill when none matches.
 
 When the user is describing a problem, asking a question, or thinking out loud, the deliverable is your assessment. Report your findings and stop. Don't apply a fix until they ask for one. This is the default for conversational turns; it does not apply to an explicitly requested task or to a scheduled/autonomous job, which carries its own instruction.
 
+## Thinking and Task Ownership
+
+- For a real decision, test the assumptions, consider distinct routes and the
+  strongest counter-case, then give one supported call. A simple request gets a
+  direct answer. "Thinking partner off" disables this posture for this session
+  only; "thinking partner back on" restores it. Never persist the off state.
+- For authorized work, retain the whole goal through follow-ups and tool failures.
+  Take reversible steps within scope, verify every agreed requirement, and
+  continue while an authorized action can advance the outcome. Stop at completion,
+  a user pause, or a real dependency. Ask only for a fact or decision that changes
+  the work and cannot be safely resolved from available sources.
+- Save changed decisions before dependent actions. After checking the result,
+  update and read back the existing scoped session or project record. Recover the
+  matching task after a reset; recheck live state before repeating a write. Skip
+  trivial answers and unchanged state. Team storage rules below take precedence.
+
+Mechanics and maintenance commands: `docs/agent-reliability.md`.
+
+## Evidence and Completion
+
+Memory points to sources. Verify current claims from live state, primary files or
+official docs; label proposals and unknowns. Before delivery, check facts and the
+full agreed outcome against real sources, using a fresh reviewer when useful for
+judgment work. Show material assumptions the user may want to change.
+
+For an external action, retain the exact target and returned artifact ID or URL,
+then read the changed live state before claiming success. After a timeout or an
+access change, check current state and retry safety before another write. Report
+the verified limit and smallest missing input when proof is unavailable.
+
+## Coding Discipline
+
+Trace the flow and callers before editing. Reuse existing helpers, standard
+features and installed dependencies; fix shared causes once. Make the smallest
+change that solves the task, preserving style and unrelated work. Define and run
+an appropriate outcome check; nontrivial logic gets a small behavior test. Report
+what was tested and any material gap. Details: `docs/agent-reliability.md`.
+
 ## Built-in Operations
 
 Core system functions handled by scripts. Check these before searching skills.
@@ -51,6 +92,7 @@ Core system functions handled by scripts. Check these before searching skills.
 | "list skills", "what skills are installed" | `bash scripts/list-skills.sh` |
 | "start / stop / status / logs crons" | `bash scripts/{start,stop,status,logs}-crons.sh` |
 | "setup memory", "enable searchable memory" | `bash scripts/setup-memory.sh` |
+| "check my setup", "system health check" | Solo: `python3 <root>/scripts/workspace-maintenance.py health --scope <active-workspace>`. Read-only; details in `docs/agent-reliability.md`. Team: use only the connected runtime's authorized status tools. |
 
 ### Add Client Flow
 
@@ -126,6 +168,12 @@ Recall a past fact or decision: `npm run memory:recall -- "query"` from
 capture mechanics and budget procedure: `docs/memory-retrieval.md`,
 `docs/memory/session-capture.md`.
 
+Confirmed corrections belong under `### Corrections` in the existing scoped
+daily session, tagged with an installed skill or `general`. Solo promotion uses
+`workspace-maintenance.py corrections`; it appends lessons to the same scope and
+skips duplicates. Team lessons use only the authorized connected store. Capture,
+promotion checks and client briefs: `docs/agent-reliability.md`.
+
 ---
 
 ## Output Standards
@@ -165,7 +213,7 @@ fallback, never block when the fallback is usable. Full registry: `.env.example`
 <!-- AI-OS SKILL PACK:START -->
 ## Installed Skill Pack
 
-93 skills are installed, including 69 adapted workflows (67 new folders and
+94 skills are installed, including 69 adapted workflows (67 new folders and
 extensions to `mkt-copywriting` and `str-ai-seo`). The complete trigger registry
 is `docs/skill-registry.md`; context loads are in `docs/context-matrix.md` and
 each skill's Context Needs. Read the active skill's learnings section only.
@@ -174,7 +222,7 @@ the existing foundations. Shared tools are in `.claude/skills/_shared/tools/`;
 optional credentials and manual fallbacks are documented there and in
 `.env.example`. No account or external memory service is connected automatically.
 - fin: `fin-company-cfo`, `fin-invoice-reconciliation`, `fin-month-end-reporting`, `fin-personal-cfo`
-- meta: `meta-memory-recall`, `meta-memory-write`, `meta-skill-creator`, `meta-skillify`, `meta-synthesize-locals`, `meta-toolify`, `meta-wrap-up`
+- meta: `meta-find-skills`, `meta-memory-recall`, `meta-memory-write`, `meta-skill-creator`, `meta-skillify`, `meta-synthesize-locals`, `meta-toolify`, `meta-wrap-up`
 - mkt: `mkt-ab-testing`, `mkt-ad-creative`, `mkt-ads`, `mkt-aso`, `mkt-brand-voice`, `mkt-churn-prevention`, `mkt-co-marketing`, `mkt-cold-email`, `mkt-community-marketing`, `mkt-content-repurposing`, `mkt-copy-editing`, `mkt-copywriting`, `mkt-cro`, `mkt-directory-submissions`, `mkt-emails`, `mkt-events`, `mkt-free-tools`, `mkt-icp`, `mkt-influencer-marketing`, `mkt-jab-hook`, `mkt-launch`, `mkt-lead-magnets`, `mkt-marketing-loops`, `mkt-offers`, `mkt-onboarding`, `mkt-paywalls`, `mkt-popups`, `mkt-positioning`, `mkt-programmatic-seo`, `mkt-prospecting`, `mkt-public-relations`, `mkt-referrals`, `mkt-sales-enablement`, `mkt-schema`, `mkt-signup`, `mkt-sms`, `mkt-social`, `mkt-ugc-scripts`, `mkt-visual-identity`
 - ops: `ops-analytics`, `ops-attribution`, `ops-cron`, `ops-ingest`, `ops-loopify`, `ops-project-management`, `ops-revops`
 - str: `str-ai-seo`, `str-business-brainstorm`, `str-competitor-profiling`, `str-competitors`, `str-content-strategy`, `str-customer-research`, `str-decide`, `str-deep-research`, `str-domain`, `str-maker-council`, `str-marketing-council`, `str-marketing-ideas`, `str-marketing-plan`, `str-marketing-psychology`, `str-pricing`, `str-product-marketing`, `str-seo-audit`, `str-site-architecture`, `str-trending-research`, `str-unstuck`
