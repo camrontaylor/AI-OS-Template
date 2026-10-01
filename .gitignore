@@ -1,0 +1,72 @@
+# Secrets
+.env
+.mcp.json
+**/.env.local
+
+# Local settings (per-machine Claude permissions)
+.claude/settings.local.json
+**/.claude/settings.local.json
+.claude/hooks_info/ccnotify.db
+.claude/hooks_info/ccnotify.log*
+
+# Installer state
+.claude/skills/_catalog/installed.json
+**/.claude/skills/_catalog/installed.json
+
+# Local planning state
+.planning/
+**/.planning/
+
+# Dev-only skills (not shipped to main)
+.claude/skills/ops-new-feature/
+.claude/skills/ops-release/
+
+# System
+.DS_Store
+.backup/
+.tmp/
+
+# Next.js / Node (inside project folders)
+**/node_modules/
+**/.next/
+**/next-env.d.ts
+**/tsconfig.tsbuildinfo
+
+# Command Centre data (inside project folders)
+**/.command-centre/
+**/.AI-OS/
+
+# Agent worktrees (temporary, per-machine)
+.worktrees/
+.claude/worktrees/
+.instances/
+
+# SQLite databases (inside project folders)
+**/data.db
+
+# Cron runtime (logs and status are generated at runtime)
+cron/logs/
+cron/status/
+
+# Raw session transcripts (archived locally, not committed)
+**/context/transcripts/*
+!context/transcripts/.gitkeep
+
+# Auto-captured memory summaries under context/memory/*.aos.md are tracked.
+# They are the source files used to rebuild the memory index and should be
+# included in private GitHub backups. Raw transcripts above stay local.
+
+# memsearch shadow index (rebuildable — do not commit)
+.memsearch/
+
+# Memory database backups (dumps/tarballs — never commit)
+backups/
+
+__pycache__/
+*.pyc
+.pytest_cache/
+# Local Command Centre development-server logs
+command-centre/.dev-*.log
+
+# Local investigation artifacts for the multi-profile isolation project
+projects/briefs/team-os-multi-profile-isolation/research/

@@ -1,0 +1,164 @@
+<!doctype html>
+<!--
+  Template: body-illustration
+  Mode: HYBRID_AI
+  Role: tip slide where the visual is a custom illustration (metaphor, diagram, hand-drawn concept)
+  When to use: concept is METAPHORICAL or DIAGRAMMATIC, not a screenshot.
+    Examples: "claude.md → filing cabinet", "blocked sites → brick wall", "abstraction → tower of cards"
+  When NOT to use: if the concept can be shown as a code mock, terminal, table, or actual UI screenshot
+    → use body-screenshot.html (PURE_CSS) instead.
+
+  Variables:
+    {{ title_number }}     e.g. "1"
+    {{ title_text }}       e.g. "Point, Don't Dump"
+    {{ body_text }}        full paragraph (will wrap, supports inline <strong>)
+    {{ ai_image_src }}     path to AI-generated illustration (PNG, transparent or white bg)
+    {{ ai_image_prompt }}  prompt used (passed for traceability / regeneration)
+    {{ alt_text }}         accessibility alt text
+
+  Brand-aware prompt construction (orchestrator builds before render):
+    Style:    hand-drawn illustration, single confident stroke red marker (#e25a45) on white,
+              architectural blueprint feel. NOT scribbled, NOT corporate vector clip-art.
+    Palette:  #0a0a0a primary, #e25a45 accent, #ffffff bg. No other colors.
+    Mood:     practitioner, mechanical, builder. Concrete metaphor, not abstract.
+    Medium:   notebook sketch / surgical line drawing.
+    Composition: centered subject, generous white margins, isolated illustration (no scene).
+    Reference: brand_context/visual_refs/carousel-trap-2-copypasting.png (subject layout)
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: 'Display'; src: url('../../brand_context/fonts/Geist-Black.ttf') format('truetype'); font-weight: 900; }
+  @font-face { font-family: 'Body';    src: url('../../brand_context/fonts/Geist-Regular.ttf') format('truetype'); font-weight: 400; }
+  @font-face { font-family: 'BodyBold'; src: url('../../brand_context/fonts/Geist-Bold.ttf') format('truetype'); font-weight: 700; }
+
+  /* Issue 08 — layout tokens. See layout-token-schema.md. */
+  :root {
+    --font-size-headline:    68px;
+    --font-size-body:        30px;
+    --line-height-headline:  1.05;
+    --line-height-body:      1.35;
+    --max-chars-headline:    38;
+    --max-chars-body:        70;
+    --logo-x:                75px;
+    --logo-y:                75px;
+    --logo-size:             130px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 1080px; height: 1350px;
+    background: #f2f0eb;
+    font-family: 'Body', system-ui, sans-serif;
+    color: #0a0a0a;
+    overflow: hidden;
+  }
+
+  body::before {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle at 30% 40%, rgba(0,0,0,0.012) 0%, transparent 50%),
+      radial-gradient(circle at 70% 60%, rgba(0,0,0,0.018) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .slide { position: relative; width: 1080px; height: 1350px; }
+
+  .dots {
+    position: absolute;
+    top: 80px; right: 80px;
+    width: 180px; height: 110px;
+    background-image: radial-gradient(circle, #9a9892 1.8px, transparent 2px);
+    background-size: 18px 18px;
+    opacity: 0.65;
+  }
+
+  h1 {
+    position: absolute;
+    top: 115px; left: 80px; right: 80px;
+    font-family: 'Display', sans-serif;
+    font-weight: 900;
+    font-size: var(--font-size-headline);
+    line-height: var(--line-height-headline);
+    letter-spacing: -0.045em;
+    color: #0a0a0a;
+  }
+
+  .body-text {
+    position: absolute;
+    top: 220px; left: 80px; right: 80px;
+    font-family: 'Body', sans-serif;
+    font-weight: 400;
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+    color: #0a0a0a;
+  }
+  .body-text strong { font-family: 'BodyBold', sans-serif; font-weight: 700; }
+
+  /* ─── AI IMAGE SLOT ────────────────────────────────────────
+     This rectangle is where the orchestrator injects the AI-generated
+     illustration. The slot has a fixed size and the image fills it
+     with object-fit:contain (illustration is NOT cropped). */
+  .ai-illustration {
+    position: absolute;
+    top: 470px; left: 100px; right: 100px;
+    height: 760px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ai-illustration img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    padding: 30px;
+  }
+
+  /* Placeholder state when no image is provided yet (for prototyping) */
+  .ai-illustration.placeholder {
+    background:
+      repeating-linear-gradient(45deg, #f2f0eb, #f2f0eb 12px, #e8e6e0 12px, #e8e6e0 24px),
+      #ffffff;
+    color: #8a8580;
+    font-family: 'Body', sans-serif;
+    font-size: 26px;
+    text-align: center;
+    padding: 60px;
+    line-height: 1.5;
+  }
+  .ai-illustration.placeholder::before {
+    content: "AI illustration slot";
+    display: block;
+    font-family: 'Display', sans-serif;
+    font-size: 32px;
+    color: #5a5854;
+    margin-bottom: 16px;
+  }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="dots"></div>
+
+    <h1>{{ title_number }}. {{ title_text }}</h1>
+
+    <p class="body-text">{{ body_text }}</p>
+
+    <!--
+      RENDER MODE: HYBRID_AI
+      Replace the placeholder div below with:
+        <div class="ai-illustration" data-render-mode="HYBRID_AI">
+          <img src="{{ ai_image_src }}" alt="{{ alt_text }}">
+        </div>
+    -->
+    <div class="ai-illustration placeholder" data-render-mode="HYBRID_AI" data-ai-prompt="{{ ai_image_prompt }}">
+      {{ ai_image_prompt }}
+    </div>
+  </div>
+</body>
+</html>

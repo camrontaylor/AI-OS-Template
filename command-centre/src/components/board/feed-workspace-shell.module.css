@@ -1,0 +1,16 @@
+.root :where(button, input, textarea, select, [role="button"], [role="menuitem"], [tabindex]):focus-visible {
+  outline: 2px solid var(--cc-brand-alpha-30);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root,
+  .root *,
+  .root *::before,
+  .root *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

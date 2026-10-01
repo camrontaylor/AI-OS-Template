@@ -1,0 +1,35 @@
+# Hosted-memory Postgres + pgvector for local development and VPS hosting.
+#
+# This is the SAME image you deploy on Railway (deploy `pgvector/pgvector:pg16`
+# as a service), so the shared memory schema + pgvector behave identically in
+# local dev, on a VPS, and on Railway. See docs/memory/hosted-postgres-setup.md.
+#
+#   docker compose up -d
+#   MEMORY_DATABASE_URL=postgres://postgres:postgres@localhost:5432/ai_memory \
+#     npm run memory:migrate
+#
+# Credentials below are local defaults — override via a .env file or shell env.
+# Never commit real production credentials.
+
+services:
+  memory-postgres:
+    image: pgvector/pgvector:pg16
+    container_name: aios-memory-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-ai_memory}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - aios_memory_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-ai_memory}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  aios_memory_pgdata:

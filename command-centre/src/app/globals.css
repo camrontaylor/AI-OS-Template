@@ -1,0 +1,112 @@
+@import "../design-system/theme.css";
+@import "tailwindcss";
+
+body {
+  background-color: var(--cc-canvas);
+  color: var(--cc-text-primary);
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.3);
+  }
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-badge {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes running-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes running-glow {
+  0%, 100% { box-shadow: var(--cc-shadow-running); }
+  50% { box-shadow: var(--cc-shadow-running-strong); }
+}
+
+.card-running {
+  animation: running-glow 2.5s ease-in-out infinite;
+}
+
+@keyframes pulse-opacity {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.pulse-text {
+  animation: pulse-opacity 2s ease-in-out infinite;
+}
+
+.custom-shadow {
+  box-shadow: var(--cc-shadow-card);
+}
+
+/* Parent detail-panel two-column layout: conversation LEFT, subtasks RIGHT.
+   Collapses to a single column below 720px of available container width. */
+.dp-parent-split {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 320px);
+  align-items: start;
+}
+@container (max-width: 720px) {
+  .dp-parent-split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+
+.terracotta-gradient {
+  background: var(--cc-brand-gradient);
+}
+
+/* Chat markdown: remove top margin on first child and bottom margin on last child */
+.chat-markdown > :first-child {
+  margin-top: 0 !important;
+}
+.chat-markdown > :last-child {
+  margin-bottom: 0 !important;
+}
+/* Company Teams controls share one visible keyboard focus treatment. */
+.cc-team-focus:focus-visible,
+.cc-team-input:focus-visible,
+.cc-team-link:focus-visible {
+  outline: 2px solid var(--cc-brand-primary);
+  outline-offset: 2px;
+}
+
+.cc-team-link:hover {
+  color: var(--cc-brand-primary) !important;
+}
+
+
+/* Keep media, emoji, native controls, and embedded previews monochrome too.
+   Applying this at the document root preserves viewport-based fixed overlays. */
+html {
+  filter: grayscale(1);
+  accent-color: var(--cc-brand-primary);
+}

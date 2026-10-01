@@ -1,0 +1,110 @@
+<!doctype html>
+<!--
+  Primitive: typographic-stack
+  Role: hero
+  Slots:
+    headline        (string, max 60 chars; supports <span class="accent"> for one-word emphasis)
+    subtitle        (string, max 90 chars, 1-2 lines)
+    byline          (string, optional; "Written by X")
+    swipe_text      (string, optional; "Swipe Left", "Tap to read")
+    page_indicator  (string, optional; "01 / 06")
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+{{ CSS_VARS }}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: {{ CANVAS_W }}px;
+  height: {{ CANVAS_H }}px;
+  background: var(--color-bg_light, #f2f0eb);
+  color: var(--color-text_on_light, #0a0a0a);
+  font-family: var(--font-body, system-ui, sans-serif);
+  overflow: hidden;
+}
+
+body::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 30% 40%, rgba(0,0,0,0.012) 0%, transparent 50%),
+    radial-gradient(circle at 70% 60%, rgba(0,0,0,0.018) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.slide { position: relative; width: 100%; height: 100%; padding: 80px; }
+
+.page-indicator {
+  position: absolute; top: 80px; right: 80px;
+  font-family: ui-monospace, 'Geist Mono', monospace;
+  font-size: var(--size-caption, 22px);
+  color: var(--color-text_muted, #5a5854);
+  letter-spacing: 0.08em;
+}
+
+.dots {
+  position: absolute; top: 80px; right: 80px;
+  width: 180px; height: 110px;
+  background-image: radial-gradient(circle, var(--color-text_muted, #9a9892) 1.8px, transparent 2px);
+  background-size: 18px 18px; opacity: 0.55;
+}
+
+.headline-block {
+  position: absolute;
+  top: 220px; left: 80px; right: 80px;
+  max-width: 920px;
+}
+
+h1 {
+  font-family: var(--font-display, var(--font-body, system-ui));
+  font-weight: 900;
+  font-size: var(--size-display, 108px);
+  line-height: var(--leading-display, 1.0);
+  letter-spacing: var(--tracking-display, -0.045em);
+  color: var(--color-text_on_light, #0a0a0a);
+}
+h1 .accent { color: var(--color-accent, #e25a45); }
+
+.subtitle {
+  position: absolute;
+  top: 690px; left: 80px; right: 80px;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--size-subtitle, 46px);
+  line-height: var(--leading-subtitle, 1.3);
+  color: var(--color-text_muted, #5a5854);
+}
+
+.byline {
+  position: absolute;
+  bottom: 95px; left: 80px;
+  font-size: var(--size-caption, 32px);
+  color: var(--color-text_muted, #5a5854);
+}
+
+.swipe-pill {
+  position: absolute;
+  bottom: 85px; right: 80px;
+  padding: 20px 36px;
+  border: 1.5px solid var(--color-border_subtle, #6c6a64);
+  border-radius: 999px;
+  font-size: var(--size-caption, 28px);
+  color: var(--color-text_on_light, #0a0a0a);
+}
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="dots"></div>
+    <div class="page-indicator">{{ page_indicator }}</div>
+    <div class="headline-block">
+      <h1>{{ headline }}</h1>
+    </div>
+    <p class="subtitle">{{ subtitle }}</p>
+    <p class="byline">{{ byline }}</p>
+    <div class="swipe-pill">{{ swipe_text }}</div>
+  </div>
+</body>
+</html>

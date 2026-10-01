@@ -1,0 +1,2 @@
+// Removed — unused component
+export {};

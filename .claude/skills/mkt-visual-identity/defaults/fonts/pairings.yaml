@@ -1,0 +1,161 @@
+# Curated editorial font pairings — Google Fonts (free, embeddable)
+#
+# When to use this file:
+#   - User sets up a new brand WITHOUT declaring fonts
+#   - Phase 2 ref-analysis identifies a "mood" but no specific font family
+#   - User explicitly picks "use a default pairing" in the font popup
+#
+# Each pairing has:
+#   - id              : kebab slug used to reference the pair
+#   - mood[]          : tags that match against ref-analysis mood detection
+#   - display         : the heavy headline sans (oversized numerals, hero text)
+#   - display_italic  : the serif italic anchor for mixed-typography moments
+#   - body            : the readable body sans (paragraphs, tagline)
+#   - google_fonts_url: single combined URL for @import (faster than multiple)
+#   - notes           : when this pair shines, when to avoid
+#
+# Local files live alongside this yaml in pair-{id}/ subfolders, downloaded once
+# via scripts/fetch_default_fonts.py (deferred — for now templates use Google Fonts CDN
+# via @import + local @font-face fallback if user uploads the same files).
+
+pairings:
+  - id: editorial-heavy
+    mood: [editorial, magazine, founder-led, punchy, contemporary]
+    display:
+      family: "Inter Tight"
+      weight: 900
+      google_name: "Inter+Tight:wght@900"
+    display_italic:
+      family: "Playfair Display"
+      weight: 700
+      style: italic
+      google_name: "Playfair+Display:ital,wght@1,700"
+    body:
+      family: "Inter"
+      weight: 500
+      google_name: "Inter:wght@500;700"
+    google_fonts_url: "https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&family=Playfair+Display:ital,wght@1,700&family=Inter:wght@500;700&display=swap"
+    notes: "Default for personal brands + LinkedIn carousels with editorial vibe. Inter Tight black is the workhorse display; Playfair italic carries the italic-serif anchor moments."
+
+  - id: magazine-classic
+    mood: [literary, long-form, thought-leadership, refined]
+    display:
+      family: "Archivo Black"
+      weight: 400
+      google_name: "Archivo+Black"
+    display_italic:
+      family: "Fraunces"
+      weight: 700
+      style: italic
+      google_name: "Fraunces:ital,opsz,wght@1,9..144,700"
+    body:
+      family: "Manrope"
+      weight: 500
+      google_name: "Manrope:wght@500;700"
+    google_fonts_url: "https://fonts.googleapis.com/css2?family=Archivo+Black&family=Fraunces:ital,opsz,wght@1,9..144,700&family=Manrope:wght@500;700&display=swap"
+    notes: "Heavier serif-italic personality via Fraunces (variable opsz makes italic look hand-set at every size). Archivo Black is the most magazine-cover-feeling free sans available."
+
+  - id: condensed-modern
+    mood: [bold, tabloid, headline-first, news, sport]
+    display:
+      family: "Anton"
+      weight: 400
+      google_name: "Anton"
+    display_italic:
+      family: "DM Serif Display"
+      weight: 400
+      style: italic
+      google_name: "DM+Serif+Display:ital@1"
+    body:
+      family: "DM Sans"
+      weight: 500
+      google_name: "DM+Sans:wght@500;700"
+    google_fonts_url: "https://fonts.googleapis.com/css2?family=Anton&family=DM+Serif+Display:ital@1&family=DM+Sans:wght@500;700&display=swap"
+    notes: "Anton is ultra-condensed — fits LOTS of chars per line. DM Serif Display Italic is gentle, modern. Pair when refs feel headline-driven."
+
+  - id: tabloid-bold
+    mood: [shouty, viral, punchy, gen-z, attention-grabbing]
+    display:
+      family: "Bebas Neue"
+      weight: 400
+      google_name: "Bebas+Neue"
+    display_italic:
+      family: "Cormorant Garamond"
+      weight: 700
+      style: italic
+      google_name: "Cormorant+Garamond:ital,wght@1,700"
+    body:
+      family: "Public Sans"
+      weight: 500
+      google_name: "Public+Sans:wght@500;700"
+    google_fonts_url: "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@1,700&family=Public+Sans:wght@500;700&display=swap"
+    notes: "Bebas Neue = max impact at small sizes. Cormorant Italic is classical-cursive contrast. Public Sans = US Treasury–derived, neutral."
+
+  - id: tech-modern
+    mood: [tech, b2b, fintech, saas, geometric, clean]
+    display:
+      family: "Big Shoulders Display"
+      weight: 800
+      google_name: "Big+Shoulders+Display:wght@800"
+    display_italic:
+      family: "Spectral"
+      weight: 700
+      style: italic
+      google_name: "Spectral:ital,wght@1,700"
+    body:
+      family: "Sora"
+      weight: 500
+      google_name: "Sora:wght@500;700"
+    google_fonts_url: "https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800&family=Spectral:ital,wght@1,700&family=Sora:wght@500;700&display=swap"
+    notes: "Big Shoulders is geometric-condensed (different feel than Anton — wider). Spectral italic is restrained literary. Sora is geometric-neutral body."
+
+  - id: warm-friendly
+    mood: [warm, approachable, lifestyle, wellness, consumer-brand]
+    display:
+      family: "Recoleta"            # NOTE: Recoleta is paid; use as concept. Free alt: Fraunces 900
+      weight: 700
+      google_name: "Fraunces:opsz,wght@9..144,900"      # actual free substitute
+    display_italic:
+      family: "Fraunces"
+      weight: 600
+      style: italic
+      google_name: "Fraunces:ital,opsz,wght@1,9..144,600"
+    body:
+      family: "Nunito Sans"
+      weight: 500
+      google_name: "Nunito+Sans:wght@500;700"
+    google_fonts_url: "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,900;1,9..144,600&family=Nunito+Sans:wght@500;700&display=swap"
+    notes: "Both display + italic from Fraunces (variable — same family, different weights + ital axis). Warmer feel than Inter Tight."
+
+  - id: minimal-luxury
+    mood: [minimal, luxury, high-end, fashion, editorial-cold]
+    display:
+      family: "Tenor Sans"
+      weight: 400
+      google_name: "Tenor+Sans"
+    display_italic:
+      family: "Cormorant"
+      weight: 500
+      style: italic
+      google_name: "Cormorant:ital,wght@1,500"
+    body:
+      family: "Tenor Sans"
+      weight: 400
+      google_name: "Tenor+Sans"
+    google_fonts_url: "https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Cormorant:ital,wght@1,500&display=swap"
+    notes: "Sparse, all-caps display preferred. Cormorant italic carries every dramatic moment. For luxury brands where 'less' wins."
+
+# How to use programmatically:
+#
+# 1. At brand setup (Phase 3 font popup):
+#    Read ref-analysis output → extract mood tags (e.g., ["editorial", "founder-led"])
+#    Filter pairings[] where any pairing.mood intersects ref mood
+#    Show top 3-4 in AskUserQuestion popup, recommended one first
+#
+# 2. When user picks a pairing:
+#    Copy the 3 declarations into brand_context/visual-identity/tokens.json > fonts.{display,display_italic,body}
+#    Add to locked_fields[]
+#    Render templates use google_fonts_url for CDN or local @font-face if downloaded
+#
+# 3. When no fonts declared + Phase 3 skipped:
+#    Default to pairing.id == "editorial-heavy" (safest universal pick)

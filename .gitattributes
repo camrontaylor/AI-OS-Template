@@ -1,0 +1,10 @@
+# Force Unix line endings for shell scripts (Windows Git converts LF→CRLF by default,
+# which breaks bash scripts and inline Python)
+*.sh text eol=lf
+
+# JSON must also stay LF (parsed by Python in scripts)
+*.json text eol=lf
+
+# Client .gitignore files are generated and re-read with exact line matching;
+# a CRLF checkout would make the generated block duplicate instead of merge
+.gitignore text eol=lf

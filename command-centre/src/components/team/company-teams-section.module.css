@@ -1,0 +1,1404 @@
+.shell {
+  --teams-canvas: var(--cc-surface);
+  --teams-feed: var(--cc-surface-raised);
+  --teams-feed-hover: var(--cc-brand-alpha-03);
+  --teams-inset: var(--cc-control-bg);
+  --teams-line: var(--cc-line-alpha-15);
+  --teams-line-soft: var(--cc-line-alpha-10);
+  --teams-accent: var(--cc-brand-primary);
+  --teams-accent-soft: var(--cc-brand-alpha-08);
+  overflow: hidden;
+  border: 1px solid var(--teams-line);
+  border-radius: 8px;
+  background: var(--teams-canvas);
+  color: var(--cc-text-primary);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  border-bottom: 1px solid var(--teams-line-soft);
+}
+
+.headerActions,
+.teamIdentity,
+.personIdentity,
+.metaLine,
+.actionRow,
+.panelHeading,
+.inlineForm,
+.filterGroup,
+.requestTitle,
+.requestMeta,
+.lockedLabel {
+  display: flex;
+  align-items: center;
+}
+
+.panelHeadingIcon,
+.teamMark,
+.avatar {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  color: var(--teams-accent);
+  background: var(--teams-accent-soft);
+}
+
+.sectionTitle {
+  margin: 0;
+  color: var(--cc-text-primary);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.sectionDescription {
+  margin: 4px 0 0;
+  color: var(--cc-text-tertiary);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.headerActions {
+  flex: 0 0 auto;
+  gap: 8px;
+}
+
+.roleBadge,
+.countBadge,
+.statusBadge,
+.accessBadge,
+.requestBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 20px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.roleBadge {
+  padding: 0 8px;
+  color: var(--teams-accent);
+  background: var(--teams-accent-soft);
+}
+
+.countBadge {
+  min-width: 20px;
+  padding: 0 6px;
+  color: var(--cc-status-warning-strong);
+  background: var(--cc-status-warning-bg);
+  font-variant-numeric: tabular-nums;
+}
+
+.iconButton,
+.primaryButton,
+.secondaryButton,
+.ghostButton,
+.dangerGhostButton,
+.dangerButton,
+.warningButton,
+.teamRowOpenButton,
+.tab,
+.dialogTab {
+  font: inherit;
+  transition:
+    background-color 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease,
+    opacity 140ms ease;
+}
+
+.iconButton,
+.primaryButton,
+.secondaryButton,
+.ghostButton,
+.dangerGhostButton,
+.dangerButton,
+.warningButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.iconButton {
+  width: 34px;
+  padding: 0;
+  border: 1px solid var(--cc-line-alpha-20);
+  color: var(--cc-text-secondary);
+  background: var(--cc-surface-muted);
+}
+
+.primaryButton {
+  border: 1px solid var(--teams-accent);
+  color: var(--cc-text-inverse);
+  background: var(--teams-accent);
+}
+
+.secondaryButton {
+  border: 1px solid var(--cc-line-alpha-25);
+  color: var(--cc-text-primary);
+  background: var(--cc-surface-muted);
+}
+
+.ghostButton {
+  border: 1px solid transparent;
+  color: var(--cc-text-secondary);
+  background: transparent;
+}
+
+.dangerGhostButton {
+  border: 1px solid var(--cc-border-danger);
+  color: var(--cc-status-danger-bright);
+  background: var(--cc-status-danger-bg);
+}
+
+.dangerButton {
+  border: 1px solid var(--cc-status-danger);
+  color: var(--cc-text-inverse);
+  background: var(--cc-status-danger);
+}
+
+.warningButton {
+  border: 1px solid var(--cc-border-warning);
+  color: var(--cc-status-warning-strong);
+  background: var(--cc-status-warning-bg);
+}
+
+.iconButton:disabled,
+.primaryButton:disabled,
+.secondaryButton:disabled,
+.ghostButton:disabled,
+.dangerGhostButton:disabled,
+.dangerButton:disabled,
+.warningButton:disabled,
+.compactSelect:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.iconButton:focus-visible,
+.primaryButton:focus-visible,
+.secondaryButton:focus-visible,
+.ghostButton:focus-visible,
+.dangerGhostButton:focus-visible,
+.dangerButton:focus-visible,
+.warningButton:focus-visible,
+.teamRowOpenButton:focus-visible,
+.tab:focus-visible,
+.dialogTab:focus-visible,
+.field input:focus-visible,
+.field select:focus-visible,
+.field textarea:focus-visible,
+.compactField select:focus-visible,
+.compactSelect:focus-visible,
+.searchControl:focus-within,
+.combobox:focus-within,
+.switchInput:focus-visible + .switchTrack {
+  outline: none;
+  box-shadow: var(--cc-focus-ring-strong);
+}
+
+.tabList {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding: 8px 16px 0;
+  border-bottom: 1px solid var(--teams-line-soft);
+  scrollbar-width: none;
+}
+
+.tabList::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  color: var(--cc-text-secondary);
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.tab[data-active="true"] {
+  border-bottom-color: var(--teams-accent);
+  color: var(--teams-accent);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) auto auto;
+  gap: 8px;
+  align-items: end;
+}
+
+.searchControl {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid var(--cc-control-border);
+  border-radius: 6px;
+  color: var(--cc-text-tertiary);
+  background: var(--teams-inset);
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.searchControl input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  color: var(--cc-text-primary);
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+}
+
+.searchControl input::placeholder,
+.field input::placeholder,
+.field textarea::placeholder,
+.combobox input::placeholder {
+  color: var(--cc-text-muted);
+}
+
+.filterGroup {
+  gap: 8px;
+}
+
+.compactField,
+.field,
+.comboboxField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  color: var(--cc-text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.compactField {
+  gap: 4px;
+  color: var(--cc-text-tertiary);
+  font-size: 10px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.compactField select,
+.field input,
+.field select,
+.field textarea,
+.compactSelect {
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 1px solid var(--cc-control-border);
+  border-radius: 6px;
+  outline: 0;
+  color: var(--cc-text-primary);
+  background: var(--teams-inset);
+  font: inherit;
+  font-size: 13px;
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.compactField select {
+  min-width: 112px;
+  padding-right: 28px;
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.field textarea {
+  min-height: 96px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.field small {
+  color: var(--cc-text-tertiary);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.monoInput,
+.slug {
+  font-family: var(--cc-font-mono);
+}
+
+.feedHeading {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 2px 8px;
+  color: var(--cc-text-tertiary);
+  font-size: 11px;
+}
+
+.feed,
+.peopleList,
+.accessList,
+.loadingList {
+  display: flex;
+  flex-direction: column;
+}
+
+.feed {
+  overflow: hidden;
+  border: 1px solid var(--cc-line-alpha-12);
+  border-radius: 8px;
+  background: transparent;
+}
+
+.feedRow,
+.requestRow,
+.personRow,
+.accessToggleRow {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  min-height: 62px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--cc-line-alpha-08);
+  background: transparent;
+  transition: background-color 140ms ease;
+}
+
+.feedRow:first-child,
+.requestRow:first-child,
+.personRow:first-child,
+.accessToggleRow:first-child {
+  border-top: 0;
+}
+
+.teamIdentity,
+.personIdentity {
+  min-width: 0;
+  gap: 10px;
+}
+
+.teamMark,
+.avatar {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--cc-brand-alpha-12);
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.avatar {
+  border: 0;
+  border-radius: 50%;
+  color: #fff;
+  background: linear-gradient(135deg, #7C7C7C, #A0A0A0);
+}
+
+.teamCopy,
+.personIdentity > span:last-child,
+.requestCopy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.teamCopy > strong,
+.personIdentity strong {
+  overflow: hidden;
+  color: var(--cc-text-primary);
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.teamRowOpenButton {
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.teamNameText {
+  transition: color 140ms ease;
+}
+
+.slug,
+.personIdentity small {
+  overflow: hidden;
+  color: var(--cc-text-tertiary);
+  font-size: 10px;
+  font-weight: 450;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.metaLine {
+  flex-wrap: wrap;
+  gap: 5px 8px;
+  margin-top: 2px;
+  color: var(--cc-text-tertiary);
+  font-size: 11px;
+}
+
+.metaLine > span:not(.statusBadge, .accessBadge) {
+  overflow: hidden;
+  max-width: 220px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.statusBadge,
+.accessBadge,
+.requestBadge {
+  min-height: 18px;
+  padding: 0 6px;
+  border: 1px solid var(--cc-line-alpha-20);
+  color: var(--cc-text-tertiary);
+  background: var(--cc-surface-muted);
+}
+
+.statusBadge[data-status="active"] {
+  border-color: var(--cc-border-success);
+  color: var(--cc-status-success-strong);
+  background: var(--cc-status-success-bg);
+}
+
+.accessBadge[data-full="true"] {
+  border-color: var(--cc-border-brand);
+  color: var(--teams-accent);
+  background: var(--teams-accent-soft);
+}
+
+.requestBadge[data-status="pending"] {
+  border-color: var(--cc-border-warning);
+  color: var(--cc-status-warning-strong);
+  background: var(--cc-status-warning-bg);
+}
+
+.requestBadge[data-status="approved"] {
+  border-color: var(--cc-border-success);
+  color: var(--cc-status-success-strong);
+  background: var(--cc-status-success-bg);
+}
+
+.requestBadge[data-status="denied"],
+.requestBadge[data-status="canceled"],
+.requestBadge[data-status="cancelled"] {
+  border-color: var(--cc-border-danger);
+  color: var(--cc-status-danger-bright);
+  background: var(--cc-status-danger-bg);
+}
+
+.actionRow {
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pendingLabel {
+  color: var(--cc-status-warning-strong);
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.muted {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--cc-text-tertiary);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.lockedLabel {
+  gap: 5px;
+  color: var(--cc-text-secondary);
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.panelStack,
+.dialogSectionStack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.panelHeading {
+  min-width: 0;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.panelHeadingIcon {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--cc-brand-alpha-12);
+  border-radius: 7px;
+}
+
+.panelHeadingCopy {
+  min-width: 0;
+  flex: 1;
+}
+
+.panelHeading h4 {
+  margin: 0;
+  color: var(--cc-text-primary);
+  font-size: 14px;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+}
+
+.panelHeading p {
+  margin: 3px 0 0;
+  color: var(--cc-text-tertiary);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.panelHeadingTrailing {
+  flex: 0 0 auto;
+}
+
+.requestRow {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.requestTimeline {
+  display: none;
+}
+
+.requestTitle,
+.requestMeta {
+  flex-wrap: wrap;
+  gap: 4px 6px;
+}
+
+.requestTitle {
+  color: var(--cc-text-secondary);
+  font-size: 12px;
+}
+
+.requestTitle strong {
+  color: var(--cc-text-primary);
+}
+
+.requestMeta {
+  color: var(--cc-text-tertiary);
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.requestMeta span + span::before {
+  margin-right: 6px;
+  content: "·";
+}
+
+.formSurface {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--teams-line);
+  border-radius: 8px;
+  background: var(--cc-surface-raised);
+}
+
+.formSurface .panelHeading {
+  margin-bottom: 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--teams-line-soft);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.inlineForm {
+  gap: 8px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.inlineForm > .comboboxField {
+  min-width: 220px;
+  flex: 1 1 280px;
+}
+
+.inlineForm > .field {
+  min-width: 128px;
+}
+
+.personRow {
+  min-height: 60px;
+  padding: 10px 0;
+  background: transparent;
+}
+
+.peopleList .personRow {
+  border-top-color: var(--teams-line-soft);
+}
+
+.compactSelect {
+  min-height: 32px;
+  padding: 5px 28px 5px 8px;
+}
+
+.accessCallout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid var(--cc-border-warning);
+  border-radius: 8px;
+  color: var(--cc-text-primary);
+  background: var(--cc-surface-warning-soft);
+}
+
+.accessCallout p {
+  margin: 4px 0 0;
+  color: var(--cc-text-secondary);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.comboboxField {
+  position: static;
+}
+
+.combobox {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid var(--cc-control-border);
+  border-radius: 6px;
+  color: var(--cc-text-tertiary);
+  background: var(--teams-inset);
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.combobox input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  color: var(--cc-text-primary);
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+}
+
+.listbox {
+  max-height: 356px;
+  overflow: auto;
+  padding: 4px;
+  border: 1px solid var(--cc-line-alpha-25);
+  border-radius: 7px;
+  background: var(--cc-surface);
+}
+
+.option {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  min-height: 44px;
+  padding: 6px 8px;
+  border-radius: 5px;
+  color: var(--cc-text-secondary);
+  cursor: pointer;
+}
+
+.option[data-active="true"] {
+  color: var(--cc-text-primary);
+  background: var(--cc-brand-alpha-08);
+}
+
+.option .avatar {
+  width: 28px;
+  height: 28px;
+  font-size: 9px;
+}
+
+.option > span:nth-child(2) {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.option strong,
+.option small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.option strong {
+  font-size: 12px;
+}
+
+.option small {
+  color: var(--cc-text-tertiary);
+  font-size: 10px;
+}
+
+.noOptions {
+  padding: 12px;
+  color: var(--cc-text-tertiary);
+  font-size: 12px;
+  text-align: center;
+}
+
+.emptyPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 104px;
+  padding: 20px;
+  border: 1px dashed var(--cc-line-alpha-30);
+  border-radius: 8px;
+  color: var(--cc-text-primary);
+  background: var(--cc-surface-muted);
+  text-align: center;
+}
+
+.emptyPanel strong {
+  font-size: 13px;
+}
+
+.emptyPanel span {
+  color: var(--cc-text-tertiary);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.errorBanner,
+.noticeBanner,
+.warningBanner,
+.dangerBanner,
+.infoBanner {
+  padding: 10px 12px;
+  border: 1px solid var(--teams-line);
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.errorBanner,
+.dangerBanner {
+  border-color: var(--cc-border-danger);
+  color: var(--cc-status-danger-bright);
+  background: var(--cc-status-danger-bg);
+}
+
+.noticeBanner {
+  border-color: var(--cc-border-success);
+  color: var(--cc-status-success-strong);
+  background: var(--cc-status-success-bg);
+}
+
+.warningBanner {
+  border-color: var(--cc-border-warning);
+  color: var(--cc-status-warning-strong);
+  background: var(--cc-status-warning-bg);
+}
+
+.infoBanner {
+  color: var(--cc-text-secondary);
+  background: var(--cc-surface-info);
+}
+
+.dangerBanner {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.loadingList {
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--teams-line);
+  border-radius: 8px;
+  background: var(--teams-line-soft);
+}
+
+.loadingRow {
+  height: 68px;
+  background: var(--cc-surface-muted);
+  animation: teamPulse 1.5s ease-in-out infinite;
+}
+
+.spinning {
+  animation: teamSpin 900ms linear infinite;
+}
+
+.overlay {
+  --teams-canvas: var(--cc-surface);
+  --teams-feed: var(--cc-surface-raised);
+  --teams-feed-hover: var(--cc-brand-alpha-03);
+  --teams-inset: var(--cc-control-bg);
+  --teams-line: var(--cc-line-alpha-15);
+  --teams-line-soft: var(--cc-line-alpha-10);
+  --teams-accent: var(--cc-brand-primary);
+  --teams-accent-soft: var(--cc-brand-alpha-08);
+  position: fixed;
+  z-index: 2600;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: var(--cc-neutral-alpha-40);
+  backdrop-filter: blur(6px);
+  animation: dialogBackdropIn 180ms ease-out;
+}
+
+.dialog {
+  width: min(560px, calc(100vw - 32px));
+  max-height: calc(100dvh - 40px);
+  overflow: hidden;
+  border: 1px solid var(--cc-line-alpha-30);
+  border-radius: 8px;
+  outline: 0;
+  color: var(--cc-text-primary);
+  background: var(--cc-surface-overlay);
+  animation: dialogIn 200ms ease-out;
+}
+
+.dialogWide {
+  width: min(760px, calc(100vw - 32px));
+}
+
+.dialogHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  border-bottom: 1px solid var(--teams-line-soft);
+}
+
+.dialogHeader > div {
+  min-width: 0;
+}
+
+.dialogHeader h4 {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--cc-text-primary);
+  font-size: 16px;
+  font-weight: 750;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+.dialogHeader p {
+  margin: 4px 0 0;
+  overflow-wrap: anywhere;
+  color: var(--cc-text-tertiary);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.dialogBody {
+  display: flex;
+  max-height: calc(100dvh - 132px);
+  overflow: auto;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+}
+
+.dialogTabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--teams-line);
+  border-radius: 7px;
+  background: var(--cc-surface-muted);
+}
+
+.dialogTab {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  color: var(--cc-text-secondary);
+  background: transparent;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.dialogTab[data-active="true"] {
+  border-color: var(--cc-line-alpha-20);
+  color: var(--teams-accent);
+  background: var(--cc-surface-raised);
+}
+
+.dialogActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-top: 4px;
+}
+
+.rowMenu {
+  position: fixed;
+  z-index: 2800;
+  width: 190px;
+  padding: 6px;
+  border: 1px solid var(--cc-line-alpha-15);
+  border-radius: 8px;
+  color: var(--cc-text-primary);
+  background: var(--cc-surface);
+  box-shadow: 0 14px 34px var(--cc-neutral-alpha-16);
+}
+
+.rowMenuItem {
+  display: flex;
+  width: 100%;
+  min-height: 38px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 6px;
+  color: var(--cc-text-secondary);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 650;
+  text-align: left;
+  transition: background-color 140ms ease, color 140ms ease;
+}
+
+.rowMenuItemDanger {
+  color: var(--cc-status-danger-bright);
+}
+
+.rowMenuItem:focus-visible {
+  outline: none;
+  box-shadow: var(--cc-focus-ring-strong);
+}
+
+.accessList {
+  overflow: hidden;
+  border: 1px solid var(--teams-line);
+  border-radius: 8px;
+}
+
+.accessToggleRow {
+  cursor: pointer;
+}
+
+.accessToggleRow[data-locked="true"] {
+  cursor: default;
+  background: var(--cc-surface-muted);
+}
+
+.switchControl {
+  position: relative;
+  display: inline-flex;
+}
+
+.switchInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.switchTrack {
+  display: block;
+  width: 36px;
+  height: 20px;
+  padding: 2px;
+  border: 1px solid var(--cc-line-alpha-25);
+  border-radius: 999px;
+  background: var(--cc-surface-soft);
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+
+.switchTrack > span {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--cc-text-tertiary);
+  transition: transform 140ms ease, background-color 140ms ease;
+}
+
+.switchInput:checked + .switchTrack {
+  border-color: var(--teams-accent);
+  background: var(--teams-accent);
+}
+
+.switchInput:checked + .switchTrack > span {
+  background: var(--cc-text-inverse);
+  transform: translateX(16px);
+}
+
+.switchInput:disabled + .switchTrack {
+  opacity: 0.58;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (hover: hover) {
+  .iconButton:hover:not(:disabled),
+  .secondaryButton:hover:not(:disabled) {
+    border-color: var(--cc-brand-alpha-25);
+    color: var(--teams-accent);
+    background: var(--cc-brand-alpha-06);
+  }
+
+  .primaryButton:hover:not(:disabled) {
+    border-color: var(--cc-brand-hover);
+    background: var(--cc-brand-hover);
+  }
+
+  .ghostButton:hover:not(:disabled),
+  .tab:hover:not([data-active="true"]),
+  .dialogTab:hover:not([data-active="true"]) {
+    color: var(--cc-text-primary);
+    background: var(--cc-brand-alpha-04);
+  }
+
+  .dangerGhostButton:hover:not(:disabled),
+  .dangerButton:hover:not(:disabled) {
+    border-color: var(--cc-status-danger-hover);
+    background: var(--cc-status-danger-hover);
+    color: var(--cc-text-inverse);
+  }
+
+  .warningButton:hover:not(:disabled) {
+    border-color: var(--cc-status-warning);
+    background: var(--cc-surface-warning);
+  }
+
+  .feedRow:hover,
+  .requestRow:hover,
+  .accessToggleRow:hover:not([data-locked="true"]) {
+    background: var(--teams-feed-hover);
+  }
+
+  .teamRowOpenButton:hover .teamNameText {
+    color: var(--teams-accent);
+  }
+
+  .rowMenuItem:hover {
+    color: var(--cc-text-primary);
+    background: var(--cc-brand-alpha-04);
+  }
+
+  .rowMenuItemDanger:hover {
+    color: var(--cc-status-danger-bright);
+    background: var(--cc-status-danger-bg);
+  }
+}
+
+@media (max-width: 760px) {
+  .toolbar {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .toolbar .searchControl {
+    grid-column: 1 / -1;
+  }
+
+  .feedRow,
+  .requestRow,
+  .accessToggleRow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .feedRow > .actionRow,
+  .requestRow > .actionRow {
+    justify-content: flex-start;
+    padding-left: 46px;
+  }
+
+  .accessToggleRow {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .formGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .sectionHeader {
+    align-items: flex-start;
+    padding: 12px;
+  }
+
+  .sectionDescription {
+    display: none;
+  }
+
+  .headerActions {
+    flex-direction: column-reverse;
+    align-items: flex-end;
+  }
+
+  .roleBadge {
+    max-width: 112px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .tabList {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .content {
+    padding: 12px;
+  }
+
+  .toolbar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .filterGroup {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .compactField select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .toolbar > .primaryButton {
+    width: 100%;
+  }
+
+  .feedHeading {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .panelHeading {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .panelHeadingTrailing {
+    width: 100%;
+    padding-left: 42px;
+  }
+
+  .panelHeadingTrailing .primaryButton {
+    width: 100%;
+  }
+
+  .feedRow > .actionRow,
+  .requestRow > .actionRow {
+    padding-left: 0;
+  }
+
+  .actionRow > button {
+    flex: 1 1 auto;
+  }
+
+  .personRow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .personRow > .actionRow,
+  .personRow > button,
+  .personRow > .lockedLabel {
+    justify-self: start;
+    margin-left: 46px;
+  }
+
+  .inlineForm {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .inlineForm > .comboboxField,
+  .inlineForm > .field {
+    width: 100%;
+    min-width: 0;
+    flex-basis: auto;
+  }
+
+  .inlineForm > button {
+    width: 100%;
+  }
+
+  .accessCallout {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .overlay {
+    padding: 12px;
+  }
+
+  .dialog,
+  .dialogWide {
+    width: calc(100vw - 24px);
+    max-height: calc(100dvh - 24px);
+  }
+
+  .dialogHeader,
+  .dialogBody {
+    padding: 12px;
+  }
+
+  .dialogBody {
+    max-height: calc(100dvh - 112px);
+  }
+
+  .dialogActions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dialogActions > button:only-child {
+    grid-column: 1 / -1;
+  }
+
+  .dialogTabs {
+    overflow-x: auto;
+  }
+
+  .dialogTab {
+    min-width: max-content;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iconButton,
+  .primaryButton,
+  .secondaryButton,
+  .ghostButton,
+  .dangerGhostButton,
+  .dangerButton,
+  .warningButton,
+  .teamRowOpenButton,
+  .tab,
+  .dialogTab,
+  .feedRow,
+  .requestRow,
+  .accessToggleRow,
+  .switchTrack,
+  .switchTrack > span,
+  .overlay,
+  .dialog {
+    transition: none;
+    animation: none;
+  }
+}
+
+@keyframes teamPulse {
+  0%,
+  100% { opacity: 0.52; }
+  50% { opacity: 0.82; }
+}
+
+@keyframes teamSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes dialogBackdropIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes dialogIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

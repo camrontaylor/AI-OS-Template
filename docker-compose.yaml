@@ -1,0 +1,59 @@
+# Coolify-only compose for the Team OS multi-user chat memory test stack.
+# It keeps Postgres private and exposes only the hosted memory API.
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    volumes:
+      - team_os_chat_memory_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  memory-api:
+    build:
+      context: .
+      dockerfile: command-centre/Dockerfile.memory-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      AI_OS_DIR: /workspace
+    volumes:
+      - team_os_workspace:/workspace
+    expose:
+      - "8787"
+    labels:
+      - traefik.enable=true
+      - traefik.http.middlewares.team-os-chat-memory-test-gzip.compress=true
+      - traefik.http.routers.team-os-chat-memory-test-http.entryPoints=http
+      - "traefik.http.routers.team-os-chat-memory-test-http.rule=Host(`c11hje24xv848po75itttwej.168.75.81.193.sslip.io`) && PathPrefix(`/`)"
+      - traefik.http.routers.team-os-chat-memory-test-http.middlewares=team-os-chat-memory-test-gzip
+      - traefik.http.routers.team-os-chat-memory-test-http.priority=1000
+      - traefik.http.routers.team-os-chat-memory-test-http.service=team-os-chat-memory-test
+      - traefik.http.services.team-os-chat-memory-test.loadbalancer.server.port=8787
+    command: >
+      sh -c "npm run team:test-bootstrap -- --run-id \"$${TEAM_OS_TEST_RUN_ID}\" &&
+      npm run memory:api"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -fsS http://127.0.0.1:8787/v1/health >/dev/null",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 300s
+
+volumes:
+  team_os_chat_memory_pgdata:
+  team_os_workspace:
