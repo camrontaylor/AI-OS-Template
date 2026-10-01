@@ -16,6 +16,7 @@ fail() {
 is_allowed_distribution_path() {
     case "$1" in
         brand_context/.gitkeep \
+        |clients/.gitkeep \
         |projects/.gitkeep \
         |context/MEMORY.md \
         |context/SOUL.md \
@@ -39,6 +40,7 @@ is_allowed_distribution_path() {
 
 required_paths=(
     "brand_context/.gitkeep"
+    "clients/.gitkeep"
     "projects/.gitkeep"
     "context/MEMORY.md"
     "context/SOUL.md"
