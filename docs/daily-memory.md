@@ -20,6 +20,9 @@ day, numbered session blocks.
 ### Decisions
 - [Decision and rationale]
 
+### Corrections
+- [general] [Confirmed lesson, or use an installed skill name as the tag]
+
 ### Open threads
 - [Anything unfinished for the next session]
 ```
@@ -35,7 +38,13 @@ Track events as they happen. Never say "I've logged that to memory."
 - File created in `brand_context/` or `.claude/skills/` → `### Deliverables`
 - User states goal → `### Goal`
 - User makes a directional decision → `### Decisions`
+- Confirmed mistake → `### Corrections`, tagged with the installed skill or `general`
 - Task left incomplete → `### Open threads`
+
+Save accepted changes before dependent actions. After verification, update the
+result or next action and read the changed entry back. Skip trivial or unchanged
+state. Promotion and recovery rules: `agent-reliability.md`. Team mode uses only
+authorized connected storage; this local file flow is Solo-only.
 
 ## Session end
 

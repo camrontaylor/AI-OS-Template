@@ -20,7 +20,7 @@ End-of-session checklist. Four steps: review what was done, collect feedback, ap
 ## Outcome
 
 - Updated `context/learnings.md` with session feedback
-- Updated `context/memory/{today}.md` with session log (4-section format)
+- Updated `context/memory/{today}.md` with its existing session log and confirmed corrections
 - Updated `context/USER.md` if new preferences were observed
 - Proposed `context/SOUL.md` updates if behaviour corrections were observed
 - Direct fixes applied to any skills that need them
@@ -37,7 +37,10 @@ End-of-session checklist. Four steps: review what was done, collect feedback, ap
 | `context/SOUL.md` | Full | Check if behaviour rules need updating based on session corrections |
 | All `brand_context/` files | Scan only | Identify which files were created or modified this session |
 
-Load if they exist. Proceed without them if not.
+Load if they exist. Proceed without them if not. In Team mode, use only the
+authorized injected context and connected storage; skip local context reads,
+memory writes and Solo maintenance. Report a missing authorized storage path
+instead of using local files as a fallback.
 
 ---
 
@@ -104,7 +107,7 @@ One file per day: `context/memory/{YYYY-MM-DD}.md`. The session block is created
 
 **Note:** Auto-tracking during the session means most deliverables, decisions, and open threads are already logged. This step is about confirming and polishing what's there, not writing from scratch.
 
-**Find the current session's `## Session N` block** and replace any placeholder text with real content from the session. Fill in all four sections:
+**Find the current session's `## Session N` block** and replace any placeholder text with real content. Preserve recorded decisions and corrections:
 
 ```
 ## Session N
@@ -118,6 +121,9 @@ One file per day: `context/memory/{YYYY-MM-DD}.md`. The session block is created
 ### Decisions
 - [Decision and rationale]
 
+### Corrections
+- [general] [Confirmed lesson, or use the relevant installed skill name]
+
 ### Open threads
 - [Anything unfinished for the next session]
 ```
@@ -126,6 +132,12 @@ One file per day: `context/memory/{YYYY-MM-DD}.md`. The session block is created
 - **Never append a new session block**, because a second block for the same session splits the day's record and breaks the one-file-per-day contract; wrap-up completes the block that was started
 - **Never leave placeholder text** like `[Waiting for user goal]`. Replace placeholders with actual content from the session
 - Omit sections that don't apply (e.g., no Decisions section if none were made)
+
+In Solo mode, promote recorded corrections with the shared root's
+`scripts/workspace-maintenance.py corrections --scope <active-workspace> --date <today>`
+using Python 3. Follow with `--check` and read back the changed learnings section.
+Do not invent corrections or repeat a rejected Team-mode command with an override.
+Full contract: `docs/agent-reliability.md`.
 - If no session block exists yet (e.g., heartbeat was skipped), create one — but this is the fallback, not the norm
 
 ### 3d: Evolve SOUL.md (agent-suggested, user-approved)

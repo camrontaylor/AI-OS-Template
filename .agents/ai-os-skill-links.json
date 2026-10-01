@@ -5,6 +5,7 @@
     "fin-invoice-reconciliation": "../../.claude/skills/fin-invoice-reconciliation",
     "fin-month-end-reporting": "../../.claude/skills/fin-month-end-reporting",
     "fin-personal-cfo": "../../.claude/skills/fin-personal-cfo",
+    "meta-find-skills": "../../.claude/skills/meta-find-skills",
     "meta-memory-recall": "../../.claude/skills/meta-memory-recall",
     "meta-memory-write": "../../.claude/skills/meta-memory-write",
     "meta-skill-creator": "../../.claude/skills/meta-skill-creator",

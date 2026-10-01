@@ -46,7 +46,7 @@ cd AI-OS
 |---|---|
 | Business context | Your voice, positioning, audience, examples and preferences |
 | Memory | Saved decisions, feedback and unfinished work across sessions |
-| 93 skills | Repeatable methods for marketing, strategy, research, finance, visual work and operations |
+| 94 skills | Repeatable methods for marketing, strategy, research, finance, visual work and operations |
 | Projects | A predictable home for briefs, drafts and finished deliverables |
 | Client workspaces | Separate context and outputs for each client, with shared skills |
 | Command Centre | An optional grayscale browser interface for chats, files and scheduled work |
@@ -54,7 +54,7 @@ cd AI-OS
 
 Browse the [included skills](docs/skills-catalog.md). A skill is a set of instructions;
 account access, image/video rendering and automation still need the appropriate tools.
-All nine example scheduled jobs start **paused**.
+All ten example scheduled jobs start **paused**.
 
 ## How it works
 
@@ -62,6 +62,11 @@ You describe the work. The agent reads the relevant instructions and context,
 chooses a skill, does the work, checks it, and saves the result. At the end of a
 session, ask it to wrap up and save the decisions and next action. In a later
 session, ask it to recover that checkpoint.
+
+AI-OS also checks claims and completed work, carries task decisions forward, and
+can promote confirmed corrections into lasting lessons. A local health check and
+client current-state briefs help keep the setup and context useful. Read
+[reliable work](docs/agent-reliability.md) for the commands and limits.
 
 The files are yours to inspect and edit. Memory improves continuity; it is not a
 guarantee that every agent remembers every chat. Current facts still need checking.

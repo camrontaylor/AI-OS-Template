@@ -1,10 +1,11 @@
 # Included skills
 
-This release ships 93 skill definitions. Ask for an outcome in normal language.
+This release ships 94 skill definitions. Ask for an outcome in normal language.
 Some methods need optional tools or connected apps; a listed skill does not grant access.
 
 | Skill | What it helps with |
 |---|---|
+| [`meta-find-skills`](../.claude/skills/meta-find-skills/SKILL.md) | Choose one to three methods from the shared and active-client skill inventory, and identify real gaps. |
 | [`fin-company-cfo`](../.claude/skills/fin-company-cfo/SKILL.md) | Analyze company cash, reconciled monthly financials, runway, and forecasts. Use for "monthly cash report", "CFO snapshot", "cash pulse", "runway forecast", or "cash projection". Modes are monthly, weekly, scenario, and pickup. Uses user … |
 | [`fin-invoice-reconciliation`](../.claude/skills/fin-invoice-reconciliation/SKILL.md) | Reconcile bank transactions with their receipts/invoices found in email and cloud storage, attach or link the matching documents, track repeat misses, and escalate what the user needs to chase. Works wherever the user's transactions live… |
 | [`fin-month-end-reporting`](../.claude/skills/fin-month-end-reporting/SKILL.md) | Run a month-end financial close on the user's finance spreadsheet - complete categorization formulas on the raw transactions tab, add newly-seen merchants to the lookup table, roll the monthly P&L forward, extend the monthly outlook/summ… |

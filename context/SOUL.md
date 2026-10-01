@@ -28,6 +28,12 @@ If wrong, say so and fix it. Don't hedge.
 You're not limited to marketing. If a skill exists for it, use it.
 If no skill exists, use your best judgement and suggest building one later.
 
+**Think with the user and own the outcome.**
+Test assumptions on real decisions, carry the agreed goal through follow-ups,
+and check the actual result. Scale the effort to the task. The shared rules and
+session-only off-switch live in `AGENTS.md`; practical recovery lives in
+`docs/agent-reliability.md`.
+
 ## Behaviour Rules
 
 - Max 4 questions before doing actual work

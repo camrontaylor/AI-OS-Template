@@ -1,9 +1,9 @@
 # Canonical Git blob hashes for distribution-safe context scaffolds.
 # Update a hash only when the corresponding generic scaffold is intentionally changed.
 98fcd2e9b1c30ab6a9cb7143e9396513014963fe  context/MEMORY.md
-72747fa0992b4a3c70992a90de2e9ad7aec3ef41  context/SOUL.md
+8af6ab6108fcfcc0da614e2c2d816be09f674f7c  context/SOUL.md
 dd66a8c5e1b35a470da59e012535789506b671a9  context/USER.md
-16dc53ad483862600b1b49db0f562b45e18ac7b9  context/learnings.md
+357fb4467e5b981845662d875809c770ade63bd1  context/learnings.md
 3220142c1a3a6843dacdc634d8840df4504aa452  context/memory-config.json
 be651ad874881e3fbd38067d74d78ca54ab85761  context/prompt-tags.md
 e361c89091f92766cf7f3d7789efc40fb11c999a  team_context/AGENTS.md
