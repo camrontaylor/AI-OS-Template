@@ -1,0 +1,1987 @@
+{
+  "version": "1.0.0",
+  "releases": [
+    {
+      "version": "1.0.0",
+      "highlights": [],
+      "notes": ""
+    }
+  ],
+  "core_skills": [
+    "meta-skill-creator",
+    "meta-wrap-up",
+    "mkt-brand-voice",
+    "mkt-positioning",
+    "mkt-icp",
+    "mkt-visual-identity"
+  ],
+  "skills": {
+    "tool-humanizer": {
+      "category": "utility",
+      "version": "1.0.0",
+      "description": "Remove AI-generated writing patterns and restore natural human voice. Detects and fixes 50+ AI tells: inflated symbolism, promotional language, hedging, corporate buzzwords, robotic structure, em dash overuse, rule of three, vague attributions, negative parallelisms, conjunctive phrase abuse. Four modes: quick (obvious patterns), standard (full scan + score), deep (voice-matched using brand_context/voice-profile.md), detect (audit only \u2014 name patterns and quote lines, no rewrite). Called automatically by execution skills as a post-processing step. Also invoked standalone: \"humanize this\", \"de-AI this\", \"make this sound human\", \"remove AI patterns\", \"clean up this copy\", \"is this AI slop\", \"audit this draft for AI patterns\". Does NOT trigger for brand voice extraction, positioning, or ICP work. Does NOT trigger for content that is intentionally formal or academic.\n",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Initial release"
+        }
+      ],
+      "requires_services": [],
+      "dependencies": [],
+      "mcp_servers": []
+    },
+    "tool-firecrawl-scraper": {
+      "category": "utility",
+      "version": "1.0.0",
+      "description": "Convert websites into LLM-ready data with Firecrawl API. Scrape, crawl, map, search, extract, agent, batch, change tracking, and branding extraction. Handles JavaScript rendering, anti-bot bypass, PDF/DOCX parsing. Requires FIRECRAWL_API_KEY in .env. Used by other skills (mkt-brand-voice) as a scraping backend when default web tools fail. Use when: scraping websites, crawling sites, web search + scrape, autonomous data gathering, monitoring content changes, extracting brand/design systems. Does NOT trigger for general browsing or simple URL fetching that WebFetch can handle.\n",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Initial release"
+        }
+      ],
+      "requires_services": [
+        "FIRECRAWL_API_KEY"
+      ],
+      "dependencies": [],
+      "mcp_servers": []
+    },
+    "tool-youtube": {
+      "category": "utility",
+      "version": "1.0.0",
+      "description": "Fetch latest videos from YouTube channels and extract full transcripts. Two modes: channel mode (list recent uploads, needs YOUTUBE_API_KEY) and transcript mode (get full timestamped transcript from a URL, free via yt-dlp). Chain both to get the latest video's full transcript from any channel. Triggers on: \"latest youtube video\", \"get transcript\", \"youtube transcript\", \"what did they post\", \"fetch from youtube\", \"channel updates\". Used by other skills (mkt-content-repurposing) as a content source. Does NOT trigger for content creation, repurposing, or video editing.\n",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Initial release"
+        }
+      ],
+      "requires_services": [
+        "YOUTUBE_API_KEY"
+      ],
+      "dependencies": [],
+      "mcp_servers": []
+    },
+    "str-trending-research": {
+      "category": "strategy",
+      "version": "1.0.0",
+      "description": "Research what's trending in the last 30 days across Reddit, X, and the web. Surface real discussions, recommendations, and patterns people are talking about right now. Produces a research brief other skills can consume. Triggers on: \"research\", \"what's trending\", \"research topic\", \"research X\", \"what are people saying about\", \"trending in\", \"last 30 days\", \"recent discussions\", \"what's hot\", \"look into\", \"dig into\", \"find out what people think about\", \"what's new with\", \"community sentiment on\". Does NOT trigger for brand voice, positioning, ICP, or content writing. Does NOT trigger for general web browsing or simple URL fetching.\n",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Initial release"
+        }
+      ],
+      "requires_services": [
+        "OPENAI_API_KEY",
+        "XAI_API_KEY"
+      ],
+      "dependencies": [],
+      "mcp_servers": []
+    },
+    "mkt-copywriting": {
+      "category": "execution",
+      "version": "1.0.0",
+      "description": "Persuasive writing for anything that needs to sell. Landing pages, sales pages, emails, ads, social posts, headlines, CTAs. Triggers on: \"write copy for\", \"landing page copy\", \"sales page\", \"help me sell\", \"punch this up\", \"make this convert\", \"write a headline\", \"score this copy\", \"review my copy\", \"email copy\", \"ad copy\". Produces multiple variants per piece, rates output on 7 quality dimensions, and recommends split tests. Loads brand voice and positioning for consistency. Does NOT trigger for content repurposing (use mkt-content-repurposing), email sequences (use mkt-email-sequences), or long-form SEO articles.\n",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Initial release"
+        },
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "requires_services": [],
+      "dependencies": [],
+      "mcp_servers": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ]
+    },
+    "mkt-content-repurposing": {
+      "category": "execution",
+      "version": "1.0.0",
+      "description": "Repurpose one piece of content into platform-native posts across LinkedIn, Twitter/X, Instagram, TikTok, YouTube, Threads, Bluesky, and Reddit. Triggers on: \"repurpose this\", \"turn this into social posts\", \"atomize this\", \"create social content from\", \"LinkedIn post from this\", \"thread from this\", \"repurpose for Threads\", \"Bluesky post from this\", \"Reddit strategy\", \"content calendar from this\", \"schedule across platforms\". Reads source content, extracts core atoms, adapts voice per platform, generates platform-native assets with proven hooks and formats. Saves per-platform files to projects/mkt-content-repurposing/. Does NOT trigger for original content creation, brand voice, positioning, or audience research.\n",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Initial release"
+        }
+      ],
+      "requires_services": [],
+      "dependencies": [
+        "tool-humanizer"
+      ],
+      "mcp_servers": []
+    },
+    "mkt-ugc-scripts": {
+      "category": "execution",
+      "version": "1.0.0",
+      "description": "Write short-form UGC video scripts for talking-head and avatar delivery. Triggers on: \"write a script\", \"UGC script\", \"video script for\", \"short form script\", \"TikTok script\", \"Reels script\", \"Shorts script\", \"script for a video about\", \"write me a hook\", \"batch scripts\", \"script ideas for\", \"what should I make a video about\". Picks script format based on topic and platform, writes with timing cues and delivery notes, suggests on-screen text. Can use str-trending-research to find topic angles before scripting. Saves to projects/mkt-ugc-scripts/. Does NOT trigger for video generation (use viz-ugc-heygen), content repurposing (use mkt-content-repurposing), or ad copy (use mkt-copywriting).\n",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Initial release"
+        }
+      ],
+      "requires_services": [],
+      "dependencies": [
+        "tool-humanizer"
+      ],
+      "mcp_servers": []
+    },
+    "viz-excalidraw-diagram": {
+      "category": "visual",
+      "version": "1.0.0",
+      "description": "Generate Excalidraw diagram JSON files that make visual arguments \u2014 not just labelled boxes. Workflows, architectures, concepts, protocols, system designs. Triggers on: \"excalidraw diagram\", \"draw a diagram\", \"visualize this workflow\", \"architecture diagram\", \"system diagram\", \"diagram this\", \"excalidraw\", \"create a diagram of\". Builds section-by-section for large diagrams, renders to PNG via Playwright, and validates in a loop until the output is clean. Brand colors configurable via color-palette.md. Does NOT trigger for inline SVG diagrams, charts/graphs, or slide decks.\n",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Initial release"
+        }
+      ],
+      "requires_services": [],
+      "dependencies": [],
+      "mcp_servers": []
+    },
+    "viz-image-gen": {
+      "category": "visual",
+      "version": "2.1.6",
+      "description": "Interactive visual direction and image generation via GPT Image or Gemini. Uses the 6-Element Framework (Subject, Framing, Lighting, Mood, Medium, Style) to guide users through visual decisions before constructing model-specific prompts. Supports 10 style presets as pre-filled framework configurations, reference image analysis, multi-generation comparison sets, and model recommendation with override. Triggers on: \"generate an image\", \"create an infographic\", \"image gen\", \"notebook sketch\", \"comic strip\", \"hand-drawn diagram\", \"visual for\", \"make an image of\", \"illustrated diagram\", \"sketchnote\", \"storyboard\", \"generate a visual\", \"image of\", \"draw me\", \"GPT image\", \"Gemini image\". Also use when any skill needs a visual asset generated. Does NOT trigger for Excalidraw diagrams (use viz-excalidraw-diagram), charts/graphs, slide decks, or text-only content.\n",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "2.1.6",
+          "summary": "Project-root path fallback when sys-config is absent"
+        }
+      ],
+      "requires_services": [
+        "OPENAI_API_KEY",
+        "GEMINI_API_KEY"
+      ],
+      "dependencies": [],
+      "mcp_servers": []
+    },
+    "viz-ugc-heygen": {
+      "category": "visual",
+      "version": "1.0.0",
+      "description": "Create UGC-style avatar videos via HeyGen API. Use when: \"create a video\", \"UGC video\", \"heygen video\", \"talking head video\", \"avatar video\", \"make a video about\", \"generate video\". Two modes: Video Agent (prompt-driven, one-shot) and Precise (exact script, specific avatar look, specific voice). Loads brand voice for script writing. Polls for completion and returns download URL. Does NOT trigger for video editing, translation, dubbing, or live streaming.\n",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Initial release"
+        }
+      ],
+      "requires_services": [
+        "HEYGEN_API_KEY"
+      ],
+      "dependencies": [],
+      "mcp_servers": [
+        "heygen"
+      ]
+    },
+    "str-ai-seo": {
+      "category": "strategy",
+      "version": "1.0.0",
+      "description": "When the user wants to optimize content for AI search engines, get cited by LLMs, or appear in AI-generated answers. Also use when the user mentions 'AI SEO,' 'AEO,' 'GEO,' 'LLMO,' 'answer engine optimization,' 'generative engine optimization,' 'LLM optimization,' 'AI Overviews,' 'optimize for ChatGPT,' 'optimize for Perplexity,' 'AI citations,' 'AI visibility,' 'zero-click search,' 'how do I show up in AI answers,' 'LLM mentions,' or 'optimize for Claude/Gemini.' Use this whenever someone wants their content to be cited or surfaced by AI assistants and AI search engines. Does NOT trigger for traditional technical or on-page SEO audits.",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Initial release"
+        },
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "requires_services": [
+        "AHREFS_API_KEY",
+        "GA4_ACCESS_TOKEN"
+      ],
+      "dependencies": [],
+      "mcp_servers": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ]
+    },
+    "viz-interface-design": {
+      "category": "visual",
+      "version": "1.0.0",
+      "description": "Design distinctive, craft-driven interfaces for dashboards, admin panels, SaaS tools, and interactive products. Use this skill whenever the user wants to build a dashboard, design an admin panel, create a data-heavy interface, build a settings page, design a SaaS product UI, or create any interactive tool interface. Also trigger when the user mentions metrics displays, data tables, control panels, monitoring UIs, or analytics views \u2014 even if they don't say \"dashboard\" explicitly. This is for functional product interfaces, NOT marketing pages, landing pages, or static content sites. NOT for diagrams (use viz-excalidraw-diagram), NOT for static mockups in Stitch (use viz-stitch-design), NOT for image generation (use viz-image-gen).\n",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Initial release"
+        }
+      ],
+      "requires_services": [],
+      "dependencies": [],
+      "mcp_servers": []
+    },
+    "tool-stitch": {
+      "category": "utility",
+      "version": "1.0.0",
+      "description": "Fetch UI designs from Google Stitch projects via MCP. Retrieve screen HTML/CSS, download screenshots, extract design DNA (fonts, colors, layouts), and generate full Astro site projects from Stitch screens. Used by viz-stitch-design and other skills as a design source. Triggers on: \"fetch stitch design\", \"get stitch screens\", \"stitch project\", \"pull from stitch\", \"stitch code\", \"export stitch\". Does NOT trigger for creating new designs in Stitch (use viz-stitch-design), or for non-Stitch design tools.\n",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Initial release"
+        }
+      ],
+      "requires_services": [],
+      "dependencies": [],
+      "mcp_servers": [
+        "stitch"
+      ]
+    },
+    "viz-stitch-design": {
+      "category": "visual",
+      "version": "1.0.0",
+      "description": "Design and iterate on UI screens using Google Stitch. Text-to-UI generation, sketch-to-UI conversion, interactive prototyping, and code export. Use when: \"design a UI\", \"create a screen\", \"stitch design\", \"UI mockup\", \"app design\", \"landing page design\", \"mobile screen\", \"web layout\", \"wireframe to UI\", \"design this page\", \"UI for\", \"screen design\". Pairs with tool-stitch for fetching existing designs and frontend-design for implementation. Does NOT trigger for generating images (use viz-image-gen), diagrams (use viz-excalidraw-diagram), or implementing code from designs.\n",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Initial release"
+        }
+      ],
+      "requires_services": [],
+      "dependencies": [
+        "tool-stitch"
+      ],
+      "mcp_servers": [
+        "stitch"
+      ]
+    },
+    "ops-cron": {
+      "category": "operations",
+      "version": "1.0.0",
+      "description": "Schedule recurring tasks with AI-OS's managed cron runtime. Jobs live in cron/jobs/ and are executed by the same scheduling core in two hosts: the Command Centre server while it is running, or a manual CLI daemon started with start-crons. Triggers on: \"schedule a job\", \"cron job\", \"run this every morning\", \"automate daily\", \"recurring task\", \"scheduled job\", \"check scheduled jobs\", \"list jobs\", \"run job manually\", \"start crons\", \"stop crons\", \"cron status\", \"cron logs\". Does NOT trigger for one-off tasks or in-session reminders.\n",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Initial release"
+        }
+      ],
+      "requires_services": [],
+      "dependencies": [],
+      "mcp_servers": []
+    },
+    "mkt-referrals": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to create, optimize, or analyze a referral program, affiliate program, or word-of-mouth strategy. Also use when the user mentions 'referral,' 'affiliate,' 'ambassador,' 'word of mouth,' 'viral loop,' 'refer a friend,' 'partner program,' 'referral incentive,' 'how to get referrals,' 'customers referring customers,' or 'affiliate payout.' Use this whenever someone wants existing users or partners to bring in new customers. For launch-specific virality, see mkt-launch. Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": [
+        "MENTIONME_API_KEY",
+        "PARTNERSTACK_PUBLIC_KEY",
+        "PARTNERSTACK_SECRET_KEY",
+        "REWARDFUL_API_KEY",
+        "TOLT_API_KEY"
+      ]
+    },
+    "mkt-ab-testing": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to plan, design, or implement an A/B test or experiment, or build a growth experimentation program. Also use when the user mentions \"A/B test,\" \"split test,\" \"experiment,\" \"test this change,\" \"variant copy,\" \"multivariate test,\" \"hypothesis,\" \"should I test this,\" \"which version is better,\" \"test two versions,\" \"statistical significance,\" \"how long should I run this test,\" \"growth experiments,\" \"experiment velocity,\" \"experiment backlog,\" \"ICE score,\" \"experimentation program,\" or \"experiment playbook.\" Use this whenever someone is comparing two approaches and wants to measure which performs better, or when they want to build a systematic experimentation practice. For tracking implementation, see ops-analytics. For page-level conversion optimization, see mkt-cro. Do not use for unrelated deliverables; use the matching native channel skill.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "meta-synthesize-locals": {
+      "category": "meta",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [],
+      "mcp_servers": [],
+      "description": "Synthesizes verbose SKILL.local.md files after migration from the old single-file pattern. For each skill that has a SKILL.local.md that looks like a full copy of SKILL.md, reads both files and rewrites SKILL.local.md to contain only the user's actual customizations (rules, overrides, additions). Triggered by: \"synthesize skills\", \"sync local overrides\", \"clean up local files\", \"/synthesize-skills\".\n",
+      "dependencies": [],
+      "requires_services": []
+    },
+    "str-pricing": {
+      "category": "strategy",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants help with pricing decisions, packaging, or monetization strategy. Also use when the user mentions 'pricing,' 'pricing tiers,' 'freemium,' 'free trial,' 'packaging,' 'price increase,' 'value metric,' 'Van Westendorp,' 'willingness to pay,' 'monetization,' 'how much should I charge,' 'my pricing is wrong,' 'pricing page,' 'annual vs monthly,' 'per seat pricing,' 'should I offer a free plan,' 'pricing page teardown,' 'pricing page audit,' 'is my pricing page AI-readable,' or 'can AI read my pricing.' Use this whenever someone is figuring out what to charge, how to structure their plans, or wants to audit a pricing page (for humans and for the AI agents that shortlist tools). For in-app upgrade screens, see mkt-paywalls. Do not use for unrelated deliverables; use the matching native channel skill.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "mkt-aso": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to audit or optimize an App Store or Google Play listing. Also use when the user mentions 'ASO audit,' 'app store optimization,' 'optimize my app listing,' 'improve app visibility,' 'app store ranking,' 'audit my listing,' 'why aren't people downloading my app,' 'improve my app conversion,' 'keyword optimization for app,' or 'compare my app to str-competitors.' Use when the user shares an App Store or Google Play URL and wants to improve it. Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "mkt-jab-hook": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "Plan, choose, draft, or audit X and LinkedIn content using a value-first jab/jab/jab/hook rotation across the user\u2019s configured properties. Use for \"plan my socials\", \"next promo\", \"next jab\", \"audit my socials\", or \"what should I post\". Reads AI-OS voice, portfolio, and real posting history and produces local drafts; connected Typefully draft export is optional. General social strategy belongs in mkt-social.\n",
+      "dependencies": [],
+      "optional_dependencies": [
+        "tool-humanizer",
+        "tool-paste",
+        "tool-social-fetch"
+      ],
+      "requires_services": [
+        "SCRAPECREATORS_API_KEY"
+      ]
+    },
+    "ops-analytics": {
+      "category": "operations",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to set up, improve, or audit analytics tracking and measurement. Also use when the user mentions \"set up tracking,\" \"GA4,\" \"Google Analytics,\" \"conversion tracking,\" \"event tracking,\" \"UTM parameters,\" \"tag manager,\" \"GTM,\" \"analytics implementation,\" \"tracking plan,\" \"how do I measure this,\" \"track conversions,\" \"Mixpanel,\" \"Segment,\" \"are my events firing,\" or \"analytics isn't working.\" Use this whenever someone asks how to know if something is working or wants to measure marketing results. For choosing attribution models, comparing multi-touch/MMM/incrementality, or reconciling conflicting numbers across tools, see ops-attribution. For A/B test measurement, see mkt-ab-testing. Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": [
+        "AMPLITUDE_API_KEY",
+        "AMPLITUDE_SECRET_KEY",
+        "GA4_ACCESS_TOKEN",
+        "MIXPANEL_API_KEY",
+        "MIXPANEL_SECRET",
+        "MIXPANEL_TOKEN",
+        "SEGMENT_ACCESS_TOKEN",
+        "SEGMENT_WRITE_KEY"
+      ]
+    },
+    "meta-toolify": {
+      "category": "meta",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "Integrate one external API, SDK, connector, or MCP into AI-OS or an explicitly selected project. Use for \"wire up this API\", \"connect this service\", \"add an MCP\", or \"set up this integration\". Detects the real stack, fetches official docs, configures secrets safely, builds scoped client/webhook code, registers services, and verifies a read-only smoke test. Skill creation belongs in meta-skillify; schedules in ops-loopify.\n",
+      "dependencies": [],
+      "optional_dependencies": [
+        "tool-humanizer",
+        "tool-watch-video"
+      ],
+      "requires_services": []
+    },
+    "mkt-sales-enablement": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to create sales collateral, pitch decks, one-pagers, objection handling docs, or demo scripts. Also use when the user mentions 'sales deck,' 'pitch deck,' 'one-pager,' 'leave-behind,' 'objection handling,' 'deal-specific ROI analysis,' 'demo script,' 'talk track,' 'sales playbook,' 'proposal template,' 'buyer persona card,' 'help my sales team,' 'sales materials,' or 'what should I give my sales reps.' Use this for any document or asset that helps a sales team close deals. For competitor comparison pages and battle cards, see str-competitors. For marketing website copy, see mkt-copywriting. For cold outreach emails, see mkt-cold-email. For the offer being sold (bonuses, guarantees, pricing structure), see mkt-offers. Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "tool-social-fetch": {
+      "category": "utility",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "Fetch a supplied public social post or thread URL and normalize author, text, time, engagement, and media links. Use for \"read this post\", \"fetch this tweet\", \"read this thread\", or as a utility for research and inspiration. Tries actual available public APIs, browser, then explicitly configured paid sources. Saves structured JSON with evidence and missing fields as null; private content and automatic publishing are outside scope.\n",
+      "dependencies": [],
+      "optional_dependencies": [
+        "tool-humanizer",
+        "tool-watch-video"
+      ],
+      "requires_services": [
+        "APIFY_API_TOKEN",
+        "SCRAPECREATORS_API_KEY"
+      ]
+    },
+    "mkt-ad-creative": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to generate, iterate, or scale ad creative \u2014 headlines, descriptions, primary text, or full ad variations \u2014 for any paid advertising platform. Do not use for unrelated deliverables; use the matching native channel skill.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer",
+        "viz-image-gen"
+      ],
+      "requires_services": [
+        "ELEVENLABS_API_KEY",
+        "GEMINI_API_KEY",
+        "GOOGLE_ADS_CUSTOMER_ID",
+        "GOOGLE_ADS_DEVELOPER_TOKEN",
+        "GOOGLE_ADS_TOKEN",
+        "LINKEDIN_ACCESS_TOKEN",
+        "META_ACCESS_TOKEN",
+        "META_AD_ACCOUNT_ID",
+        "TIKTOK_ACCESS_TOKEN",
+        "TIKTOK_ADVERTISER_ID"
+      ]
+    },
+    "str-customer-research": {
+      "category": "strategy",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to conduct, analyze, or synthesize customer research. Do not use for unrelated deliverables; use the matching native channel skill.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "mkt-cold-email": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "Write B2B cold emails and follow-up sequences that get replies. Use when the user wants to write cold outreach emails, prospecting emails, cold email campaigns, sales development emails, or SDR emails. Also use when the user mentions \"cold outreach,\" \"prospecting email,\" \"outbound email,\" \"email to leads,\" \"reach out to prospects,\" \"sales email,\" \"follow-up email sequence,\" \"nobody's replying to my emails,\" or \"how do I write a cold email.\" Covers subject lines, opening lines, body copy, CTAs, personalization, and multi-touch follow-up sequences. For warm/lifecycle email sequences, see mkt-emails. For sales collateral beyond emails, see mkt-sales-enablement. Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "mkt-community-marketing": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "Build and leverage online communities to drive product growth and brand loyalty. Use when the user wants to create a community strategy, grow a Discord or Slack community, manage a forum or subreddit, build brand advocates, increase word-of-mouth, drive community-led growth, engage users post-signup, or turn customers into evangelists. Trigger phrases: \"build a community,\" \"community strategy,\" \"Discord community,\" \"Slack community,\" \"community-led growth,\" \"brand advocates,\" \"user community,\" \"forum strategy,\" \"community engagement,\" \"grow our community,\" \"ambassador program,\" \"community flywheel.\" Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "mkt-emails": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to create or optimize an email sequence, drip campaign, automated email flow, or lifecycle email program. Also use when the user mentions \"email sequence,\" \"drip campaign,\" \"nurture sequence,\" \"onboarding emails,\" \"welcome sequence,\" \"re-engagement emails,\" \"email automation,\" \"lifecycle emails,\" \"trigger-based emails,\" \"email funnel,\" \"email workflow,\" \"what emails should I send,\" \"welcome series,\" or \"email cadence.\" Use this for any multi-email automated flow. For cold outreach emails, see mkt-cold-email. For in-app onboarding, see mkt-onboarding. Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": [
+        "CUSTOMERIO_API_KEY",
+        "CUSTOMERIO_APP_KEY",
+        "CUSTOMERIO_SITE_ID",
+        "KIT_API_KEY",
+        "KIT_API_SECRET",
+        "MAILCHIMP_API_KEY",
+        "RESEND_API_KEY",
+        "SENDGRID_API_KEY"
+      ]
+    },
+    "mkt-launch": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to plan a product launch, feature announcement, or release strategy. Also use when the user mentions 'launch,' 'Product Hunt,' 'feature release,' 'announcement,' 'go-to-market,' 'beta launch,' 'early access,' 'waitlist,' 'product update,' 'how do I launch this,' 'launch checklist,' 'GTM plan,' or 'we're about to ship.' Use this whenever someone is preparing to release something publicly. For ongoing marketing after launch, see str-marketing-ideas. For the offer being launched (bonuses, guarantees, scarcity, naming), see mkt-offers. Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "str-deep-research": {
+      "category": "strategy",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "Produce a multi-pass, cited research brief with source dates, contradictions, confidence, gaps, and next steps. Use for \"research this\", \"investigate\", \"due diligence\", \"validate this market\", or a technical decision needing verification. Uses actual available search, browser, connectors, and local knowledge; single fact lookups and internal-only wiki questions do not need this workflow.\n",
+      "dependencies": [],
+      "optional_dependencies": [
+        "tool-humanizer",
+        "tool-social-fetch"
+      ],
+      "requires_services": [
+        "NOTION_API_KEY"
+      ]
+    },
+    "mkt-signup": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to optimize signup, registration, account creation, or trial activation flows. Also use when the user mentions \"signup conversions,\" \"registration friction,\" \"signup form optimization,\" \"free trial signup,\" \"reduce signup dropoff,\" \"account creation flow,\" \"people aren't signing up,\" \"signup abandonment,\" \"trial conversion rate,\" \"nobody completes registration,\" \"too many steps to sign up,\" or \"simplify our signup.\" Use this whenever the user has a signup or registration flow that isn't performing. For post-signup onboarding, see mkt-onboarding. For lead capture forms (not account creation), see mkt-cro.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "str-decide": {
+      "category": "strategy",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "Make and record a decision using the 37signals question bank plus opportunity cost. Use for \"help me decide\", \"go/no-go\", \"deciding between\", or a consequential choice. Selects 6\u20138 relevant questions, captures first instinct, and records rationale and a revisit date. Business viability scoring belongs in str-business-brainstorm; execution belongs in the appropriate operations skill.\n",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-deep-research",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "tool-read-book": {
+      "category": "utility",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "Read a supplied book or long document in chunks and produce notes, summary, quotes, or study cards. Use for \"read this book\", \"summarize this ebook\", \"extract notes\", or \"study this PDF\". Supports accessible PDF, EPUB, MOBI, Markdown, text, and public-domain URLs with checked conversion tools. Saves dated chunk plans and sourced notes; short ad hoc document questions need not run the full workflow.\n",
+      "dependencies": [],
+      "optional_dependencies": [
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "mkt-paywalls": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to create or optimize in-app paywalls, upgrade screens, upsell modals, or feature gates. Also use when the user mentions \"paywall,\" \"upgrade screen,\" \"upgrade modal,\" \"upsell,\" \"feature gate,\" \"convert free to paid,\" \"freemium conversion,\" \"trial expiration screen,\" \"limit reached screen,\" \"plan upgrade prompt,\" \"in-app pricing,\" \"free users won't upgrade,\" \"trial to paid conversion,\" or \"how do I get users to pay.\" Use this for any in-product moment where you're asking users to upgrade. Distinct from public pricing pages (see mkt-cro) \u2014 this focuses on in-product upgrade moments where the user has already experienced value. For pricing decisions, see str-pricing. Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "meta-memory-write": {
+      "category": "meta",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [],
+      "mcp_servers": [],
+      "description": "Saves durable facts to context/MEMORY.md, the curated working scratchpad read at session start. Triggers on \"remember this\", \"remember that\", \"note that\", \"save this to memory\", \"update memory\", \"log this\", \"forget about\", \"remove from memory\". Three actions: add (append under the correct section after dedup check), replace (substring match + swap), remove (confirm with user first). Enforces a 2,500 character cap with consolidation when over. Does NOT trigger for daily session logging (handled by Returning Mode auto-tracking), learnings updates (handled by meta-wrap-up), or one-off in-conversation reminders.\n",
+      "dependencies": [],
+      "requires_services": []
+    },
+    "str-maker-council": {
+      "category": "strategy",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "Apply contrasting published founder and operator frameworks to a company-building decision. Use for \"maker council\", \"board of advisors\", \"what would Bezos do\", \"hire or bootstrap\", or \"get several founder perspectives\". Selects a simulated bench with a dissenter, maps disagreements, and synthesizes a recommendation. Label simulations clearly; marketing campaign questions belong in str-marketing-council.\n",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-decide",
+        "str-deep-research",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "mkt-prospecting": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to find, qualify, and build a list of prospects to reach out to \u2014 across B2B SaaS, general B2B, or local small businesses. Also use when the user mentions \"prospecting,\" \"build a prospect list,\" \"find prospects,\" \"find leads,\" \"lead gen list,\" \"find SaaS companies that,\" \"find B2B companies,\" \"find local businesses,\" \"ICP-fit accounts,\" \"who should we go after,\" \"outbound list,\" \"target account list,\" \"find clients near me,\" \"businesses without websites,\" \"prospect research,\" \"qualified leads,\" \"find my first customers,\" \"early adopters,\" \"design partners,\" \"beta users,\" or \"who has this problem.\" Use this for the list-building and qualification phase. For writing the outbound copy after the list is built, see mkt-cold-email. Do not use for unrelated deliverables; use the matching native channel skill.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": [
+        "APOLLO_API_KEY",
+        "CLAY_API_KEY",
+        "CLEARBIT_API_KEY",
+        "HUNTER_API_KEY",
+        "OUTREACH_ACCESS_TOKEN",
+        "SNOV_CLIENT_ID",
+        "SNOV_CLIENT_SECRET",
+        "ZOOMINFO_ACCESS_TOKEN",
+        "ZOOMINFO_PRIVATE_KEY",
+        "ZOOMINFO_USERNAME"
+      ]
+    },
+    "mkt-co-marketing": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to find co-marketing partners, plan joint campaigns, or brainstorm partnership opportunities. Use when the user says 'co-marketing,' 'partner marketing,' 'joint campaign,' 'who should we partner with,' 'integration marketing,' 'cross-promotion,' 'collaborate with another company,' 'partnership ideas,' or 'co-brand.' For customer referral programs, see mkt-referrals. For launch-specific partnerships, see mkt-launch. Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": [
+        "CROSSBEAM_API_KEY",
+        "PARTNERSTACK_PUBLIC_KEY",
+        "PARTNERSTACK_SECRET_KEY"
+      ]
+    },
+    "fin-personal-cfo": {
+      "category": "finance",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "Model household financial choices and compare scenarios with disclosed inputs and sensitivity. Use for \"house math\", \"rental forecast\", \"renovation budget\", \"monthly cash flow\", \"big purchase\", or \"savings what-if\". Includes a detailed housing template and general scenario methods. Company books belong in fin-company-cfo; this skill provides scenario analysis and never executes purchases, loans, investments, or tax filings.\n",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-decide",
+        "str-deep-research",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "meta-memory-recall": {
+      "category": "meta",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [],
+      "mcp_servers": [],
+      "description": "Drives the scoped recall ladder (search -> expand -> transcript) over the PGLite/pgvector memory store. Triggers on \"what did we decide about\", \"do we have a record of\", \"search memory\", \"look up in memory\", \"what do we know about X\", or any question about past context, decisions, or facts that Tier 0 (MEMORY.md, today's log) doesn't already answer. Composes with the always-on Tier 0/1 retrieval flow in AGENTS.md: this skill is what to reach for once Tier 0 comes up empty or thin. Stops at the lowest rung that answers the question and never widens scope mid-ladder. Does NOT trigger for memory writes (handled by meta-memory-write) or for facts already present in loaded context.\n",
+      "dependencies": [],
+      "requires_services": []
+    },
+    "str-marketing-psychology": {
+      "category": "strategy",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to apply psychological principles, mental models, or behavioral science to marketing. Also use when the user mentions 'psychology,' 'mental models,' 'cognitive bias,' 'persuasion,' 'behavioral science,' 'why people buy,' 'decision-making,' 'consumer behavior,' 'anchoring,' 'social proof,' 'scarcity,' 'loss aversion,' 'framing,' or 'nudge.' Use this whenever someone wants to understand or leverage how people think and make decisions in a marketing context. For applying psychology to specific pages, see mkt-cro; for str-pricing tactics, see str-pricing; for copy framing, see mkt-copywriting. Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "str-competitor-profiling": {
+      "category": "strategy",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to research, profile, or analyze competitors from their URLs. Also use when the user mentions 'competitor profile,' 'competitor research,' 'competitor analysis,' 'profile this competitor,' 'analyze competitor,' 'competitive intelligence,' 'competitor deep dive,' 'who are my competitors,' 'competitor landscape,' 'competitor dossier,' 'competitive audit,' or 'research these competitors.' Input is a list of competitor URLs. Output is structured competitor profile markdown files. For creating comparison/alternative pages from profiles, see str-competitors. For sales-specific battle cards, see mkt-sales-enablement. Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": [
+        "DATAFORSEO_LOGIN",
+        "DATAFORSEO_PASSWORD"
+      ]
+    },
+    "tool-watch-video": {
+      "category": "utility",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "Extract transcripts and optional visual observations from supplied video URLs or local recordings. Use for \"transcribe this video\", \"watch this recording\", \"key moments\", or \"analyze this demo\". Modes are transcript, visual, and multimodal. Prefers platform transcripts, supports checked local tools, and saves dated transcript, metadata, and moments. Does not assume a cloud key or model and does not fetch private material without access.\n",
+      "dependencies": [],
+      "optional_dependencies": [
+        "tool-humanizer",
+        "tool-social-fetch"
+      ],
+      "requires_services": [
+        "GEMINI_API_KEY",
+        "LOOM_API_KEY"
+      ]
+    },
+    "str-seo-audit": {
+      "category": "strategy",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to audit, review, or diagnose SEO issues on their site. Also use when the user mentions \"SEO audit,\" \"technical SEO,\" \"why am I not ranking,\" \"SEO issues,\" \"on-page SEO,\" \"meta tags review,\" \"SEO health check,\" \"my traffic dropped,\" \"lost rankings,\" \"not showing up in Google,\" \"site isn't ranking,\" \"Google update hit me,\" \"page speed,\" \"core web vitals,\" \"crawl errors,\" or \"indexing issues.\" Use this even if the user just says something vague like \"my SEO is bad\" or \"help with SEO\" \u2014 start with an audit. For building pages at scale to target keywords, see mkt-programmatic-seo. For adding structured data, see mkt-schema. For AI search optimization, see str-ai-seo.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "ops-revops": {
+      "category": "operations",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants help with revenue operations, lead lifecycle management, or marketing-to-sales handoff processes. Also use when the user mentions 'RevOps,' 'revenue operations,' 'lead scoring,' 'lead routing,' 'MQL,' 'SQL,' 'pipeline stages,' 'deal desk,' 'CRM automation,' 'marketing-to-sales handoff,' 'data hygiene,' 'leads aren't getting to sales,' 'pipeline management,' 'lead qualification,' or 'when should marketing hand off to sales.' Use this for anything involving the systems and processes that connect marketing to revenue. For cold outreach emails, see mkt-cold-email. For email drip campaigns, see mkt-emails. For pricing decisions, see str-pricing. Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": [
+        "ACTIVECAMPAIGN_API_KEY",
+        "ACTIVECAMPAIGN_API_URL",
+        "APOLLO_API_KEY",
+        "CALENDLY_API_KEY",
+        "CLEARBIT_API_KEY",
+        "CROSSBEAM_API_KEY",
+        "SAVVYCAL_API_KEY",
+        "ZAPIER_API_KEY"
+      ]
+    },
+    "mkt-cro": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to optimize, improve, or increase conversions on any marketing page or form \u2014 including homepage, landing pages, pricing pages, feature pages, lead capture forms, or contact forms. Also use when the user says 'CRO,' 'conversion rate optimization,' 'this page isn't converting,' 'improve conversions,' 'why isn't this page working,' 'my landing page sucks,' 'form abandonment,' 'nobody's converting,' 'low conversion rate,' or 'this page needs work.' Use this even if the user just shares a URL and asks for feedback. For signup/registration flows, see mkt-signup. For post-signup activation, see mkt-onboarding. For popups/modals, see mkt-popups. Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "mkt-copy-editing": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to edit, review, or improve existing marketing copy, or refresh outdated content. Also use when the user mentions 'edit this copy,' 'review my copy,' 'copy feedback,' 'proofread,' 'polish this,' 'make this better,' 'copy sweep,' 'tighten this up,' 'this reads awkwardly,' 'clean up this text,' 'too wordy,' 'sharpen the messaging,' 'refresh this content,' 'update this page,' 'this content is outdated,' or 'content audit.' Use this when the user already has copy and wants it improved or refreshed rather than rewritten from scratch. For writing new copy, see mkt-copywriting. Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "mkt-offers": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to design, construct, or improve an offer \u2014 the thing they actually sell \u2014 including value framing, bonus stacking, guarantee design, scarcity/urgency, naming, and payment structure. Also use when the user mentions 'offer,' 'offer design,' 'build an offer,' 'grand slam offer,' 'irresistible offer,' 'value stack,' 'bonus stack,' 'guarantee,' 'risk reversal,' 'money-back guarantee,' 'scarcity,' 'urgency,' 'high-ticket offer,' 'productize a service,' 'naming an offer,' 'payment plan,' 'down-sell,' 'upsell offer,' or 'why isn't my offer converting.' Best for services, agencies, courses, coaching, info products, high-ticket B2B, and direct-response. If you run pure self-serve SaaS, read pricing first \u2014 tiers and packaging do more work there. Do not use for unrelated deliverables; use the matching native channel skill.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "mkt-churn-prevention": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to reduce churn, build cancellation flows, set up save offers, recover failed payments, or implement retention strategies. Also use when the user mentions 'churn,' 'cancel flow,' 'offboarding,' 'save offer,' 'dunning,' 'failed payment recovery,' 'win-back,' 'retention,' 'exit survey,' 'pause subscription,' 'involuntary churn,' 'people keep canceling,' 'churn rate is too high,' 'how do I keep users,' or 'customers are leaving.' Use this whenever someone is losing subscribers or wants to build systems to prevent it. For post-cancel win-back email sequences, see mkt-emails. For in-app upgrade paywalls, see mkt-paywalls. Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "fin-invoice-reconciliation": {
+      "category": "finance",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [],
+      "mcp_servers": [],
+      "description": "Reconcile bank transactions with their receipts/invoices found in email and cloud storage, attach or link the matching documents, track repeat misses, and escalate what the user needs to chase. Works wherever the user's transactions live - an accounting app (FreeAgent, Xero, QuickBooks...), a Google Sheet, or a spreadsheet export. Use this skill whenever the user mentions reconciling invoices or receipts, matching receipts to bank transactions, chasing missing receipts, attaching receipts/invoices to transactions, unexplained or undocumented bank transactions, receipt audits, or a weekly/regular bookkeeping tidy-up - even if they don't use the word \"reconcile\". Also use it when setting up or scheduling a recurring receipt-matching job.",
+      "dependencies": [],
+      "requires_services": []
+    },
+    "mkt-lead-magnets": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to create, plan, or optimize a lead magnet for email capture or lead generation. Also use when the user mentions \"lead magnet,\" \"gated content,\" \"content upgrade,\" \"downloadable,\" \"ebook,\" \"cheat sheet,\" \"checklist,\" \"template download,\" \"opt-in,\" \"freebie,\" \"PDF download,\" \"resource library,\" \"content offer,\" \"email capture content,\" \"Notion template,\" \"spreadsheet template,\" or \"what should I give away for mkt-emails.\" Use this for planning what to create and how to distribute it. For interactive tools as lead magnets, see mkt-free-tools. For writing the actual content, see mkt-copywriting. For the email sequence after capture, see mkt-emails. Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "str-product-marketing": {
+      "category": "strategy",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "Create or update the AI-OS product marketing foundation by synthesizing existing positioning, ICP, voice and product evidence into brand_context/product-marketing.md. Use for product context, marketing context, audience, personas, differentiation, proof, objections or foundational marketing setup. Extend this foundation without replacing mkt-positioning, mkt-icp or mkt-brand-voice outputs. Do not use for one-off campaign copy.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "ops-project-management": {
+      "category": "operations",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "Manage a portfolio using five-column Kanban, Eisenhower triage, work-in-progress limits, and clear async updates. Use for \"triage my backlog\", \"what should I work on next\", \"project status\", \"weekly pulse\", or \"what is blocked\". Supports setup, triage, next, status, unblock, and weekly modes via actual available connectors or local/manual boards. It does not send status messages or delegate to people automatically.\n",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-decide",
+        "tool-humanizer"
+      ],
+      "requires_services": [
+        "LINEAR_API_KEY",
+        "NOTION_API_KEY",
+        "PLANE_API_KEY"
+      ]
+    },
+    "viz-marketing-video": {
+      "category": "visual",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to create, generate, or produce video content using AI tools or programmatic frameworks. Also use when the user mentions 'video production,' 'AI video,' 'Remotion,' 'Hyperframes,' 'HeyGen,' 'Synthesia,' 'Veo,' 'Sora,' 'Runway,' 'Kling,' 'Seedance,' 'Hailuo,' 'MiniMax,' 'Pika,' 'Hunyuan,' 'Wan,' 'video generation,' 'AI avatar,' 'talking head video,' 'programmatic video,' 'video template,' 'explainer video,' 'product demo video,' 'video pipeline,' 'copy this edit,' 'match this video style,' 'reverse-engineer this video,' 'edit like this reference,' or 'make me a video.' Use this for viz-marketing-video creation, generation, and production workflows. For video content strategy and what to post, see mkt-social. For paid video ad creative, see mkt-ad-creative. Do not use for unrelated deliverables; use the matching native channel skill.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer",
+        "viz-ugc-heygen"
+      ],
+      "requires_services": []
+    },
+    "mkt-sms": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to plan, build, or optimize SMS or MMS marketing \u2014 including welcome flows, abandoned cart texts, post-purchase, win-back, promotional sends, or transactional/auth SMS. Also use when the user mentions \"SMS marketing,\" \"text message campaigns,\" \"SMS sequence,\" \"SMS automation,\" \"abandoned cart text,\" \"post-purchase SMS,\" \"Klaviyo SMS,\" \"Postscript,\" \"Attentive,\" \"Twilio,\" \"A2P 10DLC,\" \"TCPA,\" \"SMS compliance,\" \"short code,\" \"toll-free SMS,\" \"MMS campaign,\" \"should I do SMS,\" or \"SMS vs email.\" For email sequences, see mkt-emails. For SMS copy framing, see mkt-copywriting. For opt-in popups that capture phone numbers, see mkt-popups. Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": [
+        "BREVO_API_KEY",
+        "CUSTOMERIO_API_KEY",
+        "CUSTOMERIO_APP_KEY",
+        "CUSTOMERIO_SITE_ID",
+        "KLAVIYO_API_KEY"
+      ]
+    },
+    "mkt-directory-submissions": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to submit their product to startup, SaaS, AI, agent, MCP, no-code, or review directories for backlinks, domain rating, and discovery. Also use when the user mentions \"directory submissions,\" \"submit to directories,\" \"backlinks from directories,\" \"list my product,\" \"submit to Product Hunt,\" \"BetaList,\" \"TAAFT,\" \"Futurepedia,\" \"G2 listing,\" \"Capterra listing,\" \"AlternativeTo,\" \"SaaSHub,\" \"AI directories,\" \"MCP registry,\" \"agent directory,\" \"dofollow backlinks,\" \"launch directories,\" or \"directory tracker.\" Use this whenever someone is planning the directory layer of a product launch or an ongoing backlink campaign. For the broader launch moment, see mkt-launch. For programmatic SEO pages that should live behind these backlinks, see mkt-programmatic-seo. Do not use for unrelated deliverables; use the matching native channel skill.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "mkt-free-tools": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to plan, evaluate, or build a free tool for marketing purposes \u2014 lead generation, SEO value, or brand awareness. Also use when the user mentions \"engineering as marketing,\" \"free tool,\" \"marketing tool,\" \"calculator,\" \"generator,\" \"interactive tool,\" \"lead gen tool,\" \"build a tool for leads,\" \"free resource,\" \"ROI calculator,\" \"grader tool,\" \"audit tool,\" \"should I build a free tool,\" or \"tools for lead gen.\" Use this whenever someone wants to build something useful and give it away to attract leads or earn links. For downloadable content lead magnets (ebooks, checklists, templates), see mkt-lead-magnets. Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "fin-company-cfo": {
+      "category": "finance",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "Analyze company cash, reconciled monthly financials, runway, and forecasts. Use for \"monthly cash report\", \"CFO snapshot\", \"cash pulse\", \"runway forecast\", or \"cash projection\". Modes are monthly, weekly, scenario, and pickup. Uses user exports or actual read-only connected sources and discloses assumptions; personal household modeling belongs in fin-personal-cfo. Produces analysis, never transactions or accounting filings.\n",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-decide",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "str-unstuck": {
+      "category": "strategy",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "Find safe alternative approaches when a user or agent hits a roadblock. Use for \"I am stuck\", \"we hit a wall\", \"out of options\", \"work around this\", or repeated tool failure. Classifies the barrier, tests assumptions, and generates at least ten distinct angles before selecting experiments. This supports problem solving within authorization; it never overrides security, access, or user boundaries.\n",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-decide",
+        "str-deep-research",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "str-marketing-plan": {
+      "category": "strategy",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user needs a comprehensive marketing plan for a client, a company they advise, or their own product. Also use when the user mentions \"marketing plan,\" \"growth plan,\" \"GTM plan,\" \"go-to-market plan,\" \"AARRR plan,\" \"90-day marketing plan,\" \"12-month marketing roadmap,\" \"fractional CMO plan,\" or \"fCMO plan.\" Generates an exhaustive 13-section plan structured by AARRR (Acquisition, Activation, Retention, Referral, Revenue), customized to the client's current budget, team, and stage, mapped to future funding milestones, cross-referenced with the 139-idea str-marketing-ideas library and an embedded 17-section current-state audit rubric, with a full marketing operations stack showing which skills and MCP/API integrations execute each part. Outputs a Notion-paste-ready markdown document. Do not use for unrelated deliverables; use the matching native channel skill.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": [
+        "AHREFS_API_KEY"
+      ]
+    },
+    "ops-loopify": {
+      "category": "operations",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "Design an idempotent recurring task or bounded in-session loop for AI-OS. Use for \"run this daily\", \"schedule this\", \"keep checking until\", \"make this recurring\", or \"set up a loop\". Adds checkpoints, failure handling, stop conditions, and a verification plan; recurring jobs use the existing ops-cron managed runtime. Skill authoring belongs in meta-skillify, and tool integration in meta-toolify.\n",
+      "dependencies": [
+        "ops-cron"
+      ],
+      "optional_dependencies": [
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "str-marketing-council": {
+      "category": "strategy",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants multiple expert perspectives on a marketing question \u2014 a simulated board of advisors staffed by legendary marketers (Seth Godin, David Ogilvy, Eugene Schwartz, April Dunford, Rory Sutherland, Alex Hormozi, Byron Sharp, and more). Also use when the user mentions 'marketing council,' 'board of advisors,' 'advisory board,' 'what would Seth Godin say,' 'what would Ogilvy think,' 'channel Hormozi,' 'get multiple perspectives,' 'debate this,' 'have the council review,' 'marketing mentors,' or asks how a famous marketer would approach their problem. The council gives each advisor's take through their documented frameworks, surfaces where they disagree, and synthesizes a recommendation. For executing the winning direction, hand off to mkt-positioning, offers, copywriting, ads, or the relevant skill.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "meta-skillify": {
+      "category": "meta",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "Create, adapt, or update a capability using AI-OS\u2019s own skill-building workflow. Use for \"turn this into a skill\", \"skill from this chat/video\", \"adapt this skill\", or \"propagate this learning\". Routes source material, classifies keep/adapt/add, checks licenses, and coordinates native structure, scoped context, registration, and tests. meta-skill-creator supplies the canonical authoring workflow; this is its source-routing companion.\n",
+      "dependencies": [
+        "meta-skill-creator"
+      ],
+      "optional_dependencies": [
+        "tool-humanizer",
+        "tool-watch-video"
+      ],
+      "requires_services": []
+    },
+    "fin-month-end-reporting": {
+      "category": "finance",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [],
+      "mcp_servers": [],
+      "description": "Run a month-end financial close on the user's finance spreadsheet - complete categorization formulas on the raw transactions tab, add newly-seen merchants to the lookup table, roll the monthly P&L forward, extend the monthly outlook/summary, verify the figures, and produce an insights summary with month-over-month movers. Use this skill whenever the user mentions month-end reporting or close, finalizing a month, monthly P&L, updating their finances spreadsheet for the month, monthly financial summary or outlook, or setting up/scheduling a recurring monthly finance job - even if they just say \"do my monthly numbers\" or \"close out last month\".",
+      "dependencies": [],
+      "requires_services": []
+    },
+    "str-competitors": {
+      "category": "strategy",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to create competitor comparison or alternative pages for SEO and sales enablement. Also use when the user mentions 'alternative page,' 'vs page,' 'competitor comparison,' 'comparison page,' '[Product] vs [Product],' '[Product] alternative,' 'competitive landing pages,' 'how do we compare to X,' 'battle card,' or 'competitor teardown.' Use this for any content that positions your product against competitors. Covers four formats: singular alternative, plural alternatives, you vs competitor, and competitor vs competitor. For sales-specific competitor docs, see mkt-sales-enablement. Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "mkt-programmatic-seo": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to create SEO-driven pages at scale using templates and data. Also use when the user mentions \"programmatic SEO,\" \"template pages,\" \"pages at scale,\" \"directory pages,\" \"location pages,\" \"[keyword] + [city] pages,\" \"comparison pages,\" \"integration pages,\" \"building many pages for SEO,\" \"pSEO,\" \"generate 100 pages,\" \"data-driven pages,\" or \"templated landing pages.\" Use this whenever someone wants to create many similar pages targeting different keywords or locations. For auditing existing SEO issues, see str-seo-audit. For content strategy planning, see str-content-strategy. Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "mkt-ads": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants help with paid advertising campaigns on Google Ads, Meta (Facebook/Instagram), LinkedIn, Twitter/X, or other ad platforms. Also use when the user mentions 'PPC,' 'paid media,' 'ROAS,' 'CPA,' 'ad campaign,' 'retargeting,' 'audience targeting,' 'Google Ads,' 'Facebook ads,' 'LinkedIn ads,' 'ad budget,' 'cost per click,' 'ad spend,' 'should I run ads,' 'ABM,' 'account-based marketing,' 'B2B ads,' 'lead quality,' 'negative keywords,' 'Performance Max,' 'thought leader ads,' or 'when should I kill an ad.' Use this for campaign strategy, audience targeting, bidding, and optimization. For bulk ad creative generation and iteration, see mkt-ad-creative. For landing page optimization, see mkt-cro. Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": [
+        "GA4_ACCESS_TOKEN",
+        "GOOGLE_ADS_CUSTOMER_ID",
+        "GOOGLE_ADS_DEVELOPER_TOKEN",
+        "GOOGLE_ADS_TOKEN",
+        "LINKEDIN_ACCESS_TOKEN",
+        "META_ACCESS_TOKEN",
+        "META_AD_ACCOUNT_ID",
+        "SEGMENT_ACCESS_TOKEN",
+        "SEGMENT_WRITE_KEY",
+        "TIKTOK_ACCESS_TOKEN",
+        "TIKTOK_ADVERTISER_ID"
+      ]
+    },
+    "str-site-architecture": {
+      "category": "strategy",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to plan, map, or restructure their website's page hierarchy, navigation, URL structure, or internal linking. Also use when the user mentions \"sitemap,\" \"site map,\" \"visual sitemap,\" \"site structure,\" \"page hierarchy,\" \"information architecture,\" \"IA,\" \"navigation design,\" \"URL structure,\" \"breadcrumbs,\" \"internal linking strategy,\" \"website planning,\" \"what pages do I need,\" \"how should I organize my site,\" or \"site navigation.\" Use this whenever someone is planning what pages a website should have and how they connect. NOT for XML sitemaps (that's technical SEO \u2014 see str-seo-audit). For SEO audits, see str-seo-audit. For structured data, see mkt-schema.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "mkt-events": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to plan, run, sponsor, speak at, or get pipeline from events \u2014 webinars, conferences, trade shows, meetups, dinners, workshops, virtual summits, or user conferences. Also use when the user mentions 'event marketing,' 'field marketing,' 'run a webinar,' 'webinar funnel,' 'show-up rate,' 'should we sponsor,' 'sponsor a conference,' 'trade show booth,' 'booth strategy,' 'event ROI,' 'badge scans,' 'event follow-up,' 'speaking slot,' 'CFP,' 'conference talk,' 'host a dinner,' 'user conference,' or 'virtual summit.' Covers all four roles: hosting, sponsoring/exhibiting, speaking, and attending. For product launch moments, see mkt-launch. For the partnership side of joint webinars, see mkt-co-marketing. For ongoing community programs, see mkt-community-marketing. Do not use for unrelated deliverables; use the matching native channel skill.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "str-domain": {
+      "category": "strategy",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "Brainstorm project names and investigate domain availability, registrar and aftermarket prices, trademark screening, and social handles. Use for \"find a domain\", \"name my project\", \"check domain availability\", or \"domain hunt\". Works backwards from availability and budget. Produces a verified shortlist and uncertainty log; it does not purchase, backorder, or negotiate automatically.\n",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-decide",
+        "tool-humanizer"
+      ],
+      "requires_services": [
+        "DOMAINR_API_KEY",
+        "NAMECHEAP_API_KEY"
+      ]
+    },
+    "viz-slide-deck": {
+      "category": "visual",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "Create, update, convert, or export slide decks using a chosen narrative, density mode, and AI-OS brand context. Use for \"make a deck\", \"speaker notes\", \"rewrite this slide\", \"convert PPTX\", or \"export slides\". Supports speaker-led and reading-first output, three angles, overflow checks, and presentation validation. A configured React renderer is optional; local HTML/Markdown is the fallback. Deployment requires explicit instruction.\n",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-deep-research",
+        "tool-humanizer",
+        "tool-watch-video"
+      ],
+      "requires_services": []
+    },
+    "str-business-brainstorm": {
+      "category": "strategy",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "Pressure-test a new business, product, or side project on problem, audience, wedge, monetization, moat, portfolio fit, distribution, energy, and opportunity cost. Use for \"should I build this\", \"validate this idea\", or \"new business idea\". Produces a build, defer, or pass brief; marketing tactics for an existing product belong in str-marketing-ideas.\n",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-deep-research",
+        "str-domain",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "mkt-onboarding": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to optimize post-signup onboarding, user activation, first-run experience, or time-to-value. Also use when the user mentions \"onboarding flow,\" \"activation rate,\" \"user activation,\" \"first-run experience,\" \"empty states,\" \"onboarding checklist,\" \"aha moment,\" \"new user experience,\" \"users aren't activating,\" \"nobody completes setup,\" \"low activation rate,\" \"users sign up but don't use the product,\" \"time to value,\" or \"first session experience.\" Use this whenever users are signing up but not sticking around. For signup/registration optimization, see mkt-signup. For ongoing email sequences, see mkt-emails.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "mkt-public-relations": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants help with public relations, earned media, press coverage, journalist outreach, or media strategy (not pull requests). Also use when the user mentions 'PR,' 'public relations,' 'press,' 'press release,' 'press coverage,' 'media outreach,' 'pitch a journalist,' 'get featured,' 'media list,' 'media kit,' 'press kit,' 'newsjacking,' 'news hijack,' 'HARO,' 'Qwoted,' 'Featured,' 'Help A Reporter,' 'reporter request,' 'tech press,' 'TechCrunch,' 'earned media,' 'thought leadership placement,' 'op-ed,' 'guest article,' 'press contacts,' 'podcast prep,' 'going on a podcast,' 'podcast guest,' 'prep me for this podcast,' or 'how do I get press.' Use this for earned media work \u2014 finding journalists, pitching stories, newsjacking, prepping podcast appearances, and responding to press requests.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "str-content-strategy": {
+      "category": "strategy",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to plan a content strategy, decide what content to create, or figure out what topics to cover. Also use when the user mentions \"content strategy,\" \"what should I write about,\" \"content ideas,\" \"blog strategy,\" \"topic clusters,\" \"content planning,\" \"editorial calendar,\" \"content marketing,\" \"content roadmap,\" \"what content should I create,\" \"blog topics,\" \"content pillars,\" or \"I don't know what to write.\" Use this whenever someone needs help deciding what content to produce, not just writing it. For writing individual pieces, see mkt-copywriting. For SEO-specific audits, see str-seo-audit. For social media content specifically, see mkt-social.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "ops-ingest": {
+      "category": "operations",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "Convert transcripts, client messages, email text, meeting notes, and voice dumps into structured decisions, action items, bugs, questions, and durable knowledge. Use for \"ingest this\", \"here is the transcript\", or a forwarded message needing processing. Uses scoped person-to-project routing and drafts replies. Creates external issues only when explicitly authorized; it never sends replies automatically.\n",
+      "dependencies": [],
+      "optional_dependencies": [
+        "tool-humanizer",
+        "tool-paste"
+      ],
+      "requires_services": []
+    },
+    "mkt-marketing-loops": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to set up a recurring, self-running marketing workflow \u2014 a repeatable loop an AI agent runs on a cadence (weekly, daily, on a trigger) rather than a one-off task. Also use when the user mentions 'marketing loop,' 'recurring marketing workflow,' 'automate my marketing,' 'marketing on autopilot,' 'weekly marketing review,' 'ad fatigue check,' 'content refresh loop,' 'churn watch,' 'ranking drop alert,' 'always-on marketing,' 'marketing automation workflow,' or 'run this every week.' Use this to pick, adapt, and schedule an ongoing marketing loop that orchestrates the other marketing skills. For one-off marketing ideas, see str-marketing-ideas. For the experimentation loop specifically, see mkt-ab-testing.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "ops-cron",
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "ops-attribution": {
+      "category": "operations",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to figure out which marketing actually drives conversions and revenue, choose or interpret an attribution model, or reconcile conflicting numbers across tools. Do not use for unrelated deliverables; use the matching native channel skill.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": [
+        "GA4_ACCESS_TOKEN",
+        "POSTHOG_API_KEY",
+        "SEGMENT_ACCESS_TOKEN",
+        "SEGMENT_WRITE_KEY",
+        "SUPERMETRICS_API_KEY"
+      ]
+    },
+    "viz-marketing-image": {
+      "category": "visual",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to create, generate, edit, or optimize images for marketing \u2014 blog heroes, social graphics, product mockups, profile banners, listing visuals, or brand assets. Also use when the user mentions 'AI image generation,' 'generate an image,' 'create a graphic,' 'product mockup,' 'hero image,' 'social media graphic,' 'banner image,' 'cover photo,' 'profile banner,' 'listing screenshot,' 'Flux,' 'Flux Kontext,' 'Midjourney,' 'DALL-E,' 'GPT Image,' 'ChatGPT Images,' 'Ideogram,' 'Gemini image,' 'Nano Banana,' 'Recraft,' 'Stable Diffusion,' 'Canva,' 'Figma,' 'image optimization,' 'compress images,' 'WebP,' or 'OG image.' Use this for general-purpose marketing image creation and optimization. For paid ad image creative and platform-specific ad specs, see mkt-ad-creative. Do not use for unrelated deliverables; use the matching native channel skill.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer",
+        "viz-image-gen"
+      ],
+      "requires_services": []
+    },
+    "mkt-popups": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to create or optimize popups, modals, overlays, slide-ins, or banners for conversion purposes. Also use when the user mentions \"exit intent,\" \"popup conversions,\" \"modal optimization,\" \"lead capture popup,\" \"email popup,\" \"announcement banner,\" \"overlay,\" \"collect emails with a popup,\" \"exit popup,\" \"scroll trigger,\" \"sticky bar,\" or \"notification bar.\" Use this for any overlay or interrupt-style conversion element. For forms outside of popups, see mkt-cro. For general page conversion optimization, see mkt-cro. Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "tool-paste": {
+      "category": "utility",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "Clean terminal or copied content for Slack, Notion, X, LinkedIn, email, GitHub, Markdown, HTML, or plain text. Use for \"paste-ready\", \"strip ANSI\", \"clean this for Slack\", or \"format this for email\". Removes terminal artifacts, checks for secrets, preserves meaning and valid code, and saves a dated formatted file with preview. Clipboard access is optional; creating substantive new copy belongs in a writing skill.\n",
+      "dependencies": [],
+      "optional_dependencies": [
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "mkt-schema": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to add, fix, or optimize schema markup and structured data on their site. Also use when the user mentions \"schema markup,\" \"structured data,\" \"JSON-LD,\" \"rich snippets,\" \"schema.org,\" \"FAQ schema,\" \"product schema,\" \"review schema,\" \"breadcrumb schema,\" \"Google rich results,\" \"knowledge panel,\" \"star ratings in search,\" or \"add structured data.\" Use this whenever someone wants their pages to show enhanced results in Google. For broader SEO issues, see str-seo-audit. For AI search optimization, see str-ai-seo. Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "mkt-influencer-marketing": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants to run influencer, creator, or ambassador partnerships to promote their product \u2014 finding and vetting partners, structuring deals, briefing creators, disclosure compliance, and measuring ROI. Also use when the user mentions 'influencer marketing,' 'creator partnerships,' 'sponsorships,' 'YouTube sponsorships,' 'podcast sponsorships,' 'brand ambassador,' 'ambassador program,' 'creator program,' 'UGC creators,' 'tech UGC,' 'UGC creator program,' 'creator network,' 'B2B influencers,' 'thought leader ads,' 'gifting,' 'product seeding,' 'whitelisting creator content,' 'how much to pay an influencer,' or 'FTC disclosure.' For affiliate/referral payout mechanics, see mkt-referrals. For community-led advocacy, see mkt-community-marketing. Do not use for unrelated deliverables; use the matching native channel skill.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "str-marketing-ideas": {
+      "category": "strategy",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user needs marketing ideas, inspiration, or strategies for their SaaS or software product. Also use when the user asks for 'marketing ideas,' 'growth ideas,' 'how to market,' 'marketing strategies,' 'marketing tactics,' 'ways to promote,' 'ideas to grow,' 'what else can I try,' 'I don't know how to market this,' 'brainstorm marketing,' or 'what marketing should I do.' Use this as a starting point whenever someone is stuck or looking for inspiration on how to grow. For specific channel execution, see the relevant skill (ads, social, emails, etc.). Do not use for unrelated tasks outside this skill\u2019s stated deliverables.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    },
+    "mkt-social": {
+      "category": "execution",
+      "version": "1.0.0",
+      "story": {
+        "text": "",
+        "video": ""
+      },
+      "changelog": [
+        {
+          "version": "1.0.0",
+          "summary": "Adapted methodology, active workspace context, native output conventions and shared tools."
+        }
+      ],
+      "mcp_servers": [],
+      "description": "When the user wants help creating, scheduling, or optimizing social media content for LinkedIn, Twitter/X, Instagram, TikTok, Facebook, or other platforms, or wants to do social listening and engagement triage. Do not use for unrelated deliverables; use the matching native channel skill.",
+      "dependencies": [],
+      "optional_dependencies": [
+        "str-product-marketing",
+        "tool-humanizer"
+      ],
+      "requires_services": []
+    }
+  }
+}

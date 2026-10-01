@@ -1,0 +1,26 @@
+.git
+.github
+.command-centre
+.memsearch
+.next
+**/.next
+**/node_modules
+**/dist
+**/coverage
+**/.env
+**/.env.local
+**/.mcp.json
+**/backups
+**/context/transcripts
+**/tsconfig.tsbuildinfo
+npm-debug.log*
+docker-compose*.yml
+docker-compose*.yaml
+
+# Keep private workspace data out of the published (public) server image.
+# The hosted Memory API serves from Postgres + the /workspace volume and does
+# not need any of these baked into the image.
+brand_context
+clients
+context
+projects

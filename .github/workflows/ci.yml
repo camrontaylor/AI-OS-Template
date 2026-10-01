@@ -1,0 +1,332 @@
+name: CI
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
+
+jobs:
+  detect-zones:
+    runs-on: ubuntu-latest
+    outputs:
+      code-changed: ${{ steps.filter.outputs.code }}
+      config-changed: ${{ steps.filter.outputs.config }}
+      content-only: ${{ steps.filter.outputs.content-only }}
+      memory-meta-changed: ${{ steps.filter.outputs.memory-meta }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: filter
+        name: Classify changed files into zones
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE=${{ github.event.pull_request.base.sha }}
+            HEAD=${{ github.event.pull_request.head.sha }}
+          else
+            BASE=${{ github.event.before }}
+            HEAD=${{ github.sha }}
+          fi
+
+          # Handle initial commits where BASE is all zeros
+          if [ "$BASE" = "0000000000000000000000000000000000000000" ]; then
+            FILES=$(git diff-tree --no-commit-id --name-only -r "$HEAD")
+          else
+            FILES=$(git diff --name-only "$BASE" "$HEAD")
+          fi
+
+          CODE=false
+          CONFIG=false
+          CONTENT_ONLY=true
+          MEMORY_META=false
+
+          while IFS= read -r file; do
+            [ -z "$file" ] && continue
+
+            if echo "$file" | grep -qE '^scripts/(lib/memory-meta\.sh|test-memory-meta\.sh)$'; then
+              MEMORY_META=true
+            fi
+
+            # Zone 3: Code
+            if echo "$file" | grep -qE '^command-centre/|^\.claude/hooks/.*\.(js|ts)$'; then
+              CODE=true
+              CONTENT_ONLY=false
+              continue
+            fi
+
+            # Zone 2: Config
+            if echo "$file" | grep -qE '^\.claude/skills/.*/SKILL\.md$|^AGENTS\.md$|^CLAUDE\.md$|^\.env\.example$|^scripts/.*\.sh$'; then
+              CONFIG=true
+              CONTENT_ONLY=false
+              continue
+            fi
+
+            # Zone 1: Content (projects/, brand_context/, context/, cron/jobs/, clients/)
+            if echo "$file" | grep -qE '^projects/|^brand_context/|^context/|^cron/jobs/|^clients/'; then
+              continue
+            fi
+
+            # Anything else is non-content
+            CONTENT_ONLY=false
+          done <<< "$FILES"
+
+          echo "code=$CODE" >> "$GITHUB_OUTPUT"
+          echo "config=$CONFIG" >> "$GITHUB_OUTPUT"
+          echo "content-only=$CONTENT_ONLY" >> "$GITHUB_OUTPUT"
+          echo "memory-meta=$MEMORY_META" >> "$GITHUB_OUTPUT"
+
+  checks:
+    needs: detect-zones
+    if: needs.detect-zones.outputs.content-only != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: command-centre/package-lock.json
+
+      - name: Install dependencies
+        working-directory: command-centre
+        run: npm ci
+
+      - name: TypeScript check
+        if: needs.detect-zones.outputs.code-changed == 'true'
+        working-directory: command-centre
+        run: npx tsc --noEmit
+
+      - name: Cursor-aware slash-command tests
+        if: needs.detect-zones.outputs.code-changed == 'true'
+        working-directory: command-centre
+        run: node --no-deprecation --test src/lib/slash-commands.test.cjs
+
+      - name: Deterministic file-tree tests
+        if: needs.detect-zones.outputs.code-changed == 'true'
+        working-directory: command-centre
+        run: node --no-deprecation --test src/components/docs/docs-file-tree.test.cjs
+
+      - name: Client slug creation tests
+        if: needs.detect-zones.outputs.code-changed == 'true'
+        working-directory: command-centre
+        run: node --no-deprecation --test scripts/team-client.test.cjs src/lib/client-slug.test.cjs src/lib/identity/store.test.cjs src/app/api/team/admin/route.test.cjs
+
+      - name: Team OS isolation tests
+        if: needs.detect-zones.outputs.code-changed == 'true'
+        working-directory: command-centre
+        timeout-minutes: 20
+        run: npm run test:isolation
+
+      - name: Build command centre
+        if: needs.detect-zones.outputs.code-changed == 'true'
+        working-directory: command-centre
+        run: npm run build
+
+      # Offline memory suite (PGLite); hosted-Postgres tests stay opt-in on TEST_DATABASE_URL.
+      - name: Memory tests (no-leak + recall, offline PGLite)
+        if: needs.detect-zones.outputs.code-changed == 'true'
+        working-directory: command-centre
+        timeout-minutes: 20
+        run: npm run test:memory
+
+      - name: Memory setup tests (Bash + PowerShell 7)
+        if: needs.detect-zones.outputs.code-changed == 'true'
+        timeout-minutes: 10
+        run: |
+          command -v pwsh
+          bash scripts/test-memory-setup.sh
+
+      - name: Syntax check shell scripts
+        run: |
+          for f in scripts/*.sh; do
+            [ -f "$f" ] && bash -n "$f"
+          done
+
+      - name: Updater process safety tests
+        run: bash scripts/test-update-processes.sh
+
+      # Unconditional: a release commit that only touches VERSION must still be checked.
+      - name: Command Centre version matches VERSION
+        run: bash scripts/check-version-sync.sh
+
+      - name: Syntax check hook scripts
+        run: |
+          for f in .claude/hooks/*.js; do
+            [ -f "$f" ] && node --check "$f"
+          done
+
+      - name: Validate SKILL.md frontmatter
+        run: |
+          EXIT_CODE=0
+          for skill_dir in .claude/skills/*/; do
+            [ ! -d "$skill_dir" ] && continue
+            SKILL_FILE="$skill_dir/SKILL.md"
+            [ ! -f "$SKILL_FILE" ] && continue
+
+            FOLDER_NAME=$(basename "$skill_dir")
+
+            # Skip catalog
+            [ "$FOLDER_NAME" = "_catalog" ] && continue
+
+            # Extract name from YAML frontmatter
+            YAML_NAME=$(sed -n '/^---$/,/^---$/{ /^name:/s/^name: *//p }' "$SKILL_FILE")
+
+            if [ "$YAML_NAME" != "$FOLDER_NAME" ]; then
+              echo "ERROR: $SKILL_FILE — name '$YAML_NAME' does not match folder '$FOLDER_NAME'"
+              EXIT_CODE=1
+            fi
+
+            # Check frontmatter length (awk exits after the second ---, so markdown body dividers don't get counted)
+            FRONTMATTER=$(awk '/^---$/{c++; print; if(c==2) exit; next} c==1' "$SKILL_FILE")
+            FM_LENGTH=${#FRONTMATTER}
+            if [ "$FM_LENGTH" -gt 1024 ]; then
+              echo "ERROR: $SKILL_FILE — frontmatter is ${FM_LENGTH} chars (max 1024)"
+              EXIT_CODE=1
+            fi
+          done
+          exit $EXIT_CODE
+
+  postgres-memory:
+    needs: detect-zones
+    if: github.event_name == 'pull_request' && needs.detect-zones.outputs.code-changed == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_DB: ai_memory_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d ai_memory_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: command-centre/package-lock.json
+
+      - name: Install dependencies
+        working-directory: command-centre
+        run: npm ci
+
+      - name: Memory tests (real PostgreSQL + pgvector)
+        working-directory: command-centre
+        env:
+          MEMORY_PG_TESTS: '1'
+          TEST_DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/ai_memory_test
+        run: npm run test:memory:pg
+
+  memory-setup-windows:
+    needs: detect-zones
+    if: needs.detect-zones.outputs.code-changed == 'true'
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Memory setup tests (Windows PowerShell 5.1)
+        shell: powershell
+        run: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File scripts/test-memory-setup.ps1
+
+  memory-meta-macos:
+    needs: detect-zones
+    if: needs.detect-zones.outputs.memory-meta-changed == 'true'
+    runs-on: macos-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify system Bash 3.2
+        shell: /bin/bash {0}
+        run: |
+          /bin/bash --version | head -n 1
+          if [ "${BASH_VERSINFO[0]}" -ne 3 ] || [ "${BASH_VERSINFO[1]}" -ne 2 ]; then
+            echo "Expected /bin/bash 3.2"
+            exit 1
+          fi
+
+      - name: Test memory coverage report
+        shell: /bin/bash {0}
+        run: /bin/bash scripts/test-memory-meta.sh
+
+  updater-processes-windows:
+    needs: detect-zones
+    if: needs.detect-zones.outputs.content-only != 'true'
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Updater process safety tests
+        shell: bash
+        run: bash scripts/test-update-processes.sh
+
+  distribution-hygiene:
+    if: github.repository == 'camrontaylor/AI-OS-Template'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reject personal or local files from the distribution
+        run: |
+          bash scripts/check-distribution-hygiene.sh
+          python3 scripts/check-public-template.py
+          python3 scripts/test-agent-discovery.py
+          python3 scripts/test-launcher-bootstrap.py
+
+  # Always-passing job so branch protection can require "ci-result"
+  ci-result:
+    if: always()
+    needs: [detect-zones, checks, postgres-memory, memory-setup-windows, memory-meta-macos, updater-processes-windows, distribution-hygiene]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Determine result
+        run: |
+          if [ "$GITHUB_REPOSITORY" = "camrontaylor/AI-OS-Template" ] && [ "${{ needs.distribution-hygiene.result }}" != "success" ]; then
+            echo "Distribution hygiene failed"
+            exit 1
+          fi
+          if [ "${{ needs.detect-zones.outputs.content-only }}" = "true" ]; then
+            echo "Content-only change — distribution hygiene passed"
+            exit 0
+          fi
+          if [ "${{ needs.postgres-memory.result }}" != "success" ] && [ "${{ needs.postgres-memory.result }}" != "skipped" ]; then
+            echo "Real PostgreSQL memory tests failed"
+            exit 1
+          fi
+          if [ "${{ needs.memory-setup-windows.result }}" != "success" ] && [ "${{ needs.memory-setup-windows.result }}" != "skipped" ]; then
+            echo "Windows PowerShell memory setup tests failed"
+            exit 1
+          fi
+          if [ "${{ needs.memory-meta-macos.result }}" != "success" ] && [ "${{ needs.memory-meta-macos.result }}" != "skipped" ]; then
+            echo "macOS Bash 3.2 memory metadata tests failed"
+            exit 1
+          fi
+          if [ "${{ needs.updater-processes-windows.result }}" != "success" ] && [ "${{ needs.updater-processes-windows.result }}" != "skipped" ]; then
+            echo "Windows updater process tests failed"
+            exit 1
+          fi
+          if [ "${{ needs.checks.result }}" = "success" ]; then
+            echo "All checks passed"
+            exit 0
+          fi
+          if [ "${{ needs.checks.result }}" = "skipped" ]; then
+            echo "Checks skipped (auto-pass)"
+            exit 0
+          fi
+          echo "Checks failed"
+          exit 1

@@ -1,0 +1,22 @@
+{
+  "capture": {
+    "summarize": {
+      "enabled": true,
+      "provider": "claude",
+      "model": "haiku",
+      "timeout_ms": 120000
+    }
+  },
+  "reranker": {
+    "half_life_days": 14,
+    "floor_ratio": 0.3,
+    "recency_floor": 0.7,
+    "authority_weights": {
+      "context/MEMORY.md": 2.0,
+      "context/learnings.md": 1.5,
+      "context/memory/": 1.0,
+      "context/transcripts/": 0.8
+    },
+    "cross_encoder_enabled": false
+  }
+}

@@ -1,0 +1,10 @@
+.trigger:focus-visible,
+.item:focus-visible {
+  outline: 2px solid var(--cc-brand-alpha-30);
+  outline-offset: 1px;
+}
+
+.item:hover:not(:disabled),
+.item:focus-visible:not(:disabled) {
+  background: var(--cc-brand-alpha-06) !important;
+}

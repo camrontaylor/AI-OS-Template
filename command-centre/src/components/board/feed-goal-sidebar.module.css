@@ -1,0 +1,168 @@
+.sidebar,
+.rail {
+  flex: 0 0 auto;
+  height: 100%;
+  min-height: 0;
+  background: var(--cc-canvas-subtle);
+  border-right: 1px solid var(--cc-line-alpha-15);
+  font-family: var(--cc-font-body);
+}
+
+.sidebar {
+  width: 280px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.rail {
+  width: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 0;
+}
+
+.iconButton,
+.newGoal,
+.workspaceButton,
+.groupButton,
+.goalRow,
+.goalMain,
+.rowAction,
+.archiveButton,
+.menuOption,
+.restoreButton {
+  font: inherit;
+}
+
+.iconButton:focus-visible,
+.newGoal:focus-visible,
+.workspaceButton:focus-visible,
+.groupButton:focus-visible,
+.goalRow:focus-visible,
+.goalMain:focus-visible,
+.rowAction:focus-visible,
+.archiveButton:focus-visible,
+.menuOption:focus-visible,
+.restoreButton:focus-visible,
+.search:focus-visible {
+  outline: 2px solid var(--cc-brand-alpha-30);
+  outline-offset: 1px;
+}
+
+.iconButton {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--cc-text-secondary);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.iconButton:hover { background: var(--cc-brand-alpha-06); color: var(--cc-text-primary); }
+.iconButtonAccent { border: 1px solid var(--cc-brand-alpha-30); background: var(--cc-surface-selected-soft); color: var(--cc-brand-primary); }
+.railSpacer { flex: 1; }
+
+.workspaceWrap { position: relative; padding: 10px 10px 2px; }
+.sectionLabel { font: 600 10px/1 var(--cc-font-label); letter-spacing: .12em; text-transform: uppercase; color: var(--cc-text-secondary); }
+.workspaceHeader { display: flex; align-items: center; justify-content: space-between; padding: 0 4px 6px; }
+.collapseButton { width: 24px; height: 24px; }
+
+.workspaceButton {
+  width: 100%;
+  height: 38px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--cc-text-primary-alt);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+}
+.workspaceButton:hover { background: var(--cc-surface-muted); }
+.workspaceLabel { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.ellipsis { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.workspaceMenu {
+  position: absolute;
+  top: 100%;
+  left: 10px;
+  right: 10px;
+  z-index: 100;
+  max-height: min(360px, calc(100vh - 96px));
+  margin-top: 2px;
+  overflow-y: auto;
+  padding: 4px;
+  border: 1px solid var(--cc-line-alpha-20);
+  border-radius: 8px;
+  background: var(--cc-surface);
+  box-shadow: 0 4px 12px var(--cc-brand-alpha-08);
+}
+.menuOption { width: 100%; padding: 8px 10px; border: 0; border-radius: 6px; background: transparent; color: var(--cc-text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left; font: 500 13px/1.3 var(--cc-font-body); }
+.menuOption > span { min-width: 0; }
+.menuOption strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 500; line-height: 1.3; }
+.menuOption:hover { background: var(--cc-surface-muted); }
+.menuOptionSelected { background: var(--cc-surface-selected); color: var(--cc-text-on-selected); }
+.menuOptionSelected:hover { background: var(--cc-surface-selected); }
+.menuHint { display: block; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 10px; color: inherit; opacity: .65; }
+
+.newGoalWrap { padding: 6px 12px 8px; }
+.newGoal { width: 100%; height: 34px; border: 1px solid var(--cc-brand-alpha-30); border-radius: 8px; background: transparent; color: var(--cc-brand-primary); display: flex; align-items: center; justify-content: center; gap: 7px; cursor: pointer; font: 600 12px/1 var(--cc-font-label); }
+.newGoal:hover { background: var(--cc-surface-selected-soft); }
+
+.list { flex: 1; min-height: 0; overflow-y: auto; padding: 2px 8px 8px; }
+.group { margin-bottom: 2px; }
+.groupButton { width: 100%; padding: 9px 8px 4px; display: flex; align-items: center; gap: 5px; border: 0; background: transparent; color: var(--cc-text-secondary); cursor: pointer; text-align: left; font: 600 10px/1 var(--cc-font-label); letter-spacing: .12em; text-transform: uppercase; }
+.groupCount { margin-left: auto; color: var(--cc-text-tertiary); font: 400 10px/1 var(--cc-font-mono); letter-spacing: 0; }
+
+.goalRow { width: 100%; min-height: 34px; padding: 0 8px 0 10px; border: 0; border-radius: 7px; background: transparent; color: var(--cc-text-primary); display: flex; align-items: center; gap: 4px; text-align: left; }
+.goalRow:hover { background: var(--cc-brand-alpha-04); }
+.goalRowSelected { background: var(--cc-brand-alpha-08); }
+.goalRowSelected:hover { background: var(--cc-brand-alpha-12); }
+.goalMain { min-width: 0; min-height: 34px; flex: 1; padding: 7px 0; border: 0; background: transparent; color: inherit; display: flex; align-items: center; gap: 8px; cursor: pointer; text-align: left; }
+.statusDot { width: 7px; height: 7px; flex: 0 0 7px; border-radius: 999px; }
+.statusDotHidden { box-shadow: none; }
+.statusDotAttention { box-shadow: 0 0 0 3px var(--cc-status-warning-bg); }
+.draftBadge { flex: 0 0 auto; height: 18px; padding: 0 6px; border-radius: 999px; background: var(--cc-status-info-bg); color: var(--cc-status-info); display: inline-flex; align-items: center; font: 700 8.5px/1 var(--cc-font-mono); letter-spacing: .07em; text-transform: uppercase; }
+.goalText { flex: 1; min-width: 0; }
+.goalTitle { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--cc-feed-type-sidebar); font-weight: 450; }
+.goalMeta { display: block; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--cc-text-tertiary); font: 400 10px/1 var(--cc-font-mono); }
+.rowAction { width: 22px; height: 22px; flex: 0 0 22px; border: 0; border-radius: 5px; background: transparent; color: var(--cc-text-tertiary); display: grid; place-items: center; cursor: pointer; }
+.rowAction:hover { background: var(--cc-brand-alpha-08); color: var(--cc-brand-primary); }
+
+.archiveFooter { flex: 0 0 auto; padding: 8px 12px 10px; border-top: 1px solid var(--cc-line-alpha-25); }
+.archiveButton { width: 100%; height: 32px; padding: 0 10px; border: 0; border-radius: 7px; background: transparent; color: var(--cc-text-secondary); display: flex; align-items: center; gap: 8px; cursor: pointer; font: 500 12px/1 var(--cc-font-label); }
+.archiveButton:hover { background: var(--cc-brand-alpha-04); color: var(--cc-text-primary); }
+.archiveCount { margin-left: auto; color: var(--cc-text-tertiary); font: 400 10px/1 var(--cc-font-mono); }
+
+.archiveHeader { display: flex; align-items: center; gap: 6px; padding: 4px 2px 8px; }
+.archiveTitle { font: 600 12px/1 var(--cc-font-label); }
+.searchWrap { height: 30px; margin: 0 2px 8px; padding: 0 10px; border: 1px solid var(--cc-line-alpha-25); border-radius: 7px; background: var(--cc-surface); display: flex; align-items: center; gap: 7px; }
+.search { width: 100%; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--cc-text-primary); font-size: 12px; }
+.empty { padding: 20px 10px; text-align: center; color: var(--cc-text-tertiary); font-size: 12px; }
+.restoreButton { height: 24px; padding: 0 8px; border: 1px solid var(--cc-brand-alpha-30); border-radius: 6px; background: var(--cc-surface); color: var(--cc-brand-primary); cursor: pointer; font: 600 10px/1 var(--cc-font-label); }
+.restoreButton:hover { background: var(--cc-surface-selected-soft); }
+
+.resizeHandle { position: absolute; top: 0; right: -4px; bottom: 0; z-index: 20; width: 8px; display: flex; justify-content: center; cursor: col-resize; touch-action: none; outline: none; }
+.resizeHandle span { width: 1px; height: 100%; background: transparent; transition: background-color 120ms ease; }
+.resizeHandle:hover span,
+.resizeHandle:focus-visible span { background: var(--cc-brand-alpha-35); }
+.resizeHandle:focus-visible { outline: 2px solid var(--cc-brand-alpha-25); outline-offset: -2px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .iconButton,
+  .newGoal,
+  .goalRow,
+  .archiveButton,
+  .rowAction { transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease; }
+}

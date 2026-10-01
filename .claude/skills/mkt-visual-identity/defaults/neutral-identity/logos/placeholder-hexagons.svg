@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240" role="img" aria-label="placeholder mark">
+  <!-- Three hexagons in the neutral default accent. Replace this with the brand's real wordmark when available. -->
+  <g fill="none" stroke="#e25a45" stroke-width="6" stroke-linejoin="round">
+    <polygon points="80,40 130,40 155,80 130,120 80,120 55,80" />
+    <polygon points="80,120 130,120 155,160 130,200 80,200 55,160" />
+    <polygon points="130,40 180,40 205,80 180,120 130,120 105,80" fill="#e25a45" fill-opacity="0.1" />
+  </g>
+  <text x="120" y="225" text-anchor="middle" font-family="Geist, system-ui, sans-serif" font-size="12" fill="#5a5854" letter-spacing="0.18em">PLACEHOLDER</text>
+</svg>

@@ -1,0 +1,66 @@
+{
+  "description": "Recall gold-set for memory:eval. Cases run against the committed eval/corpus indexed into an ephemeral store. Match by sourcePath + optional contentIncludes (never chunk id). kind: exact (FTS keyword target) | semantic (paraphrase, bge-m3 must earn it) | leak (cross-tenant query that must return zero forbidden hits). Thresholds gate memory:eval's exit code; the semantic bar is enforced only under bge-m3.",
+  "thresholds": {
+    "exactRecallAt5": 1.0,
+    "semanticRecallAt5": 0.5,
+    "maxLeaks": 0
+  },
+  "cases": [
+    {
+      "id": "exact-update-recovery-script",
+      "query": "update-recovery.sh",
+      "kind": "exact",
+      "scope": { "teamId": null, "include": ["system"] },
+      "expect": { "sourcePath": "context/memory/2026-06-20.md", "contentIncludes": "update-recovery.sh" }
+    },
+    {
+      "id": "exact-pr-number",
+      "query": "PR #357",
+      "kind": "exact",
+      "scope": { "teamId": null, "include": ["system"] },
+      "expect": { "sourcePath": "context/memory/2026-06-20.md", "contentIncludes": "PR #357" }
+    },
+    {
+      "id": "exact-bash-version",
+      "query": "bash 3.2.57",
+      "kind": "exact",
+      "scope": { "teamId": null, "include": ["system"] },
+      "expect": { "sourcePath": "context/memory/2026-06-20.md", "contentIncludes": "3.2.57" }
+    },
+    {
+      "id": "semantic-recovery-guard",
+      "query": "why did the safety mechanism undo a finished software update",
+      "kind": "semantic",
+      "scope": { "teamId": null, "include": ["system"] },
+      "expect": { "sourcePath": "context/memory/2026-06-20.md", "contentIncludes": "recovery guard" }
+    },
+    {
+      "id": "semantic-branch-authorship",
+      "query": "which login account is allowed to publish code to the protected repository",
+      "kind": "semantic",
+      "scope": { "teamId": null, "include": ["system"] },
+      "expect": { "sourcePath": "context/memory/2026-06-21.md", "contentIncludes": "release-bot" }
+    },
+    {
+      "id": "exact-acme-marker-in-scope",
+      "query": "ACME-MARKER-5521",
+      "kind": "exact",
+      "scope": { "teamId": null, "clientId": "acme", "include": ["system", "client"] },
+      "expect": { "sourcePath": "clients/acme/context/memory/notes.md", "contentIncludes": "ACME-MARKER-5521" }
+    },
+    {
+      "id": "leak-acme-cannot-read-globex",
+      "query": "GLOBEX-MARKER-9931",
+      "kind": "leak",
+      "scope": { "teamId": null, "clientId": "acme", "include": ["system", "client"] },
+      "forbid": [{ "sourcePathIncludes": "globex" }]
+    },
+    {
+      "id": "leak-globex-cannot-read-acme",
+      "query": "ACME-MARKER-5521",
+      "kind": "leak",
+      "scope": { "teamId": null, "clientId": "globex", "include": ["system", "client"] },
+      "forbid": [{ "sourcePathIncludes": "acme" }]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor">
+  <g transform="translate(50,50)">
+    <polygon points="0,-48 6,-10 0,0 -6,-10"/>
+    <polygon points="0,-48 6,-10 0,0 -6,-10" transform="rotate(45)"/>
+    <polygon points="0,-48 6,-10 0,0 -6,-10" transform="rotate(90)"/>
+    <polygon points="0,-48 6,-10 0,0 -6,-10" transform="rotate(135)"/>
+    <polygon points="0,-48 6,-10 0,0 -6,-10" transform="rotate(180)"/>
+    <polygon points="0,-48 6,-10 0,0 -6,-10" transform="rotate(225)"/>
+    <polygon points="0,-48 6,-10 0,0 -6,-10" transform="rotate(270)"/>
+    <polygon points="0,-48 6,-10 0,0 -6,-10" transform="rotate(315)"/>
+    <circle r="6"/>
+  </g>
+</svg>

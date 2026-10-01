@@ -1,0 +1,10 @@
+# Generated / vendored output — never worth Claude's tokens to read.
+# Advisory layer; the enforced block lives in .claude/settings.json (permissions.deny).
+node_modules/
+dist/
+build/
+coverage/
+.next/
+vendor/
+*.lock
+*.min.js

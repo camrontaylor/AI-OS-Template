@@ -1,0 +1,131 @@
+{
+  "app": {
+    "id": "AIOS.Notifications",
+    "displayName": "AI-OS",
+    "shortcutName": "AI-OS",
+    "assetVersion": "v4",
+    "attribution": "",
+    "defaultDuration": "short",
+    "defaultLayout": "compact"
+  },
+  "assets": {
+    "logoPath": "",
+    "shortcutIconPath": "",
+    "heroPaths": {
+      "success": "",
+      "info": "",
+      "warning": "",
+      "error": ""
+    },
+    "generatedLogo": {
+      "badgeText": "AI",
+      "startColor": "#0F172A",
+      "endColor": "#1D4ED8",
+      "overlayColor": "#FFFFFF",
+      "overlayOpacity": 52,
+      "borderColor": "#FFFFFF",
+      "borderOpacity": 140,
+      "textColor": "#F8FAFC"
+    },
+    "variants": {
+      "success": {
+        "startColor": "#0F4D38",
+        "endColor": "#0AA36C",
+        "accentColor": "#DCFCE7",
+        "sound": "ms-winsoundevent:Notification.Default",
+        "emoji": "\u2705"
+      },
+      "info": {
+        "startColor": "#102C63",
+        "endColor": "#2F6BFF",
+        "accentColor": "#DBEAFE",
+        "sound": "ms-winsoundevent:Notification.IM",
+        "emoji": "\ud83d\udca1"
+      },
+      "warning": {
+        "startColor": "#6B3B06",
+        "endColor": "#F59E0B",
+        "accentColor": "#FEF3C7",
+        "sound": "ms-winsoundevent:Notification.Reminder",
+        "emoji": "\u26a0\ufe0f"
+      },
+      "error": {
+        "startColor": "#63171B",
+        "endColor": "#E11D48",
+        "accentColor": "#FFE4E6",
+        "sound": "ms-winsoundevent:Notification.Mail",
+        "emoji": "\ud83d\udea8"
+      }
+    }
+  },
+  "copy": {
+    "interactive": {
+      "waiting": {
+        "status": "Needs input",
+        "subject": "",
+        "detail": "",
+        "folder": "{folderLabel}",
+        "job": "{jobLabel}",
+        "variant": "info",
+        "duration": "long",
+        "layout": "compact"
+      },
+      "permission": {
+        "status": "Permission required",
+        "subject": "",
+        "detail": "",
+        "folder": "{folderLabel}",
+        "job": "{jobLabel}",
+        "variant": "warning",
+        "duration": "long",
+        "layout": "compact"
+      },
+      "actionRequired": {
+        "status": "Needs attention",
+        "subject": "",
+        "detail": "",
+        "folder": "{folderLabel}",
+        "job": "{jobLabel}",
+        "variant": "warning",
+        "duration": "long",
+        "layout": "compact"
+      },
+      "complete": {
+        "status": "Task complete",
+        "subject": "",
+        "detail": "",
+        "folder": "{folderLabel}",
+        "job": "{jobLabel}",
+        "variant": "success",
+        "duration": "short",
+        "layout": "compact"
+      }
+    },
+    "cron": {
+      "success": {
+        "status": "Task complete",
+        "subject": "{jobName}{catchUpSuffix}",
+        "detail": "Completed in {duration}.",
+        "variant": "success",
+        "duration": "short",
+        "layout": "compact"
+      },
+      "timeout": {
+        "status": "Timed out",
+        "subject": "{jobName}{catchUpSuffix}",
+        "detail": "Killed after the {timeout} limit.",
+        "variant": "warning",
+        "duration": "short",
+        "layout": "compact"
+      },
+      "failure": {
+        "status": "Needs attention",
+        "subject": "{jobName}{catchUpSuffix}",
+        "detail": "Exit code {exitCode} after {duration}.",
+        "variant": "error",
+        "duration": "short",
+        "layout": "compact"
+      }
+    }
+  }
+}

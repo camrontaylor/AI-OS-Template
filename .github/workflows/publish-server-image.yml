@@ -1,0 +1,314 @@
+# Publishes the Team OS Memory API server as a tested multi-platform image.
+# Tag pushes publish both the release version and the moving `beta` tag.
+# Manual runs can rebuild an earlier source ref without moving its Git tag.
+name: Publish Team OS server image
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Additional image tag to publish with beta (e.g. 1.1.0)"
+        required: false
+        default: "beta"
+      source_ref:
+        description: "Git ref to build (e.g. v1.1.0); defaults to the selected workflow ref"
+        required: false
+        default: ""
+
+env:
+  IMAGE: ghcr.io/${{ github.repository_owner }}/team-os-server
+
+jobs:
+  build-test-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout source to publish
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.source_ref || github.ref }}
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Resolve publication metadata
+        id: meta
+        shell: bash
+        env:
+          MANUAL_TAG: ${{ github.event.inputs.tag }}
+        run: |
+          set -euo pipefail
+
+          version_tag=""
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            version_tag="${GITHUB_REF_NAME#v}"
+          elif [[ -n "${MANUAL_TAG}" && "${MANUAL_TAG}" != "beta" ]]; then
+            version_tag="${MANUAL_TAG}"
+          fi
+
+          if [[ -n "${version_tag}" && ! "${version_tag}" =~ ^[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}$ ]]; then
+            echo "Invalid container tag: ${version_tag}" >&2
+            exit 1
+          fi
+
+          echo "version_tag=${version_tag}" >> "${GITHUB_OUTPUT}"
+          echo "source_commit=$(git rev-parse HEAD)" >> "${GITHUB_OUTPUT}"
+
+      - name: Record current public image digests
+        id: previous
+        shell: bash
+        env:
+          VERSION_TAG: ${{ steps.meta.outputs.version_tag }}
+        run: |
+          set -euo pipefail
+
+          get_digest() {
+            docker buildx imagetools inspect "$1" 2>/dev/null \
+              | awk '$1 == "Digest:" { print $2; exit }' || true
+          }
+
+          beta_digest="$(get_digest "${IMAGE}:beta")"
+          version_digest=""
+          if [[ -n "${VERSION_TAG}" ]]; then
+            version_digest="$(get_digest "${IMAGE}:${VERSION_TAG}")"
+          fi
+
+          echo "beta_digest=${beta_digest}" >> "${GITHUB_OUTPUT}"
+          echo "version_digest=${version_digest}" >> "${GITHUB_OUTPUT}"
+
+          {
+            echo "### Existing public image digests"
+            echo
+            echo "- \`beta\`: \`${beta_digest:-not present}\`"
+            if [[ -n "${VERSION_TAG}" ]]; then
+              echo "- \`${VERSION_TAG}\`: \`${version_digest:-not present}\`"
+            fi
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+      # Push architecture-specific manifests by digest only. Public tags do not
+      # move until both images pass the smoke tests below.
+      - name: Build AMD64 image by digest
+        id: build_amd64
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: command-centre/Dockerfile.memory-api
+          platforms: linux/amd64
+          outputs: type=image,name=${{ env.IMAGE }},push-by-digest=true,name-canonical=true,push=true
+          provenance: false
+          cache-from: type=gha,scope=team-os-server-amd64
+          cache-to: type=gha,mode=max,scope=team-os-server-amd64
+
+      - name: Build ARM64 image by digest
+        id: build_arm64
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: command-centre/Dockerfile.memory-api
+          platforms: linux/arm64
+          outputs: type=image,name=${{ env.IMAGE }},push-by-digest=true,name-canonical=true,push=true
+          provenance: false
+          cache-from: type=gha,scope=team-os-server-arm64
+          cache-to: type=gha,mode=max,scope=team-os-server-arm64
+
+      - name: Smoke-test AMD64 and ARM64 images
+        shell: bash
+        env:
+          AMD64_DIGEST: ${{ steps.build_amd64.outputs.digest }}
+          ARM64_DIGEST: ${{ steps.build_arm64.outputs.digest }}
+        run: |
+          set -euo pipefail
+
+          smoke_test() {
+            local platform="$1"
+            local expected_arch="$2"
+            local digest="$3"
+            local image_ref="${IMAGE}@${digest}"
+            local container_name="team-os-smoke-${expected_arch}-${GITHUB_RUN_ID}"
+            local health_file="${RUNNER_TEMP}/team-os-health-${expected_arch}.json"
+
+            echo "Testing ${image_ref} on ${platform}"
+
+            docker run --rm --platform "${platform}" \
+              -e EXPECTED_ARCH="${expected_arch}" \
+              "${image_ref}" node -e '
+                const assert = require("node:assert/strict");
+
+                (async () => {
+                  assert.equal(process.arch, process.env.EXPECTED_ARCH);
+
+                  const Database = require("better-sqlite3");
+                  const db = new Database(":memory:");
+                  assert.equal(db.prepare("SELECT 1 AS ok").get().ok, 1);
+                  db.close();
+
+                  const ort = require("onnxruntime-node");
+                  assert.equal(typeof ort.InferenceSession, "function");
+
+                  const sharp = require("sharp");
+                  const png = await sharp({
+                    create: {
+                      width: 1,
+                      height: 1,
+                      channels: 4,
+                      background: { r: 0, g: 0, b: 0, alpha: 1 },
+                    },
+                  }).png().toBuffer();
+                  assert.ok(png.length > 0);
+
+                  console.log(`Native dependency smoke test passed on ${process.arch}`);
+                })().catch((error) => {
+                  console.error(error);
+                  process.exit(1);
+                });
+              '
+
+            docker rm -f "${container_name}" >/dev/null 2>&1 || true
+            docker run --detach --platform "${platform}" \
+              --name "${container_name}" \
+              -e MEMORY_API_TOKEN=architecture-smoke-test-only \
+              -e MEMORY_STORE_BACKEND=pglite \
+              -e MEMORY_DATABASE_URL= \
+              -e DATABASE_URL= \
+              -e MEMORY_API_SERVER_EMBEDDINGS=0 \
+              "${image_ref}" >/dev/null
+
+            local ready=false
+            for _ in $(seq 1 60); do
+              if docker exec "${container_name}" \
+                curl -fsS http://127.0.0.1:8787/v1/health > "${health_file}"; then
+                ready=true
+                break
+              fi
+
+              if [[ "$(docker inspect --format '{{.State.Running}}' "${container_name}" 2>/dev/null || true)" != "true" ]]; then
+                break
+              fi
+              sleep 5
+            done
+
+            if [[ "${ready}" != "true" ]]; then
+              echo "Memory API failed its health check on ${platform}" >&2
+              docker logs "${container_name}" >&2 || true
+              docker rm -f "${container_name}" >/dev/null 2>&1 || true
+              return 1
+            fi
+
+            cat "${health_file}"
+            docker rm -f "${container_name}" >/dev/null
+            echo "Memory API smoke test passed on ${platform}"
+          }
+
+          smoke_test linux/amd64 x64 "${AMD64_DIGEST}"
+          smoke_test linux/arm64 arm64 "${ARM64_DIGEST}"
+
+      - name: Publish and verify multi-platform manifest
+        id: publish
+        shell: bash
+        env:
+          AMD64_DIGEST: ${{ steps.build_amd64.outputs.digest }}
+          ARM64_DIGEST: ${{ steps.build_arm64.outputs.digest }}
+          VERSION_TAG: ${{ steps.meta.outputs.version_tag }}
+          PREVIOUS_BETA_DIGEST: ${{ steps.previous.outputs.beta_digest }}
+          PREVIOUS_VERSION_DIGEST: ${{ steps.previous.outputs.version_digest }}
+          SOURCE_COMMIT: ${{ steps.meta.outputs.source_commit }}
+        run: |
+          set -Eeuo pipefail
+
+          publish_started=false
+
+          restore_tag() {
+            local tag="$1"
+            local digest="$2"
+            if [[ -n "${digest}" ]]; then
+              echo "Restoring ${IMAGE}:${tag} to ${digest}" >&2
+              docker buildx imagetools create \
+                --tag "${IMAGE}:${tag}" \
+                "${IMAGE}@${digest}" >&2
+            else
+              echo "No previous digest exists for ${IMAGE}:${tag}; nothing to restore" >&2
+            fi
+          }
+
+          rollback_on_error() {
+            local status=$?
+            trap - EXIT
+            if [[ ${status} -ne 0 && "${publish_started}" == "true" ]]; then
+              set +e
+              echo "Publication verification failed; restoring previous public tags" >&2
+              restore_tag beta "${PREVIOUS_BETA_DIGEST}"
+              if [[ -n "${VERSION_TAG}" ]]; then
+                restore_tag "${VERSION_TAG}" "${PREVIOUS_VERSION_DIGEST}"
+              fi
+            fi
+            exit "${status}"
+          }
+          trap rollback_on_error EXIT
+
+          tag_args=(--tag "${IMAGE}:beta")
+          if [[ -n "${VERSION_TAG}" ]]; then
+            tag_args+=(--tag "${IMAGE}:${VERSION_TAG}")
+          fi
+
+          publish_started=true
+          docker buildx imagetools create \
+            "${tag_args[@]}" \
+            "${IMAGE}@${AMD64_DIGEST}" \
+            "${IMAGE}@${ARM64_DIGEST}"
+
+          verify_platforms() {
+            local image_ref="$1"
+            docker buildx imagetools inspect --raw "${image_ref}" \
+              | jq -e '([.manifests[].platform | select(.os == "linux") | .architecture] | sort | unique) == ["amd64", "arm64"]' \
+              >/dev/null
+          }
+
+          get_digest() {
+            docker buildx imagetools inspect "$1" \
+              | awk '$1 == "Digest:" { print $2; exit }'
+          }
+
+          verify_platforms "${IMAGE}:beta"
+          beta_digest="$(get_digest "${IMAGE}:beta")"
+
+          if [[ -n "${VERSION_TAG}" ]]; then
+            verify_platforms "${IMAGE}:${VERSION_TAG}"
+            version_digest="$(get_digest "${IMAGE}:${VERSION_TAG}")"
+            if [[ "${version_digest}" != "${beta_digest}" ]]; then
+              echo "beta and ${VERSION_TAG} do not point to the same manifest" >&2
+              exit 1
+            fi
+          fi
+
+          trap - EXIT
+          echo "manifest_digest=${beta_digest}" >> "${GITHUB_OUTPUT}"
+
+          {
+            echo
+            echo "### Published multi-platform image"
+            echo
+            echo "- Source commit: \`${SOURCE_COMMIT}\`"
+            echo "- Manifest digest: \`${beta_digest}\`"
+            echo "- Platforms: \`linux/amd64\`, \`linux/arm64\`"
+            echo "- Tag: \`beta\`"
+            if [[ -n "${VERSION_TAG}" ]]; then
+              echo "- Tag: \`${VERSION_TAG}\`"
+            fi
+          } >> "${GITHUB_STEP_SUMMARY}"

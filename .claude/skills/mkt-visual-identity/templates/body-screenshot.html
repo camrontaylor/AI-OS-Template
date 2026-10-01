@@ -1,0 +1,134 @@
+<!doctype html>
+<!--
+  Template: body-screenshot
+  Role: tip slide with UI screenshot + optional hand-drawn sketch annotations
+  When to use: tutorial step where the visual proof is a UI screenshot
+  Variables (substitute at render time):
+    {{ title_number }}     e.g. "1"
+    {{ title_text }}       e.g. "Unlock Agent Teams"
+    {{ body_text }}        full paragraph (will wrap)
+    {{ screenshot_src }}   path or URL to screenshot image
+    {{ sketch_svg }}       inline SVG content for red annotations (circles, arrows, labels)
+                           use viewBox="0 0 920 770" coordinate system
+                           use stroke="#e25a45" stroke-width="5" fill="none"
+  Tokens consumed: bg_light, text_on_light, h1, body, sketch color
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face {
+    font-family: 'Display';
+    src: url('../../brand_context/fonts/Geist-Black.ttf') format('truetype');
+    font-weight: 900;
+  }
+  @font-face {
+    font-family: 'Body';
+    src: url('../../brand_context/fonts/Geist-Regular.ttf') format('truetype');
+    font-weight: 400;
+  }
+
+  /* Issue 08 — layout tokens. See layout-token-schema.md. */
+  :root {
+    --font-size-headline:    68px;
+    --font-size-body:        30px;
+    --line-height-headline:  1.05;
+    --line-height-body:      1.35;
+    --max-chars-headline:    38;
+    --max-chars-body:        70;
+    --logo-x:                75px;
+    --logo-y:                75px;
+    --logo-size:             130px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 1080px; height: 1350px;
+    background: #f2f0eb;
+    font-family: 'Body', system-ui, sans-serif;
+    color: #0a0a0a;
+    overflow: hidden;
+  }
+
+  body::before {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle at 30% 40%, rgba(0,0,0,0.012) 0%, transparent 50%),
+      radial-gradient(circle at 70% 60%, rgba(0,0,0,0.018) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .slide { position: relative; width: 1080px; height: 1350px; }
+
+  .dots {
+    position: absolute;
+    top: 80px; right: 80px;
+    width: 180px; height: 110px;
+    background-image: radial-gradient(circle, #9a9892 1.8px, transparent 2px);
+    background-size: 18px 18px;
+    opacity: 0.65;
+  }
+
+  h1 {
+    position: absolute;
+    top: 115px; left: 80px; right: 80px;
+    font-family: 'Display', sans-serif;
+    font-weight: 900;
+    font-size: var(--font-size-headline);
+    line-height: var(--line-height-headline);
+    letter-spacing: -0.045em;
+    color: #0a0a0a;
+  }
+
+  .body-text {
+    position: absolute;
+    top: 220px; left: 80px; right: 80px;
+    font-family: 'Body', sans-serif;
+    font-weight: 400;
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+    color: #0a0a0a;
+  }
+
+  .screenshot-frame {
+    position: absolute;
+    top: 420px; left: 100px; right: 100px;
+    height: 770px;
+    border: 1px solid #d4d2cc;
+    border-radius: 6px;
+    background: #ffffff;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .screenshot-frame img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+
+  .sketch {
+    position: absolute;
+    top: 420px; left: 100px; right: 100px;
+    height: 770px;
+    pointer-events: none;
+  }
+  .sketch svg { width: 100%; height: 100%; }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="dots"></div>
+
+    <h1>{{ title_number }}. {{ title_text }}</h1>
+
+    <p class="body-text">{{ body_text }}</p>
+
+    <div class="screenshot-frame">
+      <img src="{{ screenshot_src }}" alt="">
+    </div>
+
+    <div class="sketch">
+      {{ sketch_svg }}
+    </div>
+  </div>
+</body>
+</html>

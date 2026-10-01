@@ -1,0 +1,225 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--cc-canvas-overlay-focus);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.modal {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: min(720px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--cc-line-alpha-25);
+  border-radius: 10px;
+  background: var(--cc-surface);
+  box-shadow: 0 18px 60px var(--cc-neutral-alpha-20);
+  transition: height 220ms ease-in-out;
+}
+
+.expanded {
+  height: 82vh;
+  height: 82dvh;
+}
+
+.header {
+  display: flex;
+  min-height: 52px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--cc-line-alpha-20);
+  background: var(--cc-surface-raised);
+}
+
+.title {
+  color: var(--cc-text-primary);
+  font: 600 13px/1.2 var(--cc-font-label);
+}
+
+.ghostButton {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--cc-text-tertiary);
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease, opacity 120ms ease;
+}
+
+.ghostButton:hover:not(:disabled) {
+  background: var(--cc-neutral-alpha-06);
+  color: var(--cc-text-primary);
+}
+
+.ghostButton:focus-visible,
+.secondaryButton:focus-visible,
+.primaryButton:focus-visible {
+  outline: none;
+  box-shadow: var(--cc-focus-ring);
+}
+
+.ghostButton:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.body {
+  display: flex;
+  min-height: 0;
+  flex: 0 1 auto;
+  flex-direction: column;
+  padding: 14px;
+}
+
+.expanded .body {
+  flex: 1;
+}
+
+.editorFrame {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  overflow: visible;
+  border: 1px solid var(--cc-control-bg-active);
+  border-radius: 8px;
+  background: var(--cc-surface-soft);
+}
+
+.editorArea {
+  position: relative;
+  display: flex;
+  min-height: 180px;
+  height: 180px;
+  flex: 0 0 180px;
+  overflow: hidden;
+}
+
+.expanded .editorArea {
+  height: auto;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+.editorContent {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.expandButton {
+  position: absolute;
+  top: 8px;
+  right: 20px;
+  z-index: 30;
+}
+
+.inlineExpandButton {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 20;
+}
+
+.error {
+  margin-top: 8px;
+  color: var(--cc-status-danger);
+  font: 400 12px/1.45 var(--cc-font-label);
+}
+
+.footer {
+  display: flex;
+  min-height: 56px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--cc-line-alpha-20);
+  background: var(--cc-surface-raised);
+}
+
+.secondaryButton,
+.primaryButton {
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 6px;
+  font: 600 12px/1 var(--cc-font-label);
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease, opacity 120ms ease;
+}
+
+.secondaryButton {
+  border: 1px solid var(--cc-line-alpha-25);
+  background: transparent;
+  color: var(--cc-text-secondary);
+  cursor: pointer;
+}
+
+.secondaryButton:hover:not(:disabled) {
+  border-color: var(--cc-line-alpha-40);
+  background: var(--cc-neutral-alpha-04);
+  color: var(--cc-text-primary);
+}
+
+.primaryButton {
+  border: 1px solid transparent;
+  background: var(--cc-brand-primary);
+  color: var(--cc-surface);
+  cursor: pointer;
+}
+
+.primaryButton:hover:not(:disabled) {
+  background: var(--cc-brand-hover);
+}
+
+.secondaryButton:disabled,
+.primaryButton:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+@media (max-width: 520px) {
+  .overlay {
+    padding: 12px;
+  }
+
+  .modal {
+    width: calc(100vw - 24px);
+    max-height: calc(100dvh - 24px);
+  }
+
+  .expanded {
+    height: calc(100dvh - 24px);
+  }
+
+  .body {
+    padding: 10px;
+  }
+}

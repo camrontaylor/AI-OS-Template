@@ -1,0 +1,113 @@
+<!doctype html>
+<!--
+  Template: cta-allcaps
+  Mode: PURE_CSS
+  Role: closing CTA slide with bold ALL CAPS message in framed card
+  When to use: community ask, share-your-thoughts, swipe-up moments
+  Variables:
+    {{ message }}        the bold ALL CAPS message (will be transformed to uppercase)
+    {{ byline }}         author/brand name from tokens.json > brand (small, bottom-left of card). Empty string when not set — renderer MUST pass it; never hardcode a fixture name here.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face {
+    font-family: 'Display';
+    src: url('../../brand_context/fonts/Geist-Black.ttf') format('truetype');
+    font-weight: 900;
+  }
+  @font-face {
+    font-family: 'Body';
+    src: url('../../brand_context/fonts/Geist-Regular.ttf') format('truetype');
+    font-weight: 400;
+  }
+
+  /* Issue 08 — layout tokens. See layout-token-schema.md. */
+  :root {
+    --font-size-headline:   108px;
+    --font-size-body:        30px;
+    --font-size-caption:     24px;
+    --line-height-headline:  1.0;
+    --line-height-body:      1.4;
+    --max-chars-headline:    38;
+    --max-chars-body:        70;
+    --logo-x:                75px;
+    --logo-y:                75px;
+    --logo-size:             130px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 1080px; height: 1350px;
+    background: #f2f0eb;
+    font-family: 'Body', system-ui, sans-serif;
+    color: #0a0a0a;
+    overflow: hidden;
+  }
+
+  body::before {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle at 30% 40%, rgba(0,0,0,0.012) 0%, transparent 50%),
+      radial-gradient(circle at 70% 60%, rgba(0,0,0,0.018) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .slide { position: relative; width: 1080px; height: 1350px; }
+
+  .dots {
+    position: absolute;
+    top: 80px; right: 80px;
+    width: 180px; height: 110px;
+    background-image: radial-gradient(circle, #9a9892 1.8px, transparent 2px);
+    background-size: 18px 18px;
+    opacity: 0.65;
+  }
+
+  .card {
+    position: absolute;
+    top: 240px; left: 80px; right: 80px;
+    height: 870px;
+    background: #ffffff;
+    border: 2px solid #0a0a0a;
+    border-radius: 16px;
+    padding: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .message {
+    font-family: 'Display', sans-serif;
+    font-weight: 900;
+    font-size: var(--font-size-headline);
+    line-height: var(--line-height-headline);
+    letter-spacing: -0.04em;
+    color: #0a0a0a;
+    text-transform: uppercase;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .byline {
+    font-family: 'Body', sans-serif;
+    font-weight: 400;
+    font-size: var(--font-size-body);
+    color: #0a0a0a;
+  }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="dots"></div>
+
+    <div class="card">
+      <div class="message">{{ message }}</div>
+      <p class="byline">{{ byline }}</p>
+    </div>
+  </div>
+</body>
+</html>
