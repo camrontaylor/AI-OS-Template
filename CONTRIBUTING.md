@@ -10,6 +10,7 @@ Update the user guide when behavior changes, and test the affected flow.
 
 Run `python3 scripts/test-agent-discovery.py`, `python3 scripts/test-launcher-bootstrap.py`,
 `bash scripts/check-distribution-hygiene.sh`, and `python3 scripts/check-public-template.py`.
+Maintenance changes also need `python3 scripts/test-workspace-maintenance.py`.
 Command Centre changes also need its relevant tests, type checks and a build.
 CI runs the broader runtime checks, including PostgreSQL and Windows setup.
 

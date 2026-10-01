@@ -1,7 +1,7 @@
 # Skills and capabilities
 
 A skill is a reusable method: instructions, examples and checks for a kind of work.
-This template contains **93 skills**, shared by Codex and Claude Code.
+This template contains **94 skills**, shared by Codex and Claude Code.
 Ask for the outcome in normal language. The agent should find the relevant skill
 and read its instructions. Browse [the catalog](skills-catalog.md) for starting points.
 

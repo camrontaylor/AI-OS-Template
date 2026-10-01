@@ -13,6 +13,7 @@ Auto-populated as skills are installed. Each entry includes its name and trigger
 | `meta-goal-breakdown` | "break this down", "plan this out", "subtasks", "scope this work", "task breakdown", goal bar submissions |
 | `meta-memory-write` | "remember this", "remember that", "note that", "save this to memory", "update memory", "log this", "forget about", "remove from memory" |
 | `meta-memory-recall` | "what did we decide about", "do we have a record of", "search memory", "look up in memory", "what do we know about X" |
+| `meta-find-skills` | "find a skill", "what skill handles this", "can AI-OS do this", uncertain or multifaceted routing; choose one to three methods |
 
 ## Foundation Skills
 

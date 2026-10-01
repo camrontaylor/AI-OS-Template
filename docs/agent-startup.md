@@ -31,6 +31,14 @@ prompt and its scope. For an ordinary Solo session, silently:
    Check `.claude/settings.local.json` in the active client for `skillOverrides`;
    an `off` skill must not be invoked even if it appears in discovery.
 
+For substantive Solo client work, run the root's
+`scripts/workspace-maintenance.py brief --scope <active-client>` with Python 3,
+then read that client's `context/current-state.md`. Use its links for targeted
+source reads. It covers recent state, not the full history; recover the matching
+project checkpoint before resuming work. If refresh fails, use permitted primary
+client sources and report a material persistence gap. Never use this local flow
+in Team mode. Details: `docs/agent-reliability.md`.
+
 ## First use
 
 No installation interview, API key, MCP, GitHub backup, Command Centre, or
@@ -59,6 +67,12 @@ Keep the daily session's goal, file paths, decisions and open threads current,
 without recording secrets. Claude's Stop hook also captures session events.
 Codex maintains the daily block during the session and runs `meta-wrap-up` on an
 explicit sign-off; it does not depend on Claude hooks or hidden external memory.
+
+Save material changed decisions before dependent actions. Save verified results
+or the exact next unfinished action and read the changed record back before
+delivery or handoff. Record confirmed mistakes under `### Corrections`; retain
+that section during wrap-up. These Solo records stay in the active scope. Team
+records use only the connected runtime's authorized storage.
 
 After building or removing a skill, run `python3 scripts/sync-agent-skills.py`
 from the root. This updates Codex discovery and preserves one shared source.

@@ -11,6 +11,7 @@ Load only the `brand_context/` files listed for each skill.
 | `meta-goal-breakdown` | — | summary | summary | — | — | `## meta-goal-breakdown` |
 | `meta-memory-write` | — | — | — | — | — | `## meta-memory-write` |
 | `meta-memory-recall` | — | — | — | — | — | `## meta-memory-recall` |
+| `meta-find-skills` | none | none | none | none | none | `## meta-find-skills` |
 | `str-ai-seo` | tone only | summary | full | — | — | `## str-ai-seo` |
 | `tool-stitch` | — | — | — | — | — | `## tool-stitch` |
 | `viz-stitch-design` | tone only | summary | language section | — | — | `## viz-stitch-design` |

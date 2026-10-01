@@ -12,6 +12,7 @@ Start with one real task. Add setup, connected apps and automation when the work
 | See the included skills | [Skills catalog](skills-catalog.md) |
 | Understand skills and tools | [Skills and capabilities](skills-and-capabilities.md) |
 | Continue previous work | [Memory and recall](memory-and-recall.md) |
+| Check results, learn from mistakes and recover tasks | [Reliable work](agent-reliability.md) |
 | Organize deliverables | [Projects guide](projects-guide.md) |
 | Work with different clients | [Client workspaces](multi-client-guide.md) |
 | Connect an app | [Services and connections](services-keys-and-connectors.md) |

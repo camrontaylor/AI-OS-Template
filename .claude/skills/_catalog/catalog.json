@@ -8,6 +8,7 @@
     }
   ],
   "core_skills": [
+    "meta-find-skills",
     "meta-skill-creator",
     "meta-wrap-up",
     "mkt-brand-voice",
@@ -1982,6 +1983,14 @@
         "tool-humanizer"
       ],
       "requires_services": []
+    },
+    "meta-find-skills": {
+      "category": "utility",
+      "version": "1.0.0",
+      "description": "Choose one to three installed AI-OS skills for a task and identify real gaps.",
+      "requires_services": [],
+      "dependencies": [],
+      "mcp_servers": []
     }
   }
 }
