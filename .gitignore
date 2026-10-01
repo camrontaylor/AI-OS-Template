@@ -62,6 +62,8 @@ cron/status/*
 .memsearch/
 
 # Memory database backups (dumps/tarballs — never commit)
+**/backups/
+!/backups/
 backups/*
 !backups/.gitkeep
 !backups/memory/
