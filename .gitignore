@@ -45,8 +45,10 @@
 **/data.db
 
 # Cron runtime (logs and status are generated at runtime)
-cron/logs/
-cron/status/
+cron/logs/*
+!cron/logs/.gitkeep
+cron/status/*
+!cron/status/.gitkeep
 
 # Raw session transcripts (archived locally, not committed)
 **/context/transcripts/*
@@ -60,7 +62,13 @@ cron/status/
 .memsearch/
 
 # Memory database backups (dumps/tarballs — never commit)
-backups/
+**/backups/
+!/backups/
+backups/*
+!backups/.gitkeep
+!backups/memory/
+backups/memory/*
+!backups/memory/.gitkeep
 
 __pycache__/
 *.pyc
