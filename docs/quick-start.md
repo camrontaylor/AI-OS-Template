@@ -23,6 +23,14 @@ AI-OS/
 │   └── transcripts/
 ├── brand_context/          Your business and brand information
 ├── projects/               Your work and finished outputs
+│   └── briefs/             Planned projects and their deliverables
+├── cron/                   Scheduled work
+│   ├── jobs/               Job instructions
+│   ├── templates/          Examples for new jobs
+│   ├── logs/               Local job logs
+│   └── status/             Local job status
+├── backups/                Local recovery files
+│   └── memory/             Memory database backups
 ├── .claude/skills/          The installed skills
 ├── scripts/                Setup and maintenance tools
 └── clients/                Separate workspaces for your clients or brands
@@ -30,6 +38,10 @@ AI-OS/
 
 To create a client workspace, say **“Add a client called [name].”** The agent
 builds that client's folders and connects the shared skills.
+
+Empty starter folders include a hidden `.gitkeep` placeholder so GitHub keeps
+them in every download. Generated logs, status files and backup contents stay
+local.
 
 Personal customisations such as `AGENTS.local.md`, `CLAUDE.local.md` and
 `SKILL.local.md` are optional files you add when needed. API keys go in your
