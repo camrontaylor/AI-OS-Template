@@ -13,8 +13,8 @@ patterns = {
     'provider credential': rb'\b(?:sk-(?:proj-|ant-)?[A-Za-z0-9_-]{32,}|AIza[A-Za-z0-9_-]{30,}|AKIA[A-Z0-9]{16})\b',
     'private key': rb'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----',
     'credential in URL': rb'https?://[^\s/<]+:[^\s/@]+@(?:github\.com|[^\s/]+)',
-    'personal machine path': rb'/Users/camronstricklin|/home/camronstricklin|Desktop/AI-BRAIN',
-    'retired branding': rb'(?i)skool|simon|scrapes|agentic(?:[-_ ]os)?|\bscapes\b|agentic\s+academy|a\s+g\s+e\s+n\s+t\s+i\s+c',
+    'personal machine path': rb'(?:/Users|/home)/(?!me\b|example\b)[A-Za-z][A-Za-z0-9_.-]*(?:/|$)',
+    'retired branding': rb'(?i)\x73kool|\x73imon|\x73crapes|\x61gentic(?:[-_ ]os)?|\b\x73capes\b|a\s+g\s+e\s+n\s+t\s+i\s+c',
 }
 failures = []
 for raw in paths:
@@ -22,8 +22,6 @@ for raw in paths:
         continue
     name = os.fsdecode(raw)
     path = root / name
-    if name == 'scripts/check-public-template.py':
-        continue  # The detector necessarily contains the forbidden examples.
     if path.is_symlink():
         target = path.resolve()
         if not target.is_relative_to(root) or not target.exists():
@@ -33,6 +31,8 @@ for raw in paths:
     if len(content) > 50 * 1024 * 1024:
         failures.append((name, 'oversized distribution file'))
     for label, pattern in patterns.items():
+        if name == 'scripts/check-public-template.py' and label not in ('personal machine path', 'retired branding'):
+            continue  # Credential detector syntax necessarily contains credential examples.
         if re.search(pattern, content):
             failures.append((name, label))
     if re.search(r'(^|/)(?:node_modules|\.next|\.command-centre|\.AI-OS|backups)(/|$)', name):
