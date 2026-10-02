@@ -16,6 +16,15 @@ by the connected runtime. If there is no snapshot, continue in conversation-only
 mode; never substitute local context or cached team files. Do not run Solo
 startup, onboarding or local memory writes in Team mode.
 
+In a Solo Git worktree, run the root's `scripts/workspace-git.py context` with
+Python 3. Use its `scope` as the authority for identity, memory, learnings and
+session checkpoints; code and projects remain in the worktree. A client maps
+only to the same primary client. Do not read worktree context as a second brain.
+For hookless tools, run `workspace-git.py start` before those reads; it links
+ignored state and surfaces branch notes. It may safely return the primary to
+main, but never moves a feature worktree. Skip this entire local flow in Team or
+hosted mode. Details: `docs/worktree-workspace.md`.
+
 Scheduled jobs skip interactive onboarding and session logging; follow the job
 prompt and its scope. For an ordinary Solo session, silently:
 
@@ -76,3 +85,8 @@ records use only the connected runtime's authorized storage.
 
 After building or removing a skill, run `python3 scripts/sync-agent-skills.py`
 from the root. This updates Codex discovery and preserves one shared source.
+
+On an explicit Solo sign-off, root sessions run `bash scripts/base-autosave.sh`
+after recording their checkpoint. Isolated worktrees use the explicit worktree
+save command. Client sessions do not autosave the whole repository; save only
+their authorized files deliberately. Report a hold as unfinished saving.

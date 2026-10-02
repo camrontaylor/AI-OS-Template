@@ -147,6 +147,13 @@ working branch. Zone routing: content → commit direct to `dev`; config → `de
 too, but a feature branch is advised; code → a feature branch off `dev`. Release
 flow, per-zone file lists and Solo-vs-team defaults: `docs/branching.md`.
 
+Solo workspace saving uses `scripts/base-autosave.sh` at session end. On `main`,
+it saves on a recovery branch, leaving main unchanged; remote backup is opt-in
+and never pushes main/dev. Risky work uses `worktree-new.sh`, verified changes
+merge deliberately through PRs, and `worktree-done.sh` preserves saved history.
+Run repository-wide saving/cleanup from the root. Team/hosted sessions use only
+the connected runtime. Commands and recovery: `docs/worktree-workspace.md`.
+
 ---
 
 ## Memory System

@@ -86,8 +86,9 @@ class DiscoveryTests(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    # The existing distribution CI gate also covers scoped maintenance behavior.
-    result = subprocess.run([sys.executable, str(Path(__file__).with_name('test-workspace-maintenance.py'))])
-    if result.returncode:
-        raise SystemExit(result.returncode)
+    # The distribution CI gate also covers scoped maintenance and Git safety.
+    for suite in ('test-workspace-maintenance.py', 'test-workspace-git.py'):
+        result = subprocess.run([sys.executable, str(Path(__file__).with_name(suite))])
+        if result.returncode:
+            raise SystemExit(result.returncode)
     unittest.main()
