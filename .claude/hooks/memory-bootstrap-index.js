@@ -27,7 +27,9 @@ process.stdin.on("end", () => {
     // No JSON input — fall back to env / cwd.
   }
 
-  const cwd = data.cwd || process.env.CLAUDE_PROJECT_DIR || process.cwd();
+  const cwd = require('./lib/workspace-context').contextCwd(
+    data.cwd || process.env.CLAUDE_PROJECT_DIR || process.cwd());
+  if (!cwd) return;
   const root = findRoot(cwd);
   if (!root) return;
 

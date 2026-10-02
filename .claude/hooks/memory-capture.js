@@ -54,7 +54,9 @@ function buildCaptureSpawn(input) {
   // cron cover those sessions. No-op cleanly.
   if (!sessionId || !transcript) return null;
 
-  const cwd = data.cwd || process.env.CLAUDE_PROJECT_DIR || process.cwd();
+  const cwd = require('./lib/workspace-context').contextCwd(
+    data.cwd || process.env.CLAUDE_PROJECT_DIR || process.cwd(), true);
+  if (!cwd) return null;
   const root = findCommandCentreRoot(cwd);
   if (!root) return null;
 

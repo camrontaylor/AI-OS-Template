@@ -216,9 +216,9 @@ Skip silently if the script is not found.
 ## Step 4: Commit & Push
 
 1. Stage only files this session created or modified (`git add <paths>`), never `git add -A`. Skip files with no unstaged changes, since the PostToolUse hook may already have committed SKILL.md edits.
-2. If the current branch is `main`, stop and ask; otherwise follow the zone routing in AGENTS.md's Branching Policy.
-3. Commit with a descriptive message summarising the session's work, following any attribution rules in the user's instructions.
-4. Push only if `origin` is the user's own repo, not the upstream template; otherwise report that the commit is local.
+2. In a Solo root session, run `bash scripts/base-autosave.sh` after saving the checkpoint. On main it creates a recovery branch before committing; no main push occurs. For an isolated worktree, use `worktree-autosave.sh <path>`. Client sessions save only their authorized files deliberately; never autosave the whole root from a client.
+3. Treat a credential/size hold or failed save as unfinished saving. Keep files and branches intact; follow `docs/worktree-workspace.md` to review and recover.
+4. Local commits are sufficient when backup is not configured. Automatic private backup requires explicit enablement and targets only autosave refs. Publish feature/dev/main work through the existing PR policy, with live proof. Team sessions use only the connected runtime's storage.
 
 ---
 

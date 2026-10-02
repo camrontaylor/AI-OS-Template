@@ -21,3 +21,13 @@ runs `npm version <X.Y.Z> --no-git-tag-version` in `command-centre/` so
 
 **Solo defaults:** no PR approval required; auto-merge available on release PRs.
 Teams can tighten by requiring 1 approval on `main` PRs and disabling auto-merge.
+
+
+## Workspace automation
+
+Local autosave on main creates a separate recovery branch before committing.
+Return-to-main preserves that snapshot; it does not release it. Worktrees start
+from local dev and keep code isolated while using the primary Solo context.
+Automatic remote backup is opt-in to a verified private GitHub remote and pushes
+only autosave refs. Main/dev updates and releases keep the PR policy above.
+Commands and limits: [Saving and isolated workspaces](worktree-workspace.md).

@@ -14,6 +14,15 @@ All notable changes to AI-OS will be documented in this file. Written for humans
 
 - Team snapshot authority, user-owned context and overrides, optional setup and paused example jobs. Local maintenance stops when Team mode is detected.
 
+## v1.1.6 - 2026-10-02
+
+### Added
+
+- Solo local autosave, safe return-to-main and worktree commands with shared primary context. Claude hooks and hookless instructions use the same guarded implementation.
+- Recovery branches preserve work from main; cleanup saves and archives before removal. Credential, size, Git-operation and Team authority guards stop unsafe saves.
+- Optional verified private GitHub backup pushes only autosave refs. Main/dev releases remain PR-only; automatic remote backup defaults off.
+- Disposable Git, memory-adapter and backup-transport regressions run through distribution CI.
+
 ## v1.1.5 - 2026-09-29
 
 ### Security
