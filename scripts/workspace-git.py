@@ -321,7 +321,14 @@ def run(args):
         # Downloaded Solo workspaces can load context before Git is initialized.
         # This fallback still applies the shared scope and Team guards.
         if args.command == 'context' and git(cwd, 'rev-parse', '--is-inside-work-tree', check=False).returncode:
-            root, selected = maintenance.resolve_scope(cwd)
+            if any((parent / 'AGENTS.md').is_file()
+                   and (parent / '.claude/skills/_catalog/catalog.json').is_file()
+                   for parent in (cwd, *cwd.parents)):
+                root, selected = maintenance.resolve_scope(cwd)
+            else:
+                # Existing capture/tick adapters also support minimal non-Git
+                # workspaces. Keep their original cwd/root discovery behavior.
+                root = selected = cwd
             print(json.dumps({'primary': str(root), 'scope': str(selected), 'worktree': False}))
             return
         raise

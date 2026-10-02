@@ -91,4 +91,10 @@ if __name__ == '__main__':
         result = subprocess.run([sys.executable, str(Path(__file__).with_name(suite))])
         if result.returncode:
             raise SystemExit(result.returncode)
+    root = Path(__file__).resolve().parents[1]
+    adapters = [root / 'command-centre/src/lib/memory' / name for name in
+                ('memory-capture-hook.test.cjs', 'memory-consolidation-tick-hook.test.cjs')]
+    result = subprocess.run(['node', '--no-deprecation', '--test', *map(str, adapters)])
+    if result.returncode:
+        raise SystemExit(result.returncode)
     unittest.main()
